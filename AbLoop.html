@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>AB 循環播放影片</title>
+  <style>
+    label, input, button { font-size: 16px; margin: 5px; }
+    video { display: block; margin-top: 20px; width: 640px; }
+  </style>
+</head>
+<body>
+  <h2>設定 AB 循環範圍</h2>
+
+  <div>
+    <strong>起點 A：</strong>
+    <label>分</label><input type="number" id="startMin" value="0" min="0">
+    <label>秒</label><input type="number" id="startSec" value="5" min="0" max="59">
+  </div>
+
+  <div>
+    <strong>終點 B：</strong>
+    <label>分</label><input type="number" id="endMin" value="0" min="0">
+    <label>秒</label><input type="number" id="endSec" value="10" min="0" max="59">
+  </div>
+
+  <button onclick="startABLoop()">啟動 AB 循環</button>
+  <button onclick="stopABLoop()">停止 AB 循環</button>
+
+  <video id="myVideo" controls>
+    <source src="video.mp4" type="video/mp4">
+    您的瀏覽器不支援 HTML5 video。
+  </video>
+
+  <script>
+    const video = document.getElementById("myVideo");
+    let abLoop = false;
+    let aTime = 0;
+    let bTime = 10;
+    let loopCheckInterval;
+
+    function getTime(minId, secId) {
+      const minutes = parseInt(document.getElementById(minId).value) || 0;
+      const seconds = parseInt(document.getElementById(secId).value) || 0;
+      return minutes * 60 + seconds;
+    }
+
+    function startABLoop() {
+      aTime = getTime("startMin", "startSec");
+      bTime = getTime("endMin", "endSec");
+
+      if (bTime <= aTime) {
+        alert("終點 B 必須大於起點 A！");
+        return;
+      }
+
+      video.currentTime = aTime;
+      video.play();
+      abLoop = true;
+
+      // 每 0.2 秒檢查一次是否超過 B 點
+      loopCheckInterval = setInterval(() => {
+        if (abLoop && video.currentTime >= bTime) {
+          video.currentTime = aTime;
+          video.play();
+        }
+      }, 200);
+    }
+
+    function stopABLoop() {
+      abLoop = false;
+      clearInterval(loopCheckInterval);
+    }
+
+    video.addEventListener('loadedmetadata', function() {
+        video.currentTime = 5;
+    });
+  </script>
+</body>
+</html>

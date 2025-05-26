@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《六人行》S01E01 互動學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: Introduction (Sec 1) -> Goal: Orient user -> Presentation: Static HTML text -> Interaction: None.
+        - Report Info: Scene Dialogues & Explanations (Sec 2, 3, 4) -> Goal: In-depth language learning -> Presentation: Accordion/tabs for scenes/sub-scenes, highlighted key phrases -> Interaction: Click to expand/collapse, click phrase for modal/panel explanation (JS). New: Added LLM-powered dialogue continuation button for each dialogue block. Added timestamps to dialogue blocks.
+        - Report Info: Vocabulary Table (Sec 5) -> Goal: Quick reference -> Presentation: HTML table -> Interaction: (Optional) JS sort/filter.
+        - Report Info: Grammar (Sec 6) -> Goal: Explain grammar -> Presentation: Static HTML text with examples.
+        - Report Info: Cultural Notes (Sec 7) -> Goal: Provide context -> Presentation: Static HTML text.
+        - Report Info: Practice Activities (Sec 8) -> Goal: Suggest practice -> Presentation: List.
+        - Report Info: Conclusion (Sec 9) -> Goal: Summarize -> Presentation: Static HTML text.
+        - Justification: Prioritizes interactive exploration of dialogues and easy access to reference material (vocab, grammar). LLM feature enhances creative engagement. Timestamps improve navigation to specific dialogue points. No charts needed as content is textual.
+        - Library/Method: Vanilla JS for interactions. Tailwind CSS for styling. Gemini API for LLM.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Assuming Inter is loaded or fallback to sans-serif */
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .nav-item {
+            cursor: pointer;
+            display: flex; /* 將 nav-item 設為 flex 容器 */
+            align-items: baseline; /* 讓數字和文字的基線對齊 */
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .nav-item:hover {
+            background-color: #fde68a; /* amber-200 */
+        }
+        .nav-item.active {
+            background-color: #f59e0b; /* amber-500 */
+            color: white;
+        }
+        .interactive-phrase {
+            cursor: pointer;
+            font-weight: bold;
+            color: #d97706; /* amber-600 */
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        .explanation-tooltip {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 10;
+            width: 250px; /* Adjust as needed */
+            font-size: 0.875rem; /* text-sm */
+            color: #374151; /* gray-700 */
+        }
+        .scene-title {
+            cursor: pointer;
+        }
+        .scene-content {
+            display: none;
+            padding-left: 1rem; /* Indent content */
+            border-left: 2px solid #fbbf24; /* amber-400 */
+            margin-left: 0.5rem;
+        }
+        .scene-content.open {
+            display: block;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        /* Mobile navigation toggle */
+        #mobile-menu-button {
+            display: none; /* Hidden by default, shown on small screens */
+        }
+        @media (max-width: 768px) {
+            #mobile-menu-button {
+                display: block;
+            }
+            #main-nav {
+                display: none; /* Nav hidden by default on mobile */
+            }
+            #main-nav.open {
+                display: block; /* Show nav when toggled */
+            }
+            .nav-item {
+                display: block;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #f59e0b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .timestamp {
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* gray-500 */
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="w-full md:w-64 bg-amber-100 p-4 shadow-lg">
+            <h1 class="text-2xl font-bold text-amber-700 mb-6 text-center md:text-left">學習選單</h1>
+            <button id="mobile-menu-button"
+                class="md:hidden w-full text-left p-2 mb-2 bg-amber-500 text-white rounded-md">☰ 選單</button>
+            <nav id="main-nav" class="space-y-2">
+                <a class="nav-item active" data-section="introduction">
+                    <span class="w-6 text-right mr-2">1.</span>
+                    <span>引言</span>
+                </a>
+                <a class="nav-item" data-section="scene-study">
+                    <span class="w-6 text-right mr-2">2.</span>
+                    <span>場景學習</span>
+                </a>
+                <a class="nav-item" data-section="vocabulary">
+                    <span class="w-6 text-right mr-2">3.</span>
+                    <span>詞彙與短語</span>
+                </a>
+                <a class="nav-item" data-section="grammar">
+                    <span class="w-6 text-right mr-2">4.</span>
+                    <span>語法焦點</span>
+                </a>
+                <a class="nav-item" data-section="culture">
+                    <span class="w-6 text-right mr-2">5.</span>
+                    <span>文化註釋</span>
+                </a>
+                <a class="nav-item" data-section="practice">
+                    <span class="w-6 text-right mr-2">6.</span>
+                    <span>練習活動</span>
+                </a>
+                <a class="nav-item" data-section="conclusion">
+                    <span class="w-6 text-right mr-2">7.</span>
+                    <span>結論</span>
+                </a>
+            </nav>
+        </aside>    
+
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            <section id="introduction" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-4">1. 引言：歡迎來到中央公園咖啡館！</h2>
+                <p class="mb-4 text-lg">本應用程式旨在為英文初學者提供一份全面的學習指南，透過經典情境喜劇《六人行》第一季第一集（The One Where Monica Gets a New Roommate）的對話，深入解析實用的英文表達方式。利用劇中自然、生活化的對話，幫助您掌握日常英語的精髓。</p>
+                
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3">1.1. 透過《六人行》學習英文的魅力</h3>
+                    <p class="mb-2">《六人行》是一部深受全球觀眾喜愛的情境喜劇，以其貼近生活的角色和日常情境而聞名。這部劇集之所以成為英文學習的絕佳資源，特別是對於初學者而言，原因有以下幾點：</p>
+                    <ul class="list-disc list-inside space-y-1 mb-2">
+                        <li>劇中的對話呈現了<strong>自然、口語化的英文</strong>。</li>
+                        <li>劇中常出現<strong>重複性的短語</strong>，有助於學習者記憶和理解。</li>
+                        <li>演員們的<strong>發音通常清晰可辨</strong>。</li>
+                        <li>劇集所呈現的<strong>情境普遍易於理解</strong>。</li>
+                    </ul>
+                    <p>情境式學習方法具有顯著的優勢。在劇中，學習者可以在特定場景中，伴隨角色們的情緒表達和互動，來理解單詞和短語的意義。這種學習方式比單純記憶孤立的詞彙表更為直觀且令人難忘。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3">1.2. 如何有效使用本指南</h3>
+                    <p>為了最大化本指南的學習效果，建議您首先觀看《六人行》第一季第一集，可搭配英文字幕觀看，以了解整體劇情。隨後，利用本指南針對特定片段進行重複觀看和學習。鼓勵您在觀看時暫停、重複播放，甚至嘗試「跟讀」（shadowing）對話。重要的是，初學者應首先嘗試理解對話的<strong>大意</strong>，而非糾結於每一個單詞。</p>
+                </div>
+            </section>
+<br/>
+            <section id="scene-study" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">2. 場景學習：深入劇情學英文</h2>
+                <p class="mb-6 text-lg">在這裡，我們將逐一解析《六人行》第一季第一集中的重要場景。點擊場景標題可以展開或收合詳細內容。對於對話中的關鍵詞彙片語</p>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3 scene-title">場景一：莫妮卡的「非約會」 <span class="text-sm text-stone-500">(點擊展開/收合)</span></h3>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">本場景展示了朋友之間輕鬆的日常對話，以及他們如何討論社交關係。</p>
+                        
+                        <h4 class="text-xl font-semibold text-amber-500 mt-4 mb-2">2.1. 開場寒暄：隨意問候與近況交流</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Monica: "<span class="interactive-phrase" data-explanation="一種常見的表達方式，用來表示某個話題沒什麼特別的內容，或者沒有令人興奮的消息。">There's nothing to tell!</span> He's just some guy I work with!" (沒什麼好說的！他只是我的一個同事！)<span class="timestamp"> (00:00:55)</span></p>
+                            <p>Joey: "<span class="interactive-phrase" data-explanation="非正式的「come on」縮寫，常用於催促或鼓勵某人。">C'mon</span>, you're going out with the guy! <span class="interactive-phrase" data-explanation="「there has to be」的非正式說法，表示「一定有」。">There's gotta be</span> something wrong with him!" (拜託，你跟他約會了！他一定有什麼問題！)<span class="timestamp"> (00:00:59)</span></p>
+                            <p>Chandler: "All right Joey, be nice. So does he have a <span class="interactive-phrase" data-explanation="駝背和假髮，錢德勒用誇張的描述來開玩笑。">hump? A hump and a hairpiece?</span>" (好了，喬伊，客氣點。他有駝背嗎？駝背還戴假髮？)<span class="timestamp"> (00:01:04)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">初學者在學習英文時，通常會從較為正式的語法開始。然而，在《六人行》這樣的日常對話中，非正式的縮寫詞（如 c'mon、gonna、gotta）和片語動詞（如 go out with、come on）隨處可見。掌握這些非正式的表達方式，對於理解母語人士的真實對話至關重要。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">2.2. 定義「約會」：不同的觀點</h4>
+                        <p class="mb-2">這段對話突顯了詞語在不同語境和個人經驗下可能產生不同的解釋。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Monica: "Okay, everybody <span class="interactive-phrase" data-explanation="一個常見的祈使句，表示「放鬆」。">relax</span>. This is not even a date. It's just two people <span class="interactive-phrase" data-explanation="指在餐廳用餐的標準表達。">going out to dinner</span> and- not having sex." (好了，大家放輕鬆。這甚至不算約會。這只是兩個人出去吃晚餐，然後——沒有發生性關係。)<span class="timestamp"> (00:01:17)</span></p>
+                            <p>Chandler: "<span class="interactive-phrase" data-explanation="錢德勒機智的回應，運用了諷刺，這是英語幽默中常見的一種形式。">Sounds like a date to me.</span>" (聽起來像約會啊。)<span class="timestamp"> (00:01:26)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">錢德勒的這句話並非字面意義上的陳述，而是一種諷刺的觀察。對於初學者而言，理解這一點不僅需要掌握詞彙，更需要具備文化和語境意識。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">2.3. 介紹「紅酒男保羅」</h4>
+                        <p class="mb-2">這段對話引入了一個新角色，並營造了期待感。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Monica: "Oh God, is it 6:30? <span class="interactive-phrase" data-explanation="指透過對講機讓某人進入建築物。">Buzz him in!</span>" (天啊，六點半了嗎？讓他進來！)<span class="timestamp"> (00:09:05)</span></p>
+                            <p>Joey: "Who's Paul?" (保羅是誰？)<span class="timestamp"> (00:09:09)</span></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="一個描述性的綽號，立即傳達了關於保羅的一些信息。">Paul the Wine Guy</span>, Paul?" (紅酒男保羅？保羅？)<span class="timestamp"> (00:09:11)</span></p>
+                            <p>Monica: "Maybe." (也許吧。)<span class="timestamp"> (00:09:12)</span></p>
+                            <p>Joey: "Wait. Your 'not a real date' tonight is with Paul the Wine Guy?" (等等。你今晚的「不算約會」是跟紅酒男保羅？)<span class="timestamp"> (00:09:12)</span></p>
+                            <p>Ross: "He finally <span class="interactive-phrase" data-explanation="一個常見的片語動詞，意為邀請某人約會。">asked you out</span>?" (他終於約你出去了？)<span class="timestamp"> (00:09:16)</span></p>
+                            <p>Monica: "Yes!" (是的！)<span class="timestamp"> (00:09:18)</span></p>
+                            <p>Chandler: "Ooh, this is a <span class="interactive-phrase" data-explanation="一個慣用語，指某件重要或值得記錄的事情。">Dear Diary moment</span>." (喔，這真是個「日記時刻」。)<span class="timestamp"> (00:09:19)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                         <p class="mt-2 text-sm text-stone-700">「紅酒男保羅」這個綽號立即讓觀眾對保羅和莫妮卡對他的看法有所了解。而「日記時刻」這個慣用語則增添了幽默感，並強調了莫妮卡這次約會的重要性。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3 scene-title">場景二：錢德勒的夢境與羅斯的傷心 <span class="text-sm text-stone-500">(點擊展開/收合)</span></h3>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">本場景展示了如何表達個人感受和分享經歷。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-4 mb-2">3.1. 分享個人經歷：裸體夢境</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Chandler: "Alright, so I'm back in high school, I'm standing in the middle of the cafeteria, and I realize I am <span class="interactive-phrase" data-explanation="一個強烈的描述性短語。">totally naked</span>." (好吧，我回到高中時期，站在自助餐廳中央，然後我發現我全身赤裸。)<span class="timestamp"> (00:01:31)</span></p>
+                            <p>All: "Oh, yeah. <span class="interactive-phrase" data-explanation="表達共同經歷的常見方式。">Had that dream.</span>" (哦，對啊。做過那個夢。)<span class="timestamp"> (00:01:37)</span></p>
+                            <p>Chandler: "Then I look down, and I realize there's a phone there." (然後我低頭一看，發現那裡有個電話。)<span class="timestamp"> (00:01:39)</span></p>
+                            <p>Joey: "<span class="interactive-phrase" data-explanation="一個快速、非正式的提問，用於澄清。">Instead of...?</span>" (而不是...？)<span class="timestamp"> (00:01:47)</span></p>
+                            <p>Chandler: "That's right." (沒錯。)<span class="timestamp"> (00:01:47)</span></p>
+                            <p>Joey: "Never had that dream." (從沒做過那個夢。)<span class="timestamp"> (00:01:50)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">「裸體夢境」是一種廣泛被認可的心理現象。集體回應「Oh, yeah. Had that dream」則顯示了這是一種普遍的人類經驗。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">3.2. 羅斯的情緒崩潰：表達強烈感受</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Ross: "(<span class="interactive-phrase" data-explanation="意為極度尷尬或羞愧。">mortified</span>) Hi." ((羞愧地) 嗨。)<span class="timestamp"> (00:02:20)</span></p>
+                            <p>Joey: "This guy says hello, <span class="interactive-phrase" data-explanation="一種誇張的說法，用來表達極度惱怒或絕望，並非字面意義上的尋死。">I wanna kill myself.</span>" (這傢伙說聲嗨，我就想自殺。)<span class="timestamp"> (00:02:24)</span></p>
+                            <p>Ross: "I just feel like someone reached down my throat, grabbed my small intestine, pulled it out of my mouth and tied it around my neck" (我感覺就像有人伸手到我喉嚨裡，抓住我的小腸，從我嘴裡拉出來，然後綁在我脖子上。)<span class="timestamp"> (00:02:30)</span></p>
+                            <p>Monica: "(explaining to the others) Carol <span class="interactive-phrase" data-explanation="指將物品從某處搬走，搬離。">moved her stuff out</span> today." ((向其他人解釋) 卡羅今天把她的東西搬走了。)<span class="timestamp"> (00:02:40)</span></p>
+
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">羅斯對其痛苦的強烈描述和喬伊的「I wanna kill myself」都是誇張手法的例子。對於初學者來說，理解這些並非字面意義上的陳述至關重要。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">3.3. 菲比的氣場淨化：古怪的表達方式</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                             <p>Phoebe: "Ooh! Oh! (She starts to pluck at the air just in front of Ross.)" (喔！噢！(她開始在羅斯面前的空氣中撥弄。))<span class="timestamp"> (00:02:49)</span></p>
+                             <p>Ross: "No, no don't! Stop <span class="interactive-phrase" data-explanation="一個新時代的概念，菲比獨特的表達。">cleansing my aura!</span> No, just leave my aura alone, okay?" (不，不，別！別淨化我的氣場！不，就讓我的氣場安靜待著，好嗎？)<span class="timestamp"> (00:02:55)</span></p>
+                             <p>Phoebe: "Fine! <span class="interactive-phrase" data-explanation="渾濁的，不明朗的。此處為菲比俏皮、略帶惱怒的回應。">Be murky!</span>" (好吧！那就渾濁吧！)<span class="timestamp"> (00:02:59)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">菲比的對話獨具特色，反映了她的性格。「Cleansing my aura」是一個特定且略顯不尋常的短語。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">3.4. 女同性戀的揭示與家庭反應</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Joey: "And you never knew she was a lesbian..." (你從來不知道她是女同性戀...)<span class="timestamp"> (00:03:07)</span></p>
+                            <p>Ross: "No!! Okay?! Why does everyone keep <span class="interactive-phrase" data-explanation="意為過度關注某事。">fixating on that?</span> She didn't know, how should I know?" (不！！好嗎？！為什麼大家老是糾結於這點？她都不知道，我怎麼會知道？)<span class="timestamp"> (00:03:15)</span></p>
+                            <p>Chandler: "Sometimes I wish I was a lesbian... <span class="interactive-phrase" data-explanation="當某人不小心說出心裡話時的常用表達。">Did I say that out loud?</span>" (有時候我真希望我是個女同性戀。(大家看著他。) 我是不是說出來了？)<span class="timestamp"> (00:03:24)</span></p>
+                            <p>Monica: "Oh really, so that hysterical phone call I got from a woman at sobbing 3:00 A.M., 'I'll never have grandchildren, I'll never have grandchildren.' was what? A wrong number?" (哦，真的嗎？那我凌晨三點接到一個女人邊哭邊打來的歇斯底里電話：「我永遠不會有孫子了，我永遠不會有孫子了。」那是什麼？打錯電話了？)<span class="timestamp"> (00:03:37)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">關於卡羅性取向的討論和錢德勒的意外評論提供了一個學習如何討論敏感話題以及人們如何應對尷尬情境的語境。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3 scene-title">場景三：瑞秋的戲劇性登場 <span class="text-sm text-stone-500">(點擊展開/收合)</span></h3>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">本場景是劇集的關鍵時刻，展示了如何描述外貌、表達解脫，以及在服務情境中進行交流。</p>
+                        
+                        <h4 class="text-xl font-semibold text-amber-500 mt-4 mb-2">4.1. 瑞秋的戲劇性登場：描述外觀與表達解脫</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Ross: "I don't want to be single, okay? I just I just- <span class="interactive-phrase" data-explanation="表達強烈願望的常用句型，此處 wanna 是 want to 的口語縮寫。">I just wanna be married again!</span>" (我不想單身，好嗎？我只是——我只是想再婚！)<span class="timestamp"> (00:04:05)</span> (Rachel enters in a <span class="interactive-phrase" data-explanation="一個清晰的視覺描述。">wet wedding dress</span> and starts to search the room.)</p>
+                            <p>Monica: "Rachel?!" (瑞秋？！)<span class="timestamp"> (00:04:22)</span></p>
+                            <p>Rachel: "Oh God Monica hi! <span class="interactive-phrase" data-explanation="表達解脫的常見感嘆詞。">Thank God!</span> I just went to your building and you weren't there and then this guy with a big hammer said you might be here and you are, you are!" (天啊莫妮卡嗨！感謝上帝！我剛去了你家大樓，你不在那裡，然後一個拿著大錘子的傢伙說你可能在這裡，你真的在這裡，你真的在這裡！)<span class="timestamp"> (00:04:26)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">瑞秋的出場在視覺上極具衝擊力。對話中的「wet wedding dress」和「Thank God!」等感嘆詞立即傳達了她的狀態。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">4.2. 提供協助與提出請求</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Waitress: "<span class="interactive-phrase" data-explanation="一個標準的提議，用於詢問是否需要某物。">Can I get you some coffee?</span>" (我能為您拿些咖啡嗎？)<span class="timestamp"> (00:04:32)</span></p>
+                            <p>Monica: "(pointing at Rachel) <span class="interactive-phrase" data-explanation="「decaffeinated」（無咖啡因）的常見縮寫。">De-caff.</span> (to All) Okay, everybody, this is Rachel, another <span class="interactive-phrase" data-explanation="一種幽默的方式來介紹一位前同學，暗示他們共同經歷過困難的時光。">Lincoln High survivor.</span>" (莫妮卡：(指著瑞秋) 無咖啡因的。(對大家說) 好了，各位，這是瑞秋，另一個林肯高中倖存者。)<span class="timestamp"> (00:04:36)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">與服務生的互動提供了一個在咖啡館環境中點餐或提供服務的實用範例。莫妮卡介紹瑞秋的方式展示了一種非正式的介紹方式。</p>
+
+                        <h4 class="text-xl font-semibold text-amber-500 mt-6 mb-2">4.3. 瑞秋的經濟困境與「很棒的靴子」</h4>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Rachel: "Are you kidding? I'm <span class="interactive-phrase" data-explanation="表達缺乏技能。">trained for nothing!</span> I was <span class="interactive-phrase" data-explanation="誇張說法，形容極度失敗。">laughed out of twelve interviews</span> today." (開玩笑嗎？我什麼都沒學過！我今天被十二個面試官嘲笑著趕了出來。)<span class="timestamp"> (00:23:55)</span></p>
+                            <p>Rachel: "You would be too if you found John and David boots <span class="interactive-phrase" data-explanation="打折，五折。購物常用表達。">on sale, fifty percent off!</span> They're my new 'I don't need a job, I don't need my parents, I've got great boots' boots!" (如果你找到約翰和大衛的靴子半價出售，你也會這樣！它們是我的新「我不需要工作，我不需要父母，我有很棒的靴子」的靴子！)<span class="timestamp"> (00:24:04)</span></p>
+                            <p>Monica: "How'd you pay for them?" (你怎麼付的錢？)<span class="timestamp"> (00:24:20)</span></p>
+                            <p>Rachel: "Uh, credit card." (呃，信用卡。)<span class="timestamp"> (00:24:22)</span></p>
+                            <p>Monica: "And who pays for that?" (那誰付信用卡帳單？)<span class="timestamp"> (00:24:23)</span></p>
+                            <p>Rachel: "Um... my... father." (嗯...我...爸爸。)<span class="timestamp"> (00:24:26)</span></p>
+                            <div class="generated-dialogue-output mt-2 p-3 bg-gray-100 rounded text-gray-800 hidden">
+                                <div class="loading-spinner hidden"></div>
+                                <div class="generated-text"></div>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-stone-700">瑞秋在求職面試和經濟獨立方面的掙扎對於許多年輕人來說是一個相關的主題。她關於「很棒的靴子」的台詞揭示了一種透過物質來應對困境的機制。</p>
+                    </div>
+                </div>
+                <div id="explanation-tooltip-container" class="explanation-tooltip"></div>
+            </section>
+            <br/>
+            <section id="vocabulary" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">3. 《六人行》S01E01 值得學習的英文詞彙與短語</h2>
+                <p class="mb-6 text-lg">以下表格整理了《六人行》第一季第一集中的關鍵詞彙和短語，並提供簡單的解釋和學習重點。這份表格旨在幫助初學者快速定位並理解劇中實用的表達方式。</p>
+                <div class="bg-white p-4 md:p-6 rounded-lg shadow table-container">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">場景時間 (約略)</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">角色</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">對話片段</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">關鍵英文詞彙/短語</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">簡單解釋</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">學習重點</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                            <tr><td>00:00:55<br/>
+                                <button id="toggleABLoopButton" class="styled-button"
+                                onclick="toggleABLoop()">▶️
+                                </button>
+                            </td><td>Monica</td><td>"There's nothing to tell!"</td><td>Nothing to tell</td><td>沒什麼特別的或新鮮事可說。</td><td>表示無趣或無新聞。</td></tr>
+                            <tr><td>00:00:59</td><td>Joey</td><td>"C'mon, you're going out with the guy!"</td><td>C'mon</td><td>非正式的「come on」，常用於催促或鼓勵。</td><td>非正式縮寫，日常口語常見。</td></tr>
+                            <tr><td>00:01:04</td><td>Chandler</td><td>"So does he have a hump? A hump and a hairpiece?"</td><td>Hump and a hairpiece</td><td>駝背和假髮，誇張的描述。</td><td>幽默、誇張的形容詞。</td></tr>
+                            <tr><td>00:01:17</td><td>Monica</td><td>"This is not even a date. It's just two people going out to dinner..."</td><td>Going out with / to</td><td>與某人約會/出去用餐。</td><td>片語動詞，表示社交活動。</td></tr>
+                            <tr><td>00:01:26</td><td>Chandler</td><td>"Sounds like a date to me."</td><td>Sounds like a date to me</td><td>聽起來像約會。</td><td>表達意見或諷刺。</td></tr>
+                            <tr><td>00:01:31</td><td>Chandler</td><td>"I am totally naked."</td><td>Totally naked</td><td>全身赤裸。</td><td>強烈的描述性短語。</td></tr>
+                            <tr><td>00:01:37</td><td>All</td><td>"Oh, yeah. Had that dream."</td><td>Had that dream</td><td>做過那個夢，表示共同經歷。</td><td>表達共同經驗。</td></tr>
+                            <tr><td>00:01:47</td><td>Joey</td><td>"Instead of...?"</td><td>Instead of...?</td><td>而不是...？用於澄清。</td><td>疑問句，用於澄清。</td></tr>
+                            <tr><td>00:02:20</td><td>Ross</td><td>"(mortified) Hi."</td><td>Mortified</td><td>極度尷尬或羞愧。</td><td>形容詞，表達強烈情緒。</td></tr>
+                            <tr><td>00:02:24</td><td>Joey</td><td>"I wanna kill myself."</td><td>I wanna kill myself</td><td>非字面意義的誇張，表示極度惱怒。</td><td>誇張用法，表達不滿。</td></tr>
+                            <tr><td>00:02:40</td><td>Monica</td><td>"Carol moved her stuff out today."</td><td>Move out</td><td>搬離某處，搬走東西。</td><td>片語動詞，表示搬家。</td></tr>
+                            <tr><td>00:02:55</td><td>Ross</td><td>"Stop cleansing my aura!"</td><td>Cleansing my aura</td><td>淨化氣場，新時代概念。</td><td>特定文化或角色用語。</td></tr>
+                            <tr><td>00:02:59</td><td>Phoebe</td><td>"Be murky!"</td><td>Murky</td><td>渾濁的，不明朗的。</td><td>形容詞，此處為俏皮回應。</td></tr>
+                            <tr><td>00:03:15</td><td>Ross</td><td>"Why does everyone keep fixating on that?"</td><td>Fixating on</td><td>過度關注或執著於某事。</td><td>片語動詞，表示執著。</td></tr>
+                            <tr><td>00:03:24</td><td>Chandler</td><td>"Did I say that out loud?"</td><td>Did I say that out loud?</td><td>我是不是說出來了？（不小心說出心裡話）</td><td>常用短語，表示意外說出。</td></tr>
+                            <tr><td>00:04:05</td><td>Ross</td><td>"I just wanna be married again!"</td><td>I just wanna be...</td><td>我只是想...，表達強烈願望。</td><td>表達願望的常用句型。</td></tr>
+                            <tr><td>00:04:26</td><td>Rachel</td><td>"Thank God!"</td><td>Thank God!</td><td>感謝上帝！表達解脫或慶幸。</td><td>感嘆詞，表達強烈情感。</td></tr>
+                            <tr><td>00:04:36</td><td>Monica</td><td>"De-caff."</td><td>De-caff</td><td>無咖啡因咖啡的縮寫。</td><td>常用縮寫，服務情境常見。</td></tr>
+                            <tr><td>00:04:36</td><td>Monica</td><td>"Lincoln High survivor."</td><td>Lincoln High survivor</td><td>幽默地指前同學，暗示共同經歷。</td><td>幽默介紹，文化背景。</td></tr>
+                            <tr><td>00:23:55</td><td>Rachel</td><td>"I'm trained for nothing!"</td><td>Trained for nothing</td><td>沒有任何專業技能。</td><td>表達缺乏技能。</td></tr>
+                            <tr><td>00:24:04</td><td>Rachel</td><td>"Laughed out of twelve interviews."</td><td>Laughed out of interviews</td><td>面試失敗被嘲笑（誇張說法）。</td><td>誇張用法，形容失敗。</td></tr>
+                            <tr><td>00:24:08</td><td>Rachel</td><td>"on sale, fifty percent off!"</td><td>On sale, fifty percent off</td><td>打折，五折。</td><td>購物常用表達。</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <br/>
+            <section id="grammar" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">4. 語法焦點：初學者友好的語法概念實踐</h2>
+                <p class="mb-6 text-lg">本節將簡化對話中觀察到的基本語法點，並直接使用劇集中的例子進行說明。</p>
+                <div class="bg-white p-6 rounded-lg shadow space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">6.1. 簡單現在式：用於習慣和事實</h3>
+                        <p>簡單現在式用於描述例行動作或普遍事實。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> 「she never calls me!」(她從不打電話給我！) – 這句話用於描述一個習慣性動作（或缺乏此動作）。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">6.2. 常見片語動詞</h3>
+                        <p>片語動詞是動詞與介詞或副詞的組合，其意義往往與單獨的動詞不同。</p>
+                        <ul class="list-disc list-inside space-y-1 mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded">
+                            <li><strong>範例：</strong>「going out with the guy」 - 指與某人約會。</li>
+                            <li><strong>範例：</strong>「moved her stuff out」 - 指將物品從某處搬走。</li>
+                            <li><strong>範例：：</strong>「figure I'd better answer it」 - 指決定或理解某事。</li>
+                            <li><strong>範例：</strong>「look down」 - 指向下看。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">6.3. 表達願望和意圖（I just want to...）</h3>
+                        <p>簡單的句型「I just want to...」用於表達願望。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> 「I just wanna be married again!」 (我只是想再婚！)</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">6.4. 澄清問題</h3>
+                        <p>劇中也出現了簡單的問句結構，用於澄清。</p>
+                        <ul class="list-disc list-inside space-y-1 mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded">
+                            <li><strong>範例：：</strong> 「Instead of...?」 (而不是...？)</li>
+                            <li><strong>範例：</strong> 「Did I say that out loud?」 (我說出來了嗎？)</li>
+                        </ul>
+                    </div>
+                    <p class="text-sm text-stone-700">與其孤立地學習語法規則，不如直接從《六人行》的對話中呈現語法點，這可以展示它們在自然情境中的運用方式。這使得語法不再抽象，而更具實用性。</p>
+                </div>
+            </section>
+            <br/>
+            <section id="culture" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">5. 文化註釋：理解美式英語與幽默</h2>
+                <p class="mb-6 text-lg">理解語言不僅是理解詞彙和語法，還包括其背後的文化背景。</p>
+                <div class="bg-white p-6 rounded-lg shadow space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">7.1. 美式幽默：諷刺與自嘲</h3>
+                        <p>錢德勒這個角色經常使用諷刺和自嘲式幽默。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：：</strong> 錢德勒講述他的夢境和他關於自己是女同性戀的評論。這些幽默通常需要理解言外之意。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">7.2. 社交規範：友誼中的開放性</h3>
+                        <p>劇中的朋友之間會公開分享個人細節，包括關係和夢境，這是親密美式友誼的特點。這種開放性在對話中表現得淋漓盡致，例如羅斯詳細描述他離婚後的痛苦。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">7.3. 流行文化參考</h3>
+                        <p>劇中也可能出現一些微妙的流行文化參考，這些對於初學者來說可能造成困惑。</p>
+                        <ul class="list-disc list-inside space-y-1 mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded">
+                            <li><strong>範例：：</strong> 「Speed Racer」（日本動畫《馬赫GoGoGo》的美國名稱）</li>
+                            <li><strong>範例：：</strong> 「IKEA furniture」（宜家家具）</li>
+                            <li><strong>範例：：</strong> 「Versace」（凡賽斯，時尚品牌）</li>
+                        </ul>
+                        <p class="mt-1">了解這些背景有助於更全面地理解對話。</p>
+                    </div>
+                    <p class="text-sm text-stone-700">《六人行》中的許多台詞，例如錢德勒的幽默和菲比的氣場淨化，只有在了解文化背景後才能完全理解。解釋這些細微之處不僅僅是語言學習，更是文化素養的培養。</p>
+                </div>
+            </section>
+            <br/>
+            <section id="practice" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">6. 練習活動：將所學付諸實踐！</h2>
+                <p class="mb-6 text-lg">單純地被動接收內容對於語言習得來說是不夠的。積極的練習活動對於將理解轉化為產出至關重要。這些活動直接強化了從劇集中學到的詞彙和語法。</p>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">8.1. 聽力與重複（跟讀）：</h3>
+                        <p>鼓勵學習者播放劇集中的短片段，並嘗試模仿角色的發音、語調和節奏。這有助於改善口語流暢度和語音語調。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">8.2. 填空練習：</h3>
+                        <p>提供劇集中的短句，並將關鍵詞留空，讓學習者填寫。這有助於鞏固詞彙和句型。（您可以在觀看時自行製作這類練習！）</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">8.3. 角色扮演：</h3>
+                        <p>建議學習者選擇一個簡短的對話場景，與夥伴一起練習，甚至可以自己扮演不同角色。這能提升口語表達和情境應變能力。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">8.4. 造句練習：</h3>
+                        <p>要求學習者使用新學的詞彙和語法點來創造自己的句子。這有助於將新知識應用於實際表達。</p>
+                    </div>
+                </div>
+            </section>
+            <br/>
+            <section id="conclusion" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">7. 結論：持續學習，持續觀看！</h2>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">9.1. 學習旅程回顧：</h3>
+                        <p>透過探索《六人行》第一季第一集，您已經邁出了學習日常英文的重要一步。本指南幫助初學者理解了劇中自然對話的精髓，掌握了實用的詞彙、語法點，並認識了美式幽默和社交規範。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">9.2. 鼓勵持續學習：</h3>
+                        <p>語言學習是一段旅程，而非一場競賽。持之以恆是成功的關鍵。鼓勵您繼續觀看《六人行》的其他劇集，或探索其他感興趣的英文內容。每一次觀看，每一次練習，都是一次進步的機會。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">9.3. 最終激勵訊息：</h3>
+                        <p>請記住，學習英文的過程充滿樂趣和挑戰。不要害怕犯錯，每一次嘗試都是成長的證明。持續沉浸在英語環境中，享受學習的過程，您的英文能力將會不斷提升。祝您學習愉快！</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          /*  const navItems = document.querySelectorAll('.nav-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mainNav = document.getElementById('main-nav');
+
+            // Mobile menu toggle
+            if (mobileMenuButton && mainNav) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mainNav.classList.toggle('open');
+                });
+            }
+            
+            // Navigation logic
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Remove active class from all nav items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    // Add active class to the clicked item
+                    this.classList.add('active');
+
+                    const sectionId = this.getAttribute('data-section');
+
+                    // Hide all content sections
+                    contentSections.forEach(section => section.classList.remove('active'));
+                    // Show the target content section
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    // Close mobile menu after selection
+                    if (mainNav && mainNav.classList.contains('open')) {
+                        mainNav.classList.remove('open');
+                    }
+                });
+            });
+
+ 
+*/
+           // Open all scene content sections by default
+            const allSceneContents = document.querySelectorAll('.scene-content');
+            allSceneContents.forEach(content => content.classList.add('open'));
+
+            // Scene title toggle logic
+  /*          const sceneTitles = document.querySelectorAll('.scene-title');
+            sceneTitles.forEach(title => {
+                title.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    if (content && content.classList.contains('scene-content')) {
+                        content.classList.toggle('open');
+                    }
+                });
+            });
+  */          
+            // Interactive phrase tooltip logic
+            const interactivePhrases = document.querySelectorAll('.interactive-phrase');
+            const tooltip = document.getElementById('explanation-tooltip-container');
+
+            interactivePhrases.forEach(phrase => {
+                phrase.addEventListener('mouseenter', function(event) {
+                    const explanation = this.getAttribute('data-explanation');
+                    if (explanation && tooltip) {
+                        tooltip.textContent = explanation;
+                        tooltip.style.display = 'block';
+                        // Position tooltip near the mouse, adjusting for edges
+                        let top = event.clientY + 10;
+                        let left = event.clientX + 10;
+                        
+                        // Adjust if tooltip goes off-screen
+                        if (left + tooltip.offsetWidth > window.innerWidth) {
+                            left = window.innerWidth - tooltip.offsetWidth - 10;
+                        }
+                        if (top + tooltip.offsetHeight > window.innerHeight) {
+                            top = event.clientY - tooltip.offsetHeight - 10;
+                        }
+                        
+                        tooltip.style.top = `${top}px`;
+                        tooltip.style.left = `${left}px`;
+                    }
+                });
+
+                phrase.addEventListener('mouseleave', function() {
+                    if (tooltip) {
+                        tooltip.style.display = 'none';
+                    }
+                });
+                // Keep tooltip position updated on mouse move over phrase
+                phrase.addEventListener('mousemove', function(event) {
+                    if (tooltip && tooltip.style.display === 'block') {
+                        let top = event.clientY + 10;
+                        let left = event.clientX + 10;
+                        if (left + tooltip.offsetWidth > window.innerWidth) {
+                            left = window.innerWidth - tooltip.offsetWidth - 10;
+                        }
+                        if (top + tooltip.offsetHeight > window.innerHeight) {
+                            top = event.clientY - tooltip.offsetHeight - 10;
+                        }
+                        tooltip.style.top = `${top}px`;
+                        tooltip.style.left = `${left}px`;
+                    }
+                });
+            });
+
+            // Gemini API Integration for Dialogue Continuation
+            /*
+            const generateDialogueButtons = document.querySelectorAll('.generate-dialogue-btn');
+
+            generateDialogueButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const dialogueBlock = this.closest('.border-l-4');
+                    const dialogueTextElements = dialogueBlock.querySelectorAll('p');
+                    let currentDialogue = '';
+                    dialogueTextElements.forEach(p => {
+                        // Exclude the button's own text and generated output
+                        if (!p.querySelector('.generate-dialogue-btn') && !p.closest('.generated-dialogue-output')) {
+                            currentDialogue += p.textContent.trim() + '\n';
+                        }
+                    });
+
+                    const outputContainer = dialogueBlock.querySelector('.generated-dialogue-output');
+                    const loadingSpinner = outputContainer.querySelector('.loading-spinner');
+                    const generatedTextDiv = outputContainer.querySelector('.generated-text');
+
+                    outputContainer.classList.remove('hidden');
+                    loadingSpinner.classList.remove('hidden');
+                    generatedTextDiv.textContent = ''; // Clear previous content
+                    generatedTextDiv.classList.add('hidden');
+
+                    const prompt = `Based on the following dialogue from Friends, please generate a plausible continuation of the conversation, keeping the characters' personalities and the show's tone consistent. The response should be in traditional Chinese.\n\nDialogue:\n${currentDialogue}`;
+
+                    try {
+                        const payload = {
+                            contents: [{ role: "user", parts: [{ text: prompt }] }]
+                        };
+                        const apiKey = ""; // Leave this as-is; Canvas will provide it at runtime
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const generatedDialogue = result.candidates[0].content.parts[0].text;
+                            generatedTextDiv.textContent = generatedDialogue;
+                        } else {
+                            generatedTextDiv.textContent = '無法生成對話，請稍後再試。';
+                        }
+                    } catch (error) {
+                        console.error('Error generating dialogue:', error);
+                        generatedTextDiv.textContent = '生成對話時發生錯誤。';
+                    } finally {
+                        loadingSpinner.classList.add('hidden');
+                        generatedTextDiv.classList.remove('hidden');
+                    }
+                });
+            });*/
+        });
+    </script>
+
+
+<video id="myVideo" controls>
+    <source src="video.mp4" type="video/mp4">
+    您的瀏覽器不支援 HTML5 video。
+</video>
+
+<script>
+    const video = document.getElementById("myVideo");
+    let abLoop = false;
+    let aTime = 0;
+    let bTime = 10;
+    let loopCheckInterval;
+    let isABLoopRunning = false;
+    const toggleButton = document.getElementById("toggleABLoopButton");
+    var loopStartTimeMin = 0;
+    var loopStartTimeSec = 0;
+    var loopEndTimeMin = 0;
+    var loopEndTimeSec = 0;
+
+    function toggleABLoop() {
+        if (isABLoopRunning) {
+            // 如果循環正在運行，則停止循環
+            stopABLoop();
+            toggleButton.textContent = "▶️";
+        } else {
+            // 如果循環未運行，則啟動循環
+            // 在這裡你需要獲取 AB 循環的起始時間和結束時間
+            // 這裡僅為示意，你需要根據你的實際需求來設置 loopStartTime 和 loopEndTime
+            // 例如，你可以從表格中獲取當前行的時間數據
+
+            loopStartTimeMin = 0;
+            loopStartTimeSec = 5;
+            loopEndTimeMin = 0;
+            loopEndTimeSec = 10;
+            startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec);
+            toggleButton.textContent = "⏹️";
+        }
+        isABLoopRunning = !isABLoopRunning; // 切換狀態
+    }
+    function getTime(min, sec) {
+        const minutes = parseInt(min) || 0;
+        const seconds = parseInt(sec) || 0;
+        return minutes * 60 + seconds;
+    }
+
+    function startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec) {
+        aTime = getTime(loopStartTimeMin, loopStartTimeSec);
+        bTime = getTime(loopEndTimeMin, loopEndTimeSec);
+
+        if (bTime <= aTime) {
+            alert("終點 B 必須大於起點 A！");
+            return;
+        }
+
+        video.currentTime = aTime;
+        video.play();
+        abLoop = true;
+
+        // 每 0.2 秒檢查一次是否超過 B 點
+        loopCheckInterval = setInterval(() => {
+            if (abLoop && video.currentTime >= bTime) {
+                video.currentTime = aTime;
+                video.play();
+            }
+        }, 200);
+    }
+
+    function stopABLoop() {
+        abLoop = false;
+        video.pause();
+        //clearInterval(loopCheckInterval);
+    }
+
+    //video.addEventListener('loadedmetadata', function () {
+     //   video.currentTime = 5;
+   // });
+</script>
+</body>
+</html>
