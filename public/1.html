@@ -377,11 +377,15 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm">
                             <tr><td>00:00:55<br/>
-                                <button id="toggleABLoopButton" class="styled-button"
-                                onclick="toggleABLoop(0,53,0,57)">▶️
+                                <button class="styled-button"
+                                onclick="toggleABLoop(0,53,0,57,this)">▶️
                                 </button>
                             </td><td>Monica</td><td>"There's nothing to tell!"</td><td>Nothing to tell</td><td>沒什麼特別的或新鮮事可說。</td><td>表示無趣或無新聞。</td></tr>
-                            <tr><td>00:00:59</td><td>Joey</td><td>"C'mon, you're going out with the guy!"</td><td>C'mon</td><td>非正式的「come on」，常用於催促或鼓勵。</td><td>非正式縮寫，日常口語常見。</td></tr>
+                            <tr><td>00:00:59<br/>
+                                <button class="styled-button"
+                                onclick="toggleABLoop(0,59,0,62,this)">▶️
+                                </button>
+                            </td><td>Joey</td><td>"C'mon, you're going out with the guy!"</td><td>C'mon</td><td>非正式的「come on」，常用於催促或鼓勵。</td><td>非正式縮寫，日常口語常見。</td></tr>
                             <tr><td>00:01:04</td><td>Chandler</td><td>"So does he have a hump? A hump and a hairpiece?"</td><td>Hump and a hairpiece</td><td>駝背和假髮，誇張的描述。</td><td>幽默、誇張的形容詞。</td></tr>
                             <tr><td>00:01:17</td><td>Monica</td><td>"This is not even a date. It's just two people going out to dinner..."</td><td>Going out with / to</td><td>與某人約會/出去用餐。</td><td>片語動詞，表示社交活動。</td></tr>
                             <tr><td>00:01:26</td><td>Chandler</td><td>"Sounds like a date to me."</td><td>Sounds like a date to me</td><td>聽起來像約會。</td><td>表達意見或諷刺。</td></tr>
@@ -692,13 +696,14 @@
     let bTime = 10;
     let loopCheckInterval;
     let isABLoopRunning = false;
-    const toggleButton = document.getElementById("toggleABLoopButton");
+    //const toggleButton = document.getElementById("toggleABLoopButton");
     var loopStartTimeMin = 0;
     var loopStartTimeSec = 0;
     var loopEndTimeMin = 0;
     var loopEndTimeSec = 0;
 
-    function toggleABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec) {
+    function toggleABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec,obj) {
+        var toggleButton = obj;
         if (isABLoopRunning) {
             // 如果循環正在運行，則停止循環
             stopABLoop();
