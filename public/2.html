@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《六人行》S01E02 互動學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Application Structure Plan: 
+        The application uses a sidebar navigation to switch between different learning sections: Introduction, Scene-by-scene analysis, Vocabulary, Grammar, Cultural Notes, Practice Activities, and Conclusion.
+        This structure is chosen for its clarity and ease of navigation, allowing learners to focus on specific aspects of the episode or follow a structured learning path.
+        Key interactions include:
+        - Clicking navigation items to display the corresponding section.
+        - Expanding/collapsing scene details in the "Scene Study" section.
+        - Hovering over highlighted phrases in dialogues to see explanations in tooltips.
+        - Using A-B loop functionality with an embedded video player to replay specific dialogue segments.
+        This design aims to provide an interactive and user-friendly experience for English learners using the Friends episode as material, mirroring the effective structure of the provided 1.html example.
+    -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Episode Introduction (Sec 1) -> Goal: Orient user to S01E02 -> Presentation: Static HTML text -> Interaction: None.
+        - Report Info: Scene Dialogues & Explanations (Sec 2) -> Goal: In-depth language learning with context -> Presentation: Accordion for scenes, dialogues with highlighted key phrases and timestamps -> Interaction: Click to expand/collapse scenes, hover phrase for tooltip explanation, click A-B loop button to replay video segment.
+        - Report Info: Vocabulary Table (Sec 3) -> Goal: Quick reference and consolidation -> Presentation: HTML table -> Interaction: None planned (sorting/filtering could be a future enhancement but not in 1.html).
+        - Report Info: Grammar Focus (Sec 4) -> Goal: Explain relevant grammar points with examples from the episode -> Presentation: Static HTML text with examples.
+        - Report Info: Cultural Notes (Sec 5) -> Goal: Provide cultural context for better understanding -> Presentation: Static HTML text.
+        - Report Info: Practice Activities (Sec 6) -> Goal: Suggest ways to practice learned material -> Presentation: List of suggestions.
+        - Report Info: Conclusion (Sec 7) -> Goal: Summarize learning and encourage continuation -> Presentation: Static HTML text.
+        - Justification: This structure and content choice directly emulate the provided 1.html, which focuses on textual explanations, contextual dialogue learning, and video interaction. No charts are needed as the source material is a TV show transcript for language learning.
+        - Library/Method: Vanilla JS for interactions (navigation, tooltips, A-B loop). Tailwind CSS for styling.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            display: flex;
+            align-items: baseline;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+
+        .nav-item:hover {
+            background-color: #fde68a; /* amber-200 */
+        }
+
+        .nav-item.active {
+            background-color: #f59e0b; /* amber-500 */
+            color: white;
+        }
+
+        .interactive-phrase {
+            cursor: pointer;
+            font-weight: bold;
+            color: #d97706; /* amber-600 */
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+
+        .explanation-tooltip {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 50; /* Ensure tooltip is above other content */
+            width: 250px;
+            font-size: 0.875rem;
+            color: #374151; /* gray-700 */
+        }
+
+        .scene-title-button {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.5rem 0;
+            border: none;
+            background: none;
+        }
+
+        .scene-content {
+            display: none;
+            padding-left: 1rem;
+            border-left: 2px solid #fbbf24; /* amber-400 */
+            margin-left: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .scene-content.open {
+            display: block;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 0.5rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f3f4f6; /* gray-100 */
+        }
+
+        #mobile-menu-button {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            #mobile-menu-button {
+                display: block;
+            }
+
+            #main-nav {
+                display: none;
+            }
+
+            #main-nav.open {
+                display: block;
+            }
+
+            .nav-item {
+                display: block;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .timestamp {
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* gray-500 */
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        
+        .styled-button {
+            background-color: #f59e0b; /* amber-500 */
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .styled-button:hover {
+            background-color: #d97706; /* amber-600 */
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b; /* amber-500 */
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        video {
+            display: block;
+            margin-top: 0; /* Adjusted from 20px to 0 as #myVideo handles positioning */
+            max-width: 25%; /* Default max-width */
+            max-height: 25vh; /* Default max-height using viewport height */
+            border-radius: 0.375rem; /* Match border radius */
+        }
+         @media (max-width: 1024px) { /* Tablets and large phones */
+            video {
+                max-width: 35%;
+                max-height: 30vh;
+            }
+        }
+        @media (max-width: 768px) { /* Smaller tablets and phones */
+            video {
+                max-width: 50%;
+                max-height: 25vh;
+                 bottom: 10px; /* Adjust position for smaller screens */
+                 right: 10px;
+            }
+             #myVideo {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+         @media (max-width: 480px) { /* Small phones */
+            video {
+                max-width: 80%;
+                max-height: 20vh;
+            }
+        }
+
+
+    </style>
+</head>
+
+<body class="bg-stone-100 text-stone-800">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="w-full md:w-64 bg-amber-100 p-4 shadow-lg">
+            <h1 class="text-2xl font-bold text-amber-700 mb-6 text-center md:text-left">學習選單 (S01E02)</h1>
+            <button id="mobile-menu-button"
+                class="md:hidden w-full text-left p-2 mb-2 bg-amber-500 text-white rounded-md">☰ 選單</button>
+            <nav id="main-nav" class="space-y-2">
+                <a class="nav-item active" data-section="introduction">
+                    <span class="w-6 text-right mr-2">1.</span>
+                    <span>引言</span>
+                </a>
+                <a class="nav-item" data-section="scene-study">
+                    <span class="w-6 text-right mr-2">2.</span>
+                    <span>場景學習</span>
+                </a>
+                <a class="nav-item" data-section="vocabulary">
+                    <span class="w-6 text-right mr-2">3.</span>
+                    <span>詞彙與短語</span>
+                </a>
+                <a class="nav-item" data-section="grammar">
+                    <span class="w-6 text-right mr-2">4.</span>
+                    <span>語法焦點</span>
+                </a>
+                <a class="nav-item" data-section="culture">
+                    <span class="w-6 text-right mr-2">5.</span>
+                    <span>文化註釋</span>
+                </a>
+                <a class="nav-item" data-section="practice">
+                    <span class="w-6 text-right mr-2">6.</span>
+                    <span>練習活動</span>
+                </a>
+                <a class="nav-item" data-section="conclusion">
+                    <span class="w-6 text-right mr-2">7.</span>
+                    <span>結論</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            <section id="introduction" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-4">1. 引言：超音波的啟示！</h2>
+                <p class="mb-4 text-lg">歡迎來到《六人行》第一季第二集「有超音波的結局」(The One with the Sonogram at the End) 的英文學習指南。本集充滿了戲劇性的轉折和生活化的對話，是初學者提升英文聽力、詞彙量和口語表達的絕佳材料。</p>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3">1.1. 本集學習重點</h3>
+                    <p class="mb-2">這一集圍繞著羅斯（Ross）發現前妻卡蘿（Carol）懷孕，瑞秋（Rachel）必須歸還訂婚戒指，以及莫妮卡（Monica）應對父母來訪的壓力。這些情節提供了豐富的學習機會：</p>
+                    <ul class="list-disc list-inside space-y-1 mb-2">
+                        <li>學習如何表達驚訝、沮喪和喜悅等情緒。</li>
+                        <li>掌握與家庭關係、友誼和愛情相關的詞彙。</li>
+                        <li>熟悉日常對話中常見的片語和慣用語。</li>
+                        <li>觀察角色們如何應對突如其來的變化和尷尬場面。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-amber-600 mb-3">1.2. 如何有效使用本指南</h3>
+                    <p>為了最大化本指南的學習效果，建議您：</p>
+                    <ol class="list-decimal list-inside space-y-1">
+                        <li>先觀看《六人行》S01E02，可搭配英文字幕以了解劇情。</li>
+                        <li>利用本指南，針對特定場景和對話進行重點學習。</li>
+                        <li>遇到標註的關鍵詞彙或片語時，暫停影片，查閱解釋。</li>
+                        <li>嘗試跟讀（shadowing）角色的對話，模仿語氣和發音。</li>
+                        <li>專注於理解對話大意，不必糾結於每個單字。</li>
+                    </ol>
+                </div>
+            </section>
+<br/>
+            <section id="scene-study" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">2. 場景學習：深入劇情學英文</h2>
+                <p class="mb-6 text-lg">我們將解析本集中的重要場景。點擊場景標題可展開或收合詳細內容。關鍵詞彙片語已標註，滑鼠移至上方即可查看解釋。</p>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景一：中央公園咖啡館 — 親吻的辯論 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">朋友們討論親吻在戀愛關係中的重要性，展現了男女之間的不同觀點。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Monica: "<span class="interactive-phrase" data-explanation="對我們而言，親吻和其他任何部分一樣重要。">For us, kissing is as important as any part.</span>"<span class="timestamp">(00:00:03 - 00:00:06)</span> <button class="styled-button" onclick="toggleABLoop(0,3,0,6,this)">▶️</button></p>
+                            <p>Chandler: "<span class="interactive-phrase" data-explanation="對我們而言親吻就像是開場表演，像是主要表演（比喻更重要的事）開始前，你必須耐著性子看完的暖場喜劇演員。">For us, kissing's an opening act... like the comedian you have to sit through... before Pink Floyd comes out.</span>"<span class="timestamp">(00:00:17 - 00:00:26)</span> <button class="styled-button" onclick="toggleABLoop(0,17,0,26,this)">▶️</button></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="一個建議：把喜劇演員（比喻親吻）帶回來。意思是男生也應該重視親吻。">Word of advice: Bring back the comedian.</span>"<span class="timestamp">(00:00:54 - 00:00:57)</span> <button class="styled-button" onclick="toggleABLoop(0,54,0,57,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景二：博物館 — 羅斯與卡蘿的意外相遇 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">羅斯在博物館工作時，意外遇見前妻卡蘿，並得知驚人消息。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Marsha (同事): "<span class="interactive-phrase" data-explanation="她有些（個人或情感上的）問題。">Well, she has issues.</span>"<span class="timestamp">(00:02:07 - 00:02:08)</span> <button class="styled-button" onclick="toggleABLoop(2,7,2,8,this)">▶️</button></p>
+                            <p>Carol: "<span class="interactive-phrase" data-explanation="我懷孕了。">I'm pregnant.</span>"<span class="timestamp">(00:03:48 - 00:03:51)</span> <button class="styled-button" onclick="toggleABLoop(3,48,3,51,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景三：莫妮卡與瑞秋的公寓 — 尋找戒指與重大新聞 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">莫妮卡為父母的來訪而焦慮，瑞秋瘋狂尋找訂婚戒指，羅斯帶來了懷孕的消息。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Monica: "<span class="interactive-phrase" data-explanation="我只是不想再給他們任何攻擊我的藉口或把柄。Ammunition 比喻可以用來攻擊或批評的材料。">I just don't wanna give them any more ammunition.</span>"<span class="timestamp">(00:04:36 - 00:04:40)</span> <button class="styled-button" onclick="toggleABLoop(4,36,4,40,this)">▶️</button></p>
+                            <p>Chandler: "<span class="interactive-phrase" data-explanation="你整個人都很混亂、焦躁不安地轉來轉去。Twirly 是個非正式的形容詞，形容人焦慮或興奮得團團轉。">Monica, you're all chaotic and twirly, you know?</span>"<span class="timestamp">(00:05:05 - 00:05:09)</span> <button class="styled-button" onclick="toggleABLoop(5,5,5,9,this)">▶️</button></p>
+                            <p>Rachel: "<span class="interactive-phrase" data-explanation="我是那個狠狠傷了你的心的女孩。Stomped on your heart 是一個生動的比喻，表示深深地傷害了某人的感情。">Hi, Barry, remember me? I'm the girl that stomped on your heart.</span>"<span class="timestamp">(00:06:00 - 00:06:05)</span> <button class="styled-button" onclick="toggleABLoop(6,0,6,5,this)">▶️</button></p>
+                             <p>Joey: "<span class="interactive-phrase" data-explanation="Doy 是一個非正式的感嘆詞，帶有諷刺意味，表示某事非常明顯，問了也是白問。">Doy, right before she lost it.</span>"<span class="timestamp">(00:06:28 - 00:06:32)</span> <button class="styled-button" onclick="toggleABLoop(6,28,6,32,this)">▶️</button></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="這讓那整件枕頭的事情顯得不那麼重要了。Put something in perspective 意思是正確看待某事物的相對重要性。">That puts that whole pillow thing in perspective.</span>"<span class="timestamp">(00:07:46 - 00:07:49)</span> <button class="styled-button" onclick="toggleABLoop(7,46,7,49,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景四：莫妮卡的晚餐 — 父母的偏心與批評 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">莫妮卡的父母來訪，席間不斷稱讚羅斯，同時有意無意地批評莫妮卡。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Monica: "<span class="interactive-phrase" data-explanation="這或許能轉移他們對我的注意力，減輕我的壓力。Take the heat off someone 意思是為某人解圍，轉移對其的批評或壓力。">It might take the heat off of me.</span>"<span class="timestamp">(00:10:14 - 00:10:17)</span> <button class="styled-button" onclick="toggleABLoop(10,14,10,17,this)">▶️</button></p>
+                            <p>Mrs. Geller: "<span class="interactive-phrase" data-explanation="至少她還有機會在婚禮前一刻拋棄男人（意指瑞秋至少有過婚約）。At the altar 指在教堂舉行婚禮的聖壇前。">At least she had the chance to leave a man at the altar.</span>"<span class="timestamp">(00:10:34 - 00:10:38)</span> <button class="styled-button" onclick="toggleABLoop(10,34,10,38,this)">▶️</button></p>
+                             <p>Mr. Geller: "<span class="interactive-phrase" data-explanation="（將莫妮卡比喻成）牛，爸爸？莫妮卡對父親將安於現狀的人比作牛感到不解和不滿。">Cows, Dad?</span>"<span class="timestamp">(00:11:16 - 00:11:18)</span> <button class="styled-button" onclick="toggleABLoop(11,16,11,18,this)">▶️</button></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="卡蘿是個女同性戀。她和一個名叫蘇珊的女人住在一起。她懷了我的孩子。">Carol's a lesbian. She lives with a woman named Susan. She's pregnant with my child.</span>"<span class="timestamp">(00:12:19 - 00:12:29)</span> <button class="styled-button" onclick="toggleABLoop(12,19,12,29,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景五：中央公園咖啡館 — 飯後閒聊 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">晚餐後，朋友們聚在咖啡館。菲比提到她的雙胞胎姐姐，羅斯和瑞秋則談論起複雜的人生。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Phoebe: "<span class="interactive-phrase" data-explanation="我們不說話（指關係不好，不來往）。">We don't speak.</span>"<span class="timestamp">(00:13:15 - 00:13:17)</span> <button class="styled-button" onclick="toggleABLoop(13,15,13,17,this)">▶️</button></p>
+                            <p>Rachel: "<span class="interactive-phrase" data-explanation="作為一個最近剛被甩的人。Dumped 是指被（戀愛對象）拋棄。">You know, as someone who's recently been dumped.</span>"<span class="timestamp">(00:14:24 - 00:14:27)</span> <button class="styled-button" onclick="toggleABLoop(14,24,14,27,this)">▶️</button></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="你可能要避免使用「被甩」這個詞。Steer clear of 意思是避開、迴避。">You may wanna steer clear of the word 'dumped.'</span>"<span class="timestamp">(00:14:28 - 00:14:32)</span> <button class="styled-button" onclick="toggleABLoop(14,28,14,32,this)">▶️</button></p>
+                            <p>Ross & Rachel: "<span class="interactive-phrase" data-explanation="事情什麼時候變得這麼複雜的？ — 你可問倒我了/我也不知道。Got me 是一種非正式的說法，表示「我不知道」。">When did it get so complicated? - Got me.</span>"<span class="timestamp">(00:15:00 - 00:15:03)</span> <button class="styled-button" onclick="toggleABLoop(15,0,15,3,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景六：診所 — 超音波檢查與命名爭議 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">羅斯、卡蘿和蘇珊一起去做超音波檢查，期間因嬰兒的姓氏問題發生爭執。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="她了解我們這種特殊情況嗎？（指卡蘿和蘇珊是同性伴侶，而羅斯是孩子的生父）">Is she familiar with our special situation?</span>"<span class="timestamp">(00:16:19 - 00:16:23)</span> <button class="styled-button" onclick="toggleABLoop(16,19,16,23,this)">▶️</button></p>
+                            <p>Susan: "<span class="interactive-phrase" data-explanation="事情總是會改變的。隨遇而安吧。Roll with the punches 是一個慣用語，意思是要能屈能伸，適應困境。">Things change. Roll with the punches.</span>"<span class="timestamp">(00:18:42 - 00:18:45)</span> <button class="styled-button" onclick="toggleABLoop(18,42,18,45,this)">▶️</button></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="海倫·威利克·邦奇·蓋勒？我覺得那簡直是虐待兒童。Borders on 意思是近乎、幾近於。">Helen Willick Bunch Geller? I think that borders on child abuse.</span>"<span class="timestamp">(00:21:44 - 00:21:50)</span> <button class="styled-button" onclick="toggleABLoop(21,44,21,50,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景七：巴瑞的牙醫診所 — 瑞秋歸還戒指 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">瑞秋去找前未婚夫巴瑞歸還訂婚戒指，卻發現他已經和自己的伴娘敏迪在一起了。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Rachel: "<span class="interactive-phrase" data-explanation="你一個人去度我們的蜜月了？">You went on our honeymoon alone?</span>"<span class="timestamp">(00:19:11 - 00:19:14)</span> <button class="styled-button" onclick="toggleABLoop(19,11,19,14,this)">▶️</button></p>
+                            <p>Barry: "<span class="interactive-phrase" data-explanation="是的，我們現在算是一對了。Kind of a thing now 是一種非正式的說法，指兩人正在交往。">Yeah, we're kind of a thing now.</span>"<span class="timestamp">(00:19:34 - 00:19:37)</span> <button class="styled-button" onclick="toggleABLoop(19,34,19,37,this)">▶️</button></p>
+                            <p>Rachel: "<span class="interactive-phrase" data-explanation="你植髮了！Plugs 指植髮。">You got plugs!</span>"<span class="timestamp">(00:19:42 - 00:19:43)</span> <button class="styled-button" onclick="toggleABLoop(19,42,19,43,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <button class="scene-title-button text-2xl font-semibold text-amber-600 mb-3">場景八：片尾 — 看超音波影片與瑞秋的報復 <span class="text-sm text-stone-500">(點擊展開/收合)</span></button>
+                    <div class="scene-content">
+                        <p class="italic text-stone-600 mb-4">朋友們一起看寶寶的超音波影片，瑞秋則打電話給敏迪進行了一番「祝福」。</p>
+                        <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded">
+                            <p>Joey: "<span class="interactive-phrase" data-explanation="如果你歪著頭，放鬆眼睛看...它有點像一顆老馬鈴薯。">If you tilt your head and relax your eyes... it kind of looks like an old potato.</span>"<span class="timestamp">(00:23:14 - 00:23:20)</span> <button class="styled-button" onclick="toggleABLoop(23,14,23,20,this)">▶️</button></p>
+                            <p>Ross: "<span class="interactive-phrase" data-explanation="你熱淚盈眶了嗎？Welling up 形容淚水湧上眼眶。">Are you welling up?</span>"<span class="timestamp">(00:23:31 - 00:23:33)</span> <button class="styled-button" onclick="toggleABLoop(23,31,23,33,this)">▶️</button></p>
+                            <p>Rachel: "<span class="interactive-phrase" data-explanation="那真是個卑鄙的攻擊（指她對敏迪說的話），但我現在感覺好多了！Cheap shot 指不光彩的、卑鄙的攻擊或言論。">That was a cheap shot, but I feel so much better now!</span>"<span class="timestamp">(00:24:14 - 00:24:18)</span> <button class="styled-button" onclick="toggleABLoop(24,14,24,18,this)">▶️</button></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="explanation-tooltip-container" class="explanation-tooltip"></div>
+            </section>
+<br/>
+            <section id="vocabulary" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">3. 《六人行》S01E02 值得學習的英文詞彙與短語</h2>
+                <p class="mb-6 text-lg">以下表格整理了本集中的關鍵詞彙和短語，並提供簡單的解釋和學習重點。</p>
+                <div class="bg-white p-4 md:p-6 rounded-lg shadow table-container">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">詞彙/短語</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">發音 (近似)</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">簡單解釋</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">劇中時間 (約略)</th>
+                                <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">學習重點</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                            <tr>
+                                <td>opening act</td>
+                                <td>/ˈoʊpənɪŋ ækt/</td>
+                                <td>開場表演；前奏</td>
+                                <td>00:00:17</td>
+                                <td>比喻在主要事件發生前的事物。</td>
+                            </tr>
+                            <tr>
+                                <td>sit through</td>
+                                <td>/sɪt θruː/</td>
+                                <td>耐著性子看完/聽完</td>
+                                <td>00:00:20</td>
+                                <td>常用於形容不得不忍受不感興趣的表演或演講。</td>
+                            </tr>
+                             <tr>
+                                <td>Word of advice</td>
+                                <td>/wɜːrd əv ədˈvaɪs/</td>
+                                <td>一個建議</td>
+                                <td>00:00:54</td>
+                                <td>用於給予他人建議時的開頭語。</td>
+                            </tr>
+                            <tr>
+                                <td>has issues</td>
+                                <td>/hæz ˈɪʃuːz/</td>
+                                <td>有些（個人/情感）問題</td>
+                                <td>00:02:07</td>
+                                <td>非正式用法，指某人有麻煩或困擾。</td>
+                            </tr>
+                            <tr>
+                                <td>pregnant</td>
+                                <td>/ˈpreɡnənt/</td>
+                                <td>懷孕的</td>
+                                <td>00:03:48</td>
+                                <td>描述懷有身孕的狀態。</td>
+                            </tr>
+                            <tr>
+                                <td>ammunition</td>
+                                <td>/ˌæmjəˈnɪʃn/</td>
+                                <td>(比喻) 把柄；攻擊的言論或材料</td>
+                                <td>00:04:36</td>
+                                <td>指可以用來批評或攻擊他人的資訊。</td>
+                            </tr>
+                            <tr>
+                                <td>chaotic and twirly</td>
+                                <td>/keɪˈɑːtɪk ænd ˈtwɜːrli/</td>
+                                <td>混亂且焦躁不安的</td>
+                                <td>00:05:05</td>
+                                <td>形容人因焦慮或興奮而顯得慌亂。</td>
+                            </tr>
+                            <tr>
+                                <td>stomped on your heart</td>
+                                <td>/stɑːmpt ɑːn jər hɑːrt/</td>
+                                <td>狠狠地傷了你的心</td>
+                                <td>00:06:00</td>
+                                <td>生動比喻情感上受到嚴重傷害。</td>
+                            </tr>
+                            <tr>
+                                <td>Doy</td>
+                                <td>/dɔɪ/</td>
+                                <td>(感嘆詞) 那還用說；廢話</td>
+                                <td>00:06:28</td>
+                                <td>非正式，帶諷刺意味，表示某事顯而易見。</td>
+                            </tr>
+                            <tr>
+                                <td>put in perspective</td>
+                                <td>/pʊt ɪn pərˈspektɪv/</td>
+                                <td>正確看待；使顯出相對重要性</td>
+                                <td>00:07:46</td>
+                                <td>從更宏觀或正確的角度看待問題。</td>
+                            </tr>
+                            <tr>
+                                <td>take the heat off</td>
+                                <td>/teɪk ðə hiːt ɔːf/</td>
+                                <td>轉移注意力；為(某人)解圍</td>
+                                <td>00:10:14</td>
+                                <td>減輕某人承受的壓力或批評。</td>
+                            </tr>
+                            <tr>
+                                <td>leave a man at the altar</td>
+                                <td>/liːv ə mæn æt ði ˈɔːltər/</td>
+                                <td>在婚禮前拋棄新郎</td>
+                                <td>00:10:34</td>
+                                <td>指新娘在婚禮儀式前悔婚。</td>
+                            </tr>
+                            <tr>
+                                <td>steer clear of</td>
+                                <td>/stɪr klɪr əv/</td>
+                                <td>避開；迴避</td>
+                                <td>00:14:28</td>
+                                <td>指刻意避開某人或某事物。</td>
+                            </tr>
+                            <tr>
+                                <td>Got me</td>
+                                <td>/ɡɑːt miː/</td>
+                                <td>我不知道；你可問倒我了</td>
+                                <td>00:15:00</td>
+                                <td>非正式，表示不知道答案。</td>
+                            </tr>
+                            <tr>
+                                <td>roll with the punches</td>
+                                <td>/roʊl wɪð ðə ˈpʌntʃɪz/</td>
+                                <td>隨遇而安；逆來順受</td>
+                                <td>00:18:42</td>
+                                <td>指適應困境，從容應對挑戰。</td>
+                            </tr>
+                            <tr>
+                                <td>borders on</td>
+                                <td>/ˈbɔːrdərz ɑːn/</td>
+                                <td>近乎於；幾近</td>
+                                <td>00:21:45</td>
+                                <td>形容某事物非常接近另一種（通常是不好的）狀態。</td>
+                            </tr>
+                            <tr>
+                                <td>kind of a thing</td>
+                                <td>/kaɪnd əv ə θɪŋ/</td>
+                                <td>(關係) 有點曖昧；算是一對</td>
+                                <td>00:19:34</td>
+                                <td>非正式，指兩人正在發展戀愛關係。</td>
+                            </tr>
+                            <tr>
+                                <td>plugs (hair plugs)</td>
+                                <td>/plʌɡz/</td>
+                                <td>植髮</td>
+                                <td>00:19:42</td>
+                                <td>指透過手術植入的頭髮。</td>
+                            </tr>
+                            <tr>
+                                <td>welling up</td>
+                                <td>/ˈwɛlɪŋ ʌp/</td>
+                                <td>(淚水)湧上眼眶</td>
+                                <td>00:23:31</td>
+                                <td>形容感動或悲傷得快要哭出來。</td>
+                            </tr>
+                            <tr>
+                                <td>cheap shot</td>
+                                <td>/tʃiːp ʃɑːt/</td>
+                                <td>卑鄙的攻擊；不光彩的手段</td>
+                                <td>00:24:14</td>
+                                <td>指不公正或惡意的言論或行為。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+<br/>
+            <section id="grammar" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">4. 語法焦點：從對話學語法</h2>
+                <p class="mb-6 text-lg">本集包含許多適合初學者學習的基礎語法點。以下列舉幾個例子：</p>
+                <div class="bg-white p-6 rounded-lg shadow space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">4.1. Be 動詞的用法 (am, is, are)</h3>
+                        <p>Be 動詞用於描述狀態、身份或特徵。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> "For us, kissing <span class="font-bold">is</span> as important as any part." (對我們而言，親吻和其他任何部分一樣重要。) <span class="timestamp">(00:00:03)</span></p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> "I<span class="font-bold">'m</span> pregnant." (我懷孕了。) <span class="timestamp">(00:03:48)</span></p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> "You<span class="font-bold">'re</span> all chaotic and twirly." (你整個人都很混亂、焦躁不安。) <span class="timestamp">(00:05:05)</span></p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">4.2. 助動詞 Do/Does 的疑問句與否定句</h3>
+                        <p>Do/Does 用於構成一般疑問句和否定句。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例 (疑問)：</strong> "<span class="font-bold">Doesn't</span> she seem a little angry?" (她看起來是不是有點生氣嗎?) <span class="timestamp">(00:02:03)</span> (Does not 的縮寫)</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例 (否定)：</strong> "I just <span class="font-bold">don't</span> wanna give them any more ammunition." (我只是不想再給他們任何把柄。) <span class="timestamp">(00:04:36)</span> (Do not 的縮寫)</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">4.3. 情態助動詞 (Can, May, Might, Should)</h3>
+                        <p>情態助動詞表達可能性、建議、能力等。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例 (可能性/請求)：</strong> "<span class="font-bold">Can</span> I stay?" (我可以留在這嗎？) <span class="timestamp">(00:02:42)</span></p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例 (可能性)：</strong> "It <span class="font-bold">might</span> take the heat off of me." (這或許能轉移他們對我的注意力。) <span class="timestamp">(00:10:14)</span></p>
+                         <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例 (建議/可能性)：</strong> "You <span class="font-bold">may</span> wanna steer clear of the word 'dumped.'" (你可能要避免使用「被甩」這個詞。) <span class="timestamp">(00:14:28)</span></p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">4.4. 常見縮寫 (Contractions)</h3>
+                        <p>口語中經常使用縮寫，了解它們有助於聽力理解。</p>
+                        <ul class="list-disc list-inside space-y-1 mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded">
+                            <li><span class="font-bold">It's</span> = It is (範例: "No, it's good." <span class="timestamp">(00:02:01)</span>)</li>
+                            <li><span class="font-bold">Doesn't</span> = Does not (範例: "Doesn't she seem a little angry?" <span class="timestamp">(00:02:03)</span>)</li>
+                            <li><span class="font-bold">I'm</span> = I am (範例: "I'm pregnant." <span class="timestamp">(00:03:48)</span>)</li>
+                            <li><span class="font-bold">Don't</span> = Do not (範例: "I just don't wanna give them..." <span class="timestamp">(00:04:36)</span>)</li>
+                            <li><span class="font-bold">Wanna</span> = Want to (範例: "...don't wanna give them..." <span class="timestamp">(00:04:36)</span>)</li>
+                            <li><span class="font-bold">Gonna</span> = Going to (範例: "What are you gonna do?" <span class="timestamp">(00:08:38)</span>)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+<br/>
+            <section id="culture" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">5. 文化註釋：理解美式生活與幽默</h2>
+                <p class="mb-6 text-lg">了解劇中涉及的文化背景，能幫助您更深入地理解對話和情節。</p>
+                <div class="bg-white p-6 rounded-lg shadow space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">5.1. 家庭動態與父母的期望</h3>
+                        <p>莫妮卡與父母的互動反映了某些家庭中，父母對不同子女可能存在的偏愛以及對子女成就的期望。例如，蓋勒夫婦明顯更欣賞羅斯的學術成就，而對莫妮卡則有不同的評價標準（如婚姻、體重等）。</p>
+                        <p class="mt-1 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>相關情節：</strong> 莫妮卡父母晚餐時的對話，如 "You see, he's 'The Prince.'" (他是個王子) <span class="timestamp">(00:05:22)</span>，以及對莫妮卡小時候 "chubby kid" (胖胖的孩子) <span class="timestamp">(00:10:52)</span> 的回憶。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">5.2. "Ugly Naked Guy" (醜陋裸男)</h3>
+                        <p>這是《六人行》中一個反覆出現的場外笑料。朋友們會透過窗戶觀察對面公寓裡一個從不穿衣服的鄰居。這集首次提到他買了 "ThighMaster" (美腿器) <span class="timestamp">(00:05:31)</span>，增添了喜劇效果。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">5.3. Sonogram (超音波檢查)</h3>
+                        <p>在懷孕期間進行超音波檢查以觀察胎兒情況，在美國是很普遍的。劇中羅斯、卡蘿和蘇珊一起去看超音波，以及朋友們之後觀看錄影帶的情節，反映了這一文化現象。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">5.4. 處理分手與前任關係</h3>
+                        <p>瑞秋與巴瑞的互動，以及羅斯與卡蘿、蘇珊的複雜關係，展示了劇中角色處理感情問題的不同方式。例如，瑞秋歸還戒指時的尷尬，巴瑞與敏迪的新戀情，以及羅斯對於即將成為父親的複雜情緒。</p>
+                    </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">5.5. Pink Floyd (平克·佛洛伊德)</h3>
+                        <p>錢德勒在開場時提到 "Pink Floyd" <span class="timestamp">(00:00:24)</span>，這是一支非常著名的英國搖滾樂團。這個比喻用來強調親吻對男生而言，可能不如後續發展來得重要，就像暖場喜劇演員之於主要樂團表演。</p>
+                    </div>
+                </div>
+            </section>
+<br/>
+            <section id="practice" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">6. 練習活動：鞏固所學</h2>
+                <p class="mb-6 text-lg">透過以下練習，將本集學到的英文知識付諸實踐。</p>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">6.1. 詞彙配對：</h3>
+                        <p>嘗試將以下英文單詞/片語與其正確的中文解釋配對：</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>opening act</li>
+                            <li>has issues</li>
+                            <li>ammunition</li>
+                            <li>take the heat off</li>
+                            <li>roll with the punches</li>
+                            <li>cheap shot</li>
+                        </ul>
+                        <p class="mt-1 text-sm text-stone-600">（答案可參考本指南的詞彙表部分）</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">6.2. 情境造句：</h3>
+                        <p>使用本集學到的至少三個詞彙或片語，描述一個你最近遇到的有趣或困難的情況。</p>
+                        <p class="mt-1 text-sm text-stone-600">例如：My friend <span class="italic">had some issues</span> with her boss, but she decided to <span class="italic">roll with the punches</span>. I tried to <span class="italic">take the heat off</span> her by changing the subject.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">6.3. 聽力與跟讀：</h3>
+                        <p>選擇本集中的一小段對話（例如羅斯和瑞秋在公寓談論複雜人生的片段 <span class="text-stone-500">(約 00:15:00)</span>），使用影片播放器的A-B循環播放功能，反覆聆聽並嘗試模仿角色的語氣和發音。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-1">6.4. 角色扮演：</h3>
+                        <p>與朋友一起，扮演瑞秋和巴瑞在牙醫診所的場景 <span class="text-stone-500">(約 00:19:00 開始)</span>。注意表達驚訝、尷尬和諷刺等情緒。</p>
+                    </div>
+                </div>
+            </section>
+<br/>
+            <section id="conclusion" class="content-section active">
+                <h2 class="text-3xl font-semibold text-amber-600 mb-6">7. 結論：持續學習，享受過程！</h2>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">7.1. 本集學習回顧：</h3>
+                        <p>透過《六人行》S01E02「有超音波的結局」，我們一起探索了許多實用的英文表達，從日常寒暄、情緒表達到應對複雜人際關係的詞彙。希望這些內容能幫助您更自信地使用英文。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">7.2. 學習建議：</h3>
+                        <p>語言學習是一個持續的過程。建議您：</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>多聽多看：反覆觀看《六人行》或其他您感興趣的英文影集。</li>
+                            <li>勇於開口：嘗試使用學到的詞彙和句型進行對話。</li>
+                            <li>記錄與複習：將新的單字和片語記錄下來，並定期複習。</li>
+                            <li>享受樂趣：將英文學習融入生活，找到自己喜歡的方式。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-500 mb-2">7.3. 保持動力：</h3>
+                        <p>每一集的學習都是一小步，累積起來就是一大步。不要怕犯錯，從錯誤中學習是進步的關鍵。祝您在英文學習的旅程中充滿樂趣，收穫滿滿！</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="myVideo">
+        <video controls>
+            <source src="2.mp4" type="video/mp4">
+            您的瀏覽器不支援 HTML5 video。請嘗試更換為現代瀏覽器，或確認影片檔案路徑 (2.mp4) 是否正確。
+        </video>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mainNav = document.getElementById('main-nav');
+
+            if (mobileMenuButton && mainNav) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mainNav.classList.toggle('open');
+                });
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    const sectionId = this.getAttribute('data-section');
+                    contentSections.forEach(section => section.classList.remove('active'));
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    if (mainNav && mainNav.classList.contains('open')) {
+                        mainNav.classList.remove('open');
+                    }
+                });
+            });
+
+            const sceneTitleButtons = document.querySelectorAll('.scene-title-button');
+            sceneTitleButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const content = this.nextElementSibling;
+                    if (content && content.classList.contains('scene-content')) {
+                        content.classList.toggle('open');
+                    }
+                });
+            });
+             // Open all scene content sections by default after initial load
+            const allSceneContents = document.querySelectorAll('.scene-content');
+            allSceneContents.forEach(content => content.classList.add('open'));
+
+
+            const interactivePhrases = document.querySelectorAll('.interactive-phrase');
+            const tooltip = document.getElementById('explanation-tooltip-container');
+
+            interactivePhrases.forEach(phrase => {
+                phrase.addEventListener('mouseenter', function (event) {
+                    const explanation = this.getAttribute('data-explanation');
+                    if (explanation && tooltip) {
+                        tooltip.innerHTML = explanation; // Use innerHTML if explanation contains HTML
+                        tooltip.style.display = 'block';
+                        
+                        let top = event.clientY + 15; // Position below cursor
+                        let left = event.clientX + 15; // Position to the right of cursor
+
+                        // Adjust if tooltip goes off-screen
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        const viewportWidth = window.innerWidth;
+                        const viewportHeight = window.innerHeight;
+
+                        if (left + tooltipRect.width > viewportWidth) {
+                            left = event.clientX - tooltipRect.width - 15; // Position to the left
+                        }
+                        if (top + tooltipRect.height > viewportHeight) {
+                            top = event.clientY - tooltipRect.height - 15; // Position above
+                        }
+                        // Ensure it doesn't go off top/left
+                        if (left < 0) left = 10;
+                        if (top < 0) top = 10;
+
+
+                        tooltip.style.top = `${top}px`;
+                        tooltip.style.left = `${left}px`;
+                    }
+                });
+
+                phrase.addEventListener('mouseleave', function () {
+                    if (tooltip) {
+                        tooltip.style.display = 'none';
+                    }
+                });
+                 phrase.addEventListener('mousemove', function(event) {
+                    if (tooltip && tooltip.style.display === 'block') {
+                        let top = event.clientY + 15;
+                        let left = event.clientX + 15;
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        const viewportWidth = window.innerWidth;
+                        const viewportHeight = window.innerHeight;
+
+                        if (left + tooltipRect.width > viewportWidth) {
+                            left = event.clientX - tooltipRect.width - 15;
+                        }
+                        if (top + tooltipRect.height > viewportHeight) {
+                            top = event.clientY - tooltipRect.height - 15;
+                        }
+                        if (left < 0) left = 10;
+                        if (top < 0) top = 10;
+
+                        tooltip.style.top = `${top}px`;
+                        tooltip.style.left = `${left}px`;
+                    }
+                });
+            });
+        });
+
+        const video = document.querySelector("#myVideo video"); // More specific selector
+        let abLoop = false;
+        let aTime = 0;
+        let bTime = 10;
+        let loopCheckInterval;
+        
+        function setABLoopTimes(startMin, startSec, endMin, endSec) {
+            aTime = (parseInt(startMin) * 60) + parseInt(startSec);
+            bTime = (parseInt(endMin) * 60) + parseInt(endSec);
+        }
+
+        function toggleABLoop(startMin, startSec, endMin, endSec, buttonElement) {
+            if (video.readyState < 1) { // HAVE_NOTHING or HAVE_METADATA (but not enough data)
+                alert("影片尚未載入完成，請稍候再試。");
+                return;
+            }
+
+            const allLoopButtons = document.querySelectorAll('.styled-button');
+            
+            if (buttonElement.textContent === "⏹️") { // If this button is active, stop it
+                stopABLoop();
+                buttonElement.textContent = "▶️";
+            } else { // If this button is not active, or another is, activate this one
+                stopABLoop(); // Stop any other active loops
+                allLoopButtons.forEach(btn => btn.textContent = "▶️"); // Reset all buttons
+                
+                setABLoopTimes(startMin, startSec, endMin, endSec);
+                if (bTime <= aTime) {
+                    alert("結束時間點 B 必須大於起始時間點 A！");
+                    return;
+                }
+
+                video.currentTime = aTime;
+                video.play().catch(error => console.error("影片播放錯誤:", error)); // Catch potential play errors
+                abLoop = true;
+                buttonElement.textContent = "⏹️";
+
+                loopCheckInterval = setInterval(() => {
+                    if (abLoop && video.currentTime >= bTime) {
+                        video.currentTime = aTime;
+                        video.play().catch(error => console.error("影片循環播放錯誤:", error));
+                    }
+                    if (!abLoop) { // Clear interval if loop is stopped externally
+                        clearInterval(loopCheckInterval);
+                    }
+                }, 200);
+            }
+        }
+
+        function stopABLoop() {
+            abLoop = false;
+            if (video && !video.paused) {
+                 video.pause();
+            }
+            clearInterval(loopCheckInterval);
+        }
+
+        // Optional: Add event listener for when video can play
+        if (video) {
+            video.addEventListener('canplay', () => {
+                // console.log("影片已準備好播放。");
+            });
+            video.addEventListener('error', (e) => {
+                console.error("影片載入錯誤:", e);
+                // You could display a user-friendly message here
+                const videoContainer = document.getElementById('myVideo');
+                if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
+                
+                const errorMessage = document.createElement('p');
+                errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
+                errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
+                videoContainer.appendChild(errorMessage);
+            });
+        } else {
+            console.error("找不到影片元素。");
+        }
+
+    </script>
+</body>
+</html>
