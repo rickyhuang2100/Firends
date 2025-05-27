@@ -1002,12 +1002,24 @@
 
 
     <video id="myVideo" controls>
-        <source src="1.mp4" type="video/mp4">
+        <!--<source src="1.mp4" type="video/mp4">-->
         您的瀏覽器不支援 HTML5 video。
     </video>
 
     <script>
-        const video = document.getElementById("myVideo");
+        // 將上面的 JavaScript 程式碼放在這裡
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoUrl = urlParams.get('videoUrl');
+        const video = document.getElementById('myVideo');
+
+        if (videoUrl && video) {
+            video.src = videoUrl;
+        } else if (video) {
+            console.log("未在網址中找到 'videoUrl' 參數，使用預設影片或處理錯誤。");
+            // video.src = "default_video.mp4"; // 設定預設影片
+        } else {
+             console.log("未找到 id 為 'myVideo' 的視訊元素。");
+        }
         let abLoop = false;
         let aTime = 0;
         let bTime = 10;
@@ -1074,7 +1086,26 @@
             video.pause();
             //clearInterval(loopCheckInterval);
         }
-
+        // Optional: Add event listener for when video can play
+        if (video) {
+            video.addEventListener('canplay', () => {
+                // console.log("影片已準備好播放。");
+            });
+            video.addEventListener('error', (e) => {
+                console.error("影片載入錯誤:", e);
+                alert("URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。");
+                // You could display a user-friendly message here
+                //const videoContainer = document.getElementById('myVideo');
+                //if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
+                
+                //const errorMessage = document.createElement('p');
+                //errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
+                //errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
+                //videoContainer.appendChild(errorMessage);
+            });
+        } else {
+            console.error("找不到影片元素。");
+        }
         //video.addEventListener('loadedmetadata', function () {
         //   video.currentTime = 5;
         // });

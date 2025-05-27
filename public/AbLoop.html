@@ -26,12 +26,32 @@
   <button onclick="stopABLoop()">停止 AB 循環</button>
 
   <video id="myVideo" controls>
+    <source src="http://www.tcba.com.tw/Test/s2.mp4" type="video/mp4">
+    <source src="https://dl.4kdownload.com/video/videodownloaderplus/howto-download-video-in-mp4@h264.mp4" type="video/mp4">
     <source src="video.mp4" type="video/mp4">
     您的瀏覽器不支援 HTML5 video。
   </video>
 
   <script>
     const video = document.getElementById("myVideo");
+    // 假設您的網址是像這樣：yourpage.html?videoUrl=https://example.com/videos/myvideo.mp4
+
+    // 1. 獲取網址參數
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // 2. 取得名為 "videoUrl" 的參數值
+    const videoUrl = urlParams.get('videoUrl');
+
+    // 4. 如果找到了參數值和視訊元素，則設定 src
+    if (videoUrl && video) {
+      video.src = videoUrl;
+    } else if (video) {
+      // 如果沒有找到 videoUrl 參數，您可以設定一個預設影片或顯示錯誤訊息
+      console.log("未在網址中找到 'videoUrl' 參數，使用預設影片或處理錯誤。");
+      // video.src = "default_video.mp4"; // 設定預設影片
+    } else {
+      console.log("未找到 id 為 'myVideo' 的視訊元素。");
+    }
     let abLoop = false;
     let aTime = 0;
     let bTime = 10;

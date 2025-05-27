@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif; /* 使用 Roboto 字體 */
-            line-height: 1.6;
+            line-height: 1;
             margin: 0;
             /* 調整 padding，並考慮使用 box-sizing */
             padding: 10px; /* 減少 padding */
@@ -89,13 +89,13 @@
             font-weight: bold;
             display: block;
         }
-        .episode-list a strong {
+        .episode-list strong {
             display: block; /* 總集數單獨一行 */
             font-size: 0.9em;
             color: #696969; /* 總集數顏色 */
             margin-bottom: 5px;
         }
-         .episode-list a span {
+         .episode-list span {
             display: block; /* 英文標題單獨一行 */
             font-size: 0.9em;
             color: #556b2f; /* 英文標題顏色 */
@@ -113,11 +113,44 @@
             border-top: 1px solid #ddd;
         }
     </style>
+        <script>
+            // 新增的 JavaScript 函數
+            function goToVideoPage(idString) {
+                // 獲取文字方塊的值
+                const videoUrl = document.getElementById(idString).value;
+                // 檢查 videoUrl 是否為空字串或 null/undefined
+                if (!videoUrl) {
+                    alert("請輸入URL！"); // 顯示提示訊息
+                    return; // 停止執行後續的程式碼
+                }
+                    // 使用下劃線 "_" 分割字串
+                const parts = idString.split('_');
+
+                // 現在 parts 會是一個陣列，例如：['urlObj', '1']
+                console.log("分割後的陣列：", parts);
+
+                // 您可以根據需要使用 parts 陣列中的元素
+                // 例如，如果您想獲取 '1' 這個部分：
+                const numberPart = parts[1];
+                console.log("數字部分：", numberPart);
+                
+                // 如果文字方塊中有輸入值，則建構新的網址並導向
+                if (videoUrl) {
+                    // 將輸入的 URL 編碼，以確保網址的有效性
+                    const encodedVideoUrl = encodeURIComponent(videoUrl);
+                    window.location.href = `${numberPart}.html?videoUrl=${encodedVideoUrl}`;
+                } else {
+                    // 如果文字方塊為空，您可以選擇提示使用者或執行其他操作
+                    alert("請輸入URL！");
+                }
+            }
+        </script>
 </head>
 <body>
     <header>
         <h1>六人行 Friends</h1>
         <p>透過經典影集學習實用英文</p>
+
     </header>
 
     <div class="container">
@@ -126,7 +159,10 @@
         <div class="season">
             <h2>第一季 Season 1</h2>
             <ul class="episode-list">
-                <li><a href="1.html"><strong>總集數 1</strong> 莫妮卡有了室友<span>The One Where Monica Gets a Roommate</span></a></li>
+                <li><strong>總集數 1</strong><br/>莫妮卡有了室友<br/><span>The One Where Monica Gets a Roommate</span><br/>
+                    URL：<input type="text" id="urlObj_1" placeholder="請輸入URL" style="width:80%"><br/>
+                    <button onclick="goToVideoPage('urlObj_1')">送出</button>
+                </li>
                 <li><a href="2.html"><strong>總集數 2</strong> 卡羅要做超音波檢查<span>The One with the Sonogram at the End</span></a></li>
                 <li><a href="3.html"><strong>總集數 3</strong> 大拇指事件<span>The One with the Thumb</span></a></li>
                 <li><a href="4.html"><strong>總集數 4</strong> 偷窺事件<span>The One with George Stephanopoulos</span></a></li>
