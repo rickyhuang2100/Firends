@@ -6,6 +6,39 @@
     <title>六人行 Friends 英文教學</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- 使用 Google Fonts -->
     <style>
+        /* 設計一個好看的按鈕樣式 */
+        .styled-buttonSubmit {
+          display: inline-block; /* 讓按鈕像文字一樣排列 */
+          padding: 10px 20px; /* 內部邊距，增加點擊區域 */
+          font-size: 16px; /* 字體大小 */
+          font-weight: bold; /* 字體粗細 */
+          text-align: center; /* 文字居中 */
+          text-decoration: none; /* 移除文字下劃線 */
+          color: #ffffff; /* 文字顏色 */
+          background-color: #007bff; /* 背景顏色 - 藍色 */
+          border: none; /* 移除邊框 */
+          border-radius: 5px; /* 圓角 */
+          cursor: pointer; /* 鼠標懸停時顯示手形 */
+          transition: background-color 0.3s ease; /* 背景顏色過渡效果 */
+        }
+        
+        /* 按鈕懸停時的樣式 */
+        .styled-buttonSubmit:hover {
+          background-color: #0056b3; /* 懸停時顏色變深 */
+        }
+        
+        /* 按鈕被點擊時的樣式 */
+        .styled-buttonSubmit:active {
+          background-color: #004085; /* 點擊時顏色進一步變深 */
+        }
+        
+        /* 如果您希望按鈕在停用狀態下的樣式 */
+        .styled-buttonSubmit:disabled {
+          background-color: #cccccc; /* 停用時變灰 */
+          cursor: not-allowed; /* 停用時顯示禁止符號 */
+        }
+    </style>
+    <style>
         body {
             font-family: 'Roboto', sans-serif; /* 使用 Roboto 字體 */
             line-height: 1;
@@ -116,6 +149,10 @@
         <script>
             // 新增的 JavaScript 函數
             function goToVideoPage(idString) {
+                if(idString === 'urlObj_0'){
+                    window.location.href = "0.html?videoUrl=0.mp4";
+                    return;
+                }
                 // 獲取文字方塊的值
                 const videoUrl = document.getElementById(idString).value;
                 // 檢查 videoUrl 是否為空字串或 null/undefined
@@ -159,9 +196,12 @@
         <div class="season">
             <h2>第一季 Season 1</h2>
             <ul class="episode-list">
+                <li><strong>第1集試看</strong><br/>莫妮卡有了室友<br/><span>The One Where Monica Gets a Roommate</span><br/>
+                    <button class="styled-buttonSubmit" onclick="goToVideoPage('urlObj_0')">點擊試看</button>
+                </li>
                 <li><strong>總集數 1</strong><br/>莫妮卡有了室友<br/><span>The One Where Monica Gets a Roommate</span><br/>
-                    URL：<input type="text" id="urlObj_1" placeholder="請輸入URL" style="width:80%"><br/>
-                    <button onclick="goToVideoPage('urlObj_1')">送出</button>
+                    URL：<input type="text" id="urlObj_1" placeholder="請輸入URL" style="width:80%;margin-bottom: 10px"><br/>
+                    <button class="styled-buttonSubmit" onclick="goToVideoPage('urlObj_1')">送出</button>
                 </li>
                 <li><a href="2.html"><strong>總集數 2</strong> 卡羅要做超音波檢查<span>The One with the Sonogram at the End</span></a></li>
                 <li><a href="3.html"><strong>總集數 3</strong> 大拇指事件<span>The One with the Thumb</span></a></li>
