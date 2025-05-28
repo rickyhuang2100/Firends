@@ -254,6 +254,7 @@
 
         <main class="flex-1 p-6 md:p-10 overflow-y-auto">
             <section id="introduction" class="content-section active">
+                <div id="video-button-container" class="mb-6"></div>
                 <h2 class="text-3xl font-semibold text-amber-600 mb-4">1. 引言：超音波的啟示！</h2>
                 <p class="mb-4 text-lg">歡迎來到《六人行》第一季第二集「有超音波的結局」(The One with the Sonogram at the End) 的英文學習指南。本集充滿了戲劇性的轉折和生活化的對話，是初學者提升英文聽力、詞彙量和口語表達的絕佳材料。</p>
 
@@ -862,7 +863,21 @@
         } else {
             console.error("找不到影片元素。");
         }
+        const container = document.getElementById('video-button-container');
 
+        if (videoUrl) {
+            const btn = document.createElement('a');
+            btn.href = videoUrl;
+            btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
+            btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+            container.appendChild(btn);
+        } else {
+            container.innerHTML = `<p class="text-white text-lg">找不到影片網址，請確認網址中包含 <code>?videoUrl=</code> 參數。</p>`;
+        }
     </script>
 </body>
 </html>

@@ -234,6 +234,7 @@
 
         <main class="flex-1 p-6 md:p-10 overflow-y-auto">
             <section id="introduction" class="content-section active">
+                <div id="video-button-container" class="mb-6"></div>
                 <h2 class="text-3xl font-semibold text-amber-600 mb-4">1. 引言：歡迎來到中央公園咖啡館！</h2>
                 <p class="mb-4 text-lg">本應用程式旨在為英文初學者提供一份全面的學習指南，透過經典情境喜劇《六人行》第一季第一集（The One Where Monica Gets a New
                     Roommate）的對話，深入解析實用的英文表達方式。利用劇中自然、生活化的對話，幫助您掌握日常英語的精髓。</p>
@@ -833,7 +834,7 @@
             </section>
         </main>
     </div>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const navItems = document.querySelectorAll('.nav-item');
@@ -1018,7 +1019,7 @@
             console.log("未在網址中找到 'videoUrl' 參數，使用預設影片或處理錯誤。");
             // video.src = "default_video.mp4"; // 設定預設影片
         } else {
-             console.log("未找到 id 為 'myVideo' 的視訊元素。");
+            console.log("未找到 id 為 'myVideo' 的視訊元素。");
         }
         let abLoop = false;
         let aTime = 0;
@@ -1097,7 +1098,7 @@
                 // You could display a user-friendly message here
                 //const videoContainer = document.getElementById('myVideo');
                 //if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
-                
+
                 //const errorMessage = document.createElement('p');
                 //errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
                 //errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
@@ -1109,6 +1110,22 @@
         //video.addEventListener('loadedmetadata', function () {
         //   video.currentTime = 5;
         // });
+
+        const container = document.getElementById('video-button-container');
+
+        if (videoUrl) {
+            const btn = document.createElement('a');
+            btn.href = videoUrl;
+            btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
+            btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+            container.appendChild(btn);
+        } else {
+            container.innerHTML = `<p class="text-white text-lg">找不到影片網址，請確認網址中包含 <code>?videoUrl=</code> 參數。</p>`;
+        }
     </script>
 </body>
 
