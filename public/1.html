@@ -949,66 +949,6 @@
                     }
                 });
             });
-
-            // Gemini API Integration for Dialogue Continuation
-            /*
-            const generateDialogueButtons = document.querySelectorAll('.generate-dialogue-btn');
-
-            generateDialogueButtons.forEach(button => {
-                button.addEventListener('click', async function() {
-                    const dialogueBlock = this.closest('.border-l-4');
-                    const dialogueTextElements = dialogueBlock.querySelectorAll('p');
-                    let currentDialogue = '';
-                    dialogueTextElements.forEach(p => {
-                        // Exclude the button's own text and generated output
-                        if (!p.querySelector('.generate-dialogue-btn') && !p.closest('.generated-dialogue-output')) {
-                            currentDialogue += p.textContent.trim() + '\n';
-                        }
-                    });
-
-                    const outputContainer = dialogueBlock.querySelector('.generated-dialogue-output');
-                    const loadingSpinner = outputContainer.querySelector('.loading-spinner');
-                    const generatedTextDiv = outputContainer.querySelector('.generated-text');
-
-                    outputContainer.classList.remove('hidden');
-                    loadingSpinner.classList.remove('hidden');
-                    generatedTextDiv.textContent = ''; // Clear previous content
-                    generatedTextDiv.classList.add('hidden');
-
-                    const prompt = `Based on the following dialogue from Friends, please generate a plausible continuation of the conversation, keeping the characters' personalities and the show's tone consistent. The response should be in traditional Chinese.\n\nDialogue:\n${currentDialogue}`;
-
-                    try {
-                        const payload = {
-                            contents: [{ role: "user", parts: [{ text: prompt }] }]
-                        };
-                        const apiKey = ""; // Leave this as-is; Canvas will provide it at runtime
-                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        const result = await response.json();
-
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            const generatedDialogue = result.candidates[0].content.parts[0].text;
-                            generatedTextDiv.textContent = generatedDialogue;
-                        } else {
-                            generatedTextDiv.textContent = '無法生成對話，請稍後再試。';
-                        }
-                    } catch (error) {
-                        console.error('Error generating dialogue:', error);
-                        generatedTextDiv.textContent = '生成對話時發生錯誤。';
-                    } finally {
-                        loadingSpinner.classList.add('hidden');
-                        generatedTextDiv.classList.remove('hidden');
-                    }
-                });
-            });*/
         });
     </script>
 

@@ -684,14 +684,7 @@
             </section>
         </main>
     </div>
-    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-    <div id="myVideo">
-        <video controls>
-            <source src="2.mp4" type="video/mp4">
-            您的瀏覽器不支援 HTML5 video。請嘗試更換為現代瀏覽器，或確認影片檔案路徑 (2.mp4) 是否正確。
-        </video>
-    </div>
-
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const navItems = document.querySelectorAll('.nav-item');
@@ -699,42 +692,55 @@
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mainNav = document.getElementById('main-nav');
 
+            // Mobile menu toggle
             if (mobileMenuButton && mainNav) {
                 mobileMenuButton.addEventListener('click', () => {
                     mainNav.classList.toggle('open');
                 });
             }
 
+            // Navigation logic
             navItems.forEach(item => {
                 item.addEventListener('click', function () {
+                    // Remove active class from all nav items
                     navItems.forEach(nav => nav.classList.remove('active'));
+                    // Add active class to the clicked item
                     this.classList.add('active');
+
                     const sectionId = this.getAttribute('data-section');
+
+                    // Hide all content sections
                     contentSections.forEach(section => section.classList.remove('active'));
+                    // Show the target content section
                     const targetSection = document.getElementById(sectionId);
                     if (targetSection) {
                         targetSection.classList.add('active');
                     }
+                    // Close mobile menu after selection
                     if (mainNav && mainNav.classList.contains('open')) {
                         mainNav.classList.remove('open');
                     }
                 });
             });
 
-            const sceneTitleButtons = document.querySelectorAll('.scene-title-button');
-            sceneTitleButtons.forEach(button => {
-                button.addEventListener('click', function () {
+
+
+            // Open all scene content sections by default
+            const allSceneContents = document.querySelectorAll('.scene-content');
+            allSceneContents.forEach(content => content.classList.add('open'));
+
+            // Scene title toggle logic
+            const sceneTitles = document.querySelectorAll('.scene-title');
+            sceneTitles.forEach(title => {
+                title.addEventListener('click', function () {
                     const content = this.nextElementSibling;
                     if (content && content.classList.contains('scene-content')) {
                         content.classList.toggle('open');
                     }
                 });
             });
-             // Open all scene content sections by default after initial load
-            const allSceneContents = document.querySelectorAll('.scene-content');
-            allSceneContents.forEach(content => content.classList.add('open'));
 
-
+            // Interactive phrase tooltip logic
             const interactivePhrases = document.querySelectorAll('.interactive-phrase');
             const tooltip = document.getElementById('explanation-tooltip-container');
 
@@ -742,27 +748,19 @@
                 phrase.addEventListener('mouseenter', function (event) {
                     const explanation = this.getAttribute('data-explanation');
                     if (explanation && tooltip) {
-                        tooltip.innerHTML = explanation; // Use innerHTML if explanation contains HTML
+                        tooltip.textContent = explanation;
                         tooltip.style.display = 'block';
-                        
-                        let top = event.clientY + 15; // Position below cursor
-                        let left = event.clientX + 15; // Position to the right of cursor
+                        // Position tooltip near the mouse, adjusting for edges
+                        let top = event.clientY + 10;
+                        let left = event.clientX + 10;
 
                         // Adjust if tooltip goes off-screen
-                        const tooltipRect = tooltip.getBoundingClientRect();
-                        const viewportWidth = window.innerWidth;
-                        const viewportHeight = window.innerHeight;
-
-                        if (left + tooltipRect.width > viewportWidth) {
-                            left = event.clientX - tooltipRect.width - 15; // Position to the left
+                        if (left + tooltip.offsetWidth > window.innerWidth) {
+                            left = window.innerWidth - tooltip.offsetWidth - 10;
                         }
-                        if (top + tooltipRect.height > viewportHeight) {
-                            top = event.clientY - tooltipRect.height - 15; // Position above
+                        if (top + tooltip.offsetHeight > window.innerHeight) {
+                            top = event.clientY - tooltip.offsetHeight - 10;
                         }
-                        // Ensure it doesn't go off top/left
-                        if (left < 0) left = 10;
-                        if (top < 0) top = 10;
-
 
                         tooltip.style.top = `${top}px`;
                         tooltip.style.left = `${left}px`;
@@ -774,87 +772,111 @@
                         tooltip.style.display = 'none';
                     }
                 });
-                 phrase.addEventListener('mousemove', function(event) {
+                // Keep tooltip position updated on mouse move over phrase
+                phrase.addEventListener('mousemove', function (event) {
                     if (tooltip && tooltip.style.display === 'block') {
-                        let top = event.clientY + 15;
-                        let left = event.clientX + 15;
-                        const tooltipRect = tooltip.getBoundingClientRect();
-                        const viewportWidth = window.innerWidth;
-                        const viewportHeight = window.innerHeight;
-
-                        if (left + tooltipRect.width > viewportWidth) {
-                            left = event.clientX - tooltipRect.width - 15;
+                        let top = event.clientY + 10;
+                        let left = event.clientX + 10;
+                        if (left + tooltip.offsetWidth > window.innerWidth) {
+                            left = window.innerWidth - tooltip.offsetWidth - 10;
                         }
-                        if (top + tooltipRect.height > viewportHeight) {
-                            top = event.clientY - tooltipRect.height - 15;
+                        if (top + tooltip.offsetHeight > window.innerHeight) {
+                            top = event.clientY - tooltip.offsetHeight - 10;
                         }
-                        if (left < 0) left = 10;
-                        if (top < 0) top = 10;
-
                         tooltip.style.top = `${top}px`;
                         tooltip.style.left = `${left}px`;
                     }
                 });
             });
         });
+    </script>
 
-        const video = document.querySelector("#myVideo video"); // More specific selector
+
+    <video id="myVideo" controls>
+        <!--<source src="1.mp4" type="video/mp4">-->
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+
+    <script>
+        // 將上面的 JavaScript 程式碼放在這裡
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoUrl = urlParams.get('videoUrl');
+        const video = document.getElementById('myVideo');
+
+        if (videoUrl && video) {
+            video.src = videoUrl;
+        } else if (video) {
+            console.log("未在網址中找到 'videoUrl' 參數，使用預設影片或處理錯誤。");
+            // video.src = "default_video.mp4"; // 設定預設影片
+        } else {
+            console.log("未找到 id 為 'myVideo' 的視訊元素。");
+        }
         let abLoop = false;
         let aTime = 0;
         let bTime = 10;
         let loopCheckInterval;
-        
-        function setABLoopTimes(startMin, startSec, endMin, endSec) {
-            aTime = (parseInt(startMin) * 60) + parseInt(startSec);
-            bTime = (parseInt(endMin) * 60) + parseInt(endSec);
+        let isABLoopRunning = false;
+        //const toggleButton = document.getElementById("toggleABLoopButton");
+        var loopStartTimeMin = 0;
+        var loopStartTimeSec = 0;
+        var loopEndTimeMin = 0;
+        var loopEndTimeSec = 0;
+
+        function toggleABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec, obj) {
+            var toggleButton = obj;
+            if (toggleButton.textContent === "⏹️") {
+                stopABLoop();
+                toggleButton.textContent = "▶️"
+                return;
+            }
+            //if (toggleButton.textContent === "▶️"){
+            isABLoopRunning = true;
+            //document.write("test");
+            startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec);
+            var allToggle = document.querySelectorAll('.styled-button');
+            allToggle.forEach(button => {
+                button.textContent = '▶️';
+            });
+            toggleButton.textContent = "⏹️";
+            //return;
+            //}
+
+            //isABLoopRunning = !isABLoopRunning; // 切換狀態
+        }
+        function getTime(min, sec) {
+            const minutes = parseInt(min) || 0;
+            const seconds = parseInt(sec) || 0;
+            return minutes * 60 + seconds;
         }
 
-        function toggleABLoop(startMin, startSec, endMin, endSec, buttonElement) {
-            if (video.readyState < 1) { // HAVE_NOTHING or HAVE_METADATA (but not enough data)
-                alert("影片尚未載入完成，請稍候再試。");
+        function startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec) {
+            aTime = getTime(loopStartTimeMin, loopStartTimeSec);
+            bTime = getTime(loopEndTimeMin, loopEndTimeSec);
+
+            if (bTime <= aTime) {
+                alert("終點 B 必須大於起點 A！");
                 return;
             }
 
-            const allLoopButtons = document.querySelectorAll('.styled-button');
-            
-            if (buttonElement.textContent === "⏹️") { // If this button is active, stop it
-                stopABLoop();
-                buttonElement.textContent = "▶️";
-            } else { // If this button is not active, or another is, activate this one
-                stopABLoop(); // Stop any other active loops
-                allLoopButtons.forEach(btn => btn.textContent = "▶️"); // Reset all buttons
-                
-                setABLoopTimes(startMin, startSec, endMin, endSec);
-                if (bTime <= aTime) {
-                    alert("結束時間點 B 必須大於起始時間點 A！");
-                    return;
+            video.currentTime = aTime;
+            video.play();
+            abLoop = true;
+
+            // 每 0.2 秒檢查一次是否超過 B 點
+            loopCheckInterval = setInterval(() => {
+                if (abLoop && video.currentTime >= bTime) {
+                    video.currentTime = aTime;
+                    video.play();
                 }
-
-                video.currentTime = aTime;
-                video.play().catch(error => console.error("影片播放錯誤:", error)); // Catch potential play errors
-                abLoop = true;
-                buttonElement.textContent = "⏹️";
-
-                loopCheckInterval = setInterval(() => {
-                    if (abLoop && video.currentTime >= bTime) {
-                        video.currentTime = aTime;
-                        video.play().catch(error => console.error("影片循環播放錯誤:", error));
-                    }
-                    if (!abLoop) { // Clear interval if loop is stopped externally
-                        clearInterval(loopCheckInterval);
-                    }
-                }, 200);
-            }
+            }, 200);
         }
 
         function stopABLoop() {
             abLoop = false;
-            if (video && !video.paused) {
-                 video.pause();
-            }
-            clearInterval(loopCheckInterval);
+            isABLoopRunning = false;
+            video.pause();
+            //clearInterval(loopCheckInterval);
         }
-
         // Optional: Add event listener for when video can play
         if (video) {
             video.addEventListener('canplay', () => {
@@ -862,18 +884,23 @@
             });
             video.addEventListener('error', (e) => {
                 console.error("影片載入錯誤:", e);
+                alert("URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。");
                 // You could display a user-friendly message here
-                const videoContainer = document.getElementById('myVideo');
-                if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
-                
-                const errorMessage = document.createElement('p');
-                errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
-                errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
-                videoContainer.appendChild(errorMessage);
+                //const videoContainer = document.getElementById('myVideo');
+                //if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
+
+                //const errorMessage = document.createElement('p');
+                //errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
+                //errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
+                //videoContainer.appendChild(errorMessage);
             });
         } else {
             console.error("找不到影片元素。");
         }
+        //video.addEventListener('loadedmetadata', function () {
+        //   video.currentTime = 5;
+        // });
+
         const container = document.getElementById('video-button-container');
 
         if (videoUrl) {
