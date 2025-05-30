@@ -961,13 +961,13 @@
     <script>
         // 將上面的 JavaScript 程式碼放在這裡
         const urlParams = new URLSearchParams(window.location.search);
-        const videoUrl = urlParams.get('videoUrl');
+        const url = urlParams.get('url');
         const video = document.getElementById('myVideo');
 
-        if (videoUrl && video) {
-            video.src = videoUrl;
+        if (url && video) {
+            video.src = url;
         } else if (video) {
-            console.log("未在網址中找到 'videoUrl' 參數，使用預設影片或處理錯誤。");
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
             // video.src = "default_video.mp4"; // 設定預設影片
         } else {
             console.log("未找到 id 為 'myVideo' 的視訊元素。");
@@ -1046,6 +1046,8 @@
             video.addEventListener('error', (e) => {
                 console.error("影片載入錯誤:", e);
                 alert("URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。");
+                const videoContainer = document.getElementById('video-button-container');
+                container.innerHTML = `<p class="text-red-500 text-3xl">URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。</p>`;
                 // You could display a user-friendly message here
                 //const videoContainer = document.getElementById('myVideo');
                 //if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
@@ -1064,9 +1066,9 @@
 
         const container = document.getElementById('video-button-container');
 
-        if (videoUrl) {
+        if (url) {
             const btn = document.createElement('a');
-            btn.href = videoUrl;
+            btn.href = url;
             btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
             btn.innerHTML = `
                     <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
@@ -1075,7 +1077,7 @@
                 `;
             container.appendChild(btn);
         } else {
-            container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?videoUrl=</code> 參數。</p>`;
+            container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
         }
     </script>
     <div id="contact-container"></div>
