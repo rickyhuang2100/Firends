@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《六人行》S01E04 互動學習指南</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Inter', 'Noto Sans TC', sans-serif;
+}
+
+    .content-section {
+        display: none;
+    }
+
+    .content-section.active {
+        display: block;
+    }
+
+    .nav-item {
+        cursor: pointer;
+        display: flex;
+        align-items: baseline;
+        padding: 0.75rem 1rem;
+        border-radius: 0.375rem;
+        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    }
+
+    .nav-item:hover {
+        background-color: #fde68a;
+    }
+
+    .nav-item.active {
+        background-color: #f59e0b;
+        color: white;
+        font-weight: 600;
+    }
+
+    .interactive-phrase {
+        cursor: pointer;
+        font-weight: bold;
+        color: #d97706;
+        text-decoration: underline;
+        text-decoration-style: dotted;
+    }
+
+    .explanation-tooltip {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        z-index: 10;
+        width: 250px;
+        font-size: 0.875rem;
+        color: #374151;
+    }
+
+    .scene-title {
+        cursor: pointer;
+    }
+
+    .scene-content {
+        display: none;
+        padding-left: 1rem;
+        border-left: 2px solid #fbbf24;
+        margin-left: 0.5rem;
+    }
+
+    .scene-content.open {
+        display: block;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #e5e7eb;
+        padding: 0.75rem;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f3f4f6;
+    }
+    
+    #mobile-menu-button {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        #mobile-menu-button {
+            display: block;
+        }
+
+        #main-nav {
+            display: none;
+        }
+
+        #main-nav.open {
+            display: block;
+        }
+    }
+    .timestamp {
+        font-size: 0.75rem;
+        color: #6b7280;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+    }
+    .styled-button {
+        background-color: #f59e0b;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        line-height: 1;
+        transition: background-color 0.2s ease-in-out;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+        margin: 0 0.25rem;
+    }
+    .styled-button:hover {
+        background-color: #d97706;
+    }
+     #video-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+        border: 3px solid #f59e0b;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        background-color: #1f2937;
+        overflow: hidden;
+    }
+
+    #myVideo {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-width: 320px;
+    }
+     @media (max-width: 768px) {
+        #video-container {
+            max-width: 90vw;
+            bottom: 10px;
+            right: 10px;
+        }
+    }
+</style>
+</head>
+
+<body class="bg-stone-50 text-stone-800">
+<div class="flex flex-col md:flex-row min-h-screen">
+<aside class="w-full md:w-72 bg-amber-50 p-4 shadow-md md:shadow-lg sticky top-0 h-screen md:overflow-y-auto">
+<h1 class="text-3xl font-bold text-amber-800 mb-6 text-center md:text-left">學習選單</h1>
+<button id="mobile-menu-button"
+class="md:hidden w-full text-left p-2 mb-2 bg-amber-500 text-white rounded-md">☰ 選單</button>
+<nav id="main-nav" class="space-y-2">
+<a class="nav-item active" data-section="introduction">
+<span class="w-6 text-right mr-2">1.</span>
+<span>引言</span>
+</a>
+<a class="nav-item" data-section="scene-study">
+<span class="w-6 text-right mr-2">2.</span>
+<span>場景學習</span>
+</a>
+<a class="nav-item" data-section="vocabulary">
+<span class="w-6 text-right mr-2">3.</span>
+<span>詞彙與短語</span>
+</a>
+<a class="nav-item" data-section="grammar">
+<span class="w-6 text-right mr-2">4.</span>
+<span>語法焦點</span>
+</a>
+<a class="nav-item" data-section="culture">
+<span class="w-6 text-right mr-2">5.</span>
+<span>文化註釋</span>
+</a>
+<a class="nav-item" data-section="practice">
+<span class="w-6 text-right mr-2">6.</span>
+<span>練習活動</span>
+</a>
+<a class="nav-item" data-section="conclusion">
+<span class="w-6 text-right mr-2">7.</span>
+<span>結論</span>
+</a>
+</nav>
+</aside>
+
+    <main class="flex-1 p-6 md:p-10">
+        <div id="video-placeholder" class="mb-6"></div>
+        <section id="introduction" class="content-section active">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-4">1. 引言：歡迎學習《六人行》S01E04</h2>
+            <p class="mb-4 text-lg">這一集是 "The One with George Stephanopoulos"，圍繞著幾個有趣的情節展開：男孩們去看曲棍球比賽，女孩們則因為送錯的披薩而意外窺探到政治人物的生活。同時，羅斯正為與前妻卡蘿的紀念日而感傷。這一集充滿了生活化的對話、安慰朋友的溫馨場景，以及90年代的文化元素。對於英文初學者來說，這是學習日常用語、表達關心和分享感受的絕佳教材。</p>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-2xl font-semibold text-amber-600 mb-3">1.1. 為什麼選擇這一集？</h3>
+                <ul class="list-disc list-inside space-y-2 text-stone-700">
+                    <li><b>生活化情境：</b> 從討論「如果有一天我變得全能...」的幻想，到安慰失落的朋友，對話內容非常貼近日常生活。</li>
+                    <li><b>情緒表達：</b> 學習如何表達興奮（stalking a celebrity）、悲傷（anniversary blues）和關心（comforting a friend）。</li>
+                    <li><b>文化元素：</b> 了解90年代美國的政治名人、曲棍球文化和年輕人的「睡衣派對」(slumber party)。</li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-amber-600 mb-3">1.2. 如何有效使用本指南</h3>
+                <ul class="list-disc list-inside space-y-2 text-stone-700">
+                    <li>點擊對話旁的 ▶️ 按鈕，反覆聆聽和模仿角色的發音及語調。</li>
+                    <li>將滑鼠移到 <span class="interactive-phrase" data-explanation="像這樣有底線的片語，滑鼠移過來就會有解釋喔！">高亮片語</span> 上，即時查看中文解釋。</li>
+                    <li>跟著「場景學習」深入劇情，理解對話的上下文。</li>
+                    <li>在「練習活動」中測試自己的學習成果。</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="scene-study" class="content-section">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-6">2. 場景學習：深入劇情學英文</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-2xl font-semibold text-amber-600 mb-3 scene-title">場景一：如果我變得全能... <span class="text-sm text-stone-500">(點擊展開/收合)</span></h3>
+                <div class="scene-content">
+                    <p class="italic text-stone-600 mb-4">開場時，大家在咖啡館裡玩一個想像遊戲：「如果有一天你變得無所不能，你會做什麼？」</p>
+                    <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded space-y-2">
+                        <p>Phoebe: "If I were <span class="interactive-phrase" data-explanation="無所不能的，全能的。這是一個比較高級的詞彙，但在這裡用來表達一種幻想。">omnipotent</span> for a day, I would want world peace..." (如果有一天我變得全能,我要世界和平...)<button class="styled-button" onclick="playLoop(1, 4, 1, 9, this)">▶️</button><span class="timestamp">(00:00:04 - 00:00:09)</span></p>
+                        <p>Chandler: "If I were omnipotent for a day, I'd make myself omnipotent forever." (如果有一天我變得全能 我要讓自己變得永遠全能)<button class="styled-button" onclick="playLoop(19, 95, 24, 89, this)">▶️</button><span class="timestamp">(00:00:20 - 00:00:25)</span></p>
+                        <p>Rachel: "There's always one guy. 'lf I had a wish, I'd wish for three more wishes.'" (看吧，總有這樣的人..."如果我有一個願望，我會許願再多三個願望。")<button class="styled-button" onclick="playLoop(25, 9, 30, 22, this)">▶️</button><span class="timestamp">(00:00:26 - 00:00:31)</span></p>
+                    </div>
+                    <p class="mt-2 text-sm text-stone-700">這個場景是學習第二條件句 (Second Conditional) 的好例子，用來談論不真實或假設性的情況 (If + 過去式, ...would + 動詞原形)。</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-2xl font-semibold text-amber-600 mb-3 scene-title">場景二：羅斯的憂鬱星期天 <span class="text-sm text-stone-500">(點擊展開/收合)</span></h3>
+                <div class="scene-content">
+                    <p class="italic text-stone-600 mb-4">羅斯因為今天是和前妻卡蘿的紀念日而情緒低落，喬伊和錢德勒想帶他去看曲棍球比賽轉換心情。</p>
+                    <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded space-y-2">
+                       <p>Ross: "It's the anniversary of my first time with Carol." (今天是我和卡蘿第一次的紀念日)<button class="styled-button" onclick="playLoop(87, 85, 91, 75, this)">▶️</button><span class="timestamp">(00:01:28 - 00:01:31)</span></p>
+                       <p>Joey: "We're going to the hockey game tonight. You should come with." (我們今晚要去看曲棍球賽，你該一起來。)<button class="styled-button" onclick="playLoop(100, 31, 103, 31, this)">▶️</button><span class="timestamp">(00:01:41 - 00:01:44)</span></p>
+                       <p>Ross: "<span class="interactive-phrase" data-explanation="這句話的意思是「這有什麼意義呢？」或「重點是什麼？」。用來表達做某事沒有用或沒有目的。">What's the point?</span> You know? She's gone." (有什麼意義呢？她已經走了。)<button class="styled-button" onclick="playLoop(110, 89, 114, 2, this)">▶️</button><span class="timestamp">(00:01:51 - 00:01:54)</span></p>
+                    </div>
+                    <p class="mt-2 text-sm text-stone-700">這裡可以看到朋友們如何嘗試安慰和支持情緒低落的人。"You should come with" 是一種友善的邀請。</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-2xl font-semibold text-amber-600 mb-3 scene-title">場景三：睡衣派對與名人八卦 <span class="text-sm text-stone-500">(點擊展開/收合)</span></h3>
+                <div class="scene-content">
+                    <p class="italic text-stone-600 mb-4">女孩們為了安慰羅斯，決定來一場 impromptu (即興的) 睡衣派對。同時，她們意外收到了名人 George Stephanopoulos 的披薩。</p>
+                    <div class="border-l-4 border-amber-400 pl-4 py-2 my-2 bg-amber-50 rounded space-y-2">
+                       <p>Monica: "We're having a <span class="interactive-phrase" data-explanation="睡衣派對。通常指一群朋友（特別是女孩）聚在一起過夜，吃零食、聊天、看電影等。">slumber party</span>. We've got junk food, we've got wine..." (我們在開睡衣派對，有垃圾食物和酒...)<button class="styled-button" onclick="playLoop(332, 22, 335, 99, this)">▶️</button><span class="timestamp">(00:05:33 - 00:05:35)</span></p>
+                       <p>Rachel: "The pizza guy is so cute. I'm going to <span class="interactive-phrase" data-explanation="「give him a huge tip」意思是給他一大筆小費。">give him a huge tip</span>." (送披薩的傢伙真帥，我要給他一大筆小費。)<button class="styled-button" onclick="playLoop(384, 53, 387, 43, this)">▶️</button><span class="timestamp">(00:06:25 - 00:06:28)</span></p>
+                       <p>Monica: "That's George Stephanopoulos's pizza." (那是喬治·史蒂芬諾普洛斯的披薩。)<button class="styled-button" onclick="playLoop(400, 68, 402, 85, this)">▶️</button><span class="timestamp">(00:06:41 - 00:06:42)</span></p>
+                       <p>Phoebe: "We are <span class="interactive-phrase" data-explanation="一個口語說法，意思是「嚇壞了」或「非常焦慮/緊張」。">freaking out</span>." (我們快嚇壞了。)<button class="styled-button" onclick="playLoop(717, 85, 719, 15, this)">▶️</button><span class="timestamp">(00:11:58 - 00:11:59)</span></p>
+                    </div>
+                    <p class="mt-2 text-sm text-stone-700">這個場景充滿了非正式的口語表達，如 "freaking out"，也展示了美國文化中的 "slumber party"。</p>
+                </div>
+            </div>
+            
+            <div id="explanation-tooltip-container" class="explanation-tooltip"></div>
+        </section>
+
+        <section id="vocabulary" class="content-section">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-6">3. 值得學習的詞彙與短語</h2>
+            <div class="bg-white p-4 md:p-6 rounded-lg shadow-md table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">英文詞彙/短語</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">中文意思</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">學習重點與情境</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">播放</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                        <tr>
+                            <td>omnipotent</td>
+                            <td>全能的</td>
+                            <td>用在假設性的幻想遊戲中，談論擁有無限力量。</td>
+                            <td><button class="styled-button" onclick="playLoop(19, 95, 24, 89, this)">▶️</button></td>
+                        </tr>
+                        <tr>
+                            <td>What's the point?</td>
+                            <td>有什麼意義？</td>
+                            <td>當羅斯感到絕望時，用來表達做任何事都沒用。</td>
+                            <td><button class="styled-button" onclick="playLoop(110, 89, 114, 2, this)">▶️</button></td>
+                        </tr>
+                        <tr>
+                            <td>on a roll</td>
+                            <td>運氣好；順利</td>
+                            <td>錢德勒用來形容喬伊連續猜對羅斯的心事。</td>
+                            <td><button class="styled-button" onclick="playLoop(170, 71, 172, 84, this)">▶️</button></td>
+                        </tr>
+                         <tr>
+                            <td>puck</td>
+                            <td>(冰上)曲棍球</td>
+                            <td>男孩們去看比賽，羅斯被球打到。</td>
+                            <td><button class="styled-button" onclick="playLoop(241, 11, 243, 75, this)">▶️</button></td>
+                        </tr>
+                         <tr>
+                            <td>slumber party</td>
+                            <td>睡衣派對</td>
+                            <td>女孩們為了安慰羅斯而舉辦的過夜派對。</td>
+                            <td><button class="styled-button" onclick="playLoop(332, 22, 335, 99, this)">▶️</button></td>
+                        </tr>
+                        <tr>
+                            <td>freaking out</td>
+                            <td>嚇壞了；抓狂</td>
+                            <td>口語。女孩們因為偷窺名人而感到非常緊張。</td>
+                            <td><button class="styled-button" onclick="playLoop(717, 85, 719, 15, this)">▶️</button></td>
+                        </tr>
+                        <tr>
+                            <td>let your guard down</td>
+                            <td>卸下心防</td>
+                            <td>菲比建議羅斯不要總是那麼防備，要放鬆一點。</td>
+                            <td><button class="styled-button" onclick="playLoop(832, 10, 834, 50, this)">▶️</button></td>
+                        </tr>
+                         <tr>
+                            <td>long shot</td>
+                            <td>希望渺茫的事</td>
+                            <td>錢德勒認為羅斯想約到 Lizzie 是一件不太可能成功的事。</td>
+                            <td><button class="styled-button" onclick="playLoop(1034, 25, 1036, 68, this)">▶️</button></td>
+                        </tr>
+                         <tr>
+                            <td>major</td>
+                            <td>主要的；重大的</td>
+                            <td>口語中也用來表示「非常」，如 "major crush" (非常迷戀)。</td>
+                            <td><button class="styled-button" onclick="playLoop(1235, 53, 1238, 20, this)">▶️</button></td>
+                        </tr>
+                         <tr>
+                            <td>roughhousing</td>
+                            <td>打鬧；粗暴的玩耍</td>
+                            <td>護士用來制止喬伊和錢德勒在急診室搶球。</td>
+                            <td><button class="styled-button" onclick="playLoop(1419, 75, 1422, 68, this)">▶️</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grammar" class="content-section">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-6">4. 語法焦點：輕鬆學語法</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">4.1. 第二條件句 (Second Conditional)</h3>
+                    <p>用來談論與現在事實相反的假設或未來的幻想。結構為：<code class="bg-amber-100 text-amber-800 px-2 py-1 rounded">If + 主詞 + 過去式動詞..., 主詞 + would + 動詞原形...</code>。</p>
+                    <p class="mt-2 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> Phoebe: "<strong>If I were</strong> omnipotent for a day, <strong>I would want</strong> world peace..." (如果我有一天是全能的，我會想要世界和平...)</p>
+                    <p class="mt-2 text-sm text-stone-600">注意：在假設語氣中，be動詞通常用 "were" 來代替 "was"，即使主詞是 I/he/she/it。</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">4.2. 動名詞作主詞 (Gerunds as Subjects)</h3>
+                    <p>動詞加上 -ing 形成動名詞，可以像名詞一樣當作句子的主詞。</p>
+                    <p class="mt-2 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> Monica: "<strong>Being with a woman</strong> is probably not a <span class="interactive-phrase" data-explanation="「phase」在這裡指「階段」，莫妮卡認為卡蘿喜歡女人不是一個暫時的階段。">phase</span>." (和一個女人在一起可能不是一個階段。)</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">4.3. 口語中的邀請與建議</h3>
+                    <p>在非正式場合中，常用 "You should..." 來提出友善的建議或邀請。</p>
+                    <p class="mt-2 p-3 bg-amber-50 border-l-4 border-amber-400 rounded"><strong>範例：</strong> Joey: "We're going to the hockey game tonight. <strong>You should come with</strong>." (我們今晚要去看曲棍球賽，你該一起來。)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="content-section">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-6">5. 文化註釋：美國生活小百科</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">5.1. George Stephanopoulos (喬治·史蒂芬諾普洛斯)</h3>
+                    <p>在1990年代，他是美國家喻戶曉的人物。當時他是比爾·柯林頓總統的白宮通訊聯絡主任和高級政策顧問，非常有名。因此，女孩們發現他的披薩被送到自家門口時會如此興奮。</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">5.2. Slumber Party (睡衣派對)</h3>
+                    <p>這是美國年輕人，特別是女孩之間很常見的社交活動。朋友們會聚在其中一人的家裡過夜，通常會穿著睡衣，一起吃零食、看電影、玩遊戲、分享秘密，是增進友誼的重要方式。劇中女孩們為安慰羅斯而舉辦，展現了她們的友情。</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">5.3. Hockey Game (曲棍球賽)</h3>
+                    <p>冰上曲棍球在北美（尤其在加拿大和美國北部）是一項非常受歡迎的運動。比賽節奏快、身體對抗激烈。觀眾席離賽場很近，所以像羅斯一樣被飛出場外的曲棍球 (puck) 打到，雖然不常見，但也是有可能發生的事。</p>
+                </div>
+                 <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-2">5.4. Twister (扭扭樂)</h3>
+                    <p>劇集結尾大家在玩的遊戲叫做 "Twister"。這是一個派對遊戲，玩家需要根據轉盤的指示，將手或腳放在指定顏色的圓點上。隨著遊戲進行，玩家們的身體會扭曲交纏在一起，常常引發許多有趣的畫面，是個經典的團體遊戲。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="content-section">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-6">6. 練習活動：動手試試看！</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-3">6.1. 情境問答</h3>
+                    <p class="mb-2">根據劇情，回答以下問題：</p>
+                    <ul class="list-decimal list-inside space-y-2 text-stone-700">
+                        <li>Why were the boys going to a hockey game? (男孩們為什麼要去看曲棍球比賽？)</li>
+                        <li>What did the girls decide to do to cheer Ross up? (女孩們決定做什麼來讓羅斯開心起來？)</li>
+                        <li>Who was the pizza originally for? (披薩原本是送給誰的？)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-3">6.2. 詞彙填空</h3>
+                    <p class="mb-2">用以下詞彙填入句子中：<code class="bg-amber-100 text-amber-800 px-2 py-1 rounded">long shot</code>, <code class="bg-amber-100 text-amber-800 px-2 py-1 rounded">freaking out</code>, <code class="bg-amber-100 text-amber-800 px-2 py-1 rounded">puck</code>, <code class="bg-amber-100 text-amber-800 px-2 py-1 rounded">let his guard down</code></p>
+                    <ol class="list-decimal list-inside space-y-3 mt-2">
+                        <li>The hockey player hit the ______ so hard it flew into the crowd.</li>
+                        <li>Phoebe told Ross he needed to ______ and trust people more.</li>
+                        <li>I know it's a ______, but I'm still going to apply for the job.</li>
+                        <li>Stop shouting! I'm ______ because I can't find my keys.</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-amber-500 mb-3">6.3. 造句挑戰</h3>
+                    <p>如果你有一天也變得 "omnipotent" (全能的)，你會做什麼？試著用 "If I were omnipotent, I would..." 來造一個句子。</p>
+                    <textarea class="w-full h-24 p-2 border border-stone-300 rounded-md mt-2 focus:ring-2 focus:ring-amber-400 focus:outline-none" placeholder="例如：If I were omnipotent, I would travel to the moon."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="content-section">
+            <h2 class="text-3xl font-semibold text-amber-600 mb-6">7. 結論：繼續你的六人行學習之旅！</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                <p>恭喜你！你已經完成了《六人行》S01E04 的學習。透過這一集，我們學到了如何用英語表達假設、安慰朋友，以及許多生活化的詞彙和美國文化知識。</p>
+                <p>學習語言最棒的方法就是持續地接觸和使用它。希望這個指南能激發你對學習英語的興趣。記得，看影集學英文的重點在於享受過程，不必強求一次就聽懂每一個字。多聽幾次，你會發現自己一次比一次進步！</p>
+                <p class="font-semibold">繼續觀看下一集，繼續享受在歡笑中學習的樂趣吧！</p>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="video-container">
+   <video id="myVideo" controls>
+       您的瀏覽器不支援 HTML5 video。
+   </video>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mainNav = document.getElementById('main-nav');
+        const sceneTitles = document.querySelectorAll('.scene-title');
+        const interactivePhrases = document.querySelectorAll('.interactive-phrase');
+        const tooltip = document.getElementById('explanation-tooltip-container');
+        const videoPlaceholder = document.getElementById('video-placeholder');
+        const videoContainer = document.getElementById('video-container');
+
+        if (mobileMenuButton && mainNav) {
+            mobileMenuButton.addEventListener('click', () => {
+                mainNav.classList.toggle('open');
+            });
+        }
+
+        function setActiveSection(sectionId) {
+            navItems.forEach(nav => {
+                if (nav.getAttribute('data-section') === sectionId) {
+                    nav.classList.add('active');
+                } else {
+                    nav.classList.remove('active');
+                }
+            });
+
+            contentSections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            if (mainNav && mainNav.classList.contains('open')) {
+                mainNav.classList.remove('open');
+            }
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', function () {
+                const sectionId = this.getAttribute('data-section');
+                setActiveSection(sectionId);
+            });
+        });
+
+        sceneTitles.forEach(title => {
+            const content = title.nextElementSibling;
+            if (content && content.classList.contains('scene-content')) {
+                content.classList.add('open');
+            }
+            title.addEventListener('click', function () {
+                if (content && content.classList.contains('scene-content')) {
+                    content.classList.toggle('open');
+                }
+            });
+        });
+
+        interactivePhrases.forEach(phrase => {
+            phrase.addEventListener('mouseenter', function (event) {
+                const explanation = this.getAttribute('data-explanation');
+                if (explanation && tooltip) {
+                    tooltip.textContent = explanation;
+                    const rect = phrase.getBoundingClientRect();
+                    tooltip.style.display = 'block';
+                    let left = rect.left + window.scrollX;
+                    let top = rect.bottom + window.scrollY + 5;
+                    
+                    if (left + tooltip.offsetWidth > window.innerWidth) {
+                        left = window.innerWidth - tooltip.offsetWidth - 10;
+                    }
+                     if (top + tooltip.offsetHeight > window.innerHeight) {
+                        top = rect.top + window.scrollY - tooltip.offsetHeight - 5;
+                    }
+
+                    tooltip.style.left = `${left}px`;
+                    tooltip.style.top = `${top}px`;
+                }
+            });
+
+            phrase.addEventListener('mouseleave', function () {
+                if (tooltip) {
+                    tooltip.style.display = 'none';
+                }
+            });
+        });
+        
+        videoPlaceholder.style.height = `${videoContainer.offsetHeight}px`;
+        window.addEventListener('resize', () => {
+             videoPlaceholder.style.height = `${videoContainer.offsetHeight}px`;
+        });
+        
+        setActiveSection('introduction');
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoUrl = urlParams.get('url');
+    const video = document.getElementById('myVideo');
+    let loopCheckInterval;
+    let activeLoopButton = null;
+
+    if (videoUrl && video) {
+        video.src = videoUrl;
+    } else {
+        console.log("Video URL not found in parameters.");
+    }
+    
+    function convertTimeToSeconds(minutes, seconds) {
+        return (parseInt(minutes, 10) || 0) * 60 + (parseInt(seconds, 10) || 0);
+    }
+
+    function playLoop(startMin, startSec, endMin, endSec, button) {
+         const startTime = convertTimeToSeconds(startMin, startSec) - 1;
+         const endTime = convertTimeToSeconds(endMin, endSec) + 1;
+
+        if (activeLoopButton === button) {
+            stopLoop();
+            return;
+        }
+        
+        if(activeLoopButton) {
+            stopLoop();
+        }
+
+        activeLoopButton = button;
+        button.textContent = "⏹️";
+        button.style.backgroundColor = '#9a3412';
+
+        video.currentTime = Math.max(0, startTime);
+        video.play();
+        
+        clearInterval(loopCheckInterval);
+        loopCheckInterval = setInterval(() => {
+            if (video.currentTime >= endTime || video.paused) {
+                video.currentTime = Math.max(0, startTime);
+                video.play();
+            }
+        }, 100);
+    }
+
+    function stopLoop() {
+        if (activeLoopButton) {
+            activeLoopButton.textContent = "▶️";
+            activeLoopButton.style.backgroundColor = '#f59e0b';
+            activeLoopButton = null;
+        }
+        clearInterval(loopCheckInterval);
+         video.pause();
+    }
+
+    video.addEventListener('error', (e) => {
+        console.error("Video loading error:", e);
+        alert("影片載入失敗，請檢查URL是否正確，或影片格式是否受瀏覽器支援。");
+    });
+</script>
+</body>
+</html>
