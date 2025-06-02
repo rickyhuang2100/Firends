@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《六人行》S01E05 互動學習指南 - The One with the East German Laundry Detergent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Application Structure Plan: 
+        The application is a single-page learning guide structured with a fixed sidebar for navigation and a main content area. This design, inspired by the user's provided example (2.html), offers a clear and proven-effective user flow for educational content. The seven sections (Introduction, Scene Study, Vocabulary, Grammar, Culture, Practice, Conclusion) are logically separated, allowing learners to either progress linearly or jump directly to a section of interest. 
+        Key interactions are:
+        1. Sidebar Navigation: Clicking a link smoothly scrolls to the corresponding section.
+        2. A-B Loop Video Player: Each dialogue snippet in the 'Scene Study' has a play button (▶️). Clicking it triggers a JavaScript function to loop a specific segment of an embedded video. This is the core interactive feature, enabling focused listening practice.
+        3. Simple Layout: The layout is clean and focuses on readability and usability, avoiding complex elements to keep the focus on learning.
+        This structure was chosen because it's intuitive, requires no learning curve for the user, and effectively organizes diverse types of learning material (text, video interaction, exercises) into a cohesive and manageable experience, perfect for a language learner.
+    -->
+    <!-- Visualization & Content Choices:
+        - Report Info: S01E05 Script -> Goal: Teach English to beginners -> Presentation Method: A structured 7-part learning module -> Interaction: A-B video loop for dialogues.
+        - Justification: The "data" is the episode's dialogue, and the goal is language acquisition.
+            - Section 1 (Introduction): Static HTML text to orient the user.
+            - Section 2 (Scene Study): Key dialogues are presented with text and an interactive 'play' button. This pairs reading with listening, a fundamental learning technique. Goal: Connect text to sound. Method: HTML text + JS-powered A-B loop.
+            - Sections 3-5 (Vocab, Grammar, Culture): Static HTML lists and text. These sections break down the language into digestible pieces. Goal: Deepen understanding. Method: Structured text.
+            - Section 6 (Practice): Simple interactive exercises like fill-in-the-blanks and thought questions. Goal: Reinforce learning. Method: HTML forms/text.
+            - Section 7 (Conclusion): Static HTML text to summarize and encourage.
+        This approach directly supports the learning objective by transforming a passive transcript into an active, multi-faceted educational tool.
+    -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .sidebar-link.active {
+            background-color: #fbbf24; /* amber-400 */
+            color: #1e293b; /* slate-800 */
+            font-weight: 700;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        #video-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 3px solid #f59e0b;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: #1f2937;
+            overflow: hidden;
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            /* amber-500 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+            /* Ensure video corners are also rounded if needed */
+        }
+
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+        .styled-button {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            margin: 0 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-slate-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="w-full md:w-64 bg-white shadow-md p-4 md:p-6 sticky top-0 h-screen overflow-y-auto">
+            <h1 class="text-2xl font-bold text-slate-900 mb-6">Friends S01E05</h1>
+            <nav id="sidebar-nav">
+                <ul>
+                    <li><a href="#intro" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">1. 引言</a></li>
+                    <li><a href="#scenes" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">2. 場景學習</a></li>
+                    <li><a href="#vocab" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">3. 詞彙與短語</a></li>
+                    <li><a href="#grammar" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">4. 語法焦點</a></li>
+                    <li><a href="#culture" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">5. 文化註釋</a></li>
+                    <li><a href="#practice" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">6. 練習活動</a></li>
+                    <li><a href="#conclusion" class="sidebar-link block py-2 px-4 rounded transition-colors duration-200 hover:bg-amber-200">7. 結論</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10">
+            <section id="intro" class="content-section">
+                <div id="video-button-container" class="mb-6"></div>
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">1. 引言 (Introduction)</h2>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <p>歡迎來到《六人行》第一季第五集的學習指南！這一集的標題是 "The One with the East German Laundry Detergent" (有東德洗衣粉的那集)。</p>
+                    <p>這一集有三條非常有趣且生活化的故事線，讓它成為學習日常英語的絕佳教材：</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li><strong>Chandler 和 Phoebe 的「分手聯盟」：</strong> Chandler 想要和女友 Janice 分手但說不出口，Phoebe 也想和男友分手，於是兩人決定約好在同一時間、同一地點各自解決問題。</li>
+                        <li><strong>Joey 的愛情詭計：</strong> Joey 為了追回前女友 Angela，竟然說服 Monica 假扮成他的新女友，上演一場雙重約會。</li>
+                        <li><strong>Ross 和 Rachel 的洗衣店冒險：</strong> Rachel 迎來了人生第一次自己洗衣服的挑戰，而 Ross 則抓住這個機會，試圖將其變成一場「約會」。</li>
+                    </ul>
+                    <p>本集充滿了關於分手、約會和友誼的搞笑情節。讓我們一起透過這些 relatable (有共鳴的) 場景，學習實用的英文吧！</p>
+                </div>
+            </section>
+
+            <section id="scenes" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">2. 場景學習 (Scene Study)</h2>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-4">場景一：糟糕的分手方式 (Bad Breakup)</h3>
+                        <p class="text-sm text-slate-600 mb-4">Chandler 和 Phoebe 決定要一起去和各自的伴侶分手，但事情並沒有想像中順利。</p>
+                        <div class="dialogue border-l-4 border-amber-400 pl-4">
+                            <p class="mb-2"><strong>Chandler:</strong> No, this is good. It'll be a "we" thing. It'll be like couples' counseling.</p>
+                            <p class="italic text-slate-500 mb-4">（不，這很好。這會是個「我們」的事。就像伴侶諮商一樣。）</p>
+
+                            <p class="mb-2"><strong>[00:16:06 - 00:16:14]</strong><button class="styled-button"
+                                    onclick="toggleABLoop(16, 6, 16, 14, this)">▶️</button><strong>Phoebe:</strong> It's like ripping off a Band-Aid. You just do it really fast, and then the wound is exposed.</p>
+                            <p class="italic text-slate-500 mb-4">（這就像撕掉OK繃一樣。你只要動作很快地做，然後傷口就暴露出來了。）</p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t">
+                            <h4 class="font-semibold">學習重點：</h4>
+                            <p class="text-slate-700">`Couples' counseling` 是指「伴侶諮商」或「婚姻諮商」，Chandler 在這裡用它來開玩笑，諷刺他們的分手計畫。Phoebe 的比喻 `ripping off a Band-Aid` (撕掉OK繃) 是一個非常道地的說法，意思是指「快刀斬亂麻」，迅速地做一件困難或痛苦的事，而不是拖拖拉拉。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-4">場景二：洗衣新手 (Laundry Virgin)</h3>
+                        <p class="text-sm text-slate-600 mb-4">Ross 帶著從沒洗過衣服的 Rachel 來到自助洗衣店，教她如何洗衣服。</p>
+                        <div class="dialogue border-l-4 border-amber-400 pl-4">
+                            <p class="mb-2"><strong>[00:13:40 - 00:13:42]</strong> <button class="styled-button"
+                                    onclick="toggleABLoop(13, 40, 13, 42, this)">▶️</button><strong>Rachel:</strong> I'm a laundry virgin.</p>
+                            <p class="italic text-slate-500 mb-4">（我是個洗衣新手。）</p>
+                            
+                            <p class="mb-2"><strong>Ross:</strong> You gotta separate the whites from the colors.</p>
+                            <p class="italic text-slate-500 mb-4">（妳得把白色的衣服和有色的分開。）</p>
+
+                             <p class="mb-2"><strong>[00:13:07 - 00:13:12]</strong> <button class="styled-button"
+                                    onclick="toggleABLoop(13, 7, 13, 12, this)">▶️</button><strong>Ross:</strong> Uberweiss. It's new, it's German, it's extra-tough.</p>
+                            <p class="italic text-slate-500 mb-4">（烏伯懷斯。這是新的，是德國貨，超強效。）</p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t">
+                            <h4 class="font-semibold">學習重點：</h4>
+                            <p class="text-slate-700">`Laundry virgin` 是一個幽默的自創詞，`virgin` (處女/處男) 在這裡用來比喻「第一次做某件事的人」，表示完全沒有經驗。`Separate the whites from the colors` 是洗衣服最基本的規則之一。Ross 提到的 `Uberweiss` (德語 Überweiß 的變形，意指「超級白」) 是一個虛構的品牌，這裡用來製造笑點，對比他之前想用的溫和品牌 "Snuggles"。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-4">場景三：為自己挺身而出 (Standing Up for Herself)</h3>
+                        <p class="text-sm text-slate-600 mb-4">在洗衣店，一位粗魯的女士想搶走 Rachel 的洗衣車，Rachel 在 Ross 的鼓勵下，第一次為自己勇敢地站了出來。</p>
+                        <div class="dialogue border-l-4 border-amber-400 pl-4">
+                             <p class="mb-2"><strong>[00:21:52 - 00:21:55]</strong><strong>Ross:</strong> Now, this is a woman who has a problem, you can go up to her and you can say...</p>
+                            <p class="italic text-slate-500 mb-4">（聽著，這個女人有問題，妳可以走上前去，對她說...）</p>
+
+                            <p class="mb-2"><strong>[00:22:16 - 00:22:21]</strong><button class="styled-button"
+                                    onclick="toggleABLoop(22, 16, 22, 21, this)">▶️</button><strong>Rachel:</strong> Listen, Mitzi, if you want it... you're gonna have to take me with it!</p>
+                            <p class="italic text-slate-500 mb-4">（聽著，Mitzi，如果妳想要它...妳就得連我一起帶走！）</p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t">
+                            <h4 class="font-semibold">學習重點：</h4>
+                            <p class="text-slate-700">`Go up to (someone)` 意思是「走上前去接近某人」。Rachel 勇敢地坐進洗衣車裡說 `you're gonna have to take me with it!`，這句話字面上是「你得連我一起帶走」，但實際意思是「你休想得逞！」，是一種非常堅決的抵抗。這個場景是 Rachel 角色成長的關鍵時刻，她學會了 `stand up for herself` (為自己挺身而出)。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="vocab" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">3. 詞彙與短語 (Vocabulary & Phrases)</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <ul class="space-y-4">
+                        <li><strong>Let it go</strong> (phr.): 算了吧，別再提了，放手吧。<br><span class="text-sm text-slate-600">e.g., Monica to Ross: "Would you let it go? It's not that big a deal."</span></li>
+                        <li><strong>Blows my mind</strong> (phr.): 讓我大開眼界，讓我感到非常驚訝。<br><span class="text-sm text-slate-600">e.g., Joey: "You know what blows my mind? Women can see breasts any time they want."</span></li>
+                        <li><strong>Ganging up on (someone)</strong> (phr.): 聯合起來對付(某人)，圍攻(某人)。<br><span class="text-sm text-slate-600">e.g., Chandler worries Janice will feel like they're ganging up on her.</span></li>
+                        <li><strong>Extended disco version</strong> (phr.): 加長迪斯可版。Rachel 用來誇張地形容她爸爸重複的說教。<br><span class="text-sm text-slate-600">e.g., "I got the extended disco version, with three choruses of 'You'll never make it on your own'."</span></li>
+                        <li><strong>Seem too eager</strong> (phr.): 看起來太心急、太渴望。<br><span class="text-sm text-slate-600">e.g., Joey waits a few seconds before talking to Angela because he doesn't want to seem too eager.</span></li>
+                         <li><strong>Detergent</strong> (n.): 洗衣粉，洗衣精。<br><span class="text-sm text-slate-600">e.g., Ross recommends a tough German detergent.</span></li>
+                        <li><strong>Fabric softener</strong> (n.): 衣物柔軟精。<br><span class="text-sm text-slate-600">e.g., Chandler asks Ross about bringing fabric softener on his "date".</span></li>
+                        <li><strong>Vicious</strong> (adj.): 兇猛的，惡毒的。<br><span class="text-sm text-slate-600">e.g., Ross lies that there are vicious rats in his laundry room.</span></li>
+                        <li><strong>Separate</strong> (v.): 分開，區分。<br><span class="text-sm text-slate-600">e.g., You have to separate the whites from the colors.</span></li>
+                         <li><strong>Take (someone) with it</strong> (phr.): (在這裡是字面意思) 把(某人)一起帶走。Rachel 用來表示決心不讓步。<br><span class="text-sm text-slate-600">e.g., "If you want the cart, you're gonna have to take me with it!"</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="grammar" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">4. 語法焦點 (Grammar Focus)</h2>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2">1. 動詞片語 (Phrasal Verbs)</h3>
+                        <p class="mb-2">動詞片語在日常對話中無處不在，它們由一個動詞加上一個或多個介詞/副詞組成，意思常常和原來的動詞不同。本集就有很多好例子。</p>
+                        <p class="font-semibold">例子：</p>
+                        <ul class="list-disc list-inside pl-4 text-slate-700">
+                            <li><strong>break up (with someone):</strong> 和(某人)分手。<br>e.g., Chandler wants to break up with Janice.</li>
+                            <li><strong>gang up on (someone):</strong> 聯合起來對付(某人)。<br>e.g., I think she'd feel like we're ganging up on her.</li>
+                             <li><strong>move back:</strong> 搬回去。<br>e.g., Rachel's dad wants her to move back home.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2">2. "be gonna" (Going to) 的用法</h3>
+                        <p class="mb-2">在非常口語的英文中，`going to` 常常被念成 `gonna`。它用來表示即將發生的事或一個人的意圖。</p>
+                        <p class="font-semibold">例子：</p>
+                        <ul class="list-disc list-inside pl-4 text-slate-700">
+                             <li><strong>Rachel:</strong> ...you're gonna have to take me with it! (...你將必須連我一起帶走！) 這裡表示一個強烈的決心和挑戰。</li>
+                        </ul>
+                        <p class="mt-2">學習聽懂並在口語中適度使用 `gonna`，可以讓你的英文聽起來更自然、更道地。</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2">3. If 條件句 (Conditional Sentences)</h3>
+                        <p class="mb-2">條件句用來描述一個條件和它的結果。本集出現了描述真實可能性的第一類條件句。</p>
+                        <p class="font-semibold">例子：</p>
+                        <ul class="list-disc list-inside pl-4 text-slate-700">
+                             <li><strong>Rachel:</strong> If I can do laundry, there's nothing I can't do. (如果我能洗衣服，那就沒有什麼我做不到的了。)</li>
+                             <li><strong>結構：</strong> If + [條件], [結果].</li>
+                        </ul>
+                        <p class="mt-2">這是一個非常強大的句型，用來表達因果關係和可能性，Rachel 在這裡用它來表達自己新建立的自信心。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="culture" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">5. 文化註釋 (Cultural Notes)</h2>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">分手的方式 (The Art of the Breakup)</h3>
+                        <p>本集非常幽默地探討了美國文化中不同的分手方式。Chandler 的逃避和掙扎代表了很多人面對衝突時的不安。Joey 建議「直接不要再打電話」(just stop calling) 是一種被稱為 "ghosting" (搞消失) 的不成熟行為。而 Phoebe 快刀斬亂麻的方式則被很多人認為是理想的，雖然現實中很難做到。這顯示了在人際關係中，直接溝通的重要性。</p>
+                    </div>
+                    <div class="pt-4 border-t">
+                        <h3 class="text-xl font-bold mb-2">自助洗衣店文化 (Laundromat Culture)</h3>
+                        <p>在紐約這樣的大城市，很多公寓沒有自己的洗衣機，所以去自助洗衣店 (laundromat) 是許多城市居民生活的一部分。它不僅是一個洗衣服的地方，也是一個小型的社交場所，有自己不成文的規矩 (unwritten rules)，比如不能隨便拿別人的洗衣車，這也是 Rachel 和那位女士發生衝突的原因。</p>
+                    </div>
+                    <div class="pt-4 border-t">
+                        <h3 class="text-xl font-bold mb-2">女性賦權時刻 (Female Empowerment)</h3>
+                        <p>Rachel 在洗衣店的轉變是本集的核心。一開始，她是一個需要被教導的「洗衣新手」，代表了她過去被嬌生慣養的生活。但當她勇敢地對抗那位粗魯的女士，捍衛自己的權利時，這是一個強烈的「女性賦權」(female empowerment) 的象徵。她證明了自己可以獨立，不再是那個需要爸爸買單的小公主。這個吻不僅是對 Ross 的感謝，更是對自己成長的慶祝。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="practice" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">6. 練習活動 (Practice Activities)</h2>
+                <div class="my-6">
+                    <a href="https://g.co/gemini/share/5145ddc6af1c" target="_blank"
+                        class="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-yellow-500 text-white text-2xl font-bold px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                        🚀 點擊這裡開啟練習
+                    </a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow space-y-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">填空練習 (Fill in the Blanks)</h3>
+                        <p>試著用本集學到的詞彙填入空格中。</p>
+                        <ol class="list-decimal list-inside space-y-2 mt-4 pl-4">
+                            <li>Chandler finds it very difficult to ____________ with Janice.</li>
+                            <li>You must ____________ the light clothes from the dark clothes before washing.</li>
+                            <li>The way he handled the situation really ____________. I was very impressed.</li>
+                            <li>Ross had to buy a new box of laundry ____________.</li>
+                            <li>It's important to learn how to ____________ for yourself.</li>
+                        </ol>
+                        <p class="text-sm mt-4">答案: 1. break up, 2. separate, 3. blows my mind, 4. detergent, 5. stand up</p>
+                    </div>
+                    <div class="pt-4 border-t">
+                        <h3 class="text-xl font-bold mb-2">情境思考 (Think About It)</h3>
+                        <p>用英文簡單回答下面的問題：</p>
+                        <ul class="list-disc list-inside space-y-2 mt-4 pl-4">
+                            <li>What do you think is the best way to break up with someone?</li>
+                            <li>Have you ever had a "laundry virgin" moment where you did something for the first time? What was it?</li>
+                            <li>Why was the moment in the laundromat so important for Rachel?</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conclusion" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">7. 結論 (Conclusion)</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p>恭喜你完成了 S01E05 的學習！</p>
+                    <p class="mt-4">這一集不僅充滿笑料，更富含深刻的角色成長。我們看到了 Chandler 在人際關係中的掙扎，Joey 天真的計謀，以及最重要地，Rachel 邁向獨立的關鍵一步。</p>
+                    <p class="mt-4">透過本集，我們學到了：</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li>如何用道地的英文討論分手和約會。</li>
+                        <li>許多實用的動詞片語，如 `break up` 和 `gang up on`。</li>
+                        <li>與日常生活（如洗衣）相關的詞彙。</li>
+                    </ul>
+                    <p class="mt-4 font-semibold">學習語言就像 Rachel 學洗衣服一樣，一開始可能會覺得困難，甚至會把所有東西都染成粉紅色。但只要你勇敢嘗試，為自己站出來，你會發現「沒有什麼是你做不到的」。繼續加油！</p>
+                </div>
+            </section>
+        </main>
+    </div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <script>
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        function showSection(hash) {
+            if (!hash) {
+                hash = '#intro';
+            }
+
+            contentSections.forEach(section => {
+                if ('#' + section.id === hash) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                if (link.getAttribute('href') === hash) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+        
+        showSection(window.location.hash || '#intro');
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const hash = link.getAttribute('href');
+                // We don't prevent default to allow the URL to update and maintain scroll behavior
+                showSection(hash);
+            });
+        });
+        
+        window.addEventListener('hashchange', () => {
+            showSection(window.location.hash);
+        });
+    </script>
+
+   <video id="myVideo" controls>
+        <!--<source src="1.mp4" type="video/mp4">-->
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+
+    <script>
+        // 將上面的 JavaScript 程式碼放在這裡
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        const video = document.getElementById('myVideo');
+
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            // video.src = "default_video.mp4"; // 設定預設影片
+        } else {
+            console.log("未找到 id 為 'myVideo' 的視訊元素。");
+        }
+        let abLoop = false;
+        let aTime = 0;
+        let bTime = 10;
+        let loopCheckInterval;
+        let isABLoopRunning = false;
+        //const toggleButton = document.getElementById("toggleABLoopButton");
+        var loopStartTimeMin = 0;
+        var loopStartTimeSec = 0;
+        var loopEndTimeMin = 0;
+        var loopEndTimeSec = 0;
+
+        function toggleABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec, obj) {
+            var toggleButton = obj;
+            if (toggleButton.textContent === "⏹️") {
+                stopABLoop();
+                toggleButton.textContent = "▶️"
+                return;
+            }
+            //if (toggleButton.textContent === "▶️"){
+            isABLoopRunning = true;
+            //document.write("test");
+            startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec);
+            var allToggle = document.querySelectorAll('.styled-button');
+            allToggle.forEach(button => {
+                button.textContent = '▶️';
+            });
+            toggleButton.textContent = "⏹️";
+            //return;
+            //}
+
+            //isABLoopRunning = !isABLoopRunning; // 切換狀態
+        }
+
+        function getTime(min, sec) {
+            const minutes = parseInt(min) || 0;
+            const seconds = parseInt(sec) || 0;
+            return minutes * 60 + seconds;
+        }
+
+        function startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec) {
+            aTime = getTime(loopStartTimeMin, loopStartTimeSec);
+            bTime = getTime(loopEndTimeMin, loopEndTimeSec);
+
+            if (bTime <= aTime) {
+                alert("終點 B 必須大於起點 A！");
+                return;
+            }
+
+            video.currentTime = aTime;
+            video.play();
+            abLoop = true;
+
+            // 每 0.2 秒檢查一次是否超過 B 點
+            loopCheckInterval = setInterval(() => {
+                if (abLoop && video.currentTime >= bTime) {
+                    //video.pause();
+                    video.currentTime = aTime;
+                    video.play();
+                }
+            }, 200);
+        }
+
+        function stopABLoop() {
+            abLoop = false;
+            isABLoopRunning = false;
+            video.pause();
+            //clearInterval(loopCheckInterval);
+        }
+        // Optional: Add event listener for when video can play
+        if (video) {
+            video.addEventListener('canplay', () => {
+                // console.log("影片已準備好播放。");
+            });
+            video.addEventListener('error', (e) => {
+                console.error("影片載入錯誤:", e);
+                alert("URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。");
+                // You could display a user-friendly message here
+                const videoContainer = document.getElementById('video-button-container');
+                container.innerHTML = `<p class="text-red-500 text-3xl">URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。</p>`;
+                //if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
+
+                //const errorMessage = document.createElement('p');
+                //errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
+                //errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
+                //videoContainer.appendChild(errorMessage);
+            });
+        } else {
+            console.error("找不到影片元素。");
+        }
+        //video.addEventListener('loadedmetadata', function () {
+        //   video.currentTime = 5;
+        // });
+
+        const container = document.getElementById('video-button-container');
+
+        if (url) {
+            const btn = document.createElement('a');
+            btn.href = url;
+            btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
+            btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+            container.appendChild(btn);
+        } else {
+            container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+        }
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+
+</body>
+</html>
