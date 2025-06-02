@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《六人行》S01E07 互動學習指南：The One with the Blackout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices: 
+        - Report Info: Dialogue snippets from S01E07 -> Goal: Immersive listening practice -> Viz/Presentation Method: HTML text paired with interactive '▶️' buttons -> Interaction: Clicking a button triggers an A-B loop in the main video player for the specific dialogue's timeframe. -> Justification: Repetitive listening is crucial for beginners to grasp pronunciation, intonation, and the flow of natural speech. This feature directly addresses that need. -> Library/Method: Vanilla JavaScript.
+        - Report Info: Vocabulary list -> Goal: Reinforce new words -> Viz/Presentation Method: A styled HTML table -> Interaction: Static reading -> Justification: A table provides a clear, structured, and easy-to-reference format for vocabulary and definitions. -> Library/Method: HTML/Tailwind CSS.
+        - Report Info: Grammar/Cultural explanations -> Goal: Provide context and deeper understanding -> Viz/Presentation Method: Structured text sections with headings and examples -> Interaction: Static reading -> Justification: Clear textual explanations are most effective for grammar and cultural concepts. -> Library/Method: HTML/Tailwind CSS.
+    -->
+    <style>
+        body {
+            background-color: #f8fafc;
+            /* slate-50 */
+            color: #27272a;
+            /* zinc-800 */
+        }
+
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+
+        #video-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 3px solid #f59e0b;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: #1f2937;
+            overflow: hidden;
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            /* amber-500 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+            /* Ensure video corners are also rounded if needed */
+        }
+
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <ul
+                class="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-6 py-3 overflow-x-auto whitespace-nowrap">
+                <li><a href="#intro"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">引言</a>
+                </li>
+                <li><a href="#scenes"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">場景學習</a>
+                </li>
+                <li><a href="#vocab"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">詞彙與短語</a>
+                </li>
+                <li><a href="#grammar"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">語法焦點</a>
+                </li>
+                <li><a href="#culture"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">文化註釋</a>
+                </li>
+                <li><a href="#activities"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">練習活動</a>
+                </li>
+                <li><a href="#conclusion"
+                        class="nav-link text-sm md:text-base text-zinc-600 hover:text-teal-600 border-b-2 border-transparent hover:border-teal-600 py-2">結論</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <section id="intro" class="mb-16 scroll-mt-20">
+            <h1 class="text-3xl md:text-4xl font-bold text-teal-700 mb-4">六人行第1季第07集：「大停電」英語學習指南</h1>
+            <div id="video-button-container" class="mb-6"></div>
+            <div class="space-y-4 text-zinc-700 leading-relaxed">
+                <p>《六人行》不僅是一部深受喜愛的電視劇，更是一個卓越的英語學習工具。這部劇以其真實、生活化的對話、貼近日常的情境、幽默感以及固定的人物角色，為英語初學者提供了理想的學習環境。劇中人物的說話速度自然，包含豐富的俚語和日常表達，讓學習者能夠接觸到最真實的英語使用方式。
+                </p>
+                <p>本集「大停電」的劇情圍繞著一場突如其來的大停電展開，為學習者提供了豐富的語言學習機會。劇情由意想不到的事件（大停電）和角色特有的挑戰（錢德勒的社交尷尬、羅斯的感情膽怯）所推動，自然而然地產生了大量與驚訝、沮喪、吸引力及自我反思相關的常用英語表達。
+                </p>
+                <p>本指南將引導您如何有效利用這些教學材料：建議先觀看完整劇集，然後利用各個部分進行重點學習，透過播放按鈕重複觀看特定片段，並積極參與練習活動。請特別注重主動聆聽和重複練習。</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 mb-6 border-l-4 border-teal-500 pl-4">場景學習</h2>
+            <p class="text-zinc-600 mb-8">本節將分解劇中的關鍵場景。點擊播放按鈕 <span
+                    class="text-teal-600 font-bold cursor-pointer">▶️</span> 將使影片循環播放該片段，幫助您集中練習聽力。</p>
+            <div class="space-y-8">
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">2.1 大停電開始</h3>
+                    <p class="mb-2 text-sm text-zinc-500">場景：中央公園咖啡館</p>
+                    <div class="dialogue-item p-3 bg-slate-100 rounded-md">
+                        <p class="text-zinc-800"><strong>Phoebe:</strong> I wanna start with a song that's about that
+                            moment... when you suddenly realize what life is really all about.</p>
+                        <button class="play-btn text-2xl text-teal-600 hover:text-teal-800 transition" data-start="0:12"
+                            data-end="0:22">▶️</button>
+                    </div>
+                    <p class="mt-4 text-zinc-700 leading-relaxed"><strong>簡單解釋：</strong>
+                        菲比在咖啡館裡唱歌，突然燈光熄滅，導致了「blackout」（大停電）。這個片段展示了人們對突發事件的最初反應。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">2.2 莫妮卡的電話</h3>
+                    <p class="mb-2 text-sm text-zinc-500">場景：莫妮卡和瑞秋的公寓</p>
+                    <div class="dialogue-item p-3 bg-slate-100 rounded-md">
+                        <p class="text-zinc-800"><strong>Monica:</strong> Pants and a sweater? Why, mom? Who am I gonna
+                            meet in a blackout? Power company guys? Eligible looters?</p>
+                        <button class="play-btn text-2xl text-teal-600 hover:text-teal-800 transition" data-start="1:52"
+                            data-end="2:1">▶️</button>
+                    </div>
+                    <p class="mt-4 text-zinc-700 leading-relaxed"><strong>簡單解釋：</strong>
+                        莫妮卡媽媽建議她穿褲子和毛衣，莫妮卡覺得在停電時穿這些很奇怪。她幽默地提到「power company guys」（電力公司的人）和「eligible
+                        looters」（符合條件的搶劫犯），這裡的「eligible」通常指適合結婚的單身人士，她用這個詞來諷刺停電時根本不可能遇到合適的對象。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">2.3 錢德勒被困</h3>
+                    <p class="mb-2 text-sm text-zinc-500">場景：銀行自動提款機前廳</p>
+                    <div class="dialogue-item p-3 bg-slate-100 rounded-md">
+                        <p class="text-zinc-800"><strong>Chandler:</strong> Oh my God, it's that Victoria's Secret
+                            model... I am trapped in an ATM vestibule with Jill Goodacre! Is it a vestibule? Maybe it's
+                            an atrium.</p>
+                        <button class="play-btn text-2xl text-teal-600 hover:text-teal-800 transition" data-start="2:15" data-end="2:36">▶️</button>
+                    </div>
+                    <p class="mt-4 text-zinc-700 leading-relaxed"><strong>簡單解釋：</strong> 錢德勒非常興奮地發現自己和一位「Victoria's
+                        Secret model」（維多利亞的秘密模特兒）被困在一起。「trapped」表示被困住，無法逃脫。「ATM vestibule」是指銀行裡有自動提款機的小房間或入口處。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">2.4 「最奇怪的約會地點」遊戲</h3>
+                    <p class="mb-2 text-sm text-zinc-500">場景：莫妮卡和瑞秋的公寓</p>
+                    <div class="dialogue-item p-3 bg-slate-100 rounded-md">
+                        <p class="text-zinc-800"><strong>Joey:</strong> OK... my weirdest place would have to be... the
+                            women's room on the second floor of the New York City public library.</p>
+                        <button class="play-btn text-2xl text-teal-600 hover:text-teal-800 transition" data-start="6:24" data-end="6:32">▶️</button>
+                    </div>
+                    <p class="mt-4 text-zinc-700 leading-relaxed"><strong>簡單解釋：</strong>
+                        朋友們玩了一個遊戲，分享他們曾經約會過最奇怪的地方。喬伊說是在「New York City public library」（紐約市立公共圖書館）二樓的「women's room」（女廁）。
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">2.5 羅斯與「朋友區」</h3>
+                    <p class="mb-2 text-sm text-zinc-500">場景：莫妮卡和瑞秋的公寓</p>
+                    <div class="dialogue-item p-3 bg-slate-100 rounded-md">
+                        <p class="text-zinc-800"><strong>Joey:</strong> Because you waited too long to make your move,
+                            and now you're in the friend zone.</p>
+                        <button class="play-btn text-2xl text-teal-600 hover:text-teal-800 transition" data-start="9:55" data-end="10:01">▶️</button>
+                    </div>
+                    <p class="mt-4 text-zinc-700 leading-relaxed"><strong>簡單解釋：</strong> 喬伊告訴羅斯，他對瑞秋「waited too long to
+                        make your move」（等太久才採取行動），所以現在他已經在「friend zone」（朋友區）裡了。「friend
+                        zone」是指一方對另一方有浪漫情感，但另一方只把對方當朋友的情況。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">2.6 錢德勒的口香糖窘境</h3>
+                    <p class="mb-2 text-sm text-zinc-500">場景：自動提款機前廳</p>
+                    <div class="dialogue-item p-3 bg-slate-100 rounded-md">
+                        <p class="text-zinc-800"><strong>Chandler (voice over):</strong> Gum would be perfection</p>
+                        <button class="play-btn text-2xl text-teal-600 hover:text-teal-800 transition" data-start="15:50" data-end="15:58">▶️</button>
+                    </div>
+                    <p class="mt-4 text-zinc-700 leading-relaxed"><strong>簡單解釋：</strong> 錢德勒為了給吉兒留下好印象，誇張地說「Gum would be
+                        perfection」（口香糖簡直完美）。結果他被口香糖噎住，「choking」表示窒息。吉兒跑過來給他做了「Heimlich」（哈姆立克急救法）。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 mb-6 border-l-4 border-teal-500 pl-4">詞彙與短語</h2>
+            <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-100">
+                        <tr>
+                            <th class="p-4 font-semibold text-zinc-700">英語詞彙/短語</th>
+                            <th class="p-4 font-semibold text-zinc-700">簡單定義</th>
+                            <th class="p-4 font-semibold text-zinc-700">用法說明</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Blackout</td>
+                            <td class="p-4 text-zinc-700">一段沒有電力的時期。</td>
+                            <td class="p-4 text-zinc-600">指城市範圍的大規模停電。</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">ATM vestibule</td>
+                            <td class="p-4 text-zinc-700">銀行內設置自動提款機的小房間。</td>
+                            <td class="p-4 text-zinc-600">「ATM」是 automated teller machine 的縮寫。</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Eligible looters</td>
+                            <td class="p-4 text-zinc-700">符合條件的搶劫犯。</td>
+                            <td class="p-4 text-zinc-600">莫妮卡的諷刺說法，eligible常用於指「合格的單身漢」。</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Check on (someone)</td>
+                            <td class="p-4 text-zinc-700">確保某人安全或狀況良好。</td>
+                            <td class="p-4 text-zinc-600">動詞片語，表示關心或查看。例：I'll check on the kids.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Friend zone</td>
+                            <td class="p-4 text-zinc-700">朋友區。</td>
+                            <td class="p-4 text-zinc-600">一方有愛意，另一方只當朋友的狀況。</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Make your move</td>
+                            <td class="p-4 text-zinc-700">採取行動。</td>
+                            <td class="p-4 text-zinc-600">通常指在感情關係中主動出擊。</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Laying the groundwork</td>
+                            <td class="p-4 text-zinc-700">為未來做準備、打基礎。</td>
+                            <td class="p-4 text-zinc-600">指為未來的計畫鋪路。</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4 font-medium text-teal-800">Choking</td>
+                            <td class="p-4 text-zinc-700">噎住，窒息。</td>
+                            <td class="p-4 text-zinc-600">指因異物阻塞呼吸道而無法呼吸。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 mb-6 border-l-4 border-teal-500 pl-4">語法焦點</h2>
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-2">4.1 情態動詞 (Modal Verbs)</h3>
+                    <p class="text-zinc-700 leading-relaxed mb-4">情態動詞（如 could, should,
+                        might）用於表達可能性、建議或義務。理解它們的細微差別很重要。</p>
+                    <p class="text-zinc-700 leading-relaxed"><strong class="font-semibold">例子：</strong> Monica: <code
+                            class="bg-slate-100 p-1 rounded">Could we</code> talk about this later?</p>
+                    <p class="text-zinc-600 text-sm mt-1"><strong>解釋：</strong> 這裡的「Could」用於提出一個禮貌的建議或請求。</p>
+                    <p class="text-zinc-700 leading-relaxed mt-2"><strong class="font-semibold">例子：</strong> Rachel:
+                        That <code class="bg-slate-100 p-1 rounded">had to</code> hurt!</p>
+                    <p class="text-zinc-600 text-sm mt-1"><strong>解釋：</strong> 這裡的「had to」表達了強烈的推斷或確定性，意指「那一定很痛！」。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-2">4.2 片語動詞 (Phrasal Verbs)</h3>
+                    <p class="text-zinc-700 leading-relaxed mb-4">片語動詞由「動詞 + 介詞/副詞」組成，在日常英語中非常普遍。</p>
+                    <p class="text-zinc-700 leading-relaxed"><strong class="font-semibold">例子：</strong> Phoebe: I want
+                        to call my apartment and <code class="bg-slate-100 p-1 rounded">check on</code> my grandma.</p>
+                    <p class="text-zinc-600 text-sm mt-1"><strong>解釋：</strong> 「check on」意為「查看…的情況」，確保其安全。</p>
+                    <p class="text-zinc-700 leading-relaxed mt-2"><strong class="font-semibold">例子：</strong> Joey: If
+                        you don't ask her out soon you're going to <code class="bg-slate-100 p-1 rounded">end up</code>
+                        stuck in the zone forever.</p>
+                    <p class="text-zinc-600 text-sm mt-1"><strong>解釋：</strong> 「end up」意為「最終變成/結果是」。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 mb-6 border-l-4 border-teal-500 pl-4">文化註釋</h2>
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-2">5.1 維多利亞的秘密 (Victoria's Secret)</h3>
+                    <p class="text-zinc-700 leading-relaxed">維多利亞的秘密是美國著名的內衣品牌。在劇中，錢德勒對自己能和一位「維多利亞的秘密模特兒」Jill Goodacre
+                        共處一室感到極度興奮，這反映了該品牌在當時流行文化中的地位。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-teal-700 mb-2">5.2 光明節 (Hanukkah)</h3>
+                    <p class="text-zinc-700 leading-relaxed">
+                        光明節是猶太教的重要節日。在劇中，喬伊在停電時拿著光明節燭台（menorah）來照明，因此羅斯開玩笑稱他為「崔比亞尼拉比（Rabbi Tribbiani）」，這是結合文化背景的幽默。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="activities" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 mb-6 border-l-4 border-teal-500 pl-4">練習活動</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <ul class="list-disc list-inside space-y-3 text-zinc-700">
+                    <li><strong>聽力理解：</strong> 再次觀看「場景學習」中的片段，試著不看字幕，聽出每一句台詞。</li>
+                    <li><strong>口語練習：</strong> 選擇一個你喜歡的角色，模仿他們的語氣和語調，跟讀他們的台詞。</li>
+                    <li><strong>造句練習：</strong> 使用「詞彙與短語」部分學到的新單字或片語，造出屬於你自己的句子。</li>
+                    <li><strong>情境討論：</strong> 如果你遇到大停電會做什麼？你認為「朋友區」真的存在嗎？試著用英文和朋友討論這些話題。</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 mb-6 border-l-4 border-teal-500 pl-4">結論</h2>
+            <div class="space-y-4 text-zinc-700 leading-relaxed">
+                <p>透過《六人行》這一集，我們不僅享受了劇情，更在真實且有趣的語境中學習了實用的英語。本指南涵蓋了本集中的關鍵詞彙、語法和文化點，希望能幫助您鞏固所學。</p>
+                <p>學習英語是一個需要時間和持續努力的過程。請保持耐心，享受學習的樂趣。犯錯是學習的一部分，最重要的是持續練習。希望您能將今天學到的知識和方法應用到未來的學習中，不斷進步！</p>
+            </div>
+        </section>
+
+    </main>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <footer class="text-center py-6 mt-12 bg-slate-100">
+        <p class="text-zinc-500 text-sm">互動式學習指南 | 為《六人行》愛好者設計</p>
+    </footer>
+    <video id="myVideo" controls>
+        <!--<source src="1.mp4" type="video/mp4">-->
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+
+        function parseTimeString(timeStr) {
+            const parts = timeStr.split(':');
+            if (parts.length !== 2) return NaN;
+            const minutes = parseInt(parts[0], 10);
+            const seconds = parseFloat(parts[1]);
+            return minutes * 60 + seconds;
+        }
+
+        function stopABLoop() {
+            video.pause();
+            //clearInterval(loopCheckInterval);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const videoStatus = document.getElementById('video-button-container');
+            const sceneContainer = document.getElementById('scenes');
+            let loopInterval = null;
+
+            if (!video) {
+                console.error("Video element not found.");
+                return;
+            }
+
+            video.addEventListener('error', () => {
+                videoStatus.innerHTML =
+                    `<strong>影片載入失敗。</strong><br>請確認影片檔案 "7.mp4" 存在於同一個資料夾中，且您的瀏覽器支援 MP4 格式。`;
+            });
+
+            const stopLoop = () => {
+                if (loopInterval) {
+                    clearInterval(loopInterval);
+                    loopInterval = null;
+                    //video.pause();
+                }
+            };
+
+            video.addEventListener('pause', stopLoop);
+            //video.addEventListener('seeking', stopLoop);
+
+            sceneContainer.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        stopLoop();
+                        video.pause();
+                        button.textContent = "▶️"
+                        return;
+                    }
+
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(button => {
+                        button.textContent = '▶️';
+                    });
+                    button.textContent = "⏹️";
+                    stopLoop(); // <-- 加回來，清掉之前的 setInterval
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+
+                    if (video.networkState === video.NO_SOURCE) {
+                        videoStatus.innerHTML = `<strong>影片載入失敗。</strong><br>請先載入影片檔案。`;
+                        return;
+                    }
+
+                    //stopLoop();
+                    //video.pause();
+                    video.pause();
+                    video.currentTime = startTime;
+
+                    const onSeeked = () => {
+                        video.play();
+
+                        loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+
+                        video.removeEventListener('seeked', onSeeked);
+                    };
+
+                    video.addEventListener('seeked', onSeeked);
+
+                    video.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        });
+        const container = document.getElementById('video-button-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            // video.src = "default_video.mp4"; // 設定預設影片
+        } else {
+            console.log("未找到 id 為 'myVideo' 的視訊元素。");
+        }
+        if (url) {
+            const btn = document.createElement('a');
+            btn.href = url;
+            btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
+            btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+            container.appendChild(btn);
+        } else {
+            container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+        }
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+
+</body>
+
+</html>
