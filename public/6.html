@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《六人行》S01E06 互動學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices: 
+        - Report Info: Dialogue snippets from SRT file -> Goal: Teach pronunciation, intonation, and vocabulary in context -> Presentation: HTML text with a '▶️' button -> Interaction: Click button to trigger A-B video loop -> Justification: Repetitive listening is a cornerstone of language acquisition. This provides a highly targeted and efficient way to practice. -> Library/Method: Vanilla JS with HTML5 Video API.
+        - Report Info: Key vocabulary and phrases -> Goal: Build lexical resource -> Presentation: HTML table for clear organization -> Interaction: Static, for reference -> Justification: A table provides a clear, scannable format for vocabulary review.
+        - Report Info: Grammatical patterns -> Goal: Explain language rules -> Presentation: HTML table with examples -> Interaction: Static -> Justification: Connects abstract rules to concrete examples from the episode, enhancing comprehension.
+        - All other content is presented as structured HTML text, which is sufficient for explanatory purposes and maintains a clean, readable layout.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', '微軟正黑體', 'Microsoft JhengHei', sans-serif;
+            background-color: #fdfbf7;
+            color: #4a4a4a;
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link.active, .nav-link:hover {
+            background-color: #eaddd7;
+            color: #3d3d3d;
+            transform: translateX(4px);
+        }
+        .play-btn {
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.1s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        h2 {
+            border-bottom: 2px solid #eaddd7;
+            padding-bottom: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #f0e6e0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        .prose p, .prose li {
+            line-height: 1.75;
+        }
+        .prose strong {
+            color: #8c705f;
+        }
+        /* Mobile menu button */
+        #menu-button {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 40;
+                height: 100%;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            #menu-button {
+                display: block;
+            }
+        }
+
+        .styled-button {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            margin: 0 0.25rem;
+        }
+
+        .styled-button:hover {
+            background-color: #d97706;
+        }
+
+        #video-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 3px solid #f59e0b;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: #1f2937;
+            overflow: hidden;
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            /* amber-500 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+            /* Ensure video corners are also rounded if needed */
+        }
+
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+
+    <div class="flex">
+        <aside id="sidebar" class="sidebar w-64 bg-white h-screen shadow-md fixed md:relative z-40">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-gray-800">六人行 S01E06</h1>
+                <p class="text-sm text-gray-500">The One with the Butt</p>
+            </div>
+            <nav class="mt-4">
+                <a href="#introduction" class="nav-link active block py-3 px-6 text-gray-600 font-semibold">1. 引言</a>
+                <a href="#scene-study" class="nav-link block py-3 px-6 text-gray-600 font-semibold">2. 場景學習</a>
+                <a href="#vocabulary" class="nav-link block py-3 px-6 text-gray-600 font-semibold">3. 詞彙與短語</a>
+                <a href="#grammar" class="nav-link block py-3 px-6 text-gray-600 font-semibold">4. 語法焦點</a>
+                <a href="#culture" class="nav-link block py-3 px-6 text-gray-600 font-semibold">5. 文化註釋</a>
+                <a href="#activities" class="nav-link block py-3 px-6 text-gray-600 font-semibold">6. 練習活動</a>
+                <a href="#conclusion" class="nav-link block py-3 px-6 text-gray-600 font-semibold">7. 結論</a>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content flex-1 md:ml-64 p-4 md:p-8 lg:p-12">
+            
+            <div class="max-w-4xl mx-auto">
+                <div id="video-placeholder" class="mb-6"></div>
+                <section id="introduction" class="prose max-w-none">
+                    <div id="video-button-container" class="mb-6"></div>
+                    <div class="card">
+                        <h2 class="text-2xl">1. 引言</h2>
+                        <p>歡迎來到《六人行》第一季第六集的學習指南！這一集名為 "The One with the Butt"，劇情圍繞著幾個有趣的故事線發展：Joey 得到了一個千載難逢的機會，在 Al Pacino 的電影中擔任「屁股替身」；Chandler 和一位充滿神秘魅力的已婚女子 Aurora 開始了一段複雜的戀情；同時，朋友們為了好玩，不斷挑戰 Monica 的潔癖極限。</p>
+                        <p>這一集充滿了幽默的對話和貼近生活的場景，是學習日常英語口語、了解美國文化和人際互動的絕佳材料。我們將會一起探索劇中的實用單字、片語和文法，讓您在歡笑中輕鬆學好英文！</p>
+                    </div>
+                </section>
+
+                <section id="scene-study" class="prose max-w-none">
+                     <div class="card">
+                        <h2 class="text-2xl">2. 場景學習</h2>
+                        <p class="mb-6">本節精選了劇中幾個關鍵的對話片段。點擊每段對話旁邊的 ▶️ 按鈕，即可重複播放該片段，仔細聆聽角色的發音、語調和節奏，並試著模仿他們。</p>
+
+                        <div class="mb-8 p-4 bg-stone-50 rounded-lg">
+                            <h3 class="font-bold text-lg mb-2">場景一：Chandler 的搭訕挑戰</h3>
+                            <p class="text-sm text-gray-600 mb-4">背景：大家看完 Joey 演的舞台劇後，Chandler 被一位美麗的女士 Aurora 吸引，朋友們鼓勵他上前搭訕。</p>
+                            
+                            <p class="mb-2"><strong>Rachel:</strong> God. I feel violated. <button class="styled-button"
+                                    onclick="toggleABLoop(2, 22, 2, 25, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> "I feel violated" 字面上是「我感覺被侵犯了」。在這裡是一種誇張的幽默說法，用來表達她覺得 Joey 的表演實在太糟糕了，讓她精神上受到了「攻擊」。這是學習用誇張法來表達強烈情緒的好例子。</p>
+                            
+                            <p class="mb-2"><strong>Chandler:</strong> Oh please, could she <strong>be</strong> more out of my league? <button class="styled-button"
+                                    onclick="toggleABLoop(3, 4, 3, 6, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> "out of my league" 意思是「高攀不上」、「不是同一個檔次的」。Chandler 覺得 Aurora 太完美了，自己配不上她。而 "Could she <strong>be</strong> more...?" 是 Chandler 的招牌句型，用來強烈反諷或強調，意思是「她再...不過了！」。</p>
+                        </div>
+                        
+                        <div class="mb-8 p-4 bg-stone-50 rounded-lg">
+                            <h3 class="font-bold text-lg mb-2">場景二：Joey 的大好機會</h3>
+                            <p class="text-sm text-gray-600 mb-4">背景：Joey 興奮地告訴大家，他得到了一個在 Al Pacino 電影中演出的機會。</p>
+                            
+                            <p class="mb-2"><strong>Joey:</strong> I'm his butt double. <button class="styled-button"
+                                    onclick="toggleABLoop(14, 34, 14, 37, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> "butt double" 是電影術語，指「臀部替身」。當電影需要拍攝某個明星的臀部特寫時，可能會由替身來完成。這是一個有趣且道地的行業詞彙。</p>
+                            
+                            <p class="mb-2"><strong>Chandler:</strong> you've cracked your way into show business.<button class="styled-button"
+                                    onclick="toggleABLoop(15, 3, 15, 8, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> "crack your way into" 是一個生動的片語，意思是「成功打入」、「擠進」某個困難的領域或行業。這裡 Chandler 用來開玩笑說 Joey 終於「擠」進了演藝圈。</p>
+                        </div>
+
+                        <div class="mb-8 p-4 bg-stone-50 rounded-lg">
+                            <h3 class="font-bold text-lg mb-2">場景三：Monica 的潔癖</h3>
+                            <p class="text-sm text-gray-600 mb-4">背景：朋友們故意把東西亂放，來測試有潔癖的 Monica 的反應。</p>
+                            
+                            <p class="mb-2"><strong>Chandler:</strong> Little beads of condensation are inching their way closer and closer to the surface of the wood... <button class="styled-button"
+                                    onclick="toggleABLoop(13, 24, 13, 30, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> 這句話的描述非常生動。"beads of condensation" 指「凝結的水珠」。「inch their way」意思是「一點一點地緩慢移動」。Chandler 透過這種細膩的描述來「折磨」Monica，非常有趣。</p>
+                        </div>
+                        
+                        <div class="mb-8 p-4 bg-stone-50 rounded-lg">
+                            <h3 class="font-bold text-lg mb-2">場景四：Joey 搞砸了</h3>
+                            <p class="text-sm text-gray-600 mb-4">背景：Joey 因為在片場「演得太過火」而被開除了，他感到非常沮喪。</p>
+                            
+                            <p class="mb-2"><strong>Director:</strong> No, that was clenching. <button class="styled-button"
+                                    onclick="toggleABLoop(17, 41, 17, 43, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> 導演認為 Joey 的表演不對。"clenching" 指的是「（肌肉）夾緊、繃緊」。導演要的是自然的淋浴狀態，但 Joey 卻用力過猛，這段對比非常搞笑。</p>
+
+                            <p class="mb-2"><strong>Joey:</strong> And I finally get my shot, and I blow it! <button class="styled-button"
+                                    onclick="toggleABLoop(22, 9, 22, 13, this)">▶️</button></p>
+                            <p class="pl-4 mb-2 text-sm text-gray-700"><strong>解析：</strong> "get my shot" 指「得到我的機會」。"blow it" 是一個非常口語化的片語，意思是「搞砸了」、「毀了」。這是表達錯失良機時非常道地的說法。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="vocabulary" class="prose max-w-none">
+                    <div class="card">
+                        <h2 class="text-2xl">3. 詞彙與短語</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-stone-100">
+                                    <tr>
+                                        <th class="p-3">詞彙/短語</th>
+                                        <th class="p-3">解釋</th>
+                                        <th class="p-3">劇中用法</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">violated</td>
+                                        <td class="p-3">感到被侵犯的、受騷擾的</td>
+                                        <td class="p-3">I feel violated.</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">impending doom</td>
+                                        <td class="p-3">即將到來的厄運</td>
+                                        <td class="p-3">...no sense of impending doom.</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">out of my league</td>
+                                        <td class="p-3">高攀不上，不是一個等級的</td>
+                                        <td class="p-3">Could she be more out of my league?</td>
+                                    </tr>
+                                     <tr class="border-b">
+                                        <td class="p-3 font-semibold">back me up</td>
+                                        <td class="p-3">支持我，幫我說話</td>
+                                        <td class="p-3">Ross, back me up here.</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">for the hell of it</td>
+                                        <td class="p-3">只是為了好玩，沒什麼特別原因</td>
+                                        <td class="p-3">...we just went to Brooklyn for the hell of it.</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">butt double</td>
+                                        <td class="p-3">臀部替身</td>
+                                        <td class="p-3">I'm his butt double.</td>
+                                    </tr>
+                                     <tr class="border-b">
+                                        <td class="p-3 font-semibold">crack your way into</td>
+                                        <td class="p-3">成功打入、擠進</td>
+                                        <td class="p-3">...you've finally been able to crack your way into showbusiness...</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">resentment</td>
+                                        <td class="p-3">怨恨，不滿</td>
+                                        <td class="p-3">Ooh, do I sense a little bit of resentment?</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">clench</td>
+                                        <td class="p-3">（肌肉）夾緊，繃緊</td>
+                                        <td class="p-3">No, that was clenching.</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">dumped</td>
+                                        <td class="p-3">被甩了</td>
+                                        <td class="p-3">Look at it this way: you dumped her.</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">blow it</td>
+                                        <td class="p-3">搞砸了，錯失良機</td>
+                                        <td class="p-3">And I finally get my shot, and I blow it!</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="grammar" class="prose max-w-none">
+                    <div class="card">
+                        <h2 class="text-2xl">4. 語法焦點</h2>
+                        <div class="overflow-x-auto">
+                           <table class="w-full text-left">
+                                <thead class="bg-stone-100">
+                                    <tr>
+                                        <th class="p-3">語法點</th>
+                                        <th class="p-3">劇中例句</th>
+                                        <th class="p-3">解釋</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">強調句型：Could...be more...?</td>
+                                        <td class="p-3">Could she be more out of my league?</td>
+                                        <td class="p-3">這是 Chandler 特有的反諷式強調句型，用來表達「再...不過了」。它形式上是問句，但實際上是強烈的陳述。</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">動詞 feel + 形容詞</td>
+                                        <td class="p-3">I feel violated.</td>
+                                        <td class="p-3">"feel" 後面可以直接加形容詞，用來表達主觀的感受。這裡的 "violated" 是過去分詞作形容詞用，表示「感到被...的」。</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3 font-semibold">片語動詞 (Phrasal Verbs)</td>
+                                        <td class="p-3">Ross, back me up here. / I blow it!</td>
+                                        <td class="p-3">美式口語中大量使用片語動詞。"back up" 意思是「支持」，"blow it" 意思是「搞砸」。學習片語動詞是讓口說更道地的關鍵。</td>
+                                    </tr>
+                                     <tr class="border-b">
+                                        <td class="p-3 font-semibold">動名詞作主詞補語</td>
+                                        <td class="p-3">No, that was clenching.</td>
+                                        <td class="p-3">這裡的 "clenching" 是動名詞(gerund)，用來解釋「那(動作)是什麼」。"That" 是主詞，"was" 是動詞，"clenching" 是用來說明主詞的補語。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="culture" class="prose max-w-none">
+                    <div class="card">
+                        <h2 class="text-2xl">5. 文化註釋</h2>
+                        <ul>
+                            <li><strong>Al Pacino (艾爾·帕西諾):</strong> 他是美國非常著名且備受尊敬的電影演員，以《教父》、《疤面煞星》等電影聞名。能在他的電影中得到一個角色，即使只是替身，對 Joey 這樣的年輕演員來說也是一件大事。</li>
+                            <li><strong>Butt Double (臀部替身):</strong> 這是好萊塢真實存在的一種職業。出於各種原因（例如明星不願裸露、或身材不符合要求），電影拍攝時會使用替身來完成身體某些部位的特寫鏡頭。這個設定本身就充滿了行業的幽默和辛酸。</li>
+                            <li><strong>Dating Culture (約會文化):</strong> Chandler 和 Aurora 的關係反映了 90 年代紐約較為開放的約會觀念。Aurora 同時擁有丈夫和多個情人，這對思想相對傳統的 Chandler 造成了很大的衝擊。這段劇情探討了關於「一夫一妻制 (monogamy)」和感情中「佔有慾」的話題。</li>
+                            <li><strong>Obsessive-Compulsive Disorder (OCD) / 潔癖:</strong> Monica 的極度潔癖和對秩序的渴望是她這個角色的核心特點，也是劇中許多笑點的來源。朋友們故意弄亂東西來「測試」她，是他們之間一種獨特的互動和玩笑方式。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="activities" class="prose max-w-none">
+                     <div class="card">
+                        <h2 class="text-2xl">6. 練習活動</h2>
+                <div class="my-6">
+                    <a href="https://g.co/gemini/share/395ac2b05cb8" target="_blank"
+                        class="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-yellow-500 text-white text-2xl font-bold px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                        🚀 點擊這裡開啟練習
+                    </a>
+                </div>
+                        <h3 class="font-semibold mt-4">口語練習</h3>
+                        <ul>
+                            <li>試著用 Chandler 的語氣說出 "Could I <strong>be</strong> more tired?" (我再累不過了)。你可以替換 tired 成任何形容詞來練習，例如 hungry, excited, confused。</li>
+                            <li>當你或朋友做錯事時，試著用口語說 "Oh no, I totally blew it!" 或 "You blew it!"。</li>
+                        </ul>
+                        <h3 class="font-semibold mt-4">情境思考</h3>
+                        <ul>
+                            <li>如果你是 Chandler，你會接受像 Aurora 這樣的開放式關係嗎？為什麼？</li>
+                            <li>如果你是 Joey，被開除後你會怎麼想？你會放棄演藝事業嗎？</li>
+                            <li>你身邊有像 Monica 一樣有潔癖的朋友嗎？你覺得和這樣的人相處是什麼感覺？</li>
+                        </ul>
+                         <h3 class="font-semibold mt-4">寫作練習</h3>
+                        <p>想像你是 Joey，寫一篇簡短的日記，記錄你得到「屁股替身」角色、在片場被開除、以及最後和朋友們聊天的經歷與心情。</p>
+                    </div>
+                </section>
+
+                <section id="conclusion" class="prose max-w-none">
+                     <div class="card">
+                        <h2 class="text-2xl">7. 結論</h2>
+                        <p>恭喜你完成了 S01E06 的學習！透過這一集，我們不僅學會了許多實用的口語片語，如 "out of my league" 和 "blow it"，還練習了 Chandler 的招牌諷刺句型，並了解了美國電影產業和約會文化的一些有趣面向。</p>
+                        <p>學習語言最重要的是持之以恆並享受過程。《六人行》就是一個能讓你樂在其中的最佳工具。希望你喜歡這次的學習體驗，記得多看幾次，並試著在生活中應用今天學到的英文！我們下一集見！</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.getElementById('menu-button');
+            const mainContent = document.getElementById('main-content');
+            
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('open');
+            });
+
+            mainContent.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 768) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            });
+
+        });
+    </script>
+
+
+    <video id="myVideo" controls>
+        <!--<source src="1.mp4" type="video/mp4">-->
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+
+    <script>
+        // 將上面的 JavaScript 程式碼放在這裡
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        const video = document.getElementById('myVideo');
+
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            // video.src = "default_video.mp4"; // 設定預設影片
+        } else {
+            console.log("未找到 id 為 'myVideo' 的視訊元素。");
+        }
+        let abLoop = false;
+        let aTime = 0;
+        let bTime = 10;
+        let loopCheckInterval;
+        let isABLoopRunning = false;
+        //const toggleButton = document.getElementById("toggleABLoopButton");
+        var loopStartTimeMin = 0;
+        var loopStartTimeSec = 0;
+        var loopEndTimeMin = 0;
+        var loopEndTimeSec = 0;
+
+        function toggleABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec, obj) {
+            var toggleButton = obj;
+            if (toggleButton.textContent === "⏹️") {
+                stopABLoop();
+                toggleButton.textContent = "▶️"
+                return;
+            }
+            //if (toggleButton.textContent === "▶️"){
+            isABLoopRunning = true;
+            //document.write("test");
+            startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec);
+            var allToggle = document.querySelectorAll('.styled-button');
+            allToggle.forEach(button => {
+                button.textContent = '▶️';
+            });
+            toggleButton.textContent = "⏹️";
+            //return;
+            //}
+
+            //isABLoopRunning = !isABLoopRunning; // 切換狀態
+        }
+
+        function getTime(min, sec) {
+            const minutes = parseInt(min) || 0;
+            const seconds = parseInt(sec) || 0;
+            return minutes * 60 + seconds;
+        }
+
+        function startABLoop(loopStartTimeMin, loopStartTimeSec, loopEndTimeMin, loopEndTimeSec) {
+            aTime = getTime(loopStartTimeMin, loopStartTimeSec);
+            bTime = getTime(loopEndTimeMin, loopEndTimeSec);
+
+            if (bTime <= aTime) {
+                alert("終點 B 必須大於起點 A！");
+                return;
+            }
+
+            video.currentTime = aTime;
+            video.play();
+            abLoop = true;
+
+            // 每 0.2 秒檢查一次是否超過 B 點
+            loopCheckInterval = setInterval(() => {
+                if (abLoop && video.currentTime >= bTime) {
+                    //video.pause();
+                    video.currentTime = aTime;
+                    video.play();
+                }
+            }, 200);
+        }
+
+        function stopABLoop() {
+            abLoop = false;
+            isABLoopRunning = false;
+            video.pause();
+            //clearInterval(loopCheckInterval);
+        }
+        // Optional: Add event listener for when video can play
+        if (video) {
+            video.addEventListener('canplay', () => {
+                // console.log("影片已準備好播放。");
+            });
+            video.addEventListener('error', (e) => {
+                console.error("影片載入錯誤:", e);
+                alert("URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。");
+                // You could display a user-friendly message here
+                const videoContainer = document.getElementById('video-button-container');
+                container.innerHTML = `<p class="text-red-500 text-3xl">URL載入失敗，請檢查檔案或影片格式是否受瀏覽器支援。</p>`;
+                //if(videoContainer.querySelector('.video-error-message')) return; // Avoid multiple messages
+
+                //const errorMessage = document.createElement('p');
+                //errorMessage.textContent = "影片載入失敗，請檢查 '2.mp4' 檔案是否存在於同目錄下，或影片格式是否受瀏覽器支援。";
+                //errorMessage.className = 'text-red-500 text-xs p-2 bg-red-100 rounded video-error-message';
+                //videoContainer.appendChild(errorMessage);
+            });
+        } else {
+            console.error("找不到影片元素。");
+        }
+        //video.addEventListener('loadedmetadata', function () {
+        //   video.currentTime = 5;
+        // });
+
+        const container = document.getElementById('video-button-container');
+
+        if (url) {
+            const btn = document.createElement('a');
+            btn.href = url;
+            btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
+            btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+            container.appendChild(btn);
+        } else {
+            container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+        }
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+
+</body>
+</html>
