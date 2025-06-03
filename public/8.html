@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《六人行》S01E08 互動學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8f7f4;
+            color: #4a4a4a;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .nav-link.active {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            font-weight: 600;
+        }
+
+        .prose h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .prose h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .play-btn.playing {
+            color: #4f46e5;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="md:w-64 bg-white border-b md:border-r border-gray-200 md:sticky md:top-0 md:self-start md:h-screen">
+            <div class="p-4">
+                <h1 class="text-xl font-bold text-indigo-800">六人行 S1E08</h1>
+                <p class="text-sm text-gray-500">互動學習指南</p>
+            </div>
+            <div class="md:hidden p-2">
+                 <select id="mobile-nav" class="w-full p-2 border rounded-md bg-gray-50">
+                    <option value="introduction">1. 引言</option>
+                    <option value="scene-study">2. 場景學習</option>
+                    <option value="vocabulary">3. 詞彙與短語</option>
+                    <option value="grammar">4. 語法焦點</option>
+                    <option value="cultural-notes">5. 文化註釋</option>
+                    <option value="practice">6. 練習活動</option>
+                    <option value="conclusion">7. 結論</option>
+                </select>
+            </div>
+            <nav class="hidden md:block p-2">
+                <ul>
+                    <li><a href="#introduction" class="nav-link block p-3 rounded-lg hover:bg-gray-100">1. 引言</a></li>
+                    <li><a href="#scene-study" class="nav-link block p-3 rounded-lg hover:bg-gray-100">2. 場景學習</a></li>
+                    <li><a href="#vocabulary" class="nav-link block p-3 rounded-lg hover:bg-gray-100">3. 詞彙與短語</a></li>
+                    <li><a href="#grammar" class="nav-link block p-3 rounded-lg hover:bg-gray-100">4. 語法焦點</a></li>
+                    <li><a href="#cultural-notes" class="nav-link block p-3 rounded-lg hover:bg-gray-100">5. 文化註釋</a></li>
+                    <li><a href="#practice" class="nav-link block p-3 rounded-lg hover:bg-gray-100">6. 練習活動</a></li>
+                    <li><a href="#conclusion" class="nav-link block p-3 rounded-lg hover:bg-gray-100">7. 結論</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-4 sm:p-6 lg:p-8">
+            <div id="video-container" class="mb-6 bg-white p-4 rounded-xl shadow-md sticky top-0 z-10">
+                 <div id="video-player-wrapper" class="relative bg-black rounded-lg overflow-hidden aspect-video">
+                    <video id="episode-video" class="w-full h-full" controls></video>
+                    <div id="video-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-white bg-gray-800">
+                        <h3 class="text-2xl font-bold mb-2">請載入影片檔案</h3>
+                        <p class="mb-4 text-gray-300 text-center px-4">請點擊下方按鈕，選擇您電腦中的《六人行》S01E08 影片檔案以開始學習。</p>
+                        <input type="file" id="video-upload" accept="video/*" class="hidden">
+                        <label for="video-upload" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition-colors">
+                            選擇影片
+                        </label>
+                    </div>
+                </div>
+                 <div id="video-error-message" class="hidden mt-2 text-red-600 bg-red-100 p-3 rounded-lg"></div>
+            </div>
+
+            <div class="prose max-w-none bg-white p-6 rounded-xl shadow-md">
+                <section id="introduction" class="content-section">
+                    <h2>1. 引言</h2>
+                    <p>歡迎所有初學英文的朋友們，踏上這趟與《六人行》一同學習的精彩旅程！《六人行》不僅是一部風趣幽默的經典情境喜劇，更是一個絕佳且真實的資源，能幫助學習者輕鬆掌握日常英文、理解美國文化，並以有趣的方式提升聽力技能。本學習指南旨在引導學習者深入探索《六人行》第一季第八集「奶奶雙重逝世記」(The One Where Nana Dies Twice) 中的語言與文化精髓。透過本指南，學習者將能掌握實用的詞彙與常用短語，透過互動式播放功能增強聽力理解，在語境中理解關鍵語法點，並獲得寶貴的文化見解。</p>
+                    <h3>本集劇情簡介</h3>
+                    <p>《六人行》第一季第八集「奶奶雙重逝世記」巧妙地平衡了兩種截然不同的故事情節。首先，莫妮卡（Monica）和羅斯（Ross）面臨著祖母娜娜（Nana）去世的悲痛過程。然而，劇情卻出人意料地加入了喜劇轉折：娜娜在被宣布去世後，竟短暫地甦醒過來，隨後才再次離世，這也正是本集標題的由來。與此同時，錢德勒（Chandler）則陷入了一場令人啼笑皆非的困境。他震驚地發現，許多人誤以為他是同性戀，這導致了一系列尷尬卻又幽默的社交互動。本集雙線並行的情節，為學習者提供了豐富多樣的語言學習環境。</p>
+                    <h3>如何使用本學習資料</h3>
+                    <p>為了最大化學習效果，建議您：首先，不帶字幕觀看本集，掌握大致情節；接著，搭配英文字幕再次觀看；最後，深入研讀本指南。本指南的核心特色是互動性，請務必使用對話片段旁的播放按鈕 (▶️)。重複點擊進行A-B循環播放，專注於發音、語調和自然的語速。記得做筆記、大聲朗讀，並嘗試完成練習活動。</p>
+                </section>
+
+                <section id="scene-study" class="content-section">
+                    <h2>2. 場景學習</h2>
+                    <p>本節旨在幫助您在自然語境中理解英文對話。每個對話片段旁的 ▶️ 按鈕將循環播放該片段（從字幕開始前一秒到結束後一秒），以便您專注於重複聆聽練習。</p>
+
+                    <h4>場景一：錢德勒的辦公室</h4>
+                    <p><strong>背景：</strong> 同事雪莉在茶水間接近錢德勒，隨後的對話揭示了大家對錢德勒的一個普遍誤解。</p>
+                    <ul>
+                        <li><strong>片段：</strong> "Hey, gorgeous. How's it going?" <span class="play-btn" data-start="5.63" data-end="9.97">▶️</span>
+                            <br><strong>解釋：</strong> 非常常見且非正式的問候。「Gorgeous」是友善、常帶有調情的讚美。「How's it going?」是「How are you?」的隨性說法。
+                        </li>
+                        <li><strong>片段：</strong> "Dehydrated Japanese noodles under fluorescent lights. Does it get better than this?" <span class="play-btn" data-start="8.17" data-end="15.68">▶️</span>
+                            <br><strong>解釋：</strong> 錢德勒標誌性的諷刺。他描述一個平淡的場景，然後用反問句「Does it get better than this?」來暗示這情況糟透了。
+                        </li>
+                        <li><strong>片段：</strong> "Question. You're not seeing anybody, are you? 'Cause I met somebody who would be perfect for you." <span class="play-btn" data-start="14.38" data-end="21.65">▶️</span>
+                            <br><strong>解釋：</strong> 「Seeing anybody」是「正在約會某人」的慣用語。「'Cause」是「because」的口語縮寫。雪莉想為錢德勒介紹對象。
+                        </li>
+                    </ul>
+
+                    <h4>場景二：中央公園咖啡館</h4>
+                    <p><strong>背景：</strong> 眾人討論錢德勒發現大家認為他是同性戀。瑞秋承認她最初也有同樣的看法。</p>
+                     <ul>
+                        <li><strong>片段：</strong> "Well, I mean, when I first met you, I thought, you know maybe, possibly, you might be." <span class="play-btn" data-start="56.77" data-end="61.73">▶️</span>
+                            <br><strong>解釋：</strong> 「You might be」是一種禮貌而間接的表達可能性的方式，避免直接陳述。
+                        </li>
+                        <li><strong>片段：</strong> "Yeah, but then you spent Phoebe's entire birthday party talking to my breasts, so then I figured maybe not." <span class="play-btn" data-start="61.80" data-end="67.33">▶️</span>
+                            <br><strong>解釋：</strong> 瑞秋的幽默直接而坦率。「Figured」是非正式地表示「得出結論」或「想通了」。
+                        </li>
+                    </ul>
+
+                    <h4>場景三：醫院走廊</h4>
+                    <p><strong>背景：</strong> 莫妮卡和羅斯趕到醫院，與家人一同面對娜娜的臨終。他們的母親茱蒂一見面就對莫妮卡的外表發表評論。</p>
+                    <ul>
+                         <li><strong>片段：</strong> "How's she doing?" <span class="play-btn" data-start="189.96" data-end="192.20">▶️</span>
+                            <br><strong>解釋：</strong> 非常常見且簡潔的方式，用來詢問某人的健康狀況。
+                        </li>
+                         <li><strong>片段：</strong> "The doctor says it's a matter of hours." <span class="play-btn" data-start="192.30" data-end="194.86">▶️</span>
+                            <br><strong>解釋：</strong> 「A matter of hours」是慣用語，意思是某事將在幾小時內發生，傳達了緊迫感。
+                        </li>
+                        <li><strong>片段：</strong> "What's with your hair?" <span class="play-btn" data-start="197.63" data-end="199.70">▶️</span>
+                            <br><strong>解釋：</strong> 非正式且常帶有批評意味的問法，意為「你的頭髮怎麼了？」。
+                        </li>
+                         <li><strong>片段：</strong> "Relax. Okay, we're gonna be here for a while, it looks like, and we still have 'boyfriends' and 'your career' to cover." <span class="play-btn" data-start="202.94" data-end="208.97">▶️</span>
+                            <br><strong>解釋：</strong> 「Gonna」是「going to」的口語縮寫。「To cover」在這裡的意思是「討論」。羅斯試圖緩和氣氛。
+                        </li>
+                    </ul>
+                    
+                    <h4>場景四：娜娜的房間 (娜娜「雙重逝世」)</h4>
+                    <p><strong>背景：</strong> 這是高潮場景，娜娜的逝世因短暫的甦醒而變得複雜，導致了混亂和本集的標題。</p>
+                     <ul>
+                        <li><strong>片段：</strong> "You know how the nurse said that Nana had passed? Well, she's... not quite." <span class="play-btn" data-start="277.58" data-end="281.85">▶️</span>
+                            <br><strong>解釋：</strong> 「Passed」是「died」的常見禮貌委婉說法。「Not quite」意為「不完全」或「還沒」。
+                        </li>
+                         <li><strong>片段：</strong> "She's not passed. She's present. She's back." <span class="play-btn" data-start="284.19" data-end="286.99">▶️</span>
+                            <br><strong>解釋：</strong> 羅斯運用了文字遊戲，將「passed」（去世）與「present」（在場的，活著）對比，幽默地解釋狀況。
+                        </li>
+                         <li><strong>片段：</strong> "This almost never happens..." <span class="play-btn" data-start="300.91" data-end="303.48">▶️</span>
+                            <br><strong>解釋：</strong> 這句話強調了情況的極度不尋常。
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="vocabulary" class="content-section">
+                    <h2>3. 詞彙與短語</h2>
+                    <p>本節列出了本集中對初學者特別重要的詞彙和短語。建議您大聲朗讀、做筆記，並嘗試用它們造句。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-3 border">英文詞彙/短語</th>
+                                    <th class="p-3 border">中文解釋</th>
+                                    <th class="p-3 border">劇中例句</th>
+                                    <th class="p-3 border">一般例句</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-3 border"><strong>Gorgeous</strong></td><td class="p-3 border">華麗的；極美的</td><td class="p-3 border">Hey, <strong>gorgeous</strong>.</td><td class="p-3 border">You look <strong>gorgeous</strong> in that dress!</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Dehydrated</strong></td><td class="p-3 border">脫水的</td><td class="p-3 border"><strong>Dehydrated</strong> Japanese noodles.</td><td class="p-3 border">Don't get <strong>dehydrated</strong> in this hot weather.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Seeing anybody</strong></td><td class="p-3 border">正在約會某人 (慣用語)</td><td class="p-3 border">You're not <strong>seeing anybody</strong>, are you?</td><td class="p-3 border">Is she <strong>seeing anybody</strong> right now?</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Quality</strong></td><td class="p-3 border">品質；特質</td><td class="p-3 border">You just have a <strong>quality</strong>.</td><td class="p-3 border">Honesty is a good <strong>quality</strong>.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Matter of hours</strong></td><td class="p-3 border">幾小時內 (慣用語)</td><td class="p-3 border">It's a <strong>matter of hours</strong>.</td><td class="p-3 border">The results will be ready in a <strong>matter of hours</strong>.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>What's with...?</strong></td><td class="p-3 border">怎麼了？(非正式)</td><td class="p-3 border"><strong>What's with</strong> your hair?</td><td class="p-3 border"><strong>What's with</strong> all the noise?</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Relax</strong></td><td class="p-3 border">放鬆；冷靜</td><td class="p-3 border"><strong>Relax</strong>. <strong>Relax</strong>.</td><td class="p-3 border">Just take a deep breath and <strong>relax</strong>.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Vigil</strong></td><td class="p-3 border">守夜；守候</td><td class="p-3 border">THE <strong>VIGIL</strong> CONTINUES.</td><td class="p-3 border">The family kept a <strong>vigil</strong> at her bedside.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Sweet 'N Lows</strong></td><td class="p-3 border">甜味劑 (品牌名)</td><td class="p-3 border">The <strong>Sweet 'N Lows</strong>.</td><td class="p-3 border">Do you want sugar or <strong>Sweet 'N Low</strong>?</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Passed / Expired</strong></td><td class="p-3 border">去世 (委婉語)</td><td class="p-3 border">Nana had <strong>passed</strong>. / ...and <strong>expires</strong>.</td><td class="p-3 border">Her grandfather <strong>passed</strong> away last year.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Not quite</strong></td><td class="p-3 border">不完全；還沒</td><td class="p-3 border">Well, she's... <strong>not quite</strong>.</td><td class="p-3 border">Are you finished? <strong>Not quite</strong>.</td></tr>
+                                <tr class="border-b"><td class="p-3 border"><strong>Looking into it</strong></td><td class="p-3 border">調查；研究</td><td class="p-3 border">We're <strong>looking into it</strong>.</td><td class="p-3 border">The police are <strong>looking into</strong> the case.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="grammar" class="content-section">
+                    <h2>4. 語法焦點</h2>
+                    <p>語法最好在語境中學習。請注意這些語法結構在對話中是如何使用的。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-3 border">語法點</th>
+                                    <th class="p-3 border">解釋</th>
+                                    <th class="p-3 border">劇中例句</th>
+                                    <th class="p-3 border">一般例句</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="p-3 border"><strong>反問句</strong></td>
+                                    <td class="p-3 border">提出問題並非為了得到答案，而是為了表達強烈情感，通常是諷刺。</td>
+                                    <td class="p-3 border">"Does it get better than this?"</td>
+                                    <td class="p-3 border">Could this day get any worse?</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-3 border"><strong>動詞片語</strong></td>
+                                    <td class="p-3 border">動詞與介詞或副詞的組合，創造出新的意義。</td>
+                                    <td class="p-3 border">"We're <strong>looking into it</strong>." (意為「正在調查」)</td>
+                                    <td class="p-3 border">Can you <strong>look after</strong> my cat?</td>
+                                </tr>
+                                 <tr class="border-b">
+                                    <td class="p-3 border"><strong>口語縮寫</strong></td>
+                                    <td class="p-3 border">詞語的縮短形式，是自然口語的基礎。</td>
+                                    <td class="p-3 border">"<strong>How's</strong> it going?" / "we're <strong>gonna</strong> be here..."</td>
+                                    <td class="p-3 border"><strong>It's</strong> cold. / <strong>They're</strong> late. / I <strong>wanna</strong> go home.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="cultural-notes" class="content-section">
+                    <h2>5. 文化註釋</h2>
+                    <p>語言與文化密不可分。理解這些文化細節能讓您更深入地理解劇情。</p>
+                    <ul>
+                        <li><strong>美國辦公室文化：</strong>在許多美國職場，同事間的非正式聊天很常見，甚至會幫忙介紹對象，反映了專業與個人生活界線較為模糊的一面。</li>
+                        <li><strong>死亡的委婉語：</strong>在美式英文中，人們常用較溫和的詞語（如 "passed away", "gone"）來代替直接的 "died"，尤其是在敏感情境中，這被認為更禮貌。</li>
+                        <li><strong>喪葬與哀悼習俗：</strong>本集對猶太喪禮的描寫（提供火腿）在文化上並不準確，這提醒我們影視作品有時會出現文化上的疏漏。猶太傳統中，家人會進行為期七天的 "Shiva" 哀悼期，而火腿不符合猶太潔食規定。</li>
+                        <li><strong>流行文化現象「瑞秋髮型」：</strong>本集是珍妮佛·安妮絲頓的標誌性髮型「瑞秋頭」首次亮相，它後來成為90年代的全球時尚潮流，這展示了流行媒體對文化的巨大影響力。</li>
+                    </ul>
+                </section>
+
+                <section id="practice" class="content-section">
+                    <h2>6. 練習活動</h2>
+                    <p>積極練習是鞏固學習成果的關鍵。試著完成以下活動。</p>
+                    
+                    <h4>聽力理解</h4>
+                    <p>1. 錢德勒的同事雪莉為什麼找他？</p>
+                    <ul class="list-disc pl-5">
+                        <li>(A) 她想約他出去。</li>
+                        <li>(B) 她想為他介紹一個男朋友。</li>
+                        <li>(C) 她想問他工作上的事。</li>
+                    </ul>
+
+                    <h4>詞彙填空</h4>
+                    <p>1. The doctor says it's just a ______ of hours.</p>
+                    <p>2. ______ your hair? It looks different.</p>
+                    
+                    <h4>口語練習</h4>
+                    <p>試著和朋友角色扮演莫妮卡和羅斯到達醫院的場景，專注於表達出擔憂和驚訝的語氣。</p>
+
+                    <h4>寫作練習</h4>
+                    <p>用幾句話描述一下本集中你覺得最有趣或最出人意料的時刻，並解釋原因。</p>
+                </section>
+
+                <section id="conclusion" class="content-section">
+                    <h2>7. 結論</h2>
+                    <p>恭喜您完成了本集的學習！透過《六人行》，您不僅學到了實用的英文詞彙和語法，還窺見了美國的文化和生活方式。</p>
+                    <p>語言學習是一段漫長的旅程。我們衷心鼓勵您繼續使用《六人行》或其他您感興趣的英文媒體進行學習。持續的接觸和練習是通往流利和自信的唯一途徑。祝您學習愉快！</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('episode-video');
+            const videoUpload = document.getElementById('video-upload');
+            const videoPlaceholder = document.getElementById('video-placeholder');
+            const videoErrorMessage = document.getElementById('video-error-message');
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileNav = document.getElementById('mobile-nav');
+            const contentSections = document.querySelectorAll('.content-section');
+            const playButtons = document.querySelectorAll('.play-btn');
+
+            let currentLoop = { active: false, start: 0, end: 0, button: null };
+
+            // --- Video Player Logic ---
+            videoUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const fileURL = URL.createObjectURL(file);
+                    video.src = fileURL;
+                    videoPlaceholder.style.display = 'none';
+                    videoErrorMessage.classList.add('hidden');
+                    video.load();
+                }
+            });
+
+            video.addEventListener('error', function() {
+                videoPlaceholder.style.display = 'flex';
+                videoErrorMessage.textContent = '影片載入失敗。請確認檔案格式是否受您的瀏覽器支援。';
+                videoErrorMessage.classList.remove('hidden');
+            });
+
+            // --- Navigation Logic ---
+            function setActiveSection(sectionId) {
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === sectionId);
+                });
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${sectionId}`);
+                });
+                if (mobileNav.value !== sectionId) {
+                    mobileNav.value = sectionId;
+                }
+                window.scrollTo(0,0);
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('href').substring(1);
+                    setActiveSection(sectionId);
+                });
+            });
+            
+            mobileNav.addEventListener('change', function() {
+                setActiveSection(this.value);
+            });
+
+            // --- A-B Loop Logic ---
+            function startLoop(startTime, endTime, btn) {
+                 if (!video.src || video.networkState === video.NO_SOURCE) {
+                    videoErrorMessage.textContent = '請先載入影片檔案才能播放片段。';
+                    videoErrorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                // Stop previous loop if any
+                if (currentLoop.button) {
+                    currentLoop.button.classList.remove('playing');
+                }
+
+                video.pause();
+                currentLoop = { active: true, start: startTime, end: endTime, button: btn };
+                video.currentTime = startTime;
+                video.play();
+                btn.classList.add('playing');
+            }
+
+            playButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const start = parseFloat(this.dataset.start);
+                    const end = parseFloat(this.dataset.end);
+                    if (currentLoop.button === this) { // If clicking the same button, stop the loop
+                         currentLoop.active = false;
+                         this.classList.remove('playing');
+                         video.pause();
+                         currentLoop.button = null;
+                    } else {
+                        startLoop(start, end, this);
+                    }
+                });
+            });
+
+            video.addEventListener('timeupdate', function() {
+                if (currentLoop.active && this.currentTime >= currentLoop.end) {
+                    this.currentTime = currentLoop.start;
+                    this.play();
+                }
+            });
+            
+            // Clicking the main video player pauses any active loop
+            video.addEventListener('click', function() {
+                 if (currentLoop.active) {
+                     currentLoop.active = false;
+                     if (currentLoop.button) {
+                         currentLoop.button.classList.remove('playing');
+                         currentLoop.button = null;
+                     }
+                 }
+            });
+
+
+            // --- Initial State ---
+            const initialSection = window.location.hash ? window.location.hash.substring(1) : 'introduction';
+            setActiveSection(initialSection);
+
+        });
+    </script>
+</body>
+
+</html>
