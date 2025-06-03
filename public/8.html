@@ -70,6 +70,53 @@
             50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
+        #video-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 3px solid #f59e0b;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: #1f2937;
+            overflow: hidden;
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            /* amber-500 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+            /* Ensure video corners are also rounded if needed */
+        }
+
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -105,23 +152,9 @@
         </aside>
 
         <main class="flex-1 p-4 sm:p-6 lg:p-8">
-            <div id="video-container" class="mb-6 bg-white p-4 rounded-xl shadow-md sticky top-0 z-10">
-                 <div id="video-player-wrapper" class="relative bg-black rounded-lg overflow-hidden aspect-video">
-                    <video id="episode-video" class="w-full h-full" controls></video>
-                    <div id="video-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-white bg-gray-800">
-                        <h3 class="text-2xl font-bold mb-2">請載入影片檔案</h3>
-                        <p class="mb-4 text-gray-300 text-center px-4">請點擊下方按鈕，選擇您電腦中的《六人行》S01E08 影片檔案以開始學習。</p>
-                        <input type="file" id="video-upload" accept="video/*" class="hidden">
-                        <label for="video-upload" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition-colors">
-                            選擇影片
-                        </label>
-                    </div>
-                </div>
-                 <div id="video-error-message" class="hidden mt-2 text-red-600 bg-red-100 p-3 rounded-lg"></div>
-            </div>
-
             <div class="prose max-w-none bg-white p-6 rounded-xl shadow-md">
                 <section id="introduction" class="content-section">
+                    <div id="video-button-container" class="mb-6"></div>
                     <h2>1. 引言</h2>
                     <p>歡迎所有初學英文的朋友們，踏上這趟與《六人行》一同學習的精彩旅程！《六人行》不僅是一部風趣幽默的經典情境喜劇，更是一個絕佳且真實的資源，能幫助學習者輕鬆掌握日常英文、理解美國文化，並以有趣的方式提升聽力技能。本學習指南旨在引導學習者深入探索《六人行》第一季第八集「奶奶雙重逝世記」(The One Where Nana Dies Twice) 中的語言與文化精髓。透過本指南，學習者將能掌握實用的詞彙與常用短語，透過互動式播放功能增強聽力理解，在語境中理解關鍵語法點，並獲得寶貴的文化見解。</p>
                     <h3>本集劇情簡介</h3>
@@ -137,13 +170,13 @@
                     <h4>場景一：錢德勒的辦公室</h4>
                     <p><strong>背景：</strong> 同事雪莉在茶水間接近錢德勒，隨後的對話揭示了大家對錢德勒的一個普遍誤解。</p>
                     <ul>
-                        <li><strong>片段：</strong> "Hey, gorgeous. How's it going?" <span class="play-btn" data-start="5.63" data-end="9.97">▶️</span>
+                        <li><strong>片段：</strong> "Hey, gorgeous. How's it going?" <span class="play-btn" data-start="6" data-end="9.1">▶️</span>
                             <br><strong>解釋：</strong> 非常常見且非正式的問候。「Gorgeous」是友善、常帶有調情的讚美。「How's it going?」是「How are you?」的隨性說法。
                         </li>
-                        <li><strong>片段：</strong> "Dehydrated Japanese noodles under fluorescent lights. Does it get better than this?" <span class="play-btn" data-start="8.17" data-end="15.68">▶️</span>
+                        <li><strong>片段：</strong> "Dehydrated Japanese noodles under fluorescent lights. Does it get better than this?" <span class="play-btn" data-start="9.17" data-end="14.68">▶️</span>
                             <br><strong>解釋：</strong> 錢德勒標誌性的諷刺。他描述一個平淡的場景，然後用反問句「Does it get better than this?」來暗示這情況糟透了。
                         </li>
-                        <li><strong>片段：</strong> "Question. You're not seeing anybody, are you? 'Cause I met somebody who would be perfect for you." <span class="play-btn" data-start="14.38" data-end="21.65">▶️</span>
+                        <li><strong>片段：</strong> "Question. You're not seeing anybody, are you? 'Cause I met somebody who would be perfect for you." <span class="play-btn" data-start="15.38" data-end="20.65">▶️</span>
                             <br><strong>解釋：</strong> 「Seeing anybody」是「正在約會某人」的慣用語。「'Cause」是「because」的口語縮寫。雪莉想為錢德勒介紹對象。
                         </li>
                     </ul>
@@ -151,10 +184,10 @@
                     <h4>場景二：中央公園咖啡館</h4>
                     <p><strong>背景：</strong> 眾人討論錢德勒發現大家認為他是同性戀。瑞秋承認她最初也有同樣的看法。</p>
                      <ul>
-                        <li><strong>片段：</strong> "Well, I mean, when I first met you, I thought, you know maybe, possibly, you might be." <span class="play-btn" data-start="56.77" data-end="61.73">▶️</span>
+                        <li><strong>片段：</strong> "Well, I mean, when I first met you, I thought, you know maybe, possibly, you might be." <span class="play-btn" data-start="109.77" data-end="114.73">▶️</span>
                             <br><strong>解釋：</strong> 「You might be」是一種禮貌而間接的表達可能性的方式，避免直接陳述。
                         </li>
-                        <li><strong>片段：</strong> "Yeah, but then you spent Phoebe's entire birthday party talking to my breasts, so then I figured maybe not." <span class="play-btn" data-start="61.80" data-end="67.33">▶️</span>
+                        <li><strong>片段：</strong> "Yeah, but then you spent Phoebe's entire birthday party talking to my breasts, so then I figured maybe not." <span class="play-btn" data-start="117.80" data-end="122.33">▶️</span>
                             <br><strong>解釋：</strong> 瑞秋的幽默直接而坦率。「Figured」是非正式地表示「得出結論」或「想通了」。
                         </li>
                     </ul>
@@ -162,16 +195,16 @@
                     <h4>場景三：醫院走廊</h4>
                     <p><strong>背景：</strong> 莫妮卡和羅斯趕到醫院，與家人一同面對娜娜的臨終。他們的母親茱蒂一見面就對莫妮卡的外表發表評論。</p>
                     <ul>
-                         <li><strong>片段：</strong> "How's she doing?" <span class="play-btn" data-start="189.96" data-end="192.20">▶️</span>
+                         <li><strong>片段：</strong> "How's she doing?" <span class="play-btn" data-start="263.96" data-end="265.20">▶️</span>
                             <br><strong>解釋：</strong> 非常常見且簡潔的方式，用來詢問某人的健康狀況。
                         </li>
-                         <li><strong>片段：</strong> "The doctor says it's a matter of hours." <span class="play-btn" data-start="192.30" data-end="194.86">▶️</span>
+                         <li><strong>片段：</strong> "The doctor says it's a matter of hours." <span class="play-btn" data-start="265.30" data-end="267.86">▶️</span>
                             <br><strong>解釋：</strong> 「A matter of hours」是慣用語，意思是某事將在幾小時內發生，傳達了緊迫感。
                         </li>
-                        <li><strong>片段：</strong> "What's with your hair?" <span class="play-btn" data-start="197.63" data-end="199.70">▶️</span>
+                        <li><strong>片段：</strong> "What's with your hair?" <span class="play-btn" data-start="274.63" data-end="276.70">▶️</span>
                             <br><strong>解釋：</strong> 非正式且常帶有批評意味的問法，意為「你的頭髮怎麼了？」。
                         </li>
-                         <li><strong>片段：</strong> "Relax. Okay, we're gonna be here for a while, it looks like, and we still have 'boyfriends' and 'your career' to cover." <span class="play-btn" data-start="202.94" data-end="208.97">▶️</span>
+                         <li><strong>片段：</strong> "Relax. Okay, we're gonna be here for a while, it looks like, and we still have 'boyfriends' and 'your career' to cover." <span class="play-btn" data-start="286.94" data-end="292.97">▶️</span>
                             <br><strong>解釋：</strong> 「Gonna」是「going to」的口語縮寫。「To cover」在這裡的意思是「討論」。羅斯試圖緩和氣氛。
                         </li>
                     </ul>
@@ -179,13 +212,13 @@
                     <h4>場景四：娜娜的房間 (娜娜「雙重逝世」)</h4>
                     <p><strong>背景：</strong> 這是高潮場景，娜娜的逝世因短暫的甦醒而變得複雜，導致了混亂和本集的標題。</p>
                      <ul>
-                        <li><strong>片段：</strong> "You know how the nurse said that Nana had passed? Well, she's... not quite." <span class="play-btn" data-start="277.58" data-end="281.85">▶️</span>
+                        <li><strong>片段：</strong> "You know how the nurse said that Nana had passed? Well, she's... not quite." <span class="play-btn" data-start="373.58" data-end="378.85">▶️</span>
                             <br><strong>解釋：</strong> 「Passed」是「died」的常見禮貌委婉說法。「Not quite」意為「不完全」或「還沒」。
                         </li>
-                         <li><strong>片段：</strong> "She's not passed. She's present. She's back." <span class="play-btn" data-start="284.19" data-end="286.99">▶️</span>
+                         <li><strong>片段：</strong> "She's not passed. She's present. She's back." <span class="play-btn" data-start="380.19" data-end="384.99">▶️</span>
                             <br><strong>解釋：</strong> 羅斯運用了文字遊戲，將「passed」（去世）與「present」（在場的，活著）對比，幽默地解釋狀況。
                         </li>
-                         <li><strong>片段：</strong> "This almost never happens..." <span class="play-btn" data-start="300.91" data-end="303.48">▶️</span>
+                         <li><strong>片段：</strong> "This almost never happens..." <span class="play-btn" data-start="397.91" data-end="400.48">▶️</span>
                             <br><strong>解釋：</strong> 這句話強調了情況的極度不尋常。
                         </li>
                     </ul>
@@ -272,6 +305,12 @@
 
                 <section id="practice" class="content-section">
                     <h2>6. 練習活動</h2>
+                    <div class="my-6">
+                        <a href="https://g.co/gemini/share/4986b9f3f4a9" target="_blank"
+                        class="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-yellow-500 text-white text-2xl font-bold px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                            🚀 點擊這裡開啟練習
+                        </a>
+                    </div>
                     <p>積極練習是鞏固學習成果的關鍵。試著完成以下活動。</p>
                     
                     <h4>聽力理解</h4>
@@ -301,13 +340,15 @@
             </div>
         </main>
     </div>
-
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        <!--<source src="1.mp4" type="video/mp4">-->
+        您的瀏覽器不支援 HTML5 video。
+    </video>
     <script>
+        const video = document.getElementById('myVideo');
         document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('episode-video');
-            const videoUpload = document.getElementById('video-upload');
-            const videoPlaceholder = document.getElementById('video-placeholder');
-            const videoErrorMessage = document.getElementById('video-error-message');
+            
             
             const navLinks = document.querySelectorAll('.nav-link');
             const mobileNav = document.getElementById('mobile-nav');
@@ -316,23 +357,7 @@
 
             let currentLoop = { active: false, start: 0, end: 0, button: null };
 
-            // --- Video Player Logic ---
-            videoUpload.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const fileURL = URL.createObjectURL(file);
-                    video.src = fileURL;
-                    videoPlaceholder.style.display = 'none';
-                    videoErrorMessage.classList.add('hidden');
-                    video.load();
-                }
-            });
 
-            video.addEventListener('error', function() {
-                videoPlaceholder.style.display = 'flex';
-                videoErrorMessage.textContent = '影片載入失敗。請確認檔案格式是否受您的瀏覽器支援。';
-                videoErrorMessage.classList.remove('hidden');
-            });
 
             // --- Navigation Logic ---
             function setActiveSection(sectionId) {
@@ -362,11 +387,6 @@
 
             // --- A-B Loop Logic ---
             function startLoop(startTime, endTime, btn) {
-                 if (!video.src || video.networkState === video.NO_SOURCE) {
-                    videoErrorMessage.textContent = '請先載入影片檔案才能播放片段。';
-                    videoErrorMessage.classList.remove('hidden');
-                    return;
-                }
 
                 // Stop previous loop if any
                 if (currentLoop.button) {
@@ -417,9 +437,38 @@
             // --- Initial State ---
             const initialSection = window.location.hash ? window.location.hash.substring(1) : 'introduction';
             setActiveSection(initialSection);
-
+            contentSections.forEach(section => {
+                section.classList.add('active');
+            });
         });
+        const container = document.getElementById('video-button-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            // video.src = "default_video.mp4"; // 設定預設影片
+        } else {
+            console.log("未找到 id 為 'myVideo' 的視訊元素。");
+        }
+        if (url) {
+            const btn = document.createElement('a');
+            btn.href = url;
+            btn.target = '_blank'; // 如需在同視窗開啟，可改成 "_self"
+            btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+            container.appendChild(btn);
+        } else {
+            container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+        }
     </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+
 </body>
 
 </html>
