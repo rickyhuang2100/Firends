@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E20 學習指南 | The One with the Evil Orthodontist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+            }
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+            header nav .nav-link.active, header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+            #menu-overlay {
+                display: none;
+            }
+            header nav.open ~ #menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E20</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#introduction" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocabulary" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">《六人行》英文學習指南</h1>
+            <p class="text-xl md:text-2xl text-gray-600">S01E20: The One with the Evil Orthodontist</p>
+            <div id="video-button-container" class="mt-8"></div>
+        </div>
+
+        <section id="introduction" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">1. 引言</h2>
+            <div class="space-y-4 text-lg text-gray-700">
+                <p>歡迎來到《六人行》第一季第二十集《有邪惡牙醫的那一集》！這一集的標題直接點出了劇情核心——瑞秋的前未婚夫巴瑞，一位牙醫，在劇中的行為從瑞秋的角度看，確實有點「邪惡」。透過觀看這部充滿生活化情境與幽默的影集來學習英文，其真實且貼近日常的對話，能讓學習過程變得更加有趣且有效。</p>
+                <p>本集主要有三條故事線交織。首先是瑞秋的困境，她與前未婚夫巴瑞舊情復燃，但巴瑞卻已和瑞秋的前閨蜜敏蒂訂婚，這使瑞秋陷入複雜的情感糾葛。其次是錢德勒的約會焦慮，他在一次成功的約會後，因過度在意所謂的「約會規則」而飽受煎熬。最後，還有一個輕鬆的喜劇插曲，朋友們發現對面有人用望遠鏡偷窺他們，引出了「醜陋裸男」的有趣情節。這些多元的情境為我們提供了豐富的日常詞彙和常見對話短語。</p>
+                <p>為了幫助你更有效地掌握劇中語言，本指南將特別介紹「連讀 (linking)」和「弱讀 (weak forms)」這兩種發音現象。它們是讓你的口語聽起來更自然、更流利的關鍵。連讀指的是單字在口語中自然地連接在一起，形成流暢的語音；弱讀則是指某些常見的、非重讀的單字在口語中被快速且輕柔地發音。理解並掌握這兩種現象至關重要，因為母語人士在對話中會大量使用它們。這份指南將帶你從劇中對話識別並分析這些現象，讓你更貼近真實的英語世界。</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">2. 場景分析</h2>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">2.1 開場：公寓裡的偷窺者</h3>
+                    <p class="mb-4 text-gray-700">朋友們正在爭論零食界的明星，此時莫妮卡發現對面有人用望遠鏡偷窺他們，大家立刻感到被冒犯，氣氛也變得緊張又好笑。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="mb-2"><strong>CHANDLER:</strong> I can't believe you'd actually say that. I'd much rather be Mr. Peanut than Mr. Salty. <span class="play-btn" data-start="1" data-end="9">▶️</span></p>
+                        <p class="mb-2"><strong>MONICA:</strong> Oh, my God. You gotta come see this. There's some creep out there with a telescope. <span class="play-btn" data-start="23" data-end="31">▶️</span></p>
+                        <p class="mb-2"><strong>CHANDLER:</strong> I feel violated. And not in a good way. <span class="play-btn" data-start="32" data-end="36">▶️</span></p>
+                        <p class="mb-2"><strong>學習價值：</strong>這段對話充滿了日常用語，如 "you gotta" (you have got to)，以及表達強烈情緒的 "Oh my God" 和 "I feel violated"。這是學習如何用英文表達驚訝和不滿的好機會。</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">2.2 咖啡館：錢德勒的約會規則 & 瑞秋的秘密</h3>
+                    <p class="mb-4 text-gray-700">錢德勒為了一次完美的約會而興奮不已，卻又因為堅持所謂的「約會規則」而不敢打電話給對方。同時，瑞秋剛和前未婚夫巴瑞見面回來，試圖隱瞞這件事。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                        <h4 class="font-bold mb-2">錢德勒的困境</h4>
+                        <p class="mb-2"><strong>CHANDLER:</strong> I am telling you, years from now, schoolchildren will study it as one of the greatest first dates of all time... Let her know I like her? What are you, insane? <span class="play-btn" data-start="58" data-end="69">▶️</span></p>
+                        <p class="mb-2"><strong>JOEY & ROSS:</strong> Oh, yeah. Yeah. Let her dangle. <span class="play-btn" data-start="71" data-end="74">▶️</span></p>
+                        <p class="mb-2"><strong>學習價值：</strong>這裡出現了俚語 "let her dangle"（吊她胃口），以及誇張的表達方式 "What are you, insane?"（你瘋了嗎？）。這段對話生動地展現了美國約會文化中的一些有趣觀念。</p>
+                    </div>
+                     <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold mb-2">瑞秋的午餐</h4>
+                        <p class="mb-2"><strong>RACHEL:</strong> Y'know, it was... it was actually really great. He took me to lunch... it was comfortable, it was familiar... it was just nice! <span class="play-btn" data-start="132" data-end="145">▶️</span></p>
+                         <p class="mb-2"><strong>MONICA:</strong> Rachel, what's going on? I mean isn't this the same Barry who you left at the altar? <span class="play-btn" data-start="145" data-end="151">▶️</span></p>
+                        <p class="mb-2"><strong>學習價值：</strong>注意瑞秋使用的口頭禪 "y'know" (you know)，這是非常口語化的表達。莫妮卡則用 "left at the altar" (在婚禮上拋棄) 來提醒瑞秋過去的經歷，這是一個很形象的片語。</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">2.3 牙醫診所：真相大白</h3>
+                    <p class="mb-4 text-gray-700">瑞秋和巴瑞在診所舊情復燃。隨後，瑞秋接到敏蒂的電話，敏蒂不僅邀請她當伴娘，還透露懷疑巴瑞有外遇。最終，瑞秋向敏蒂坦白了一切。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                         <h4 class="font-bold mb-2">瑞秋與巴瑞</h4>
+                        <p class="mb-2"><strong>RACHEL:</strong> Oh, Barry, this was not good. <span class="play-btn" data-start="597" data-end="599">▶️</span></p>
+                        <p class="mb-2"><strong>BARRY:</strong> Well, if you want, I'll just... I'll just break it off with her. <span class="play-btn" data-start="607" data-end="611">▶️</span></p>
+                        <p class="mb-2"><strong>學習價值：</strong>學習動詞片語 "break it off" (分手、結束關係)。注意巴瑞說話時猶豫的語氣 "I'll just..."，這在口語中很常見，用來表示思考或不確定。</p>
+                    </div>
+                     <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold mb-2">瑞秋與敏蒂的通話</h4>
+                        <p class="mb-2"><strong>MINDY:</strong> So, will you be my maid of honor? <span class="play-btn" data-start="706" data-end="708">▶️</span></p>
+                        <p class="mb-2"><strong>RACHEL:</strong> Mindy... I'm the other woman. <span class="play-btn" data-start="776" data-end="780">▶️</span></p>
+                        <p class="mb-2"><strong>學習價值：</strong> "maid of honor" 是指婚禮中的「主伴娘」。瑞秋說 "I'm the other woman" (我是第三者)，這是一種非常直接且戲劇性的坦白方式。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vocabulary" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">3. 重點詞彙</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>英文 (English)</th>
+                            <th>中文解釋</th>
+                            <th>情境範例 (劇中)</th>
+                            <th>簡單定義</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>creep</strong> (n.)</td>
+                            <td>討厭鬼；怪人</td>
+                            <td>"There's some <strong>creep</strong> out there with a telescope!"</td>
+                            <td>一個讓人不舒服的、奇怪的人。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>violated</strong> (adj.)</td>
+                            <td>被侵犯的</td>
+                            <td>"I feel <strong>violated</strong>."</td>
+                            <td>感覺自己的隱私或個人空間被侵犯了。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>insane</strong> (adj.)</td>
+                            <td>瘋狂的；不理智的</td>
+                            <td>"What are you, <strong>insane</strong>?"</td>
+                            <td>瘋了；想法不合邏輯。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>let her dangle</strong> (idiom)</td>
+                            <td>吊她胃口</td>
+                            <td>"Oh, yeah. Yeah. <strong>Let her dangle</strong>."</td>
+                            <td>故意讓某人等待，使對方更感興趣。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>break it off</strong> (phrasal verb)</td>
+                            <td>結束關係；分手</td>
+                            <td>"I'll just <strong>break it off</strong> with her."</td>
+                            <td>結束一段戀愛關係。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>maid of honor</strong> (n. phrase)</td>
+                            <td>主伴娘</td>
+                            <td>"So, will you be my <strong>maid of honor</strong>?"</td>
+                            <td>新娘在婚禮上的主要女性陪伴者。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>snubbed</strong> (v.)</td>
+                            <td>被冷落；被怠慢</td>
+                            <td>"Now I'm needy and <strong>snubbed</strong>."</td>
+                            <td>被無禮地忽視或對待。</td>
+                        </tr>
+                         <tr>
+                            <td><strong>the other woman</strong> (n. phrase)</td>
+                            <td>第三者</td>
+                            <td>"I'm <strong>the other woman</strong>."</td>
+                            <td>與已婚或有伴侶的男人有染的女人。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grammar" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">4. 語法解析</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">動詞片語 (Phrasal Verbs)</h3>
+                    <p class="text-gray-700">動詞片語在口語中非常普遍，是由「動詞 + 介詞/副詞」組成的。它們的意思通常不能從單個詞猜到。</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2 bg-gray-50 p-4 rounded-lg">
+                        <li><strong>break it off:</strong> 結束關係。 "I'll just <span class="font-bold text-red-600">break it off</span> with her."</li>
+                        <li><strong>run out on:</strong> 拋棄，突然離開。 "since you <span class="font-bold text-red-600">ran out on</span> Barry..."</li>
+                        <li><strong>come see:</strong> 過來看看。 "You gotta <span class="font-bold text-red-600">come see</span> this."</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">口語縮讀 (Contractions)</h3>
+                     <p class="text-gray-700">英文口語中充滿了縮讀，這讓對話聽起來更快速、更自然。對於初學者來說，熟悉這些縮讀非常重要。</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2 bg-gray-50 p-4 rounded-lg">
+                        <li><strong>Gotta:</strong> "have got to" 的縮寫，意思是「必須」。"You <span class="font-bold text-red-600">gotta</span> come see this." <span class="play-btn" data-start="23" data-end="26">▶️</span></li>
+                        <li><strong>Y'know:</strong> "you know" 的縮寫，常用作口頭禪。 "<span class="font-bold text-red-600">Y'know</span>, it was... it was actually really great." <span class="play-btn" data-start="132" data-end="135">▶️</span></li>
+                         <li><strong>I'd:</strong> "I would" 的縮寫。 "<span class="font-bold text-red-600">I'd</span> much rather be Mr. Peanut..." <span class="play-btn" data-start="4" data-end="7">▶️</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">表達難以置信的問句</h3>
+                     <p class="text-gray-700">當你對聽到的事情感到非常驚訝或不贊同時，可以使用 "What are you...?" 或 "I can't believe..." 這類句型來加強語氣。</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2 bg-gray-50 p-4 rounded-lg">
+                        <li>"What are you, <span class="font-bold text-red-600">insane</span>?" (你瘋了嗎？) <span class="play-btn" data-start="66" data-end="68">▶️</span></li>
+                        <li>"I <span class="font-bold text-red-600">can't believe</span> you'd actually say that." (我真不敢相信你會這麼說。) <span class="play-btn" data-start="1" data-end="4">▶️</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">5. 文化背景</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">美國的「約會規則」(Dating Rules)</h3>
+                    <p class="text-gray-700">錢德勒的焦慮完美地詮釋了90年代美國約會文化中的一些不成文「規則」。比如，約會後不能馬上打電話，否則會顯得太「needy」(黏人、迫切)。「Let her dangle」(吊她胃口) 這種說法，反映了一種想在關係中保持主導地位的心態。雖然現在的約會方式因科技而改變，但這種關於「表現得酷一點」的社交壓力在某種程度上依然存在。</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">隱私與鄰里關係</h3>
+                    <p class="text-gray-700">朋友們發現有人在偷窺時的第一反應是「I feel violated」(我感覺被侵犯了)，這反映了美國文化對個人隱私(privacy)的重視。然而，像「Ugly Naked Guy」(醜陋裸男) 這樣古怪的鄰居角色，又是情境喜劇中常見的幽默來源，這種幽默常常來自於對社會常規的打破。</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">婚禮習俗 (Maid of Honor)</h3>
+                    <p class="text-gray-700">當敏蒂邀請瑞秋做她的「maid of honor」(主伴娘)時，這不僅是一個請求，更是一種深厚友誼的象徵。主伴娘是新娘最重要的支持者，通常由最親密的姐妹或朋友擔任。瑞秋答應了這個請求，同時卻隱瞞著自己是「第三者」的事實，這加劇了劇情的戲劇衝突。</p>
+                </div>
+            </div>
+        </section>
+<br/>
+        <section id="practice" class="scroll-mt-24">
+
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">6. 連讀與弱讀特訓</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/fdb12916dbad" target="_blank">
+                    <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                </a>
+            </div>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">連讀 (Linking)</h3>
+                    <p class="mb-4 text-gray-700">連讀是口語流暢的秘訣。當一個單詞以子音結尾，而下一個單詞以母音開頭時，它們的聲音會自然地連在一起。請仔細聽下面的例子，並試著模仿。</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>劇中範例</th>
+                                    <th>發音解析 (聽起來像)</th>
+                                    <th>練習</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>He's looking <strong>right at us</strong>!</td>
+                                    <td>"right" 的 /t/ 和 "at" 的 /æ/ 連接；"at" 的 /t/ 和 "us" 的 /ʌ/ 連接，聽起來像 "rai-da-dus"。</td>
+                                    <td><span class="play-btn" data-start="0:38" data-end="0:40">▶️</span></td>
+                                </tr>
+                                <tr>
+                                    <td>...since you <strong>ran out on</strong> Barry...</td>
+                                    <td>"ran" 的 /n/ 和 "out" 的 /aʊ/ 連接；"out" 的 /t/ 和 "on" 的 /ɒ/ 連接，聽起來像 "ra-nou-don"。</td>
+                                    <td><span class="play-btn" data-start="11:58" data-end="12:00">▶️</span></td>
+                                </tr>
+                                <tr>
+                                    <td>I'll just <strong>break it off</strong> with her.</td>
+                                    <td>"break" 的 /k/ 和 "it" 的 /ɪ/ 連接；"it" 的 /t/ 和 "off" 的 /ɒ/ 連接，聽起來像 "brei-ki-doff"。</td>
+                                    <td><span class="play-btn" data-start="10:08" data-end="10:11">▶️</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2">弱讀 (Weak Forms)</h3>
+                    <p class="mb-4 text-gray-700">在快速的口語中，一些功能詞（如 to, for, are, and）的母音會被弱化成一個模糊的 "uh" 音 (ə)。學會辨識和使用弱讀，能讓你的聽力和口語都更上一層樓。</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>常見弱讀詞</th>
+                                    <th>劇中範例</th>
+                                    <th>發音解析 (聽起來像)</th>
+                                    <th>練習</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>are</strong> (/ər/)</td>
+                                    <td>What <strong>are</strong> you, insane?</td>
+                                    <td>"are" 的聲音變得非常短促，像 "er"，所以整句聽起來像 "Whader-you, insane?"</td>
+                                    <td><span class="play-btn" data-start="1:06" data-end="1:09">▶️</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>to</strong> (/tə/)</td>
+                                    <td>You gotta come see this. (got <strong>to</strong>)</td>
+                                    <td>"got to" 經常縮讀成 "gotta"，其中 "to" 的發音變成了 "uh" (/ə/)。</td>
+                                    <td><span class="play-btn" data-start="0:24" data-end="0:26">▶️</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>and</strong> (/ən/ or /n/)</td>
+                                    <td>needy <strong>and</strong> snubbed</td>
+                                    <td>"and" 的聲音縮短為 "n"，聽起來像 "needy-'n'-snubbed"。</td>
+                                    <td><span class="play-btn" data-start="13:24" data-end="13:27">▶️</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-2xl font-semibold mb-2 mt-8">跟讀練習</h3>
+                    <p class="mb-4 text-gray-700">現在，讓我們來做些練習吧！點擊播放按鈕，仔細聆聽，然後試著模仿角色的語氣和發音。你可以錄下自己的聲音，和原音做比較。</p>
+                    <ul class="space-y-2 list-none">
+                        <li class="bg-gray-50 p-3 rounded-lg flex items-center justify-between">
+                            <span>"I feel violated. And not in a good way."</span>
+                            <span class="play-btn" data-start="0:32" data-end="0:36">▶️</span>
+                        </li>
+                        <li class="bg-gray-50 p-3 rounded-lg flex items-center justify-between">
+                            <span>"Let her know I like her? What are you, insane?"</span>
+                            <span class="play-btn" data-start="1:05" data-end="1:09">▶️</span>
+                        </li>
+                        <li class="bg-gray-50 p-3 rounded-lg flex items-center justify-between">
+                             <span>"Isn't this the same Barry who you left at the altar?"</span>
+                            <span class="play-btn" data-start="2:27" data-end="2:31">▶️</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="conclusion" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-[#c7a17a]">7. 結論</h2>
+            <div class="space-y-4 text-lg text-gray-700">
+                <p>恭喜你完成了這一集的學習！透過《有邪惡牙醫的那一集》，我們不僅學會了許多實用的詞彙和片語，如 "break it off" 和 "maid of honor"，還深入了解了美國的約會文化和朋友間的互動模式。</p>
+                <p>最重要的是，我們特別訓練了對「連讀」和「弱讀」的聽力敏感度。掌握這些發音技巧，是從「能看懂」英文到「能聽懂」並「流利說出」英文的關鍵一步。你會發現，當你開始注意這些語音現象後，聽懂快速的英文對話會變得容易許多，而你自己的口說也會聽起來更加自然。</p>
+                <p>學習語言是一個持續的過程。希望你將今天學到的知識應用到更多的英文學習中。可以試著重看這一集，看看是否能聽出更多我們討論過的語言點。繼續保持好奇心，享受在《六人行》的歡笑聲中學英文的樂趣吧！</p>
+            </div>
+        </section>
+
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            } else {
+                // 若為純秒數，轉為分:秒格式
+                return parseFloat(timeStr);
+            }
+        }
+        function toMinSec(sec) {
+            sec = parseFloat(sec);
+            const m = Math.floor(sec / 60);
+            const s = Math.round(sec - m * 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        // 批次修正所有 play-btn 的 data-start/data-end 屬性為分:秒格式
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                let ds = btn.getAttribute('data-start');
+                let de = btn.getAttribute('data-end');
+                if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+                if (de && !de.includes(':')) btn.setAttribute('data-end', toMinSec(de));
+            });
+            // Navbar active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            // play-btn 綁定
+            document.body.addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                }
+            });
+            // 響應式側邊選單開關（含遮罩層控制）
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                // 點擊遮罩層自動關閉
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            // 影片網址參數載入
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>在新視窗開啟影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class=\"text-red-500 text-3xl\">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

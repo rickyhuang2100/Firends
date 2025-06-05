@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E18 學習指南 | The One with All the Poker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+            }
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+            header nav .nav-link.active, header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+            #menu-overlay {
+                display: none;
+            }
+            header nav.open ~ #menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E18</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">
+        <section id="intro" class="scroll-mt-24">
+            <div id="video-button-container" class="mb-6"></div>
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>歡迎踏上這趟精彩的《六人行》英文學習之旅！本學習資料專為英文初學者設計，旨在透過觀看經典情境喜劇《六人行》來提升英語能力。選擇《六人行》作為學習素材，是因為其貼近日常生活的對話、自然生動的情境以及充滿幽默感的劇情，讓學習者能沉浸在真實的語言環境中，有效且愉快地學習英語。</p>
+                <p>本學習資料將聚焦於《六人行》第1季第18集，標題為「撲克牌之戰」(The One with All the Poker)。本集的核心劇情圍繞著六位朋友展開一場激烈的撲克牌遊戲，同時也穿插了瑞秋的求職經歷。本集提供了豐富的日常對話、多樣的情感表達以及獨特的文化情境，對於初學者來說，是掌握生活化英語的絕佳機會。</p>
+                <p>為了有效利用這份學習資料，建議您首先完整觀看本集，對劇情有大致的了解。隨後，在各個學習環節中，您會看到對話片段旁附有播放按鈕 (▶️)。點擊此按鈕，內嵌的影片播放器將會循環播放該片段。這項功能將幫助您打破快速語流，精準模仿發音，從而提升聽力理解和口語流暢度。</p>
+            </div>
+        </section>
+        <section id="scenes" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景</h2>
+            <div class="content-card space-y-8 text-lg leading-relaxed">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">場景一：瑞秋的求職困境與履歷表 (00:14 - 01:57)</h3>
+                    <p>朋友們在瑞秋的公寓裡幫她寄履歷找工作。瑞秋對服務生工作感到厭倦，渴望改變。羅斯發現瑞秋的履歷有拼寫錯誤。</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>ROSS: Uh, Rach, we're running low on resumes over here. <span class="play-btn" data-start="13.21" data-end="17.37">▶️</span></li>
+                        <li>RACHEL: Hey, look, you guys, I'm going for anything here, OK? I cannot be a waitress anymore, I mean it. I'm sick of the lousy tips, I'm sick of being called 'Excuse me...' <span class="play-btn" data-start="24.99" data-end="34.99">▶️</span></li>
+                        <li>ROSS: Rach, did you proofread these? <span class="play-btn" data-start="47.16" data-end="49.36">▶️</span></li>
+                        <li>JOEY: Oh no, I'm sure the Xerox machine caught a few. <span class="play-btn" data-start="49.56" data-end="52.26">▶️</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">場景二：撲克牌教學與高額賭注 (04:56 - 07:00)</h3>
+                    <p>男孩們嘗試教女孩們撲克牌規則，但女孩們的理解方式非常獨特。最終，大家決定玩真的，賭注升高。</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>PHOEBE: I’m going for fours. <span class="play-btn" data-start="5:05" data-end="5:07">▶️</span></li>
+                        <li>CHANDLER: Phoebe just threw away two jacks because they didn’t look happy... <span class="play-btn" data-start="5:12" data-end="5:15">▶️</span></li>
+                        <li>RACHEL: Let’s play for real. <span class="play-btn" data-start="5:28" data-end="5:29">▶️</span></li>
+                        <li>JOEY: Heh... I was bluffing. <span class="play-btn" data-start="5:51" data-end="5:53">▶️</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">場景三：最終對決與羅斯的讓步 (12:02 - 結束)</h3>
+                    <p>瑞秋面試失敗後情緒低落。朋友們再次進行撲克牌對決，這次女孩們展現了更強的實力，而羅斯在最後的對決中，似乎為了安慰瑞秋而故意讓她贏得比賽。</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>ROSS: Your money's mine, Green. RACHEL: Your fly's open, Geller. <span class="play-btn" data-start="14:21" data-end="14:24">▶️</span></li>
+                        <li>JOEY: I fold like a cheap hooker who got hit in the stomach by a fat guy with sores on his face. <span class="play-btn" data-start="14:41" data-end="14:46">▶️</span></li>
+                        <li>RACHEL: Full house. <span class="play-btn" data-start="16:36" data-end="16:38">▶️</span></li>
+                        <li>ROSS: Oh, well, when you don’t have the cards, you don’t have the cards, you know. <span class="play-btn" data-start="17:07" data-end="17:11">▶️</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id="vocab" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card space-y-8">
+                <p class="text-lg leading-relaxed">本集節目中包含了許多實用的詞彙和片語。掌握這些詞彙不僅能幫助您理解本集內容，更能提升您在真實情境中運用英語的能力。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>時間</th>
+                                <th>詞彙/片語</th>
+                                <th>解釋</th>
+                                <th>劇中例句</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>00:14</td><td>to run low (on sth)</td><td>剩下不多了；快用完了</td><td>ROSS: Uh, Rach, we're running low on resumes over here.<span class="play-btn" data-start="13.21" data-end="17.37">▶️</span></td></tr>
+                            <tr><td>00:25</td><td>go for anything</td><td>不挑剔；什麼都願意嘗試</td><td>RACHEL: Hey, look, you guys, I'm going for anything here, OK?<span class="play-btn" data-start="24.99" data-end="28.86">▶️</span></td></tr>
+                            <tr><td>00:28</td><td>I mean it</td><td>我是認真的</td><td>RACHEL: I cannot be a waitress anymore, I mean it.<span class="play-btn" data-start="27.65" data-end="30.86">▶️</span></td></tr>
+                            <tr><td>00:30</td><td>lousy</td><td>糟糕的；差勁的</td><td>RACHEL: I'm sick of the lousy tips...<span class="play-btn" data-start="29.86" data-end="32.19">▶️</span></td></tr>
+                            <tr><td>00:48</td><td>to proofread</td><td>校對</td><td>ROSS: Rach, did you proofread these?<span class="play-btn" data-start="47.16" data-end="49.36">▶️</span></td></tr>
+                            <tr><td>01:31</td><td>inquiry</td><td>詢問；查詢（較正式）</td><td>PHOEBE: Dear Ms. Green, thank you for your inquiry, however...<span class="play-btn" data-start="90.13" data-end="93.80">▶️</span></td></tr>
+                            <tr><td>02:52</td><td>to be over someone</td><td>不再對某人有感情；走出情傷</td><td>ROSS: Look, I am totally, totally over her, OK, I just... Hiiii!<span class="play-btn" data-start="171.21" data-end="175.78">▶️</span></td></tr>
+                            <tr><td>02:59</td><td>read ‘em and weep</td><td>（撲克牌用語）亮牌吧，你輸了</td><td>ROSS: You should have seen him. ‘Read ‘em and weep.’<span class="play-btn" data-start="178.42" data-end="181.12">▶️</span></td></tr>
+                            <tr><td>03:04</td><td>lame</td><td>蹩腳的；無說服力的</td><td>MONICA: Oh, please, that is such a lame excuse!<span class="play-btn" data-start="183.19" data-end="185.39">▶️</span></td></tr>
+                            <tr><td>05:05</td><td>to go for (sth)</td><td>選擇；追求</td><td>PHOEBE: I’m going for fours.<span class="play-btn" data-start="304.82" data-end="306.72">▶️</span></td></tr>
+                            <tr><td>05:28</td><td>for real</td><td>認真的；來真的</td><td>RACHEL: Let’s play for real.<span class="play-btn" data-start="326.91" data-end="328.54">▶️</span></td></tr>
+                            <tr><td>05:32</td><td>stake</td><td>賭注</td><td>CHANDLER: High stakes... big bucks...<span class="play-btn" data-start="331.45" data-end="333.65">▶️</span></td></tr>
+                            <tr><td>05:52</td><td>bluffing</td><td>虛張聲勢；詐唬</td><td>JOEY: Heh... I was bluffing.<span class="play-btn" data-start="350.46" data-end="352.16">▶️</span></td></tr>
+                            <tr><td>08:14</td><td>the pot calling the kettle black</td><td>五十步笑百步</td><td>PHOEBE: Oh, hello, kettle? This is Monica. You’re black.<span class="play-btn" data-start="493.59" data-end="496.36">▶️</span></td></tr>
+                            <tr><td>08:34</td><td>[do sth] for a living</td><td>以...為生</td><td>RACHEL: I would be shopping... for a living!<span class="play-btn" data-start="513.51" data-end="515.91">▶️</span></td></tr>
+                            <tr><td>14:23</td><td>fly</td><td>褲子拉鍊</td><td>RACHEL: Your fly is open, Geller.<span class="play-btn" data-start="862.16" data-end="864.56">▶️</span></td></tr>
+                            <tr><td>14:42</td><td>fold</td><td>（撲克牌）蓋牌；放棄</td><td>JOEY: Ahhh, I fold.<span class="play-btn" data-start="881.38" data-end="882.55">▶️</span></td></tr>
+                            <tr><td>20:57</td><td>you got me</td><td>你贏了；我認輸</td><td>ROSS: You got me.<span class="play-btn" data-start="1025.22" data-end="1026.85">▶️</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <section id="grammar" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法</h2>
+            <div class="content-card space-y-6 text-lg">
+                <p class="text-lg leading-relaxed">透過劇中實際例句的輔助，語法規則將不再是枯燥的條文，而是活生生的語言運用。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>時間</th>
+                                <th>語法點</th>
+                                <th>解釋</th>
+                                <th>劇中例句</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>03:02</td><td>"how come" 的用法</td><td>"how come" 是一種非正式的問「為什麼」的方式，後面直接接主詞和動詞，不需要倒裝（與 "Why do you..." 不同）。</td><td>CHANDLER: Well, now, how come you guys have never played poker with us?<span class="play-btn" data-start="181.12" data-end="183.92">▶️</span></td></tr>
+                            <tr><td>07:37</td><td>"in order for (sb) to (do sth)" 的用法</td><td>用於表達某事發生的目的或結果，以及達成該結果所需的條件或行動。</td><td>ROSS: In order for me to win, other people have to lose.<span class="play-btn" data-start="456.40" data-end="459.70">▶️</span></td></tr>
+                            <tr><td>08:34</td><td>"______ for a living" 的用法</td><td>表示「以...為生」或「靠做...賺錢」，強調某人的職業或主要收入來源。</td><td>RACHEL: I would be shopping... for a living!<span class="play-btn" data-start="513.51" data-end="515.91">▶️</span></td></tr>
+                            <tr><td>17:34</td><td>"I’ll see you and raise you" 的用法</td><td>這是撲克牌中的術語，"see" 表示「跟注」，"raise" 表示「加注」。</td><td>ROSS: Uh, I will see you... and I’ll raise you.<span class="play-btn" data-start="1053.48" data-end="1056.28">▶️</span></td></tr>
+                            <tr><td>14:52</td><td>"I’m out / I’m in" 的用法</td><td>這是撲克牌中的術語，"I’m out" 表示「我放棄這局」，"I’m in" 表示「我繼續玩」。</td><td>JOEY: Um... I’m out. ROSS: I’m in.<span class="play-btn" data-start="891.22" data-end="893.99">▶️</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <section id="culture" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 文化</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>劇中許多笑點和對話的深層含義都根植於特定的美國文化。理解它們能幫助您更深入地享受劇情。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>時間</th>
+                                <th>文化參考/笑點</th>
+                                <th>解釋</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>00:18</td><td>Popular Mechanics</td><td>《大眾機械》是一本關於科學、技術的雜誌。錢德勒的笑點是雙關語，指「受歡迎的機械師」而非雜誌。<span class="play-btn" data-start="17.58" data-end="23.57">▶️</span></td></tr>
+                            <tr><td>07:49</td><td>IKEA</td><td>宜家（IKEA）是一家銷售需要買家自行組裝家具的公司。錢德勒用宜家來比喻自己從朋友那裡贏錢的「樂趣」。<span class="play-btn" data-start="468.21" data-end="472.91">▶️</span></td></tr>
+                            <tr><td>08:24</td><td>Pictionary</td><td>一種團隊遊戲，玩家需透過繪畫讓隊友猜詞。莫妮卡在遊戲中表現出強烈的競爭心。<span class="play-btn" data-start="503.20" data-end="504.87">▶️</span></td></tr>
+                            <tr><td>08:32</td><td>mother ship is calling you home</td><td>菲比的意思是瑞秋回歸本性。瑞秋最喜歡購物，所以購物中心（她的「母艦」）才是她的歸屬。<span class="play-btn" data-start="510.41" data-end="513.31">▶️</span></td></tr>
+                            <tr><td>14:26</td><td>"I got a flush" 的雙關語</td><td>在撲克牌中，"flush" 指同花牌型。羅斯開玩笑說 "flush"，同時也指馬桶沖水（"flush" 作動詞），暗示沖水會讓淋浴水變熱。<span class="play-btn" data-start="865.53" data-end="868.53">▶️</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <section id="practice" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VI. 練習</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/a0ac7e2e1cda" target="_blank">
+                    <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                </a>
+            </div>
+            <div class="content-card space-y-6 text-lg">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">發音練習 (連讀與弱讀)</h3>
+                    <p>英語口語的自然流暢性，很大程度上取決於連讀 (linking) 和弱讀 (weak forms)。掌握它們是提升聽力和口語流暢度的關鍵。以下是一些劇中實例：</p>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>對話片段</th>
+                                    <th>發音現象</th>
+                                    <th>解釋與練習</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>00:50</td><td>JOEY: caught a few.</td><td><strong>連讀:</strong> 'caught a'</td><td>實際發音聽起來像 "kaw-duh"。試著將 "caught" 的尾音和 "a" 連起來，並輕讀 "a"。 <span class="play-btn" data-start="49.56" data-end="52.26">▶️</span></td></tr>
+                                <tr><td>04:08</td><td>MONICA: read them to me.</td><td><strong>弱讀:</strong> 'them'</td><td>實際發音聽起來像 "read ‘em"。輕讀 "them"，幾乎只發出 /m/ 音。<span class="play-btn" data-start="247.33" data-end="249.00">▶️</span></td></tr>
+                                <tr><td>02:59</td><td>ROSS: You should have seen him.</td><td><strong>弱讀:</strong> 'have' / 'him'</td><td>實際發音聽起來像 "shou-duh see-nim"。注意 "have" 和 "him" 的縮短發音。<span class="play-btn" data-start="178.42" data-end="180.12">▶️</span></td></tr>
+                                <tr><td>05:20</td><td>JOEY: What are you doing?</td><td><strong>弱讀:</strong> 'are you'</td><td>實際發音聽起來像 "wuh-duh-ya doin'"。輕讀 "are" 和 "you"，讓語流更自然。<span class="play-btn" data-start="319.10" data-end="320.63">▶️</span></td></tr>
+                                <tr><td>07:54</td><td>ROSS: I’m not a nice guy!</td><td><strong>連讀:</strong> 'not a'</td><td>實際發音聽起來像 "naw-duh"。將 "not" 的尾音和 "a" 連起來，並輕讀 "a"。 <span class="play-btn" data-start="473.18" data-end="475.25">▶️</span></td></tr>
+                                <tr><td>09:03</td><td>RACHEL: I got an interview!</td><td><strong>連讀:</strong> 'got an'</td><td>實際發音聽起來像 "I gaw-dan interview"。練習 "got" 和 "an" 的連讀。<span class="play-btn" data-start="542.48" data-end="544.38">▶️</span></td></tr>
+                                <tr><td>19:04</td><td>RACHEL: give it a go.</td><td><strong>連讀:</strong> 'give it a'</td><td>實際發音聽起來像 "gi-vi-duh"。將 "give"、"it" 和 "a" 連起來發音。<span class="play-btn" data-start="1143.14" data-end="1145.04">▶️</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">聽力與口語練習建議</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>聽力練習:</strong> 嘗試在沒有字幕的情況下再次觀看本集，專注於聽懂對話中的連讀和弱讀現象。</li>
+                        <li><strong>口語練習:</strong> 模仿劇中角色的語氣、語速和發音，特別是連讀和弱讀的部分，力求自然流暢。</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">角色扮演與討論問題</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>你認為羅斯為什麼讓瑞秋贏得撲克牌比賽？你覺得他的動機是什麼？</li>
+                        <li>你是否有過像瑞秋一樣糟糕的求職經歷？你是如何應對的？</li>
+                        <li><strong>角色扮演:</strong> 一人扮演面試官，一人扮演瑞秋，模擬瑞秋在Saks Fifth Avenue的面試過程。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id="conclusion" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VII. 結論</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>本學習資料透過《六人行》第1季第18集「撲克牌之戰」，為您提供了豐富的英語學習內容。本集不僅涵蓋了日常生活中實用的詞彙和語法點，更深入探討了美國文化中的幽默感和人際互動。特別是對於連讀和弱讀這兩種發音現象的分析與練習，對於您提升聽力理解和口語流暢度具有關鍵作用。</p>
+                <p>學習英語是一個循序漸進的過程，需要持之以恆的努力和耐心。希望這份資料能激發您的學習興趣。鼓勵您將《六人行》視為長期學習的夥伴，並將本資料中提到的學習方法應用到未來的學習中。每一個小小的進步都值得慶祝，保持對英語學習的熱情和耐心，您將會發現自己的英語能力在不知不覺中大幅提升。</p>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            } else {
+                // 若為純秒數，轉為分:秒格式
+                return parseFloat(timeStr);
+            }
+        }
+        function toMinSec(sec) {
+            sec = parseFloat(sec);
+            const m = Math.floor(sec / 60);
+            const s = Math.round(sec - m * 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        // 批次修正所有 play-btn 的 data-start/data-end 屬性為分:秒格式
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                let ds = btn.getAttribute('data-start');
+                let de = btn.getAttribute('data-end');
+                if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+                if (de && !de.includes(':')) btn.setAttribute('data-end', toMinSec(de));
+            });
+            // Navbar active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            // play-btn 綁定
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                }
+            });
+            // 響應式側邊選單開關（含遮罩層控制）
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                // 點擊遮罩層自動關閉
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            // 影片網址參數載入
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

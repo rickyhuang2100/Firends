@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E22 學習指南 | The One with the Ick Factor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+            }
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+            header nav .nav-link.active, header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+            #menu-overlay {
+                display: none;
+            }
+            header nav.open ~ #menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E22</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <div class="content-card">
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">1. 引言</h2>
+            <div class="space-y-4 text-lg text-gray-700 leading-relaxed">
+                <p>歡迎來到《六人行》第一季第22集 "The One with the Ick Factor" 的專屬英文學習指南！這一集充滿了生活化的幽默、朋友間的有趣互動，以及一些讓人會心一笑的尷尬時刻，是學習日常英語的絕佳教材。</p>
+                <p>在本指南中，我們將扮演您的私人英文老師，帶您深入劇情，解析實用的單字和文法。更重要的是，我們會特別聚焦在「連讀」(linking) 和「弱讀」(weak forms) 這兩個能讓您的口說聽起來更道地的發音技巧。透過有趣的學習方式，您會發現學英文就像看影集一樣輕鬆！準備好了嗎？讓我們一起開始吧！</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">2. 場景</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">這一集圍繞著幾個有趣的情節展開：莫妮卡和一位年輕男生伊森約會，卻因為謊報年齡而陷入尷尬；菲比到錢德勒的公司當臨時秘書，結果發現同事們都在背後模仿他；同時，瑞秋夢到和錢德勒的親密場景，讓兩人之間的互動變得有點微妙。這些生活化的場景充滿了值得學習的對話。</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-amber-100">
+                        <tr>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">時間</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">角色</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">對話 (點擊 ▶️ 循環播放)</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">學習重點</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:00:07</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Ross</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="6.81" data-end="10.07">▶️</span> I love it, when we share. (我喜歡我們分享的感覺。)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">連讀: "love it"</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:00:54</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Phoebe</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="53.72" data-end="56.75">▶️</span> I could do it. (我能做。)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">連讀: "do it"</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:01:21</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Rachel</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="80.55" data-end="83.81">▶️</span> Off to see young Ethan? (要去看年輕的伊森嗎？)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">片語: "off to" / 弱讀: "to"</td>
+                        </tr>
+                         <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:01:44</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Monica</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="103.38" data-end="106.97">▶️</span> Oh, I can't pass for 22? (喔，我不能冒充22歲嗎？)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">詞彙: "pass for"</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:04:08</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Rachel</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="247.27" data-end="250.90">▶️</span> So, did you shave your legs? (所以，你刮腿毛了嗎？)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">連讀: "did you"</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:05:19</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Chandler</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="318.67" data-end="321.93">▶️</span> What are you talking about? (你在說什麼？)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">實用句型</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:05:23</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Phoebe</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="322.55" data-end="326.05">▶️</span> You know they used to like you a lot. (你知道他們以前很喜歡你。)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">文法: "used to"</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200">00:07:00</td>
+                            <td class="p-4 border-b border-gray-200 font-semibold">Monica</td>
+                            <td class="p-4 border-b border-gray-200">
+                                <span class="play-btn" data-start="419.00" data-end="422.84">▶️</span> It's icky. (真噁心。)
+                            </td>
+                            <td class="p-4 border-b border-gray-200">詞彙: "icky"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">3. 詞彙 (Vocabulary)</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">學習新單字是讓英文進步的關鍵。這一集有很多生活化的單字，讓我們一起來看看吧！</p>
+            <div class="overflow-x-auto">
+                 <table class="w-full text-left border-collapse">
+                    <thead class="bg-amber-100">
+                        <tr>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">詞彙 / 片語</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">英文解釋</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">劇中範例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">Ick Factor</td>
+                            <td class="p-4 border-b border-gray-200">A feeling of disgust or dislike, often when you discover something unpleasant about someone. (一種噁心或反感的感覺，通常是因為你發現了某人令人不快的事情。)</td>
+                            <td class="p-4 border-b border-gray-200">The episode title is "The One with the <strong>Ick Factor</strong>".</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">Pass for</td>
+                            <td class="p-4 border-b border-gray-200">To be accepted as or believed to be someone or something else. (被當作或被認為是別人或別的東西，意指「冒充」。)</td>
+                            <td class="p-4 border-b border-gray-200">MONICA: Oh, I can't <strong>pass for</strong> 22?</td>
+                        </tr>
+                         <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">Man-child</td>
+                            <td class="p-4 border-b border-gray-200">An adult man who behaves like a child. (一個行為像小孩的成年男人。)</td>
+                            <td class="p-4 border-b border-gray-200">CHANDLER: And this <strong>manchild</strong> has no problem with how old you are?</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">Icky</td>
+                            <td class="p-4 border-b border-gray-200">Informal word for "disgusting" or "unpleasant". (一個非正式的詞，意思是「噁心的」或「令人不快的」。)</td>
+                            <td class="p-4 border-b border-gray-200">MONICA: It's <strong>icky</strong>.</td>
+                        </tr>
+                         <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">Have my reasons</td>
+                            <td class="p-4 border-b border-gray-200">A phrase used to say you have a reason for something but you don't want to explain it. (一個片語，用來表示你做某件事有原因，但你不想解釋。)</td>
+                            <td class="p-4 border-b border-gray-200">MONICA: I <strong>have my reasons</strong>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">4. 語法 (Grammar)</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">從生活對話中學文法最自然！這裡有幾個本集出現的實用文法點，非常適合初學者。</p>
+             <div class="overflow-x-auto">
+                 <table class="w-full text-left border-collapse">
+                    <thead class="bg-amber-100">
+                        <tr>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">語法點</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">解釋與用法</th>
+                            <th class="p-4 border-b-2 border-amber-300 font-bold text-amber-800">劇中範例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">Used to + [verb]</td>
+                            <td class="p-4 border-b border-gray-200">用來談論「過去常常做，但現在不了」的習慣或狀態。</td>
+                            <td class="p-4 border-b border-gray-200">PHOEBE: You know they <strong>used to</strong> like you a lot. (你知道他們以前很喜歡你。)</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">What are you talking about?</td>
+                            <td class="p-4 border-b border-gray-200">一個非常口語化的問句，用來表達「驚訝、困惑或不相信」對方說的話。意思接近「你在說什麼鬼？」。</td>
+                            <td class="p-4 border-b border-gray-200">CHANDLER: <strong>What are you talking about?</strong></td>
+                        </tr>
+                        <tr class="hover:bg-amber-50">
+                            <td class="p-4 border-b border-gray-200 font-semibold">wanna (want to)</td>
+                            <td class="p-4 border-b border-gray-200">在口語中，"want to" 經常被縮讀成 "wanna"，聽起來更自然、更隨意。</td>
+                            <td class="p-4 border-b border-gray-200">MONICA: Unless you <strong>wanna</strong> stay over? (除非你想留下來過夜？)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="culture" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">5. 文化 (Culture)</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">了解對話背後的文化，能幫助你更深入地理解笑點和角色們的反應。</p>
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-2xl font-bold mb-2 text-amber-900">"Ick Factor" 的文化意涵</h3>
+                    <p class="text-gray-700">在美國約會文化中，"ick" 或 "ick factor" 是一個很流行的詞。它指的是當你對某人有點好感時，對方突然做了一件小事（或你發現了某個特質），讓你瞬間感到反感、興趣全無。這在本集中，就是莫妮卡發現伊森才上高中時那種「噁心、不舒服」的感覺，這觸碰到了社會對於成年人與未成年人交往的敏感界線。</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-2xl font-bold mb-2 text-amber-900">"School Night" (上學日夜晚)</h3>
+                    <p class="text-gray-700">當莫妮卡對伊森說 "it's a school night"，這是一個很道地的說法。它指明天要上學或上班的夜晚（通常是週日到週四晚）。言下之意就是「時間不早了，你該回家了，因為你明天還要早起」。這裡莫妮卡用這個詞，也巧妙地強調了伊森「學生」的身份，加深了那份尷尬感。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-2xl font-bold mb-2 text-amber-900">"They even do you" (他們甚至會模仿你)</h3>
+                    <p class="text-gray-700">當菲比說錢德勒的同事 "do you"，意思不是「做你」，而是「模仿你、學你說話的樣子」。這在美國辦公室文化中是一種常見的開玩笑或私下抱怨的方式，用來取笑某人的特定行為或口頭禪。這裡同事們模仿錢德勒當上主管後官僚的語氣，是一種帶點諷刺的幽默。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">6. 練習：連讀 (Linking) & 弱讀 (Weak Forms)</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/f91cb8e6341f" target="_blank">
+                    <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                </a>
+            </div>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">想讓你的英文說得跟外國人一樣順嗎？秘訣就在於「連讀」和「弱讀」！連讀是把字跟字連在一起念，弱讀是把不重要的輕輕帶過。讓我們來練習幾個劇中的例子。</p>
+            
+            <h3 class="text-3xl font-bold mb-4 text-amber-900">連讀 (Linking)</h3>
+            <div class="space-y-4">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="text-xl font-semibold mb-2">子音 + 母音 連讀</h4>
+                    <p>當前一個字以「子音」結尾，下一個字以「母音」開頭時，它們會自然地連在一起。</p>
+                    <p class="my-2">範例：<span class="play-btn" data-start="6.81" data-end="10.07">▶️</span> "love it"</p>
+                    <p>聽起來像：<span class="pronunciation-example">lo-vit</span></p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="text-xl font-semibold mb-2">音的改變 (Assimilation)</h4>
+                    <p>有時候，兩個音連在一起時會變成一個新的音。</p>
+                    <p class="my-2">範例：<span class="play-btn" data-start="247.27" data-end="250.90">▶️</span> "did you"</p>
+                    <p>"did" 的 /d/ 和 "you" 的 /j/ 會合成 /dʒ/ 的音，聽起來像：<span class="pronunciation-example">di-joo</span></p>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-bold mt-10 mb-4 text-amber-900">弱讀 (Weak Forms)</h3>
+             <div class="space-y-4">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p>在句子中，不重要的功能詞 (如 to, for, a, an, the) 的母音會被弱化，唸成一個模糊的 "uh" (/ə/) 音。</p>
+                    <p class="my-2">範例：<span class="play-btn" data-start="80.55" data-end="83.81">▶️</span> "Off <strong>to</strong> see young Ethan?"</p>
+                    <p>"to" 不會唸成清楚的 "two"，而是很輕很快的 <span class="pronunciation-example">tə</span>。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold mb-6">7. 結論</h2>
+            <div class="space-y-4 text-lg text-gray-700 leading-relaxed bg-amber-50 p-8 rounded-lg border border-amber-200">
+                <p>恭喜您完成了這一集的學習！透過 "The One with the Ick Factor"，我們不僅學會了像 "icky"、"pass for" 這樣道地的詞彙，也理解了 "used to" 的用法，並窺見了美國的約會和職場文化。</p>
+                <p>最重要的是，我們練習了「連讀」和「弱讀」的發音技巧。請記得，語言學習是持續的過程。多加利用本指南的播放功能，反覆聆聽和模仿，您的聽力和口說能力一定會突飛猛進。希望您享受這次的學習旅程，我們下一集見！</p>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+    // 影片網址參數載入、A-B循環、play-btn、選單active、menu-button、遮罩層、主內容點擊自動關閉
+    function parseTimeString(timeStr) {
+        if (!timeStr) return 0;
+        if (timeStr.includes(':')) {
+            const [min, sec] = timeStr.split(':');
+            return parseInt(min, 10) * 60 + parseFloat(sec);
+        } else {
+            return parseFloat(timeStr);
+        }
+    }
+    function toMinSec(sec) {
+        sec = parseFloat(sec);
+        const m = Math.floor(sec / 60);
+        const s = Math.round(sec - m * 60);
+        return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        // 影片網址參數載入
+        const video = document.getElementById('myVideo');
+        const container = document.getElementById('video-button-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+        }
+        if (container) {
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class=\"text-red-500 text-3xl\">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        }
+        // play-btn 屬性批次轉換
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            let ds = btn.getAttribute('data-start');
+            let de = btn.getAttribute('data-end');
+            // 若是舊的onclick格式，轉為data-start/data-end
+            if (!ds && btn.hasAttribute('onclick')) {
+                const m = btn.getAttribute('onclick').match(/playSegment\(([^,]+),\s*([^\)]+)\)/);
+                if (m) {
+                    btn.removeAttribute('onclick');
+                    btn.setAttribute('data-start', toMinSec(m[1]));
+                    btn.setAttribute('data-end', toMinSec(m[2]));
+                }
+            } else {
+                if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+                if (de && !de.includes(':')) btn.setAttribute('data-end', toMinSec(de));
+            }
+        });
+            // play-btn 綁定
+            document.body.addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                }
+            });
+        // Navbar active state on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').replace('#','') === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        // menu-button 響應式側邊選單
+        const menuButton = document.getElementById('menu-button');
+        const nav = document.querySelector('header nav');
+        const menuOverlay = document.getElementById('menu-overlay');
+        if (menuButton && nav) {
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nav.classList.toggle('open');
+                menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+            });
+            // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+            document.body.addEventListener('click', (e) => {
+                if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                    if (!nav.contains(e.target) && e.target !== menuButton) {
+                        nav.classList.remove('open');
+                        menuOverlay.style.display = 'none';
+                    }
+                }
+            });
+            // 點擊遮罩層自動關閉
+            menuOverlay.addEventListener('click', () => {
+                nav.classList.remove('open');
+                menuOverlay.style.display = 'none';
+            });
+        }
+    });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

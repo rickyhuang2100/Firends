@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E21 學習指南 | The One with the Fake Monica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+            }
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+            header nav .nav-link.active, header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+            #menu-overlay {
+                display: none;
+            }
+            header nav.open ~ #menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E21</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocabulary" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center mb-4 text-gray-800">六人行 S01E21 學習指南</h1>
+        <p class="text-center text-xl text-gray-500 mb-12">The One with the Fake Monica</p>
+
+        <div class="content-card">
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+        
+        <section id="intro" class="py-8 scroll-mt-20">
+            <h2 class="section-title">1. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed text-gray-600">
+                <p>你好！歡迎來到《六人行》第一季第21集「假莫妮卡」的專屬英文學習指南！這一集非常有趣，劇情圍繞著莫妮卡的信用卡被盜用，但她非但不生氣，反而對這位把她的人生「過得更精彩」的假莫妮卡產生了奇特的迷戀。同時，羅斯的猴子馬歇爾進入了「青春期」，行為開始失控，而喬伊則在經紀人的建議下，努力想一個更酷的藝名。</p>
+                <p>《六人行》之所以是絕佳的英文學習材料，是因為它的對話非常生活化、語速自然，充滿了美國人日常會用到的片語和俚語。作為英文老師，我將帶你拆解這一集的精華，讓你從劇情中學到最道地的英文。我們不只學單字，更要學習單字是怎麼被「說」出來的，特別是「連讀」和「弱讀」的發音技巧。這能幫助你真正聽懂母語人士的對話，也讓你的口說更流利自然。</p>
+                <p>準備好了嗎？讓我們跟著六位好友的腳步，在歡笑中輕鬆學英文吧！</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="py-8 scroll-mt-20">
+            <h2 class="section-title">2. 場景</h2>
+            <div class="content-card space-y-6">
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景一：信用卡風波</h3>
+                    <p class="text-gray-600 mb-4">莫妮卡發現她的信用卡被盜刷，但盜刷者的品味和生活方式卻讓她又羨又妒。</p>
+                    <p class="text-gray-700 font-semibold">"It's just such reckless spending."<span class="play-btn" data-start="2:06" data-end="2:10">▶️</span></p>
+                    <p class="text-gray-700 font-semibold">"I think when someone steals your credit card, they've kind of already thrown caution to the wind."<span class="play-btn" data-start="2:08" data-end="2:13">▶️</span></p>
+                </div>
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：馬歇爾的「青春期」</h3>
+                    <p class="text-gray-600 mb-4">羅斯的寵物猴子馬歇爾開始出現一些令人尷尬的行為，羅斯解釋說這只是個「階段」。</p>
+                    <p class="text-gray-700 font-semibold">"Marcel, stop humping the lamp! Stop humping!"<span class="play-btn" data-start="2:34" data-end="2:39">▶️</span></p>
+                    <p class="text-gray-700 font-semibold">"What? It's just a phase."<span class="play-btn" data-start="2:44" data-end="2:47">▶️</span></p>
+                </div>
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景三：喬伊的新藝名</h3>
+                    <p class="text-gray-600 mb-4">喬伊為了演藝事業，需要一個新藝名。錢德勒的「幫忙」卻鬧出不少笑話。</p>
+                     <p class="text-gray-700 font-semibold">Chandler: "Joe... Joe... Joe... Stalin?"<span class="play-btn" data-start="6:32" data-end="6:36">▶️</span></p>
+                    <p class="text-gray-700 font-semibold">Joey: "Stalin... Do I know that name? It sounds familiar."<span class="play-btn" data-start="6:34" data-end="6:39">▶️</span></p>
+                </div>
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景四：踢踏舞課的相遇</h3>
+                    <p class="text-gray-600 mb-4">莫妮卡追查到「假莫妮卡」的蹤跡，來到一間踢踏舞教室，為了不被識破，她只好硬著頭皮上場。</p>
+                    <p class="text-gray-700 font-semibold">Teacher: "You don't observe a dance class. You dance a dance class."<span class="play-btn" data-start="12:59" data-end="13:05">▶️</span></p>
+                    <p class="text-gray-700 font-semibold">Monica: "Oh. Monica! Hi. I'm Mo-nana."<span class="play-btn" data-start="15:47" data-end="15:53">▶️</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="vocabulary" class="py-8 scroll-mt-20">
+            <h2 class="section-title">3. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文單字/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">中文解釋</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中例句 (點擊 ▶️ 聆聽)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">reckless spending</td>
+                                <td class="p-4 text-gray-600">魯莽的消費；亂花錢</td>
+                                <td class="p-4">"It's just such reckless spending."<span class="play-btn" data-start="2:06" data-end="2:10">▶️</span></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">throw caution to the wind</td>
+                                <td class="p-4 text-gray-600">豁出去了；不顧一切</td>
+                                <td class="p-4">"...they've kind of already thrown caution to the wind."<span class="play-btn" data-start="2:08" data-end="2:13">▶️</span></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">geek</td>
+                                <td class="p-4 text-gray-600">怪咖；對某事過於熱衷的人</td>
+                                <td class="p-4">"Wow, what a geek. They spent $69.95 on a Wonder Mop."<span class="play-btn" data-start="134" data-end="139">▶️</span></td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">phase</td>
+                                <td class="p-4 text-gray-600">階段；時期 (通常指暫時的)</td>
+                                <td class="p-4">"What? It's just a phase."<span class="play-btn" data-start="2:44" data-end="2:47">▶️</span></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">ring a bell</td>
+                                <td class="p-4 text-gray-600">聽起來耳熟</td>
+                                <td class="p-4">"Well, it does not ring a bell with me."<span class="play-btn" data-start="404" data-end="408">▶️</span></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">lose it</td>
+                                <td class="p-4 text-gray-600">失控；抓狂</td>
+                                <td class="p-4">"Honey, you're kinda losing it here!"<span class="play-btn" data-start="719" data-end="724">▶️</span></td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">uncoordinated</td>
+                                <td class="p-4 text-gray-600">不協調的；笨手笨腳的</td>
+                                <td class="p-4">"...you are just so unbelievably uncoordinated?"<span class="play-btn" data-start="850" data-end="856">▶️</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="grammar" class="py-8 scroll-mt-20">
+            <h2 class="section-title">4. 語法</h2>
+            <div class="content-card space-y-6">
+                <div class="p-4 bg-white">
+                    <h3 class="font-bold text-xl mb-2 text-gray-700">1. 現在完成式 (Present Perfect) - `have/has + 過去分詞`</h3>
+                    <p class="text-gray-600 mb-2">用來談論「過去發生，但跟現在有關」的動作或經驗。</p>
+                    <p class="text-gray-800 bg-gray-100 p-3 rounded-md">例句: "they'<span class="text-red-500 font-bold">ve</span> kind of already <span class="text-red-500 font-bold">thrown</span> caution to the wind." (他們早就豁出去了)<span class="play-btn" data-start="2:08" data-end="2:13">▶️</span></p>
+                    <p class="mt-2 text-sm text-gray-500">老師解析：羅斯用現在完成式 "they've thrown" (they have thrown)，意思是盜刷者「已經」做了這件事，而這件事的「結果」(魯莽消費) 現在正影響著莫妮卡。</p>
+                </div>
+                 <div class="p-4 bg-white">
+                    <h3 class="font-bold text-xl mb-2 text-gray-700">2. "used to" - 表示過去的習慣或狀態</h3>
+                    <p class="text-gray-600 mb-2">用來描述「過去常常做，但現在不了」的事。</p>
+                    <p class="text-gray-800 bg-gray-100 p-3 rounded-md">例句: "I-I <span class="text-red-500 font-bold">used to</span> be just like you." (我以前也跟你一樣。)<span class="play-btn" data-start="1049" data-end="1053">▶️</span></p>
+                    <p class="mt-2 text-sm text-gray-500">老師解析：假莫妮卡說她「以前」("used to be") 也像莫妮卡一樣循規蹈矩，暗示她「現在」已經改變了。</p>
+                </div>
+                <div class="p-4 bg-white">
+                    <h3 class="font-bold text-xl mb-2 text-gray-700">3. "be supposed to" - 應該...</h3>
+                    <p class="text-gray-600 mb-2">用來表示「被期望」或「按規定」應該做某件事。</p>
+                    <p class="text-gray-800 bg-gray-100 p-3 rounded-md">例句: "You'<span class="text-red-500 font-bold">re supposed to</span> call them." (你應該要打電話給他們。)<span class="play-btn" data-start="481" data-end="484">▶️</span></p>
+                     <p class="mt-2 text-sm text-gray-500">老師解析：瑞秋提醒莫妮卡，按照一般處理程序，她「應該」要打電話給信用卡公司，而不是享受被盜刷的樂趣。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="py-8 scroll-mt-20">
+            <h2 class="section-title">5. 文化</h2>
+            <div class="content-card space-y-6">
+                <div class="p-4 bg-white">
+                    <h3 class="font-bold text-xl mb-2 text-gray-700">1. 好奇猴喬治 (Curious George)</h3>
+                    <p class="text-gray-600 mb-2">劇中瑞秋開玩笑說：「我們就說我的好奇猴喬治玩偶不再好奇了。」<span class="play-btn" data-start="186" data-end="192">▶️</span></p>
+                    <p class="text-sm text-gray-500">文化解析：「好奇猴喬治」是美國家喻戶曉的童書角色，是一隻天真可愛的小猴子。瑞秋用這個純潔的形象來反諷馬歇爾不雅的「交配」行為，這種強烈的反差產生了巨大的喜劇效果，是美式幽默中常見的手法。</p>
+                </div>
+                <div class="p-4 bg-white">
+                    <h3 class="font-bold text-xl mb-2 text-gray-700">2. 約瑟夫·史達林 (Joseph Stalin)</h3>
+                    <p class="text-gray-600 mb-2">錢德勒建議喬伊用「約瑟夫·史達林」當藝名，喬伊還覺得聽起來很耳熟。<span class="play-btn" data-start="392" data-end="399">▶️</span></p>
+                    <p class="text-sm text-gray-500">文化解析：史達林是歷史上惡名昭彰的蘇聯獨裁者。這個笑點建立在喬伊對歷史的無知上。在美國文化中，用這樣一個負面歷史人物的名字開玩笑，本身就是一種黑色幽默，也突顯了喬伊天真單純（甚至有點笨）的角色設定。</p>
+                </div>
+                <div class="p-4 bg-white">
+                    <h3 class="font-bold text-xl mb-2 text-gray-700">3. 賓州荷蘭人 (Pennsylvania Dutch)</h3>
+                    <p class="text-gray-600 mb-2">莫妮卡情急之下說自己的假名 "Monana" 是「賓州荷蘭語」。<span class="play-btn" data-start="960" data-end="966">▶️</span></p>
+                    <p class="text-sm text-gray-500">文化解析：「賓州荷蘭人」是指居住在賓州的一個德裔美國人社群，他們以傳統、保守、甚至排斥現代科技（如阿米什人）的生活方式聞名。莫妮卡隨後開玩笑說「直到我買了吹風機，然後我就被排斥了」，就是利用了這個文化刻板印象來製造笑點。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="py-8 scroll-mt-20">
+            <h2 class="section-title">6. 練習</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/6adad5a18165" target="_blank">
+                    <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                </a>
+            </div>
+            <div class="content-card">
+                <h3 class="font-bold text-xl mb-2 text-gray-700">連讀 (Linking) & 弱讀 (Weak Forms) 技巧</h3>
+                <p class="text-gray-600 mb-4">想讓你的英文聽起來更道地嗎？關鍵就在於學會母語人士如何「偷懶」地把字連在一起說！這就是連讀和弱讀。讓我們來看看劇中的例子。</p>
+                 <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">劇中對話</th>
+                                <th class="p-4 font-semibold text-gray-600">聽起來像...</th>
+                                <th class="p-4 font-semibold text-gray-600">發音規則解析</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">"...they've <span class="text-red-500 font-bold">kind of</span> already..."<span class="play-btn" data-start="2:08" data-end="2:13">▶️</span></td>
+                                <td class="p-4 text-gray-600 font-mono">kin<span class="text-red-500 font-bold">da</span></td>
+                                <td class="p-4 text-sm text-gray-500">【弱讀+連讀】"of" 這個字在口語中通常會被弱化成一個很輕的 "a" (/ə/) 音，並且和前面的 "kind" 連在一起，聽起來就像 "kinda"。</td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">"<span class="text-red-500 font-bold">What are</span> you doing?"<span class="play-btn" data-start="837" data-end="840">▶️</span></td>
+                                <td class="p-4 text-gray-600 font-mono">Wh<span class="text-red-500 font-bold">addaya</span> doin?</td>
+                                <td class="p-4 text-sm text-gray-500">【連讀+音變】"What" 的 "t" 音夾在兩個母音中間，會變成像 "d" 的音 (Flap T)。"are" 和 "you" 都被弱化，所以整個聽起來像 "Whaddaya"。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">"Let's <span class="text-red-500 font-bold">get started</span>."<span class="play-btn" data-start="860" data-end="863">▶️</span></td>
+                                <td class="p-4 text-gray-600 font-mono">Let's ge<span class="text-red-500 font-bold">h-s</span>tarted</td>
+                                <td class="p-4 text-sm text-gray-500">【子音省略】當一個字的結尾子音和下一個字的開頭子音相同或相近時（這裡都是 t/d 音），前面的子音常常會被「吃掉」或省略，讓發音更順暢。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-medium">"I'm <span class="text-red-500 font-bold">gonna</span> miss you."<span class="play-btn" data-start="1369" data-end="1373">▶️</span></td>
+                                <td class="p-4 text-gray-600 font-mono">I'm <span class="text-red-500 font-bold">gonna</span> miss you</td>
+                                <td class="p-4 text-sm text-gray-500">【口語縮讀】"going to" 在極快的口語中會縮讀成 "gonna"。這是非常普遍的非正式用法。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="py-8 scroll-mt-20">
+            <h2 class="section-title">7. 結論</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed text-gray-600">
+                <p>恭喜你完成了這一集的學習！我們一起探索了「假莫妮卡」的精彩劇情，學會了像是 "reckless spending"、"throw caution to the wind" 這些道地的片語，也理解了現在完成式和 "used to" 等實用語法在對話中的實際應用。更重要的是，我們揭開了美式幽默背後的文化密碼，並練習了連讀、弱讀等能讓你口說大躍進的發音技巧。</p>
+                <p>學習語言是一趟沒有終點的旅程，但每一步都算數。請記得，最好的學習方式就是「多聽、多說」。試著反覆觀看這一集，這次不要看字幕，挑戰看看自己能聽懂多少。也可以試著把你學到的新單字和句型用到自己的對話中，甚至錄下自己的聲音和劇中角色比較，你會發現自己的進步！</p>
+                <p>希望這份指南能成為你學習路上的好夥伴。繼續保持這份熱情，享受《六人行》帶來的樂趣與知識吧！</p>
+            </div>
+        </section>
+
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            } else {
+                // 若為純秒數，轉為分:秒格式
+                return parseFloat(timeStr);
+            }
+        }
+        function toMinSec(sec) {
+            sec = parseFloat(sec);
+            const m = Math.floor(sec / 60);
+            const s = Math.round(sec - m * 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        // 批次修正所有 play-btn 的 data-start/data-end 屬性為分:秒格式
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                let ds = btn.getAttribute('data-start');
+                let de = btn.getAttribute('data-end');
+                if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+                if (de && !de.includes(':')) btn.setAttribute('data-end', toMinSec(de));
+            });
+            // Navbar active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            // play-btn 綁定
+            document.body.addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                }
+            });
+            // 響應式側邊選單開關（含遮罩層控制）
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                // 點擊遮罩層自動關閉
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            // 影片網址參數載入
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class=\"text-red-500 text-3xl\">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

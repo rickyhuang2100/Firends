@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E14 學習指南 | The One with the Candy Hearts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+            /* 響應式選單展開樣式（優化動畫與樣式） */
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4, 0, .2, 1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0, 0, 0, 0.18);
+            }
+
+            header nav .flex.items-center.justify-between.h-20 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+
+            header nav .nav-link.active,
+            header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+
+            /* 遮罩層動畫 */
+            #menu-overlay {
+                display: none;
+            }
+
+            header nav.open~#menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+        }
+
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 text-stone-800">
+
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <div class="text-2xl font-bold text-stone-700">
+                    <span class="text-amber-700">Friends</span> S01E14
+                </div>
+                <div class="hidden md:flex items-center space-x-6 text-lg">
+                    <a href="#introduction" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocabulary" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#exercises" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <section id="introduction" class="scroll-mt-24">
+            <div id="video-button-container" class="mb-6"></div>
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>歡迎來到《六人行》第一季第十四集的學習指南！這一集圍繞著情人節展開，充滿了各種約會的趣事和尷尬場面，是學習日常對話和美國約會文化的絕佳素材。</p>
+            </div>
+        </section>
+        <section id="scenes" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景</h2>
+            <div class="content-card space-y-6">
+                <ul class="space-y-2 text-lg">
+                    <li><span class="play-btn" data-start="0:09" data-end="0:13">▶️</span><strong>Joey:</strong> You're in!</li>
+                    <li><span class="play-btn" data-start="0:21" data-end="0:25">▶️</span><strong>Chandler:</strong> Come on. Get back in the game.</li>
+                    <li><span class="play-btn" data-start="0:53" data-end="0:59">▶️</span><strong>Joey:</strong> No, no, no, don't you dare bail on me.</li>
+                    <li><span class="play-btn" data-start="1:05" data-end="1:11">▶️</span><strong>Joey:</strong> She's needy, she's vulnerable. I'm thinkin', cha-ching!</li>
+                    <li><span class="play-btn" data-start="1:12" data-end="1:16">▶️</span><strong>Janice:</strong> Oh... my... God.</li>
+                    <li><span class="play-btn" data-start="2:59" data-end="3:05">▶️</span><strong>Rachel:</strong> Pete the Weeper? Remember that guy who used to cry every time we had sex.</li>
+                    <li><span class="play-btn" data-start="3:21" data-end="3:29">▶️</span><strong>Phoebe:</strong> ...if you want to break the bad boyfriend cycle, you can do like a cleansing ritual.</li>
+                    <li><span class="play-btn" data-start="4:46" data-end="4:53">▶️</span><strong>Joey:</strong> I'm outta here. Here's my credit card. Dinner's on me.</li>
+                    <li><span class="play-btn" data-start="4:52" data-end="4:56">▶️</span><strong>Chandler:</strong> I hope she throws up on you.</li>
+                </ul>
+            </div>
+        </section>
+        <section id="vocabulary" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card space-y-8">
+                <ul class="space-y-4 text-lg">
+                    <li><strong>bail on (someone):</strong> 放（某人）鴿子，拋棄（某人）。</li>
+                    <li><strong>needy:</strong> 非常需要關愛和關注的。</li>
+                    <li><strong>vulnerable:</strong> 脆弱的，易受傷害的。</li>
+                    <li><strong>slather:</strong> 厚厚地塗抹。</li>
+                </ul>
+            </div>
+        </section>
+        <section id="grammar" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法</h2>
+            <div class="content-card space-y-6 text-lg">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2 text-amber-800">Gotta / Wanna / Gonna 的口語用法</h3>
+                    <p>在日常英語對話中，人們很少會一字不差地說 "going to", "want to" 或 "got to"。它們通常會被縮讀成 gonna, wanna, gotta，讓語氣更流暢自然。</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-2 text-amber-800">用 "used to" 描述過去的習慣</h3>
+                    <p>"Used to" 是一個非常有用的片語，用來描述過去經常發生、但現在已經不再發生的習慣或狀態。</p>
+                </div>
+            </div>
+        </section>
+        <section id="culture" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 文化</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <h3 class="text-2xl font-semibold text-amber-800">情人節 (Valentine's Day)</h3>
+                <p>在美國，情人節是一個重要的節日。情侶們通常會外出享用浪漫晚餐、互贈禮物（如巧克力、鮮花）。</p>
+                <h3 class="text-2xl font-semibold text-amber-800">盲目約會 (Blind Date)</h3>
+                <p>盲目約會是指由朋友安排，與一個完全不認識的人約會。這在美國是一種常見的社交方式，充滿了不確定性，結果可能是驚喜，也可能是災難。</p>
+            </div>
+        </section>
+        <section id="exercises" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VI. 練習</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/63e1fe297ad8" target="_blank">
+                    <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">
+                        點擊這裡開啟練習
+                    </button>
+                </a>
+            </div>
+            <div class="content-card space-y-6 text-lg">
+                <div>
+                    <h3>1. 詞彙填空</h3>
+                    <p>從以下單詞中選擇最合適的填入句子中：bail on, needy, vulnerable, slather, cha-ching.</p>
+                </div>
+                <div>
+                    <h3>2. 開放式問題</h3>
+                    <p>試著用英文回答以下問題，練習使用本集學到的單字和句型。</p>
+                </div>
+            </div>
+        </section>
+        <section id="conclusion" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VII. 結論</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>恭喜你完成了第十四集的學習！透過這一集，你不僅學會了許多關於約會和人際關係的有趣詞彙，還深入了解了情人節和盲目約會等美國文化。</p>
+            </div>
+        </section>
+    </main>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            const parts = timeStr.split(':');
+            if (parts.length !== 2) return NaN;
+            const minutes = parseInt(parts[0], 10);
+            const seconds = parseFloat(parts[1]);
+            return minutes * 60 + seconds;
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navbar active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            // play-btn 綁定
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                    video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+            // 響應式側邊選單開關（含遮罩層控制）
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    if (nav.classList.contains('open')) {
+                        menuOverlay.style.display = 'block';
+                    } else {
+                        menuOverlay.style.display = 'none';
+                    }
+                });
+                // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open') && !menuButton.contains(e.target) && !nav.contains(e.target)) {
+                        nav.classList.remove('open');
+                        menuOverlay.style.display = 'none';
+                    }
+                });
+                // 點擊遮罩層自動關閉
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            // 影片網址參數載入
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `
+                    <button class="text-2xl font-bold bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow">
+                        ▶️ 開始播放影片
+                    </button>
+                `;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+
+</html>
