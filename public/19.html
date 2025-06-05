@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E19 學習指南 | The One Where the Monkey Gets Away</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4, 0, .2, 1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0, 0, 0, 0.18);
+            }
+
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+
+            header nav .nav-link.active,
+            header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+
+            #menu-overlay {
+                display: none;
+            }
+
+            header nav.open~#menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+        }
+
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E19</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">
+        <div id="video-button-container" class="text-center mb-12"></div>
+
+        <section id="intro" class="mb-16">
+            <div class="content-card">
+                <h2 class="section-title">1. 引言</h2>
+                <p class="text-lg leading-relaxed">
+                    你好！歡迎來到《六人行》英文學習指南。這個系列是為像你一樣的英文初學者設計的，透過觀看這部有趣的影集，我們能用輕鬆愉快的方式學習最道地的美式英文。</p>
+                <p class="text-lg leading-relaxed mt-4">今天我們要學習的是第一季第19集「The One Where the Monkey Gets
+                    Away」。這一集的情節非常有趣：瑞秋（Rachel）不小心把羅斯（Ross）心愛的猴子馬歇爾（Marcel）弄丟了！朋友們為了找回猴子，鬧出了一連串的笑話。我們將跟隨他們的腳步，學習實用的單字、文法，並特別關注母語人士說話時的「連讀」和「弱讀」現象，這對提升你的聽力和口說流暢度非常有幫助。準備好了嗎？讓我們開始吧！
+                </p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-16">
+            <div class="content-card">
+                <h2 class="section-title">2. 重點場景分析</h2>
+                <p class="text-lg mb-6">這一集有幾個關鍵場景，推動了故事的發展，也充滿了學習點。讓我們一起來看看吧！</p>
+
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mb-2 text-gray-800">場景一：瑞秋發現前未婚夫訂婚了</h3>
+                    <p><span class="play-btn" data-start="83" data-end="86">▶️</span> <strong>Rachel:</strong> Oh my
+                        God! Oh my God, it's Barry and Mindy!</p>
+                    <p class="text-gray-600">瑞秋: 我的天啊！我的天啊，是巴里和明蒂！</p>
+                    <div class="explanation">
+                        <p>瑞秋收到媽媽寄來的報紙，意外發現她的前未婚夫巴里和她以前最好的朋友兼伴娘明蒂訂婚了，這讓她非常震驚。注意她重複使用 "Oh my God!" 來表達強烈的驚訝情緒。</p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mb-2 text-gray-800">場景二：馬歇爾在鞋子裡便便</h3>
+                    <p><span class="play-btn" data-start="427" data-end="431">▶️</span> <strong>Rachel:</strong> Marcel,
+                        did you poo in the shoe? Bad monkey!</p>
+                    <p class="text-gray-600">瑞秋: 馬歇爾，你是不是在鞋子裡大便了？壞猴子！</p>
+                    <div class="explanation">
+                        <p>瑞秋在照顧馬歇爾時，發現牠在莫妮卡的鞋子裡大便了。這裡的 "poo" 是 "大便" 的口語說法，非常生活化。為了處理這件事，瑞秋把公寓的門打開，卻忘記關上，這也導致了馬歇爾後來的逃跑。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mb-2 text-gray-800">場景三：打給動物管制局</h3>
+                    <p><span class="play-btn" data-start="707" data-end="710">▶️</span> <strong>Rachel:</strong> Yes,
+                        hi, I'm looking for a monkey that was lost in my building.</p>
+                    <p class="text-gray-600">瑞秋: 是的，你好，我在找一隻在我這棟樓裡走失的猴子。</p>
+                    <div class="explanation">
+                        <p>瑞秋因為找不到猴子而非常著急，於是她打電話給動物管制局求助。但她不知道，羅斯養的這隻捲尾猴 (Capuchin monkey) 在城市裡是違法的，這個舉動反而讓情況變得更複雜。</p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mb-2 text-gray-800">場景四：高中時的恩怨</h3>
+                    <p><span class="play-btn" data-start="987" data-end="991">▶️</span> <strong>Ross:</strong> You had
+                        to be a bitch in high school, you couldn't've been fat?</p>
+                    <p class="text-gray-600">羅斯: 你高中時非得當個賤人，你就不能胖一點嗎？</p>
+                    <div class="explanation">
+                        <p>來處理猴子事件的動物管制員路易莎，竟然是瑞秋和莫妮卡的高中同學，而且她們以前處得不好。路易莎利用職權刁難他們，羅斯在絕望中說出了這句氣話，非常搞笑。這句話也反映了美國高中文化中的一些社交現象。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mb-2 text-gray-800">場景五：巴里回來了</h3>
+                    <p><span class="play-btn" data-start="1327" data-end="1331">▶️</span> <strong>Barry:</strong> I
+                        can't do it. I can't marry Mindy. I think I'm still in love with you.</p>
+                    <p class="text-gray-600">巴里: 我辦不到。我不能娶明蒂。我想我還愛著你。</p>
+                    <div class="explanation">
+                        <p>就在羅斯和瑞秋因為找回猴子而關係升溫、即將有浪漫進展時，瑞秋的前未婚夫巴里突然闖進來，說他還愛著瑞秋！這個意外的轉折為下一集埋下了伏筆。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16">
+            <div class="content-card">
+                <h2 class="section-title">3. 核心詞彙</h2>
+                <p class="text-lg mb-6">讓我們來學習一些本集出現的實用單字和片語吧！</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 p-4 text-[#a87e58]">詞彙 / 片語</th>
+                                <th class="border-b-2 p-4 text-[#a87e58]">中文解釋</th>
+                                <th class="border-b-2 p-4 text-[#a87e58]">劇中情境</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">maid of honor</td>
+                                <td class="border-b p-4">首席伴娘</td>
+                                <td class="border-b p-4">"Mindy, my maid of honor." (明蒂，我的首席伴娘。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">chick-flick</td>
+                                <td class="border-b p-4">女性電影 (俚語)</td>
+                                <td class="border-b p-4">"Total chick-flick." (完全是給女生看的電影。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">unclench</td>
+                                <td class="border-b p-4">放輕鬆 (非正式)</td>
+                                <td class="border-b p-4">"Oh, unclench. You're not even gonna be there."
+                                    (噢，放輕鬆點。你根本不會在那裡。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">poo</td>
+                                <td class="border-b p-4">大便 (口語)</td>
+                                <td class="border-b p-4">"Marcel, did you poo in the shoe?" (馬歇爾，你在鞋子裡大便了嗎？)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">lose him</td>
+                                <td class="border-b p-4">把他弄丟</td>
+                                <td class="border-b p-4">"How could you lose him?" (你怎麼能把他弄丟？)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">illegal exotic animal</td>
+                                <td class="border-b p-4">非法的奇珍異獸</td>
+                                <td class="border-b p-4">"Marcel is an illegal exotic animal." (馬歇爾是非法的奇珍異獸。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">tranquilizer</td>
+                                <td class="border-b p-4">鎮定劑</td>
+                                <td class="border-b p-4">"Just a small tranquilizer." (只是一點點鎮定劑。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">dumbstruck</td>
+                                <td class="border-b p-4">嚇傻的、目瞪口呆的</td>
+                                <td class="border-b p-4">"Chandler and Joey are dumbstruck for a moment."
+                                    (錢德勒和喬伊一時目瞪口呆。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">hard on you</td>
+                                <td class="border-b p-4">對你很嚴厲、苛刻</td>
+                                <td class="border-b p-4">"I'm sorry I was so hard on you before." (很抱歉我之前對你那麼苛刻。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border-b p-4 font-semibold">bursts in</td>
+                                <td class="border-b p-4">突然闖入</td>
+                                <td class="border-b p-4">"Barry bursts in." (巴里突然闖進來。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16">
+            <div class="content-card">
+                <h2 class="section-title">4. 語法與發音技巧</h2>
+                <p class="text-lg mb-6">語法是句子的骨架，而發音則是讓語言生動起來的靈魂。我們來看看本集中的重點，特別是「連讀」和「弱讀」這兩個能讓你英文聽起來更道地的秘訣！</p>
+
+                <h3 class="font-bold text-xl mb-2 text-gray-800">重點一：連讀 (Linking) - 讓話語如流水般順暢</h3>
+                <p class="mb-4">在英文口說中，單字跟單字之間不是斷開的，而是會連在一起唸。最常見的就是「子音 + 母音」的連讀。當前一個字以子音結尾，後一個字以母音開頭時，它們聽起來就像一個字。</p>
+
+                <div class="dialogue">
+                    <p><span class="play-btn" data-start="121" data-end="125">▶️</span> <strong>原文:</strong> "Well, I
+                        see he's finally mastered the difference between 'bring me the' and 'pee in the'."</p>
+                    <div class="explanation">
+                        <p><strong>發音分析:</strong></p>
+                        <ul>
+                            <li><strong>"pee in"</strong> 聽起來像 <strong>"peein"</strong>。'pee' 的結尾音 /iː/
+                                (雖然是母音，但這裡的連接很自然) 連接到 'in' 的開頭母音 /ɪ/。</li>
+                            <li><strong>"in the"</strong> 在快速口語中，'in' 的 /n/ 音會自然地連接到 'the'。</li>
+                        </ul>
+                        <p class="mt-2"><strong>練習技巧:</strong> 試著唸 "pee in the" 時，不要在單字之間停頓，讓氣流順暢地從一個字到下一個字。</p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <p><span class="play-btn" data-start="779" data-end="782">▶️</span> <strong>原文:</strong> "Marcel is
+                        an illegal exotic animal."</p>
+                    <div class="explanation">
+                        <p><strong>發音分析:</strong> 這句話是連讀的絕佳範例！</p>
+                        <ul>
+                            <li><strong>"is an"</strong> 聽起來像 <strong>"izan"</strong>。'is' 的 /z/ 音連到 'an' 的 /æ/。</li>
+                            <li><strong>"an illegal"</strong> 聽起來像 <strong>"anillegal"</strong>。'an' 的 /n/ 音連到 'illegal'
+                                的 /ɪ/。</li>
+                        </ul>
+                        <p class="mt-2"><strong>練習技巧:</strong> 把整句話當成一個長單字來練習，感受聲音的流動：
+                            "Marcel-izan-illegal-exotic-animal"。</p>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-xl mt-8 mb-2 text-gray-800">重點二：弱讀 (Weak Forms) 與縮讀 - 口說的捷徑</h3>
+                <p class="mb-4">為了說話更省力、更快速，母語人士會把一些不重要的功能詞（如 to, for, you, are, am）唸得又輕又快，這就是弱讀。有時還會把字合在一起唸，變成縮讀形。</p>
+
+                <div class="dialogue">
+                    <p><span class="play-btn" data-start="253" data-end="256">▶️</span> <strong>原文:</strong> "He's
+                        probably gonna wanna do some of the touristy things."</p>
+                    <div class="explanation">
+                        <p><strong>發音分析:</strong></p>
+                        <ul>
+                            <li><strong>gonna</strong> 是 <strong>"going to"</strong> 的縮讀。幾乎所有口語中都會這樣用。</li>
+                            <li><strong>wanna</strong> 是 <strong>"want to"</strong> 的縮讀。</li>
+                            <li><strong>of the</strong> 中的 <strong>"of"</strong> 常弱讀成 /əv/ (一個模糊的 "呃" 音)。</li>
+                        </ul>
+                        <p class="mt-2"><strong>完整分析:</strong> 這句話從書面語的 "He is probably going to want to do some of
+                            the..." 簡化成了口語的 "He's probably gonna wanna..."，速度快了很多！</p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <p><span class="play-btn" data-start="618" data-end="620">▶️</span> <strong>原文:</strong> "What'm I
+                        gonna do?"</p>
+                    <div class="explanation">
+                        <p><strong>發音分析:</strong></p>
+                        <ul>
+                            <li>這句話是 <strong>"What am I going to do?"</strong> 的超快版本。</li>
+                            <li><strong>"What'm"</strong> 是 <strong>"What am"</strong> 的結合。</li>
+                            <li><strong>"gonna"</strong> 就是我們學過的 <strong>"going to"</strong>。</li>
+                        </ul>
+                        <p class="mt-2"><strong>練習技巧:</strong> 當你感到絕望或困惑時，可以學羅斯這樣快速地說出這句話，聽起來會非常道地！</p>
+                    </div>
+                </div>
+
+                <div class="dialogue">
+                    <p><span class="play-btn" data-start="593" data-end="594">▶️</span> <strong>原文:</strong> "How could
+                        you lose him?"</p>
+                    <div class="explanation">
+                        <p><strong>發音分析:</strong></p>
+                        <ul>
+                            <li><strong>"you"</strong> 在這裡被弱讀成了 <strong>"ya"</strong> /jə/。</li>
+                            <li>所以整句話聽起來更像 <strong>"How could-ya lose him?"</strong>。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="mb-16">
+            <div class="content-card">
+                <h2 class="section-title">5. 文化小知識</h2>
+                <p class="text-lg mb-6">《六人行》不只教我們英文，還能讓我們一窺美國的文化。這一集有哪些有趣的文化點呢？</p>
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mb-2 text-gray-800">1. 高中社交階級 (High School Hierarchy)</h3>
+                    <p><span class="play-btn" data-start="978" data-end="985">▶️</span> <strong>Luisa:</strong> "In high
+                        school, I was the prom queen, and the homecoming queen, and the class president." /
+                        <strong>Rachel:</strong> "I was also the cheerleading captain."</p>
+                    <p class="text-gray-600">路易莎: "在高中，我是舞會皇后、返校節皇后，還有班長。" / 瑞秋: "我還是啦啦隊隊長呢。"</p>
+                    <div class="explanation">
+                        <p>動物管制員路易莎和瑞秋的對話提到了很多美國高中特有的頭銜，如 "prom queen" (畢業舞會皇后)、"homecoming queen" (返校節皇后) 和
+                            "cheerleading captain"
+                            (啦啦隊隊長)。在美國高中，這些頭銜通常代表著高人氣和社交地位，是校園文化很重要的一部分。路易莎對瑞秋的怨恨，正是源於高中時的這種階級差異。</p>
+                    </div>
+                </div>
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mt-6 mb-2 text-gray-800">2. 寵物是家人</h3>
+                    <p><span class="play-btn" data-start="588" data-end="592">▶️</span> <strong>Ross:</strong> "I mean,
+                        it's not like he's a pair of keys, alright? He's a living thing!"</p>
+                    <p class="text-gray-600">羅斯: "我的意思是，牠不像是一串鑰匙，好嗎？牠是個活生生的東西！"</p>
+                    <div class="explanation">
+                        <p>羅斯在發現馬歇爾走失後，他的焦慮和痛苦完全不像只是丟了個東西。這反映了在美國文化中，很多人把寵物視為家庭成員，有著非常深厚的情感連結。這也是為什麼瑞秋一開始無法理解羅斯為何如此生氣的原因。
+                        </p>
+                    </div>
+                </div>
+                <div class="dialogue">
+                    <h3 class="font-bold text-xl mt-6 mb-2 text-gray-800">3. 美式諷刺幽默 (Sarcasm)</h3>
+                    <p><span class="play-btn" data-start="481" data-end="486">▶️</span> <strong>Chandler:</strong> "Oh,
+                        those little clunky Amish things you think go with everything."</p>
+                    <p class="text-gray-600">錢德勒: "噢，就是那些你覺得跟什麼都百搭的、笨重的阿米什風格的東西。"</p>
+                    <div class="explanation">
+                        <p>當莫妮卡因為馬歇爾弄髒了她的鞋子而生氣時，錢德勒用這句話來調侃她的鞋子。他並不是真的在討論鞋子的風格，而是用諷刺的語氣來開玩笑，這是錢德勒這個角色的招牌幽默，也是美式幽默中非常常見的一種形式。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VI. 練習</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/10e14b735ce7" target="_blank">
+                    <button
+                        class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                </a>
+            </div>
+            <div class="content-card space-y-6 text-lg">
+                《六人行》S01E19 問答練習<br />
+                請根據您所學的《六人行》S01E19 學習指南內容，回答以下問題。盡量用完整的句子來回答。<br />
+
+                問題與解答<br /><br />
+                問題: 瑞秋（Rachel）為什麼會對前未婚夫巴里（Barry）和前伴娘明迪（Mindy）訂婚的消息感到如此震驚？這反映了她當時怎樣的心情？<br />
+
+                參考答案: 瑞秋感到震驚是因為巴里是她的前未婚夫，而明迪是她最好的朋友和前伴娘，他們兩人訂婚是對瑞秋的雙重背叛。這反映了她當時驚訝、受傷和無法置信的心情。<br /><br />
+
+                問題: 羅斯（Ross）試圖訓練猴子馬歇爾（Marcel）時，瑞秋（Rachel）提到了「對的人」的觀點。瑞秋所說的「對的人」應該具備哪些特質？<br />
+
+                參考答案: 瑞秋認為「對的人」應該是像「最好的朋友」，同時又能讓她「興奮」或「產生熱情」的人。她希望對方不僅是精神上的伴侶，也能有浪漫的火花。<br /><br />
+
+                問題: 在劇中，瑞秋不小心將馬歇爾（Marcel）弄丟的直接原因是什麼？這個事件對她和羅斯（Ross）的關係造成了什麼影響？<br />
+
+                參考答案:
+                瑞秋不小心將馬歇爾弄丟的直接原因是她在處理馬歇爾在莫妮卡鞋中排便後，忘記關上公寓的門。這個事件一開始讓羅斯對瑞秋非常生氣和失望，但後來在尋找馬歇爾的過程中，他們一起經歷了困難，反而讓兩人的關係變得更加親近和溫暖。<br /><br />
+
+                問題: 動物管制員路易莎·吉亞內蒂（Luisa Gianetti）與瑞秋和莫妮卡（Monica）在高中有什麼樣的過往恩怨？路易莎是如何利用她的職權來刁難她們的？<br />
+
+                參考答案:
+                路易莎、瑞秋和莫妮卡是高中同學，路易莎在高中時期不如瑞秋和莫妮卡受歡迎，而瑞秋和莫妮卡則擁有許多校園頭銜。路易莎利用她作為動物管制員的職權，對他們進行言語諷刺，並故意拖延和製造麻煩，以報復過去的恩怨。<br /><br />
+
+                問題: 為什麼羅斯（Ross）對瑞秋（Rachel）打電話給動物管制局感到如此驚慌？這與馬歇爾（Marcel）的身份有什麼關係？<br />
+
+                參考答案: 羅斯感到驚慌是因為馬歇爾是一隻「非法的奇珍異獸」，在紐約市飼養捲尾猴是違法的。他知道一旦動物管制局介入並發現馬歇爾的非法身份，牠就會被帶走，這對羅斯來說是無法接受的。<br /><br />
+
+                問題: 請舉一個本集中「連讀」（Linking）的例子，並解釋為什麼這些詞會連在一起唸。<br />
+
+                參考答案: 例如，在 "pooped in Monica's shoe" 中，"pooped" 的結尾輔音 /d/ 與 "in" 的開頭元音 /ɪ/ 會連接起來，聽起來像
+                "pooped_in"。這是因為在自然的英語口語中，輔音結尾的詞和元音開頭的詞會順暢連接，以保持語流。<br /><br />
+
+                問題: 請舉一個本集中「弱讀」（Weak Forms）的例子，並解釋這個詞在口語中是如何被簡化或輕讀的。<br />
+
+                參考答案: 例如，羅斯說 "What'm I gonna do?"，其中 "gonna" 是 "going to" 的弱讀形式。在口語中，"going to" 通常會被簡化為
+                /ɡʌnə/，因為它是一個常見的功能詞，通常不被重讀，這樣可以讓說話更省力和流暢。<br /><br />
+
+                問題: 本集展示了美國文化中對待寵物的普遍態度。羅斯（Ross）對馬歇爾（Marcel）的情感反映了什麼？<br />
+
+                參考答案: 羅斯對馬歇爾的深厚情感反映了美國文化中許多人將寵物視為家庭成員的態度。他對馬歇爾的丟失表現出的焦慮和痛苦，遠超出了丟失一個「物品」，而是像失去了一個親密的夥伴。<br /><br />
+
+                問題: 錢德勒（Chandler）的幽默常帶有諷刺意味。請回憶一個他諷刺的例子，並說明這種幽默方式在美式對話中的作用。<br />
+
+                參考答案:
+                例如，當莫妮卡因為馬歇爾弄髒她的鞋子而生氣時，錢德勒諷刺地說：「噢，就是那些你覺得跟什麼都百搭的、笨重的阿米什風格的東西。」這種諷刺幽默在美式對話中常用來調侃、開玩笑或表達不滿，而不直接指責，需要聽者理解其潛在含義。<br /><br />
+
+                問題: 在本集的結尾，巴里（Barry）突然闖入公寓並對瑞秋（Rachel）說了什麼？這個情節對劇情有什麼影響？<br />
+
+                參考答案: 在本集的結尾，巴里突然闖入公寓，並對瑞秋說他還愛著她，無法和明迪結婚。這個情節為下一集製造了懸念和戲劇性衝突，讓羅斯和瑞秋之間可能萌芽的浪漫關係變得更加複雜。<br />
+            </div>
+        </section>
+
+        <section id="conclusion" class="mb-16">
+            <div class="content-card">
+                <h2 class="section-title">7. 結論</h2>
+                <p class="text-lg leading-relaxed">恭喜你完成了第19集的學習！今天我們不只學了像是 `illegal exotic animal` 和 `tranquilizer`
+                    這些有趣的單字，還深入了解了英文口說中非常重要的「連讀」和「弱讀」技巧，比如把 "going to" 說成 "gonna"。</p>
+                <p class="text-lg leading-relaxed mt-4">
+                    學習語言就像一場馬拉松，需要耐心和持續的練習。最重要的不是一次學會所有東西，而是享受這個過程。我建議你可以再看一次這一集，試著聽聽看我們今天討論到的發音細節，或者跟著角色一起念台詞。</p>
+                <p class="text-lg leading-relaxed mt-4">繼續保持這份熱情，你的英文一定會越來越進步！我們下一集見！</p>
+            </div>
+        </section>
+
+    </main>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            } else {
+                // 若為純秒數，轉為分:秒格式
+                return parseFloat(timeStr);
+            }
+        }
+        function toMinSec(sec) {
+            sec = parseFloat(sec);
+            const m = Math.floor(sec / 60);
+            const s = Math.round(sec - m * 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        // 批次修正所有 play-btn 的 data-start/data-end 屬性為分:秒格式
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                let ds = btn.getAttribute('data-start');
+                let de = btn.getAttribute('data-end');
+                if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+                if (de && !de.includes(':')) btn.setAttribute('data-end', toMinSec(de));
+            });
+            // Navbar active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#', '') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            // play-btn 綁定
+            document.body.addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                }
+            });
+            // 響應式側邊選單開關（含遮罩層控制）
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                // 點擊遮罩層自動關閉
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            // 影片網址參數載入
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class=\"text-red-500 text-3xl\">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+
+</html>

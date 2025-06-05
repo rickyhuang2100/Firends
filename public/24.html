@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E24 學習指南 | The One Where Rachel Finds Out</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+            }
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+            header nav .nav-link.active, header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+            #menu-overlay {
+                display: none;
+            }
+            header nav.open ~ #menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E24</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card">
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+        <section id="intro" class="mb-16 scroll-mt-20">
+            <h2 class="section-title">引言：當秘密不再是秘密</h2>
+            <p class="text-lg leading-relaxed text-gray-700">歡迎來到《六人行》第一季的最高潮！第24集「The One Where Rachel Finds Out」是充滿情感轉折的一集。劇情圍繞著瑞秋的生日派對展開，但一個不經意的禮物和一句說漏嘴的話，卻揭開了羅斯長達近十年的暗戀。這一集不僅有浪漫、期待、失落和無盡的尷尬，對話中更充滿了生活化的用語和自然的語速，是我們練習聽力、掌握口語發音絕佳的教材。準備好了嗎？讓我們跟著瑞秋一起，發現那個驚人的秘密吧！</p>
+        </section>
+
+        <section id="scenes" class="mb-16 scroll-mt-20">
+            <h2 class="section-title">場景分析與關鍵對白</h2>
+            
+            <div class="mb-12">
+                <h3>場景一：羅斯的中國行</h3>
+                <p class="text-gray-600 mb-6">瑞秋生日派對前夕，羅斯突然宣布他要代表博物館去中國出差。這個突如其來的消息，為後續的劇情埋下了「錯過」的伏筆。注意聽羅斯解釋他要去中國的原因，以及喬伊醉醺醺的真情流露。</p>
+                
+                <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:05:43 - 00:05:48</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="5:43" data-end="5:48">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">So, I'm goin' to China.</p>
+                            <p class="text-gray-500">所以，我要去中國了。</p>
+                        </div>
+                    </div>
+                    <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> 這是學習「現在進行式表示未來」的經典例子。"I'm going" 在這裡不代表「我正在去」，而是「我將要去」。這是口語中非常常見的用法，用來表達一個已經計劃好的未來安排。另外，注意聽 "goin'"，這是 "going" 的口語念法，省略了字尾的 "g" 音。</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:06:51 - 00:06:54</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="6:51" data-end="6:54">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">And I may only have a couple beers in me, but... I love you, man.</p>
+                            <p class="text-gray-500">我可能只喝了幾杯啤酒，但是...我愛你，兄弟。</p>
+                        </div>
+                    </div>
+                    <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> 注意連讀！"have a" 會連在一起唸成 /hævə/。 "in me" 也會連在一起 /ɪnmi/。 "a couple of beers" 是個常用片語，意思是「幾杯啤酒」，但口語中常常會省略 "of"，直接說 "a couple beers"，這裡喬伊就是這麼說的。 "man" 在這裡不是指男人，而是朋友間親密的稱呼，類似「兄弟」、「哥兒們」。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h3>場景二：驚喜的禮物</h3>
+                <p class="text-gray-600 mb-6">瑞秋的生日派對上，她拆開了羅斯送的禮物——一個精緻的古董別針。這個別針正是瑞秋幾個月前提過自己很喜歡的。這個貼心的舉動讓瑞秋非常感動，也讓錢德勒不小心說漏了嘴。</p>
+
+                <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:09:44 - 00:09:45</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="9:44" data-end="9:45">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">Oh my God. He remembered.</p>
+                            <p class="text-gray-500">我的天啊。他還記得。</p>
+                        </div>
+                    </div>
+                     <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> "Oh my God" 是非常常見的感嘆語，用來表達驚訝、喜悅或震驚。這句話的重音通常在 "God" 上面，語氣會上揚。 "He remembered" 的過去式動詞 "remembered" 字尾的 "-ed" 發 /d/ 的音，要輕輕地發出來。</p>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:09:50 - 00:09:55</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="9:50" data-end="9:55">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">Well, sure he remembered. Remember back in college, when he fell in love with Carol...</p>
+                            <p class="text-gray-500">喔，他當然記得。還記得大學的時候，他愛上卡蘿...</p>
+                        </div>
+                    </div>
+                    <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> 這是真相被揭開的關鍵句！注意這裡的連讀現象： "fell in love with" 在快速口語中，"fell" 和 "in" 會連在一起，聽起來像 /fɛlɪn/。 "love with" 的 /v/ 和 "with" 的 /w/ 也會平順地過渡。這句話也用了片語動詞 "fall in love with someone" 意指「愛上某人」。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-12">
+                <h3>場景三：真相大白</h3>
+                <p class="text-gray-600 mb-6">錢德勒的失言讓瑞秋終於意識到羅斯對她的感情。她不敢置信，向朋友們確認這個驚人的事實。這一刻，整個房間的氣氛都變了。</p>
+
+                <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:10:20 - 00:10:22</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="10:20" data-end="10:22">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">Ross is in love with me?</p>
+                            <p class="text-gray-500">羅斯愛我？</p>
+                        </div>
+                    </div>
+                     <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> 注意這個問句的語調。因為是表達極度驚訝和不確定的問句，所以句尾的語調是急遽上揚的。發音上， "Ross is" 會連讀成 /rɔsɪz/，而 "in love with me" 的 "with" 字尾的 "th" (/ð/) 和 "me" 的 /m/ 會很自然地連在一起。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h3>場景四：機場追愛</h3>
+                <p class="text-gray-600 mb-6">得知真相後，瑞秋決定去機場告訴羅斯她的心意。但事情總是不如預期，她被地勤人員攔下，只能請人代為轉告，卻又發生了烏龍。這段充滿了追逐的急迫感。</p>
+                
+                 <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:19:10 - 00:19:14</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="19:10" data-end="19:14">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">You are not allowed on the jetway unless you have a boarding pass.</p>
+                            <p class="text-gray-500">除非您有登機證，否則不准進入登機橋。</p>
+                        </div>
+                    </div>
+                    <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> "You are not allowed to..." 是一個常用句型，表示「你被禁止做某事」。 "Unless" 意思是「除非」，用來引導一個條件。這裡有兩個重要的連讀點： "allowed on" 會連讀成 /əlaʊdɔn/， "have a" 會連讀成 /hævə/。 "Boarding pass" 是「登機證」的意思，是機場必學單字。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h3>場景五：意外的結局</h3>
+                <p class="text-gray-600 mb-6">瑞秋滿心期待地在機場等著羅斯從中國回來。當她看到羅斯時，正要上前，卻發現他身邊多了一位新女友。這個意想不到的結局，為第一季畫下了一個充滿懸念的句點。</p>
+                
+                 <div class="content-card">
+                    <p class="text-gray-500 text-sm mb-2">時間: 00:21:40 - 00:21:43</p>
+                    <div class="flex items-start">
+                        <span class="play-btn" data-start="21:40" data-end="21:43">▶️</span>
+                        <div>
+                            <p class="font-semibold text-lg text-gray-800">Come on, they're gonna love you.</p>
+                            <p class="text-gray-500">來吧，他們會愛死你的。</p>
+                        </div>
+                    </div>
+                    <div class="teacher-note">
+                        <p><strong>老師來解說：</strong> "Come on" 是個萬用片語，這裡是用來鼓勵人、催促人。 "gonna" 是 "going to" 最常見的口語縮寫，發音是 /ɡənə/。 "love you" 在這裡的 "love" 帶有「非常喜歡」的意思，而不僅僅是愛情。這句話是羅斯對他的新女友說的，對瑞秋來說，無疑是晴天霹靂。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16 scroll-mt-20">
+            <h2 class="section-title">必學詞彙與片語</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">詞彙 / 片語</th>
+                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">意思</th>
+                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">劇中用法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">nod off</td>
+                            <td class="py-3 px-4 border-b">打瞌睡，不知不覺睡著</td>
+                            <td class="py-3 px-4 border-b">Here's little Ben nodding off.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">fertility study</td>
+                            <td class="py-3 px-4 border-b">生育能力研究</td>
+                            <td class="py-3 px-4 border-b">It’s a fertility study.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">spill the beans</td>
+                            <td class="py-3 px-4 border-b">洩漏秘密 (錢德勒的行為)</td>
+                            <td class="py-3 px-4 border-b">Chandler basically spills the beans about Ross's feelings.</td>
+                        </tr>
+                         <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">ridiculously expensive</td>
+                            <td class="py-3 px-4 border-b">貴得離譜</td>
+                            <td class="py-3 px-4 border-b">...bought her that ridiculously expensive crystal duck.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">get over (someone)</td>
+                            <td class="py-3 px-4 border-b">忘記（某人），從失戀中走出來</td>
+                            <td class="py-3 px-4 border-b">I thought you were over her.</td>
+                        </tr>
+                         <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">boarding pass</td>
+                            <td class="py-3 px-4 border-b">登機證</td>
+                            <td class="py-3 px-4 border-b">...unless you have a boarding pass.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">jetway</td>
+                            <td class="py-3 px-4 border-b">（機場）登機橋，空橋</td>
+                            <td class="py-3 px-4 border-b">You are not allowed on the jetway...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16 scroll-mt-20">
+            <h2 class="section-title">實用語法點</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">語法點</th>
+                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">說明</th>
+                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">劇中用法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">口語縮寫: Gonna / Wanna</td>
+                            <td class="py-3 px-4 border-b">"gonna" 是 "going to" 的縮寫；"wanna" 是 "want to" 的縮寫。在非正式口語中極為常見。</td>
+                            <td class="py-3 px-4 border-b">They're <strong>gonna</strong> love you. / If you <strong>wanna</strong> reach me, you can't.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">現在完成式 Present Perfect</td>
+                            <td class="py-3 px-4 border-b">用來描述過去發生、但與現在有關聯的動作或狀態。例如羅斯「已經」愛了瑞秋很久。</td>
+                            <td class="py-3 px-4 border-b">I've been in love with you since the ninth grade. (這是瑞秋幻想中羅斯說的話)</td>
+                        </tr>
+                         <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">片語動詞 Phrasal Verbs</td>
+                            <td class="py-3 px-4 border-b">由「動詞 + 介詞/副詞」組成，意思常常和單一動詞不同。例如 find out (發現), get over (克服/忘記)。</td>
+                            <td class="py-3 px-4 border-b">When did you <strong>find out</strong>? / I thought you were <strong>over</strong> her.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">表達「不敢相信」</td>
+                            <td class="py-3 px-4 border-b">"I can't believe..." 或 "I don't believe..." 是用來表達震驚或難以置信的常用句型。</td>
+                            <td class="py-3 px-4 border-b"><strong>I don't believe</strong> this. He's never said anything.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="culture" class="mb-16 scroll-mt-20">
+            <h2 class="section-title">文化透視鏡</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3>盛大的浪漫表示 (The Grand Romantic Gesture)</h3>
+                    <p class="text-gray-700 leading-relaxed">羅斯送給瑞秋的別針，不只是一個禮物，它代表了一種「盛大的浪漫表示」。在美國文化中，這種精心策劃、充滿個人意義的舉動，常常被視為深情的最高表現。它顯示了送禮者不僅僅是花錢，更是用心記住了對方不經意間透露的願望。這也是為什麼瑞秋會如此感動，並最終促使她重新思考對羅斯的感情。</p>
+                </div>
+                <div>
+                    <h3>朋友間的界線</h3>
+                    <p class="text-gray-700 leading-relaxed">錢德勒「洩漏秘密」的行為，雖然是無心的，但也點出了美國朋友文化中的一個有趣現象。朋友們關係緊密，無話不談，但同時也存在著一些不成文的界線。什麼事該說，什麼事不該說，常常是一種藝術。錢德勒的失言完美地展示了當這種界線被打破時，會產生多麼戲劇性（和爆笑）的後果。</p>
+                </div>
+                 <div>
+                    <h3>機場的悲歡離合</h3>
+                    <p class="text-gray-700 leading-relaxed">機場在許多電影和電視節目中，都是一個充滿相聚與分離、希望與失望的經典場景。瑞秋在機場追逐羅斯，是愛情喜劇中一個非常經典的橋段。它象徵著為了愛情不顧一切的勇氣。然而，《六人行》在這裡卻來了個反轉：女主角鼓起勇氣追到機場，男主角卻帶著新歡回來了。這種「反高潮」的設計，正是《六人行》之所以真實又吸引人的原因之一。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-16 scroll-mt-20">
+            <h2 class="section-title">小練習，大進步</h2>
+            <div class="my-6">
+                <a href="https://g.co/gemini/share/bd23d5715b85" target="_blank">
+                    <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                </a>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">聽力理解</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>喬伊為什麼要參加生育能力研究？</li>
+                        <li>羅斯送給瑞秋的生日禮物是什麼？為什麼這個禮物很特別？</li>
+                        <li>錢德勒是如何不小心洩漏羅斯的秘密的？</li>
+                        <li>瑞秋在機場想告訴羅斯什麼？她成功了嗎？</li>
+                        <li>這一集的結尾，當羅斯從中國回來時，發生了什麼讓瑞秋驚訝的事？</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">口說練習</h3>
+                    <p class="text-gray-700">試著用自己的話，回答瑞秋的問題： "I mean, it's Ross. Y'know what I mean? I mean, it's Ross." (我的意思是，他是羅斯。你懂我意思嗎？我是說，他是羅斯。) 你覺得瑞秋想表達什麼？試著解釋 "it's Ross" 背後複雜的情感。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-20">
+            <h2 class="section-title">結論：一個結束，也是一個開始</h2>
+            <p class="text-lg leading-relaxed text-gray-700 mb-4">恭喜你完成了 S01E24 的學習！這一集不僅讓我們學到了許多實用的詞彙和發音技巧，更讓我們見證了《六人行》中最經典的愛情線之一的開端。瑞秋發現了真相，但羅斯卻有了新的戀情，這個充滿懸念的結尾，正是吸引我們繼續看下去的動力。</p>
+            <p class="text-lg leading-relaxed text-gray-700">學習語言就像看劇一樣，需要耐心和持續的熱情。不要怕犯錯，大膽地去聽、去說。希望這份指南能幫助你更好地理解《六人行》，並從中找到學習英語的樂趣。下一季，羅斯和瑞秋的故事會如何發展呢？讓我們一起期待吧！</p>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+    // 影片網址參數載入、A-B循環、play-btn、選單active、menu-button、遮罩層、主內容點擊自動關閉
+    function parseTimeString(timeStr) {
+        if (!timeStr) return 0;
+        if (timeStr.includes(':')) {
+            const [min, sec] = timeStr.split(':');
+            return parseInt(min, 10) * 60 + parseFloat(sec);
+        } else {
+            return parseFloat(timeStr);
+        }
+    }
+    function toMinSec(sec) {
+        sec = parseFloat(sec);
+        const m = Math.floor(sec / 60);
+        const s = Math.round(sec - m * 60);
+        return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        // 影片網址參數載入
+        const video = document.getElementById('myVideo');
+        const container = document.getElementById('video-button-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+        }
+        if (container) {
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class=\"text-red-500 text-3xl\">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        }
+        // play-btn 屬性批次轉換
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            let ds = btn.getAttribute('data-start');
+            let de = btn.getAttribute('data-end');
+            // 若是舊的onclick格式，轉為data-start/data-end
+            if (!ds && btn.hasAttribute('onclick')) {
+                const m = btn.getAttribute('onclick').match(/playSegment\(([^,]+),\s*([^\)]+)\)/);
+                if (m) {
+                    btn.removeAttribute('onclick');
+                    btn.setAttribute('data-start', toMinSec(m[1]));
+                    btn.setAttribute('data-end', toMinSec(m[2]));
+                }
+            } else {
+                if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+                if (de && !de.includes(':')) btn.setAttribute('data-end', toMinSec(de));
+            }
+        });
+            // play-btn 綁定
+            document.body.addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
+                    };
+                    video.addEventListener('seeked', onSeeked);
+                }
+            });
+        // Navbar active state on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').replace('#','') === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        // menu-button 響應式側邊選單
+        const menuButton = document.getElementById('menu-button');
+        const nav = document.querySelector('header nav');
+        const menuOverlay = document.getElementById('menu-overlay');
+        if (menuButton && nav) {
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nav.classList.toggle('open');
+                menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+            });
+            // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+            document.body.addEventListener('click', (e) => {
+                if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                    if (!nav.contains(e.target) && e.target !== menuButton) {
+                        nav.classList.remove('open');
+                        menuOverlay.style.display = 'none';
+                    }
+                }
+            });
+            // 點擊遮罩層自動關閉
+            menuOverlay.addEventListener('click', () => {
+                nav.classList.remove('open');
+                menuOverlay.style.display = 'none';
+            });
+        }
+    });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

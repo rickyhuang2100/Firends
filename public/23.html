@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S01E23 學習指南 | The One with the Birth</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: #c7a17a;
+            border-bottom-color: #c7a17a;
+        }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c7a17a;
+            transition: transform 0.2s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.2);
+        }
+        .content-card {
+            background-color: #fff;
+            border: 1px solid #f0e9e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            color: #8c6f51;
+            border-bottom: 2px solid #e0d5c8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        #myVideo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border: 2px solid #f59e0b;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        video {
+            display: block;
+            margin-top: 20px;
+            max-width: 25%;
+            max-height: 25%;
+            border-radius: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            #myVideo {
+                max-width: 80%;
+                max-height: 30%;
+                bottom: 10px;
+                right: 10px;
+            }
+            video {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80vw;
+                max-width: 340px;
+                height: 100vh;
+                background: rgba(255,255,255,0.98);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+                transform: translateX(-110%);
+                transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                padding-top: 5rem;
+                border-top-right-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+                border-right: 2px solid #f3e9d7;
+                opacity: 0.98;
+                backdrop-filter: blur(6px);
+            }
+            header nav.open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+            }
+            header nav .flex.items-center.justify-between.h-16 {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+            header nav .hidden.md\:flex {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+            header nav .nav-link {
+                padding: 1.1rem 2.2rem;
+                width: 100%;
+                border-bottom: 1px solid #f3f3f3;
+                font-size: 1.25rem;
+                border-radius: 0.75rem;
+                margin: 0.2rem 0;
+                background: transparent;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            }
+            header nav .nav-link.active, header nav .nav-link:hover {
+                background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%);
+                color: #b97a3a;
+                box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08);
+            }
+            #menu-overlay {
+                display: none;
+            }
+            header nav.open ~ #menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.18);
+                z-index: 900;
+                animation: fadeIn 0.3s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+        @media (min-width: 769px) {
+            header nav {
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S01E23</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+    <main class="container mx-auto p-4 md:p-8">  
+        <section id="intro" class="mb-12">
+            <div class="content-card">
+            <div id="video-button-container" class="mt-4 text-center"></div>
+                <h2 class="section-title">1. 引言</h2>
+                <p class="text-lg leading-relaxed text-gray-700">
+                    歡迎來到《六人行》S01E23 "The One with the Birth" 的學習指南！本集圍繞著一個充滿緊張、幽默與感動的重大事件：Ross的前妻Carol即將生下他們的寶寶。朋友們聚集在醫院，焦急地等待新生命的到來，期間發生了一連串溫馨又搞笑的互動。
+                </p>
+                <p class="mt-4 text-lg leading-relaxed text-gray-700">
+                    這一集是學習日常英語，特別是關於醫院、家庭關係和表達情緒詞彙的絕佳素材。我們將特別聚焦在英文口說中非常重要的「連讀」(linking) 和「弱讀」(weak forms) 現象。掌握這些，能讓你的聽力大幅進步，也能讓你的口說更像母語人士那樣自然流暢。準備好了嗎？讓我們一起跟著六人行，迎接小Ben的誕生，同時提升我們的英文能力吧！
+                </p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-12">
+            <div class="content-card">
+                <h2 class="section-title">2. 場景</h2>
+                <p class="text-lg leading-relaxed text-gray-700 mb-6">
+                    本集主要場景發生在醫院的等待室和產房內，充滿了戲劇性的對話。以下精選了幾個關鍵對話片段，它們不僅推動劇情，更富含實用的口語表達和我們將要學習的發音重點。
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 font-semibold text-sm text-gray-600">對話片段 (點擊 ▶️ 播放)</th>
+                                <th class="p-3 font-semibold text-sm text-gray-600">中文翻譯</th>
+                                <th class="p-3 font-semibold text-sm text-gray-600">學習重點</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-4 flex items-center space-x-4">
+                                    <span class="play-btn" data-start="00:00:06,970" data-end="00:00:13,270">▶️</span>
+                                    <div><strong>Ross:</strong> She's having my baby, and she's not here yet.<br><strong>Monica:</strong> Has her water broken yet?</div>
+                                </td>
+                                <td class="p-4"><strong>羅斯:</strong> 她要生我的孩子了，但她還沒到。<br><strong>莫妮卡:</strong> 她的羊水破了嗎？</td>
+                                <td class="p-4">焦慮的表達、弱讀 "her" (/ər/)</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-4 flex items-center space-x-4">
+                                    <span class="play-btn" data-start="00:03:52,950" data-end="00:03:56,850">▶️</span>
+                                    <div><strong>Rachel:</strong> What, it's ok when Chandler does it?<br><strong>Chandler:</strong> You have to pick your moments.</div>
+                                </td>
+                                <td class="p-4"><strong>瑞秋:</strong> 什麼？錢德勒就可以這樣？<br><strong>錢德勒:</strong> 你得挑對時機。</td>
+                                <td class="p-4">慣用語 "pick your moments"</td>
+                            </tr>
+                             <tr class="border-b">
+                                <td class="p-4 flex items-center space-x-4">
+                                    <span class="play-btn" data-start="00:03:01,840" data-end="00:03:05,240">▶️</span>
+                                    <div><strong>Ross:</strong> Susan, this is a baby. You don't stop for Chunkys.</div>
+                                </td>
+                                <td class="p-4"><strong>羅斯:</strong> 蘇珊，這是生小孩，妳不能為了巧克力棒停下來。</td>
+                                <td class="p-4">口語強調 "You don't stop for..."</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-4 flex items-center space-x-4">
+                                    <span class="play-btn" data-start="00:10:51,910" data-end="00:10:56,050">▶️</span>
+                                    <div><strong>Lydia:</strong> Oh, boy, do they suck.<br><strong>Joey:</strong> You know, it's a rebuilding year.</div>
+                                </td>
+                                <td class="p-4"><strong>莉迪亞:</strong> 天啊，他們爛透了。<br><strong>喬伊:</strong> 妳知道的，這是重建年。</td>
+                                <td class="p-4">俚語 "suck"、體育術語</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 flex items-center space-x-4">
+                                    <span class="play-btn" data-start="00:20:13,670" data-end="00:20:19,940">▶️</span>
+                                    <div><strong>Ross:</strong> How 'bout Ben?<br><strong>Susan:</strong> I like Ben.<br><strong>Carol:</strong> Ben... Ben's good.</div>
+                                </td>
+                                <td class="p-4"><strong>羅斯:</strong> 叫班怎麼樣？<br><strong>蘇珊:</strong> 我喜歡班。<br><strong>卡蘿:</strong> 班… 班不錯。</td>
+                                <td class="p-4">常用提議句型 "How 'bout...?"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-12">
+            <div class="content-card">
+                <h2 class="section-title">3. 詞彙</h2>
+                <p class="text-lg leading-relaxed text-gray-700 mb-6">學習新單字是看影集的一大收穫。這裡列出了本集中幾個實用的單字和片語，讓你更懂劇情，也能在日常生活中使用。</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                           <tr>
+                                <th class="p-3 font-semibold text-sm text-gray-600">詞彙/片語</th>
+                                <th class="p-3 font-semibold text-sm text-gray-600">解釋 & 例句</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-4"><strong class="text-lg text-[#a37e58]">mucus plug</strong><br><span class="text-sm text-gray-500">黏液塞</span></td><td class="p-4"><strong>(n.)</strong> A thick piece of mucus that blocks the cervix during pregnancy. 懷孕時堵住子宮頸的黏液。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:00:13,510" data-end="00:00:17,880">▶️</span> She said she'd already passed the <strong class="text-[#c7a17a]">mucus plug</strong>.</td></tr>
+                            <tr class="border-b"><td class="p-4"><strong class="text-lg text-[#a37e58]">hand out</strong><br><span class="text-sm text-gray-500">分發</span></td><td class="p-4"><strong>(phrasal v.)</strong> To give something to many people. 把東西發給很多人。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:00:25,250" data-end="00:00:28,650">▶️</span> I'll be in the waiting room, <strong class="text-[#c7a17a]">handing out</strong> cigars.</td></tr>
+                            <tr class="border-b"><td class="p-4"><strong class="text-lg text-[#a37e58]">contraction</strong><br><span class="text-sm text-gray-500">宮縮</span></td><td class="p-4"><strong>(n.)</strong> The tightening of a muscle, especially in the uterus during childbirth. 肌肉收緊，特別指分娩時子宮的收縮。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:02:12,180" data-end="00:02:14,750">▶️</span> Are you having a <strong class="text-[#c7a17a]">contraction</strong>?</td></tr>
+                            <tr class="border-b"><td class="p-4"><strong class="text-lg text-[#a37e58]">ice chips</strong><br><span class="text-sm text-gray-500">冰屑</span></td><td class="p-4"><strong>(n.)</strong> Small pieces of ice. 小冰塊，常用於給病人含著解渴。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:04:47,790" data-end="00:04:50,990">▶️</span> <strong class="text-[#c7a17a]">Ice chips</strong>. Just <strong class="text-[#c7a17a]">ice chips</strong>. They're at the nurse's station.</td></tr>
+                            <tr class="border-b"><td class="p-4"><strong class="text-lg text-[#a37e58]">suck</strong><br><span class="text-sm text-gray-500">(俚語) 很爛</span></td><td class="p-4"><strong>(v., slang)</strong> To be very bad or unpleasant. 非常糟糕或令人不快。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:10:51,910" data-end="00:10:53,410">▶️</span> Oh, boy, do they <strong class="text-[#c7a17a]">suck</strong>.</td></tr>
+                            <tr class="border-b"><td class="p-4"><strong class="text-lg text-[#a37e58]">Mazel tov!</strong><br><span class="text-sm text-gray-500">(意第緒語) 恭喜！</span></td><td class="p-4"><strong>(exclamation)</strong> From Yiddish/Hebrew, means "Congratulations!". 來自意第緒語/希伯來語，意思是「恭喜」。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:11:15,840" data-end="00:11:16,740">▶️</span> <strong class="text-[#c7a17a]">Mazel tov!</strong></td></tr>
+                            <tr><td class="p-4"><strong class="text-lg text-[#a37e58]">crowning</strong><br><span class="text-sm text-gray-500">(分娩) 胎頭露出</span></td><td class="p-4"><strong>(v.)</strong> The stage of childbirth when the baby's head becomes visible. 分娩過程中，嬰兒頭部出現的階段。<br><strong class="text-gray-600">例句:</strong> <span class="play-btn" data-start="00:19:20,530" data-end="00:19:22,460">▶️</span> All right, he's <strong class="text-[#c7a17a]">crowning</strong>. Here he comes.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-12">
+            <div class="content-card">
+                <h2 class="section-title">4. 語法</h2>
+                <p class="text-lg leading-relaxed text-gray-700 mb-6">
+                    語法是句子的骨架。本集有許多自然的對話，是學習實用文法的絕佳機會。不過，我們今天的重頭戲是「連讀」和「弱讀」，這是讓你英文聽起來更道地的秘密武器！
+                </p>
+                
+                <h3>連讀 (Linking) 與 弱讀 (Weak Forms) 專題</h3>
+                <p class="text-base leading-relaxed text-gray-600 mb-4">在自然的英語口說中，單字之間並不像書寫時那樣有明顯的間隔。為了說得更順、更快，會產生「連讀」和「弱讀」的現象。</p>
+                <ul class="list-disc list-inside space-y-2 mb-6">
+                    <li><strong>連讀 (Linking):</strong> 當一個字以「子音」結尾，下一個字以「母音」開頭時，它們會連在一起唸。例如 "an apple" 聽起來像 "a-napple"。</li>
+                    <li><strong>弱讀 (Weak Forms):</strong> 像 `a`, `an`, `of`, `for`, `to`, `and` 這些功能詞，在句子中不被強調時，母音會被弱化成很輕的 /ə/ 音 (schwa)。</li>
+                </ul>
+                <p class="text-base leading-relaxed text-gray-600 mb-6">掌握這兩點，你就能更容易聽懂母語人士的快語速，自己的口說也會更流暢。讓我們看看劇中的例子：</p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 font-semibold text-sm text-gray-600">對話片段 & 發音特徵</th>
+                                <th class="p-3 font-semibold text-sm text-gray-600">解釋</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-4">
+                                    <span class="play-btn" data-start="00:00:06,970" data-end="00:00:10,200">▶️</span> ...my baby <strong>and she's</strong> not here.
+                                    <br><strong class="text-[#c7a17a]">弱讀 & 連讀:</strong> and she's → /ən-ʃiz/
+                                </td>
+                                <td class="p-4">`and` 的 `d` 音幾乎聽不見，弱化成 /ən/，並和後面的 `she's` 連在一起，聽起來像「恩西茲」。</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-4">
+                                    <span class="play-btn" data-start="00:00:10,410" data-end="00:00:13,270">▶️</span> Has <strong>her water</strong> broken yet?
+                                    <br><strong class="text-[#c7a17a]">弱讀:</strong> her → /ər/
+                                </td>
+                                <td class="p-4">在非重讀時，`her` 的 `h` 音常被省略，母音也弱化成 /ər/，所以 `Has her` 聽起來像 `Ha-zər`。</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-4">
+                                    <span class="play-btn" data-start="00:00:28,920" data-end="00:00:33,830">▶️</span> ...to have his baby <strong>in a</strong> movie from the '50s.
+                                    <br><strong class="text-[#c7a17a]">連讀:</strong> in a → /ɪn-ə/
+                                </td>
+                                <td class="p-4">`in` 結尾的子音 /n/ 和後面母音開頭的 `a` /ə/ 連在一起，唸成「伊訥」。</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4">
+                                    <span class="play-btn" data-start="00:03:01,840" data-end="00:03:03,840">▶️</span> You don't <strong>stop for</strong> Chunkys.
+                                    <br><strong class="text-[#c7a17a]">弱讀 & 連讀:</strong> for → /fər/
+                                </td>
+                                <td class="p-4">`for` 被弱化成 /fər/，而且 `stop` 的 /p/ 音和 /f/ 連接得非常緊密。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="mb-12">
+            <div class="content-card">
+                <h2 class="section-title">5. 文化</h2>
+                <p class="text-lg leading-relaxed text-gray-700 mb-6">《六人行》不僅是學英文的工具，也是了解90年代美國文化的窗口。理解這些文化點，能讓你更懂劇中笑點和對話的深層含義。</p>
+                <div class="space-y-4">
+                    <p><strong>👶 產房外的傳統 (Waiting Room Traditions):</strong> 劇中 Joey 提到要在等待室「分發雪茄 (handing out cigars)」。這是美國一個比較老的傳統，父親為了慶祝孩子出生，會分送雪茄給親友。雖然現在比較少見，但這個梗反映了 Joey 有點老派、從電影裡學知識的可愛個性。</p>
+                    <p><strong>👨‍👨‍👧 多元家庭 (Modern Families):</strong> Ross、Carol 和 Susan 三人共同迎接孩子的出生，他們之間的互動（爭吵、妥協、合作）生動地展現了90年代社會對非傳統家庭形式逐漸開放的態度。他們爭論誰該多待在產房，甚至為了巧克力棒「Chunky」吵架，這些都讓角色更真實、更人性化。</p>
+                    <p><strong>🏀 體育與城市認同 (Sports & City Identity):</strong> Joey 身為紐約客，是尼克隊 (Knicks) 的鐵粉。當他遇到來自波士頓的孕婦 Lydia 時，兩人立刻因為尼克隊和塞爾提克隊 (Celtics) 的世仇關係而有了話題。這反映了體育在美國文化中的重要性，它不僅是娛樂，也是一種身份認同和社交話題。</p>
+                    <p><strong>🗣️ 外來語的融入 (Borrowed Words):</strong> 當 Joey 成功扮演 Lydia 的「教練」時，Chandler 對他說了一句 "Mazel tov!"。這是一個源自意第緒語（猶太人常用語言）的詞，意思是「恭喜」。這顯示了美國作為一個文化大熔爐，日常英語中吸收了許多來自不同文化的詞彙。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold mb-6">6. 練習</h2>
+                <div class="my-6">
+                    <a href="https://g.co/gemini/share/e7b7f1a714f5" target="_blank">
+                        <button class="text-2xl font-bold bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg shadow">點擊這裡開啟練習</button>
+                    </a>
+                </div>
+                <p class="text-lg leading-relaxed text-gray-700 mb-6">知道和做到是兩回事。現在，讓我們透過練習，把學到的知識變成自己的能力！</p>
+                <div class="space-y-6">
+                    <div>
+                        <h3>聽力轟炸 (Listening Blast)</h3>
+                        <p class="text-gray-600">利用本頁面的播放功能，對重點對話進行A-B循環播放。第一遍不看字幕盲聽，試著抓住大意和語調。第二遍對照字幕聽，注意你沒聽懂的地方，特別是那些連讀和弱讀的部分。重複播放，直到你感覺能完全跟上為止。</p>
+                    </div>
+                    <div>
+                        <h3>跟讀模仿 (Shadowing Practice)</h3>
+                        <p class="text-gray-600">這是提升口說最有效的方法之一！選擇一個你喜歡的角色（例如，試試模仿 Ross 焦慮的語氣，或 Phoebe 奇特的歌聲）。跟著影片一起說台詞，盡力模仿他們的語速、語調、情緒，最重要的是，練習我們今天學的「連讀」和「弱讀」，讓你的發音更自然。可以錄下自己的聲音，和原音對比找不同。</p>
+                    </div>
+                    <div>
+                        <h3>情境造句 (Scenario Creation)</h3>
+                        <p class="text-gray-600">試著用今天學到的單字和句型造句。例如：</p>
+                        <ul class="list-disc list-inside text-gray-600 mt-2 space-y-1">
+                            <li>如果你朋友很焦慮，你會怎麼安慰他？(I'm sure everything's fine.)</li>
+                            <li>形容一支你討厭的球隊。(Oh, boy, do they suck.)</li>
+                            <li>向朋友提議晚餐吃什麼？(How 'bout pizza?)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion">
+            <div class="content-card">
+                <h2 class="section-title">7. 結論</h2>
+                <p class="text-lg leading-relaxed text-gray-700">
+                    恭喜你完成了 S01E23 的學習！透過這一集，我們不僅見證了 Ben 的誕生，也學習了許多實用的英文知識。
+                </p>
+                <p class="mt-4 text-lg leading-relaxed text-gray-700">
+                    希望你對「連讀」和「弱讀」有了更深刻的理解。請記住，這不是一蹴可幾的，需要透過大量的聽和說來內化。繼續使用這個方法觀看《六人行》或其他你喜歡的影集，你會發現你的英文聽力和口說能力在不知不覺中飛速進步。學習語言是一場有趣的冒險，享受過程，我們下一集見！
+                </p>
+            </div>
+        </section>
+
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+    // 影片網址參數載入、A-B循環、play-btn、選單active、menu-button、遮罩層、主內容點擊自動關閉
+    function parseTimeString(timeStr) {
+        if (!timeStr) return 0;
+        if (timeStr.includes(':')) {
+            const [min, sec] = timeStr.split(':');
+            return parseInt(min, 10) * 60 + parseFloat(sec);
+        } else {
+            return parseFloat(timeStr);
+        }
+    }
+    function toMinSec(sec) {
+        sec = parseFloat(sec);
+        const m = Math.floor(sec / 60);
+        const s = Math.round(sec - m * 60);
+        return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('myVideo');
+        const container = document.getElementById('video-button-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        if (url && video) {
+            video.src = url;
+        } else if (video) {
+            console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+        }
+        if (container) {
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class=\"text-red-500 text-3xl\">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        }
+        // play-btn 屬性批次轉換
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            let ds = btn.getAttribute('data-start');
+            let de = btn.getAttribute('data-end');
+            if (ds && ds.includes(',')) {
+                // SRT格式 00:00:06,970 => 0:06
+                const [h, m, s] = ds.split(':');
+                const [sec, ms] = s.split(',');
+                const totalSec = parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(sec);
+                btn.setAttribute('data-start', `${Math.floor(totalSec/60)}:${(totalSec%60).toString().padStart(2,'0')}`);
+            } else if (ds && ds.includes(':') && ds.split(':').length === 3) {
+                // 00:03:52 => 3:52
+                const [h, m, s] = ds.split(':');
+                const totalSec = parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
+                btn.setAttribute('data-start', `${Math.floor(totalSec/60)}:${(totalSec%60).toString().padStart(2,'0')}`);
+            } else if (ds && !ds.includes(':')) btn.setAttribute('data-start', toMinSec(ds));
+            let de2 = btn.getAttribute('data-end');
+            if (de2 && de2.includes(',')) {
+                const [h, m, s] = de2.split(':');
+                const [sec, ms] = s.split(',');
+                const totalSec = parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(sec);
+                btn.setAttribute('data-end', `${Math.floor(totalSec/60)}:${(totalSec%60).toString().padStart(2,'0')}`);
+            } else if (de2 && de2.includes(':') && de2.split(':').length === 3) {
+                const [h, m, s] = de2.split(':');
+                const totalSec = parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
+                btn.setAttribute('data-end', `${Math.floor(totalSec/60)}:${(totalSec%60).toString().padStart(2,'0')}`);
+            } else if (de2 && !de2.includes(':')) btn.setAttribute('data-end', toMinSec(de2));
+        });
+        // play-btn 綁定
+        document.body.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('play-btn')) {
+                var button = e.target;
+                if (button.textContent === "⏹️") {
+                    video.pause();
+                    button.textContent = "▶️";
+                    return;
+                }
+                var allToggle = document.querySelectorAll('.play-btn');
+                allToggle.forEach(btn => btn.textContent = '▶️');
+                button.textContent = "⏹️";
+                var startTimeStr = button.dataset.start;
+                var endTimeStr = button.dataset.end;
+                var startTime = parseTimeString(startTimeStr);
+                var endTime = parseTimeString(endTimeStr);
+                if (isNaN(startTime) || isNaN(endTime)) {
+                    console.error('Invalid start or end time');
+                    return;
+                }
+                video.pause();
+                video.currentTime = startTime;
+                const onSeeked = () => {
+                    video.play();
+                    var loopInterval = setInterval(() => {
+                        if (video.currentTime >= endTime) {
+                            video.currentTime = startTime;
+                        }
+                    }, 200);
+                    video.removeEventListener('seeked', onSeeked);
+                    video.addEventListener('pause', function clearLoop() {
+                        clearInterval(loopInterval);
+                        video.removeEventListener('pause', clearLoop);
+                    });
+                };
+                video.addEventListener('seeked', onSeeked);
+            }
+        });
+        // Navbar active state on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').replace('#','') === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        // menu-button 響應式側邊選單
+        const menuButton = document.getElementById('menu-button');
+        const nav = document.querySelector('header nav');
+        const menuOverlay = document.getElementById('menu-overlay');
+        if (menuButton && nav) {
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nav.classList.toggle('open');
+                menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+            });
+            // 點擊主內容區域時自動關閉選單（僅在小螢幕）
+            document.body.addEventListener('click', (e) => {
+                if (window.innerWidth < 769 && nav.classList.contains('open')) {
+                    if (!nav.contains(e.target) && e.target !== menuButton) {
+                        nav.classList.remove('open');
+                        menuOverlay.style.display = 'none';
+                    }
+                }
+            });
+            // 點擊遮罩層自動關閉
+            menuOverlay.addEventListener('click', () => {
+                nav.classList.remove('open');
+                menuOverlay.style.display = 'none';
+            });
+        }
+    });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
