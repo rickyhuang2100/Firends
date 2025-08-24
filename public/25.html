@@ -22,9 +22,28 @@
         .section-title { color: #8c6f51; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
         #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #f59e0b; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
         video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s; z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; opacity: 0.98; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .flex.items-center.justify-between.h-16 { flex-direction: column; align-items: flex-start; height: auto; }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; background: transparent; transition: background 0.18s, color 0.18s, box-shadow 0.18s; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%); color: #b97a3a; box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08); }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
     <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
         <nav class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
@@ -41,166 +60,284 @@
             </div>
         </nav>
     </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
 
     <main class="container mx-auto p-4 md:p-8">
-        <section id="intro" class="mb-16 scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">引言：當量褲子變成一場災難</h2>
-            <p class="text-lg leading-relaxed text-gray-700">今天，我們要來看一段《六人行》中堪稱經典的爆笑橋段！Chandler 聽了 Joey 的推薦，去找了一位老裁縫師傅量身做褲子，沒想到卻引發了一場關於「界線」和「誤會」的災難。這段對話充滿了生活化的抱怨和誇張的肢體語言，是學習如何用英文表達不滿和理解文化差異的絕佳教材。讓我們一起來看看，量褲子到底能出什麼問題！</p>
+        <div class="content-card">
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>歡迎來到《六人行》第二季的學習旅程！我是你的英文老師，很高興能和你一起透過這部經典影集，輕鬆又有趣地學習最道地的生活英文。</p>
+                <p>第二季的第一集 "The One with Ross's New Girlfriend" (羅斯的新女友) 是整部劇集中一個非常重要的轉折點。在上一季的結尾，我們看到瑞秋 (Rachel) 終於意識到自己對羅斯 (Ross) 的感情，並決定在他從中國出差回來時，到機場向他告白。這一集就從瑞秋滿懷期待地在機場等候開始。然而，故事的發展卻出乎所有人的意料——羅斯並不是一個人回來的，他身邊多了一位新女友，朱莉 (Julie)。這個意外的發展不僅讓瑞秋心碎，也為接下來的劇情埋下了充滿戲劇性與笑料的伏筆。</p>
+            </div>
         </section>
 
-        <section id="scenes" class="mb-16 scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">場景分析與關鍵對白</h2>
-            <div class="content-card">
-                <p class="text-gray-500 text-sm mb-2">時間: 00:17:32 - 00:17:36</p>
-                <div class="flex items-start space-x-4">
-                    <span class="play-btn" data-start="17:32" data-end="17:36">▶️</span>
-                    <div>
-                        <p class="font-semibold text-lg text-gray-800">Your tailor... is a very bad man!</p>
-                        <p class="text-gray-500">你的裁縫... 是個很壞的壞人！</p>
-                    </div>
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景</h2>
+            <div class="content-card space-y-6">
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景一：機場的期待與失落</h3>
+                    <p class="text-gray-600 mb-4">瑞秋精心打扮來到機場，準備迎接羅斯並向他告白，但現實卻給了她沉重一擊。</p>
+                    <p class="text-gray-700 font-semibold"><strong>Julie:</strong> Hi! It's so nice to finally meet you.</p>
                 </div>
-            </div>
-            <div class="content-card">
-                <p class="text-gray-500 text-sm mb-2">時間: 00:17:52 - 00:17:53</p>
-                <div class="flex items-start space-x-4">
-                    <span class="play-btn" data-start="17:52" data-end="17:53">▶️</span>
-                    <div>
-                        <p class="font-semibold text-lg text-gray-800">...took advantage of me.</p>
-                        <p class="text-gray-500">...佔我便宜。</p>
-                    </div>
-                </div>
-            </div>
-             <div class="content-card">
-                <p class="text-gray-500 text-sm mb-2">時間: 00:18:12 - 00:18:15</p>
-                <div class="flex items-start space-x-4">
-                    <span class="play-btn" data-start="18:12" data-end="18:15">▶️</span>
-                    <div>
-                        <p class="font-semibold text-lg text-gray-800">That's how they do pants!</p>
-                        <p class="text-gray-500">他們量褲子就是那樣的啊！</p>
-                    </div>
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：朋友們的反應</h3>
+                    <p class="text-gray-600 mb-4">羅斯帶著朱莉回到公寓，朋友們的反應非常微妙而尷尬，場面一度非常有趣又充滿張力。</p>
+                    <p class="text-gray-700 font-semibold"><strong>Chandler:</strong> The guy at the tailor shop freaked out. He started yelling at me.</p>
                 </div>
             </div>
         </section>
 
-        <section id="vocab" class="mb-16 scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">必學詞彙與片語</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr>
-                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">詞彙 / 片語</th>
-                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">意思</th>
-                            <th class="py-3 px-4 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">用法說明</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-4 border-b font-semibold">tailor</td>
-                            <td class="py-3 px-4 border-b">裁縫師</td>
-                            <td class="py-3 px-4 border-b">指專門製作或修改衣服的師傅。</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-4 border-b font-semibold">take advantage of (someone)</td>
-                            <td class="py-3 px-4 border-b">佔（某人）便宜</td>
-                            <td class="py-3 px-4 border-b">這是一個很重要的片語，通常帶有負面意思，指利用某人的弱點或信任來為自己牟利，在這裡 Chandler 暗指他被性騷擾了。</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-4 border-b font-semibold">inseam</td>
-                            <td class="py-3 px-4 border-b">（褲子的）內接縫、褲襠</td>
-                            <td class="py-3 px-4 border-b">指褲子從胯下到褲腳的內側縫線長度，是量褲長的標準。</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-4 border-b font-semibold">cupping</td>
-                            <td class="py-3 px-4 border-b">（俚語）用手捧住</td>
-                            <td class="py-3 px-4 border-b">Chandler 用這個詞來形容裁縫師傅觸碰他的方式。它不是一個正式的詞彙，但生動地表達了那個讓他不舒服的動作。</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">get over (someone)</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">忘記(某人)；從...恢復</td>
+                                <td class="p-4"><strong>Monica:</strong> "I'm telling you, she is totally <strong>over</strong> you." (莫妮卡試圖說服羅斯，瑞秋已不喜歡他了。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">jet lag</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">時差反應</td>
+                                <td class="p-4"><strong>Phoebe:</strong> "You must have <strong>jet lag</strong>." (菲比認為羅斯可能是因為時差才買了奇怪的領帶。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">freak out</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">嚇壞了；抓狂</td>
+                                <td class="p-4"><strong>Chandler:</strong> "The guy at the tailor <strong>freaked out</strong>." (錢德形容裁縫反應過度、情緒失控。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">on a roll</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">運氣好；勢頭正旺</td>
+                                <td class="p-4"><strong>Joey:</strong> "I'm <strong>on a roll</strong>!" (喬伊覺得自己運氣正好、事事順利。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">we're even</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">我們扯平了</td>
+                                <td class="p-4"><strong>Rachel:</strong> "Okay, then <strong>we're even</strong>." (瑞秋和莫妮卡互相幫忙後，表示誰也不欠誰。)</td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">end up</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">結果是；最終</td>
+                                <td class="p-4"><strong>Ross:</strong> "We just <strong>ended up</strong> talking all night." (羅斯解釋他和朱莉如何感情升溫，強調一個意想不到的結果。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <section id="grammar" class="mb-16 scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">語法與發音</h2>
+        <section id="grammar" class="mb-16 scroll-mt-24">
             <div class="content-card">
-                <h3 class="text-xl font-semibold mb-2">連讀 (Linking)</h3>
-                <p><span class="play-btn" data-start="17:52" data-end="17:53">▶️</span> "...took advantage of me."</p>
-                <p class="mt-2">這句話是連讀的絕佳範例！母語者在說話時，會把 `advantage` 字尾的 /dʒ/ 音和 `of` 的 /ə/ 音連在一起，聽起來像 `advan-ta-jof`。而 `of` 的 /v/ 音又會和 `me` 的 /m/ 音平順地連起來。這就是為什麼有時候單字你都懂，但連在一起就聽不懂了！</p>
-            </div>
-            <div class="content-card">
-                <h3 class="text-xl font-semibold mb-2">弱讀 (Weak Forms)</h3>
-                <p><span class="play-btn" data-start="17:38" data-end="17:40">▶️</span> "What are you talking about?"</p>
-                <p class="mt-2">在這句常用的問話中，`are` 和 `you` 都會被弱化。`are` 不會念成完整的 /ɑːr/，而是縮短成 /ər/。`you` 也常常會被弱化成 /jə/ (聽起來像 "呀")。所以整句話聽起來更像是 "What-er-ya talkin' about?"</p>
-            </div>
-        </section>
-
-        <section id="culture" class="mb-16 scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">文化透視鏡</h2>
-            <div class="content-card">
-                <h3 class="text-xl font-semibold mb-2">個人空間 (Personal Space)</h3>
-                <p class="mt-2">這段笑話的核心來自於對「個人空間」的不同理解。在美國文化中，人們對於身體接觸有比較明確的界線，特別是來自陌生人或服務提供者的接觸。Chandler 的反應（震驚和被侵犯感）代表了這種主流文化。而 Joey 來自義大利裔家庭，可能在一個對身體接觸更為開放的環境中長大，因此他認為裁縫的行為「很正常」，這種文化差異製造了巨大的笑料。</p>
-            </div>
-        </section>
-
-        <section id="practice" class="mb-16 scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">小練習，大進步</h2>
-            <div class="content-card">
-                <h3 class="text-xl font-semibold mb-2">情境選擇題</h3>
-                <p class="mb-4">如果你覺得有店家或服務人員的舉動讓你感到不舒服，你比較可能會像誰一樣反應？</p>
-                <ul class="list-disc list-inside space-y-2">
-                    <li>A) 像 Chandler 一樣，覺得自己被佔便宜了，並向朋友抱怨。</li>
-                    <li>B) 像 Joey 一樣，覺得這沒什麼大不了的，也許只是文化不同。</li>
-                </ul>
-                <p class="mt-4 text-sm text-gray-600">（這個問題沒有標準答案，主要是幫助你思考文化和個人界線的問題。）</p>
+                <h2 class="section-title">4. 語法</h2>
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">文法焦點一：片語動詞 (Phrasal Verbs) - 口語對話的靈魂</h3>
+                    <p class="text-lg leading-relaxed mb-4">片語動詞是「動詞 + 介詞/副詞」的組合，會產生一個全新的意思，例如 `give` (給) 變成 `give up` (放棄)。它們是英語母語人士在日常對話中用得最頻繁的元素之一，學會使用它們，你的英文聽起來會立刻變得非常道地。</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <p class="mb-2"><strong>本集範例：</strong> <code>get off</code> (下來)</p>
+                        <p class="font-mono text-gray-700">`...a guy who's <strong>getting off</strong> a plane from China.`</p>
+                        <p class="mt-2"><strong>用法：</strong> 用於從大型交通工具（飛機、公車、火車）上下來。</p>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-2xl font-semibold mb-4">文法焦點二：現在完成式 (Present Perfect) - 連接過去與現在的橋樑</h3>
+                    <p class="text-lg leading-relaxed mb-4">現在完成式 (`have/has + 過去分詞`) 用來描述一個發生在過去，但與「現在」有關聯的動作或狀態。這個關聯可以是動作的結果持續到現在，或是談論過去的「經驗」。</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <p class="mb-2"><strong>本集範例：</strong></p>
+                        <p class="font-mono text-gray-700"><strong>Chandler:</strong> `Oh, my God! I <strong>have never been</strong> this happy.`</p>
+                        <p class="mt-2"><strong>分析：</strong> 錢德說的是「從我出生到現在這一刻為止，我從來沒有這麼開心過」。這是一個從過去延伸到現在的「經驗」，所以用現在完成式。</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="conclusion" class="scroll-mt-20">
-            <h2 class="section-title text-3xl font-bold">結論：笑聲中的文化課</h2>
-            <p class="text-lg leading-relaxed text-gray-700">今天我們透過 Chandler 的「悲慘」經歷，學到了幾個非常實用的片語，像是 `take advantage of`。更重要的是，我們看到了語言背後的文化差異。有時候，誤會並非源於語言不通，而是源於文化背景的不同。希望這堂課能讓你未來在跨文化交流時，多一份理解和觀察！</p>
+        <section id="culture" class="mb-16 scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">5. 文化</h2>
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">文化點一：機場接機的浪漫意涵 (The Romantic Gesture of an Airport Greeting)</h3>
+                    <p class="text-lg leading-relaxed">在劇中，瑞秋盛裝打扮、帶著鮮花去機場迎接羅斯，在90年代的美國文化中，這是一個非常重大的浪漫舉動。這代表著「我迫不及待地想見到你」。正因為這個舉動背後有如此強烈的浪漫期待，當瑞秋看到羅斯牽著另一個女人的手走出來時，那種失落感才會如此強烈。</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">文化點二：「朋友區」的困境 (The Dilemma of the "Friend Zone")</h3>
+                    <p class="text-lg leading-relaxed">羅斯和瑞秋的關係，是「朋友區 (friend zone)」最經典的案例。當兩個人是好朋友，其中一方產生了浪漫的感情，但另一方卻只把對方當成「純朋友」，那麼動了感情的人就被認為是「困在了朋友區」。瑞秋等待得太久，錯過了最佳時機，這正是「朋友區」最常見的悲劇。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">6. 練習</h2>
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">練習一：詞彙配對</h3>
+                    <p>請將左邊的英文片語和右邊的中文意思配對起來。</p>
+                    <ul class="list-decimal list-inside mt-4 space-y-2 text-lg">
+                        <li>get over <span class="text-gray-400">-></span> A. 我們扯平了</li>
+                        <li>on a roll <span class="text-gray-400">-></span> B. 忘記；從...恢復</li>
+                        <li>we're even <span class="text-gray-400">-></span> C. 運氣好；勢頭正旺</li>
+                    </ul>
+                </div>
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">練習二：填空練習</h3>
+                    <p>請用本課學到的詞彙或片語完成以下句子。</p>
+                    <ol class="list-decimal list-inside mt-4 space-y-2 text-lg">
+                        <li>After the long flight, I had terrible ____ ____.</li>
+                        <li>When he saw the spider, he started to ____ ____.</li>
+                        <li>It took her a long time to ____ ____ the breakup.</li>
+                    </ol>
+                </div>
+                 <div>
+                    <h3 class="text-2xl font-semibold mb-4">練習三：理解問答</h3>
+                    <ol class="list-decimal list-inside mt-4 space-y-2 text-lg">
+                        <li>瑞秋去機場時，帶了什麼東西要給羅斯？</li>
+                        <li>羅斯的新女友叫什麼名字？她和羅斯是在哪裡認識的？</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">7. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">恭喜你！你已經完成了《六人行》第二季第一集的深度學習。你已經像一位語言學家一樣，剖析了其中的對話、發音、文法和文化。</p>
+                <div class="mt-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-green-900 mb-2">下一步與鼓勵</h3>
+                    <p class="text-lg leading-relaxed">學習語言最重要的一環就是「重複」與「應用」。我強烈建議你再次觀看本集，先只看英文字幕，再挑戰無字幕觀看。你可能會驚訝地發現，自己比想像中聽懂了更多內容。繼續保持這份熱情，我們下一集學習指南再見！</p>
+                </div>
+            </div>
         </section>
     </main>
-
-    <video id="myVideo" controls style="display:none;"></video>
-
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('myVideo');
-            if (video) {
-                video.src = "25.mp4"; // Default or specified video source
-                video.style.display = 'block';
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
             }
-
-            document.body.addEventListener('click', function (e) {
-                if (e.target && e.target.classList.contains('play-btn')) {
-                    const button = e.target;
-                    const startTimeStr = button.dataset.start;
-                    const endTimeStr = button.dataset.end;
-                    
-                    const parseTime = (timeStr) => {
-                        const parts = timeStr.split(':').map(Number);
-                        if (parts.length === 2) return parts[0] * 60 + parts[1];
-                        return 0;
-                    };
-
-                    const startTime = parseTime(startTimeStr);
-                    const endTime = parseTime(endTimeStr);
-
-                    if (video.paused || video.currentTime < startTime || video.currentTime > endTime) {
-                        video.currentTime = startTime;
-                        video.play();
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
                     }
-
-                    const checkTime = () => {
-                        if (video.currentTime >= endTime) {
-                            video.currentTime = startTime;
-                        } else if (!video.paused) {
-                            requestAnimationFrame(checkTime);
-                        }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    const onSeeked = () => {
+                        video.play();
+                        var loopInterval = setInterval(() => {
+                            if (video.currentTime >= endTime) {
+                                video.currentTime = startTime;
+                            }
+                        }, 200);
+                        video.removeEventListener('seeked', onSeeked);
+                        video.addEventListener('pause', function clearLoop() {
+                            clearInterval(loopInterval);
+                            video.removeEventListener('pause', clearLoop);
+                        });
                     };
-                    video.onplay = () => requestAnimationFrame(checkTime);
+                    video.addEventListener('seeked', onSeeked);
+                    video.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
         });
     </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
 </body>
 </html>
