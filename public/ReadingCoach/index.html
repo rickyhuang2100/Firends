@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Coatch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* 標題區域 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        /* 工具列 */
+        .toolbar {
+            padding: 20px 30px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* 搜尋框 */
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        /* 按鈕 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dee2e6;
+        }
+
+        /* 統計資訊 */
+        .stats {
+            padding: 15px 30px;
+            background-color: #fff3cd;
+            border-bottom: 1px solid #ffc107;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        /* 樹狀結構區域 */
+        .tree-container {
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .tree-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .tree-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .tree-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .tree-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* 樹狀結構 */
+        .tree {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tree ul {
+            list-style: none;
+            padding-left: 30px;
+            margin-top: 5px;
+        }
+
+        .tree li {
+            margin: 3px 0;
+            position: relative;
+        }
+
+        /* 樹狀連接線 */
+        .tree ul::before {
+            content: "";
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e0e0e0;
+        }
+
+        .tree li::before {
+            content: "";
+            position: absolute;
+            left: -18px;
+            top: 20px;
+            width: 18px;
+            height: 2px;
+            background-color: #e0e0e0;
+        }
+
+        /* 項目樣式 */
+        .tree-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tree-item:hover {
+            background-color: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .tree-item.highlight {
+            background-color: #fff3cd;
+            animation: pulse 1s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* 展開/收合按鈕 */
+        .toggle {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 12px;
+            color: #666;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .toggle:hover {
+            background-color: #e9ecef;
+            color: #667eea;
+        }
+
+        .toggle.expanded::before {
+            content: "▼";
+        }
+
+        .toggle.collapsed::before {
+            content: "▶";
+        }
+
+        .no-children .toggle {
+            visibility: hidden;
+        }
+
+        /* 圖示 */
+        .icon {
+            margin-right: 10px;
+            font-size: 20px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .icon-folder {
+            color: #FFA500;
+        }
+
+        .icon-file {
+            color: #4CAF50;
+        }
+
+        .icon-link {
+            color: #2196F3;
+        }
+
+        /* 項目文字和連結 */
+        .item-label {
+            flex: 1;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .tree a {
+            text-decoration: none;
+            color: #333;
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .tree a:hover {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        /* 徽章（顯示項目數量） */
+        .badge {
+            background-color: #667eea;
+            color: white;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        /* 隱藏狀態 */
+        .tree ul.collapsed {
+            display: none;
+        }
+
+        .tree li.hidden {
+            display: none;
+        }
+
+        /* 空狀態 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* 搜尋結果高亮 */
+        .search-highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 標題 -->
+        <div class="header">
+            <h1>📚 課程教材目錄</h1>
+            <p>線上學習資源導覽系統</p>
+        </div>
+
+        <!-- 工具列 -->
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 搜尋課程或教材..." />
+                <span class="search-icon">⌕</span>
+            </div>
+            <button class="btn btn-primary" onclick="expandAll()">展開全部</button>
+            <button class="btn btn-secondary" onclick="collapseAll()">收合全部</button>
+            <button class="btn btn-secondary" onclick="clearSearch()">清除搜尋</button>
+        </div>
+
+        <!-- 統計資訊 -->
+        <div class="stats">
+            <span>📊 總計: <strong id="totalItems">0</strong> 個項目</span>
+            <span id="searchStats" style="display: none;">🔍 找到 <strong id="searchCount">0</strong> 個結果</span>
+        </div>
+
+        <!-- 樹狀結構 -->
+        <div class="tree-container">
+            <ul class="tree" id="mainTree">
+                <!-- 英語學習 -->
+                <li data-path="english">
+                    <div class="tree-item">
+                        <span class="toggle expanded"></span>
+                        <span class="icon icon-folder">📁</span>
+                        <span class="item-label">英語學習</span>
+                        <span class="badge"></span>
+                    </div>
+                    <ul>
+                        <li data-path="english-beginner">
+                            <div class="tree-item">
+                                <span class="toggle expanded"></span>
+                                <span class="icon icon-folder">📂</span>
+                                <span class="item-label">等級1</span>
+                                <span class="badge"></span>
+                            </div>
+                            <ul>
+                                <li class="no-children" data-path="lv1_1">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="1_1.html">1 - Cloudy and Sunny</a>
+                                    </div>
+                                </li>
+                                <li class="no-children" data-path="lv1_2">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="1-2.html">2 - At the Park</a>
+                                    </div>
+                                </li>
+                                <li class="no-children" data-path="lv1_3">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="1_3.html">3 - My Family</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li data-path="english-intermediate">
+                            <div class="tree-item">
+                                <span class="toggle collapsed"></span>
+                                <span class="icon icon-folder">📂</span>
+                                <span class="item-label">等級2</span>
+                                <span class="badge">2</span>
+                            </div>
+                            <ul class="collapsed">
+                                <li class="no-children" data-path="lv2_1">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="lesson4.html">Lesson 4 - Daily Routines</a>
+                                    </div>
+                                </li>
+                                <li class="no-children" data-path="lv2_2">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="lesson5.html">Lesson 5 - Shopping</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li data-path="english-advanced">
+                            <div class="tree-item">
+                                <span class="toggle collapsed"></span>
+                                <span class="icon icon-folder">📂</span>
+                                <span class="item-label">等級3</span>
+                                <span class="badge">2</span>
+                            </div>
+                            <ul class="collapsed">
+                                <li class="no-children" data-path="lv3_1">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="lesson6.html">Lesson 6 - Business English</a>
+                                    </div>
+                                </li>
+                                <li class="no-children" data-path="lv3_2">
+                                    <div class="tree-item">
+                                        <span class="toggle"></span>
+                                        <span class="icon icon-file">📄</span>
+                                        <a href="lesson7.html">Lesson 7 - Academic Writing</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+
+            <!-- 空狀態（搜尋無結果時顯示） -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="icon">🔍</div>
+                <h3>找不到相關內容</h3>
+                <p>請嘗試其他關鍵字</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 全域變數 ====================
+        const STORAGE_KEY = 'treeExpandedState';
+        let allTreeItems = [];
+        let searchTimeout = null;
+
+        // ==================== 初始化 ====================
+        function init() {
+            // 收集所有樹狀項目
+            collectTreeItems();
+            
+            // 載入儲存的展開狀態
+            loadExpandedState();
+            
+            // 設定事件監聽
+            setupEventListeners();
+            
+            // 更新統計
+            updateStats();
+        }
+
+        // 收集所有樹狀項目
+        function collectTreeItems() {
+            const items = document.querySelectorAll('.tree li');
+            allTreeItems = Array.from(items).map(item => ({
+                element: item,
+                path: item.getAttribute('data-path'),
+                text: item.textContent.toLowerCase()
+            }));
+        }
+
+        // ==================== 展開/收合功能 ====================
+        function setupEventListeners() {
+            // 展開/收合按鈕
+            const toggleButtons = document.querySelectorAll('.toggle');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleNode(this);
+                });
+            });
+
+            // 點擊項目名稱展開/收合
+            const treeItems = document.querySelectorAll('.tree-item');
+            treeItems.forEach(item => {
+                const parentLi = item.closest('li');
+                const hasChildren = parentLi.querySelector(':scope > ul');
+                
+                if (hasChildren && !parentLi.classList.contains('no-children')) {
+                    item.addEventListener('click', function(e) {
+                        if (e.target.tagName === 'A') return;
+                        const toggle = this.querySelector('.toggle');
+                        if (toggle) toggleNode(toggle);
+                    });
+                }
+            });
+
+            // 搜尋功能
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performSearch(this.value);
+                }, 300);
+            });
+        }
+
+        function toggleNode(toggleButton) {
+            const parentLi = toggleButton.closest('li');
+            const childUl = parentLi.querySelector(':scope > ul');
+            
+            if (childUl) {
+                childUl.classList.toggle('collapsed');
+                toggleButton.classList.toggle('expanded');
+                toggleButton.classList.toggle('collapsed');
+                
+                // 儲存展開狀態
+                saveExpandedState();
+            }
+        }
+
+        // ==================== 展開/收合全部 ====================
+        function expandAll() {
+            document.querySelectorAll('.tree ul').forEach(ul => {
+                ul.classList.remove('collapsed');
+            });
+            document.querySelectorAll('.toggle').forEach(toggle => {
+                toggle.classList.remove('collapsed');
+                toggle.classList.add('expanded');
+            });
+            saveExpandedState();
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('.tree ul').forEach(ul => {
+                ul.classList.add('collapsed');
+            });
+            document.querySelectorAll('.toggle').forEach(toggle => {
+                toggle.classList.remove('expanded');
+                toggle.classList.add('collapsed');
+            });
+            saveExpandedState();
+        }
+
+        // ==================== 搜尋功能 ====================
+        function performSearch(keyword) {
+            const trimmedKeyword = keyword.trim().toLowerCase();
+            
+            if (!trimmedKeyword) {
+                clearSearch();
+                return;
+            }
+
+            let matchCount = 0;
+            const mainTree = document.getElementById('mainTree');
+            const emptyState = document.getElementById('emptyState');
+
+            // 隱藏所有項目
+            allTreeItems.forEach(item => {
+                item.element.classList.add('hidden');
+            });
+
+            // 顯示符合的項目及其父項目
+            allTreeItems.forEach(item => {
+                if (item.text.includes(trimmedKeyword)) {
+                    matchCount++;
+                    
+                    // 顯示該項目
+                    item.element.classList.remove('hidden');
+                    item.element.classList.add('highlight');
+                    
+                    // 顯示並展開所有父項目
+                    let parent = item.element.parentElement;
+                    while (parent && parent !== mainTree) {
+                        if (parent.tagName === 'UL') {
+                            parent.classList.remove('collapsed');
+                        }
+                        if (parent.tagName === 'LI') {
+                            parent.classList.remove('hidden');
+                            const toggle = parent.querySelector(':scope > .tree-item > .toggle');
+                            if (toggle) {
+                                toggle.classList.remove('collapsed');
+                                toggle.classList.add('expanded');
+                            }
+                        }
+                        parent = parent.parentElement;
+                    }
+                }
+            });
+
+            // 更新搜尋統計
+            document.getElementById('searchCount').textContent = matchCount;
+            document.getElementById('searchStats').style.display = 'block';
+
+            // 顯示空狀態
+            if (matchCount === 0) {
+                mainTree.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                mainTree.style.display = 'block';
+                emptyState.style.display = 'none';
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchStats').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('mainTree').style.display = 'block';
+            
+            allTreeItems.forEach(item => {
+                item.element.classList.remove('hidden', 'highlight');
+            });
+
+            // 恢復儲存的展開狀態
+            loadExpandedState();
+        }
+
+        // ==================== 記住展開狀態 ====================
+        function saveExpandedState() {
+            const expandedPaths = [];
+            
+            document.querySelectorAll('.tree li').forEach(li => {
+                const path = li.getAttribute('data-path');
+                const ul = li.querySelector(':scope > ul');
+                
+                if (path && ul && !ul.classList.contains('collapsed')) {
+                    expandedPaths.push(path);
+                }
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(expandedPaths));
+        }
+
+        function loadExpandedState() {
+            const savedState = localStorage.getItem(STORAGE_KEY);
+            
+            if (!savedState) return;
+
+            const expandedPaths = JSON.parse(savedState);
+            
+            // 先全部收合
+            document.querySelectorAll('.tree ul').forEach(ul => {
+                ul.classList.add('collapsed');
+            });
+            document.querySelectorAll('.toggle').forEach(toggle => {
+                toggle.classList.remove('expanded');
+                toggle.classList.add('collapsed');
+            });
+
+            // 展開儲存的項目
+            expandedPaths.forEach(path => {
+                const li = document.querySelector(`li[data-path="${path}"]`);
+                if (li) {
+                    const ul = li.querySelector(':scope > ul');
+                    const toggle = li.querySelector(':scope > .tree-item > .toggle');
+                    
+                    if (ul) ul.classList.remove('collapsed');
+                    if (toggle) {
+                        toggle.classList.remove('collapsed');
+                        toggle.classList.add('expanded');
+                    }
+                }
+            });
+        }
+
+        // ==================== 統計 ====================
+        function updateStats() {
+            const totalItems = document.querySelectorAll('.tree a, .tree .item-label').length;
+            document.getElementById('totalItems').textContent = totalItems;
+        }
+
+        // ==================== 頁面載入時執行 ====================
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

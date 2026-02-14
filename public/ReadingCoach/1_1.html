@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Cloudy and Sunny</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+        .word.completed {
+            color: #999;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-stop {
+            background-color: #f44336;
+        }
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .setting-item {
+            margin: 10px 0;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+        select, input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Cloudy and Sunny</h1>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+
+
+        <!-- 學習資訊分頁 -->
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 單字分頁 -->
+            <div id="vocabulary" class="tab-content active">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">cloudy</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">多雲的、陰天的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sunny</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">晴朗的、陽光充足的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">tag</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">鬼抓人遊戲 (play tag = 玩鬼抓人)</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">warm</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">溫暖的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">shade</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">陰影、樹蔭</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">cool off</div>
+                        <div class="vocab-type">[片語動詞]</div>
+                        <div class="vocab-meaning">涼快下來、消暑</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">take a break</div>
+                        <div class="vocab-type">[片語]</div>
+                        <div class="vocab-meaning">休息一下</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">wave</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">揮手</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 文法分頁 -->
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 過去簡單式 (Past Simple Tense)</div>
+                    <p>本文主要使用過去簡單式來敘述已經發生的事情：</p>
+                    <div class="example">
+                        ✓ It <span class="highlight">was</span> cloudy. (be 動詞過去式)<br>
+                        ✓ Maria and her friends <span class="highlight">went</span> outside. (go 的過去式)<br>
+                        ✓ They <span class="highlight">played</span> tag. (規則動詞加 -ed)<br>
+                        ✓ The sun <span class="highlight">came</span> out. (come 的過去式)
+                    </div>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">2. 比較級 (Comparative)</div>
+                    <p>warmer and warmer 表示「越來越溫暖」：</p>
+                    <div class="example">
+                        The air got <span class="highlight">warmer and warmer</span>.<br>
+                        → 使用「比較級 + and + 比較級」表示程度逐漸增加
+                    </div>
+                    <p><strong>形容詞變化規則：</strong></p>
+                    <ul>
+                        <li>warm → warmer (單音節加 -er)</li>
+                        <li>cool → cooler</li>
+                    </ul>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">3. 形容詞 "It was..." 句型</div>
+                    <p>用來描述天氣或環境狀況：</p>
+                    <div class="example">
+                        ✓ It was <span class="highlight">cloudy</span>. (天氣多雲)<br>
+                        ✓ It was <span class="highlight">cooler</span> in the shade. (陰涼處比較涼爽)
+                    </div>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">4. 連接詞 "Then" 的使用</div>
+                    <p>用來表示時間順序，「然後」的意思：</p>
+                    <div class="example">
+                        They played tag. <span class="highlight">Then</span> the sun came out.<br>
+                        → 先玩遊戲，然後太陽出來了
+                    </div>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">5. 感官動詞 "felt"</div>
+                    <p>feel 的過去式，表示感覺：</p>
+                    <div class="example">
+                        The sun <span class="highlight">felt</span> warm. (太陽感覺溫暖)<br>
+                        Maria <span class="highlight">felt</span> very warm. (Maria 覺得很熱)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 句型分頁 -->
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                
+                <div class="sentence-pattern">
+                    <strong>句型 1: 主詞 + went + 地點</strong>
+                    <div class="example">
+                        Maria and her friends <span class="highlight">went outside</span>.<br>
+                        → 表示「去某地」
+                    </div>
+                </div>
+
+                <div class="sentence-pattern">
+                    <strong>句型 2: 主詞 + played + 遊戲/運動</strong>
+                    <div class="example">
+                        They <span class="highlight">played tag</span>.<br>
+                        → play 後面接遊戲或運動名稱
+                    </div>
+                    <p>類似用法：play basketball, play soccer, play hide-and-seek</p>
+                </div>
+
+                <div class="sentence-pattern">
+                    <strong>句型 3: 主詞 + needed to + 動詞原形</strong>
+                    <div class="example">
+                        She <span class="highlight">needed to take a break</span>.<br>
+                        → 表示「需要做某事」
+                    </div>
+                </div>
+
+                <div class="sentence-pattern">
+                    <strong>句型 4: 主詞 + sat down + 地點</strong>
+                    <div class="example">
+                        She <span class="highlight">sat down under a tree</span>.<br>
+                        → sit down 是「坐下」的意思
+                    </div>
+                </div>
+
+                <div class="sentence-pattern">
+                    <strong>句型 5: 祈使句 (命令句)</strong>
+                    <div class="example">
+                        <span class="highlight">Cool off</span> with me in the shade!<br>
+                        → 以動詞原形開頭，表示建議或邀請
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 直接引語 (Direct Speech)</strong>
+                    <p>文中使用引號表示人物說的話：</p>
+                    <div class="example">
+                        "Cool off with me in the shade!" <span class="highlight">said Maria</span>.
+                    </div>
+                    <p>注意：said 在引號之後，這是英文常見的引述方式。</p>
+                </div>
+            </div>
+
+            <!-- 閱讀技巧分頁 -->
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                
+                <div class="info-box">
+                    <strong>故事結構分析</strong>
+                    <p><strong>開頭 (Beginning)：</strong> 設定場景 - 早上天氣多雲</p>
+                    <p><strong>發展 (Development)：</strong> Maria 和朋友在外面玩，太陽出來，天氣變熱</p>
+                    <p><strong>轉折 (Problem)：</strong> Maria 覺得太熱，需要休息</p>
+                    <p><strong>解決 (Solution)：</strong> 她在樹蔭下休息並邀請朋友一起來乘涼</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>主題理解</strong>
+                    <ul>
+                        <li><strong>主要主題：</strong>天氣變化與反應</li>
+                        <li><strong>次要主題：</strong>友誼、分享、照顧自己</li>
+                        <li><strong>情緒轉變：</strong>開心玩耍 → 感到炎熱 → 找到解決方法 → 微笑邀請朋友</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <strong>時間順序標記詞</strong>
+                    <ul>
+                        <li><span class="highlight">This morning</span> - 今天早上</li>
+                        <li><span class="highlight">Then</span> - 然後</li>
+                        <li>故事按照時間順序發展，容易理解</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <strong>天氣相關詞彙總結</strong>
+                    <ul>
+                        <li>cloudy (多雲) ↔ sunny (晴天)</li>
+                        <li>warm (溫暖) ↔ cool (涼爽)</li>
+                        <li>sun (太陽) - shade (陰影)</li>
+                    </ul>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗問題</div>
+                    <ol>
+                        <li>What was the weather like this morning? (今天早上天氣如何？)</li>
+                        <li>What game did Maria and her friends play? (Maria 和朋友玩什麼遊戲？)</li>
+                        <li>Why did Maria need to take a break? (為什麼 Maria 需要休息？)</li>
+                        <li>Where did Maria sit down? (Maria 坐在哪裡？)</li>
+                        <li>What did Maria say to her friends? (Maria 對朋友說了什麼？)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+                <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item">
+                <label>語音:</label>
+                <select id="voiceSelect"></select>
+            </div>
+            <div class="setting-item">
+                <label>速度:</label>
+                <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" />
+                <span class="value-display" id="rateValue">1.0</span>
+            </div>
+            <div class="setting-item">
+                <label>音調:</label>
+                <input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" />
+                <span class="value-display" id="pitchValue">1.0</span>
+            </div>
+            <div class="setting-item">
+                <label>音量:</label>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" />
+                <span class="value-display" id="volumeValue">1.0</span>
+            </div>
+            <div class="setting-item">
+                <label>同步調整:</label>
+                <input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" />
+                <span class="value-display" id="timingValue">1.5</span>
+                <span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5; // 時間調整係數，預設 1.5 讓高亮快一點
+        
+        const storyText = `Cloudy and Sunny
+
+This morning it was cloudy. Maria and her friends went outside. They played tag. Then the sun came out. The sun felt warm. The air got warmer and warmer. Maria felt very warm. She needed to take a break. She sat down under a tree. It was cooler in the shade. Maria smiled. She waved to her friends. "Cool off with me in the shade!" said Maria.`;
+
+        // 初始化文字
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
+            
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') {
+                    container.appendChild(document.createElement('br'));
+                    return;
+                }
+                
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+                        
+                        // 單字之間加空格
+                        if (wordIndex < words.length - 1) {
+                            container.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+                
+                // 行尾換行
+                if (lineIndex < lines.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+            
+            console.log('初始化完成，總單字數:', wordElements.length);
+        }
+
+        // 載入語音
+        function loadVoices() {
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+                
+                if (voice.lang.startsWith('zh-TW')) {
+                    select.selectedIndex = i;
+                }
+            });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        // 滑桿更新
+        document.getElementById('rateSlider').oninput = function() {
+            document.getElementById('rateValue').textContent = this.value;
+        };
+        document.getElementById('pitchSlider').oninput = function() {
+            document.getElementById('pitchValue').textContent = this.value;
+        };
+        document.getElementById('volumeSlider').oninput = function() {
+            document.getElementById('volumeValue').textContent = this.value;
+        };
+        document.getElementById('timingSlider').oninput = function() {
+            timingAdjustment = parseFloat(this.value);
+            document.getElementById('timingValue').textContent = this.value;
+        };
+
+        // 高亮單字
+        function highlightWord(index) {
+            // 只允許往前或保持，不允許往回
+            if (index < currentIndex) {
+                console.log('忽略往回的高亮請求:', index, '當前:', currentIndex);
+                return;
+            }
+            
+            currentIndex = index;
+            
+            // 清除所有樣式
+            wordElements.forEach((word, i) => {
+                word.classList.remove('active', 'completed');
+                if (i < index) {
+                    word.classList.add('completed');
+                }
+            });
+            
+            // 高亮當前單字
+            if (index < wordElements.length) {
+                wordElements[index].classList.add('active');
+                console.log('高亮:', index, wordElements[index].textContent);
+            }
+        }
+
+        // 朗讀
+        function speakText() {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            
+            // 重置
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+            
+            const utterance = new SpeechSynthesisUtterance(storyText);
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            if (voices[voiceIndex]) {
+                utterance.voice = voices[voiceIndex];
+            }
+            utterance.rate = parseFloat(document.getElementById('rateSlider').value);
+            utterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            utterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            
+            let boundarySupported = false;
+            let boundaryWordIndex = 0;
+            
+            // 嘗試使用 boundary 事件（更精確）
+            utterance.addEventListener('boundary', (event) => {
+                if (event.name === 'word') {
+                    boundarySupported = true;
+                    
+                    // 計算當前朗讀到第幾個單字
+                    const textBeforeWord = storyText.substring(0, event.charIndex);
+                    // 移除多餘的空白和換行，計算單字數
+                    const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0);
+                    const wordIndex = wordsBefore.length;
+                    
+                    if (wordIndex < wordElements.length) {
+                        highlightWord(wordIndex);
+                        console.log('Boundary 事件 - 高亮單字:', wordIndex, wordElements[wordIndex]?.textContent);
+                    }
+                }
+            });
+            
+            utterance.onend = function() {
+                if (highlightTimer) clearInterval(highlightTimer);
+                setTimeout(() => {
+                    wordElements.forEach(w => w.classList.remove('active', 'completed'));
+                }, 500);
+                console.log('朗讀完成');
+            };
+            
+            synth.speak(utterance);
+            
+            // 備用方案：如果 boundary 不支援，使用定時器
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    console.log('使用定時器備用方案，調整係數:', timingAdjustment);
+                    const rate = utterance.rate;
+                    // 基礎時間計算
+                    const baseMs = 60000 / (150 * rate);
+                    // 套用調整係數
+                    const msPerWord = baseMs * timingAdjustment;
+                    
+                    console.log('每個單字間隔:', msPerWord.toFixed(0), 'ms');
+                    
+                    // 立即高亮第一個單字
+                    currentIndex = 0;
+                    highlightWord(0);
+                    
+                    let nextWordIndex = 1;
+                    
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) {
+                            // 只有當 nextWordIndex 大於等於 currentIndex 時才更新
+                            // 這樣可以避免往回跑
+                            if (nextWordIndex >= currentIndex) {
+                                highlightWord(nextWordIndex);
+                            }
+                            nextWordIndex++;
+                        } else {
+                            clearInterval(highlightTimer);
+                        }
+                    }, msPerWord);
+                }
+            }, 300);
+        }
+
+        // 停止
+        function stopSpeaking() {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        // 分頁切換
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 頁面載入時初始化
+        window.onload = initText;
+    </script>
+</body>
+</html>
