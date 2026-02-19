@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Stop Signs Are for Safety</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; }
+        h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; }
+        .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; }
+        .btn:hover { background-color: #45a049; }
+        .btn-stop { background-color: #f44336; }
+        .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; }
+        .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; }
+        select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; }
+        .vocab-type { color: #666; font-style: italic; font-size: 14px; }
+        .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; }
+        .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Stop Signs Are for Safety</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 中文翻譯分頁 -->
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">停止標誌是為了安全</h4>
+                    <p style="line-height: 2; font-size: 16px;">
+                        停止標誌是紅色的標誌。它們有八個邊。上面寫著「STOP」。你可能在街上注意過停止標誌。你知道為什麼我們要使用停止標誌嗎？停止標誌幫助人們保持安全。當兩條路交會時，車子必須停下來。如果他們不停下來，可能會很危險。車子可能會互相撞上。駕駛看到停止標誌就停下來。然後他們輪流通行。只要每個人都遵守規則，道路就是安全的！
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Stop signs are red signs. They have eight sides. They have the word stop on them.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>停止標誌是紅色的標誌。它們有八個邊。上面寫著「STOP」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">You may have noticed stop signs on the street. Do you know why we use stop signs?</td>
+                            <td style="padding: 10px; vertical-align: top;">你可能在街上注意過停止標誌。你知道為什麼我們要使用停止標誌嗎？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Stop signs help people stay safe. When two roads come together, cars must stop.</td>
+                            <td style="padding: 10px; vertical-align: top;">停止標誌幫助人們保持安全。當兩條路交會時，車子必須停下來。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">It can be dangerous if they do not stop. Cars can crash into each other.</td>
+                            <td style="padding: 10px; vertical-align: top;">如果他們不停下來，可能會很危險。車子可能會互相撞上。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; vertical-align: top;">Drivers stop when they come to stop signs. Then they wait their turn. As long as everyone follows the rules, the road is safe!</td>
+                            <td style="padding: 10px; vertical-align: top;">駕駛看到停止標誌就停下來。然後他們輪流通行。只要每個人都遵守規則，道路就是安全的！</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">stop sign</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">停止標誌（八角形的紅色交通標誌）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">safety</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">安全</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dangerous</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">危險的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">crash</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">撞擊、碰撞</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">noticed</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">注意到（notice 的過去式）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">follow the rules</div>
+                        <div class="vocab-type">[片語]</div>
+                        <div class="vocab-meaning">遵守規則</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 現在簡單式 - 描述事實</div>
+                    <p>用來描述普遍的事實或常規：</p>
+                    <div class="example">
+                        ✓ Stop signs <span class="highlight">are</span> red signs.<br>
+                        ✓ They <span class="highlight">have</span> eight sides.<br>
+                        ✓ Stop signs <span class="highlight">help</span> people stay safe.
+                    </div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. 條件句 - "if" 的用法</div>
+                    <p>用 "if" 表示「如果」的條件：</p>
+                    <div class="example">
+                        It can be dangerous <span class="highlight">if</span> they do not stop.<br>
+                        → 如果他們不停下來，就會很危險
+                    </div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "As long as" 的用法</div>
+                    <p>表示「只要」的條件：</p>
+                    <div class="example">
+                        <span class="highlight">As long as</span> everyone follows the rules, the road is safe!<br>
+                        → 只要每個人都遵守規則，道路就是安全的
+                    </div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">4. 疑問句 "Do you know why...?"</div>
+                    <p>用來問原因的疑問句：</p>
+                    <div class="example">
+                        <span class="highlight">Do you know why</span> we use stop signs?<br>
+                        → 你知道為什麼我們使用停止標誌嗎？
+                    </div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>句型 1: You may have + 過去分詞</strong>
+                    <div class="example">
+                        <span class="highlight">You may have noticed</span> stop signs on the street.<br>
+                        → 表示「你可能已經注意到了」
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>句型 2: When + 子句, 主句</strong>
+                    <div class="example">
+                        <span class="highlight">When</span> two roads come together, cars must stop.<br>
+                        → 用 "when" 引導時間子句
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>句型 3: 主詞 + can + 動詞原形</strong>
+                    <div class="example">
+                        Cars <span class="highlight">can crash</span> into each other.<br>
+                        → "can" 表示可能性
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>句型 4: Then + 主詞 + 動詞</strong>
+                    <div class="example">
+                        <span class="highlight">Then</span> they wait their turn.<br>
+                        → "Then" 表示接下來的動作
+                    </div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                <div class="info-box">
+                    <strong>文章結構分析（說明文）</strong>
+                    <p><strong>介紹 (Introduction)：</strong> 描述停止標誌的外觀特徵</p>
+                    <p><strong>目的 (Purpose)：</strong> 解釋為什麼需要停止標誌</p>
+                    <p><strong>結論 (Conclusion)：</strong> 遵守規則就能保持道路安全</p>
+                </div>
+                <div class="info-box">
+                    <strong>交通安全知識</strong>
+                    <ul>
+                        <li><strong>停止標誌：</strong>紅色、八邊形、上面寫著 STOP</li>
+                        <li><strong>功能：</strong>在兩條路交會處讓車輛停下來</li>
+                        <li><strong>重要性：</strong>防止車輛相撞</li>
+                    </ul>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗問題</div>
+                    <ol>
+                        <li>What color are stop signs? (停止標誌是什麼顏色？)</li>
+                        <li>How many sides does a stop sign have? (停止標誌有幾個邊？)</li>
+                        <li>Why do we use stop signs? (我們為什麼使用停止標誌？)</li>
+                        <li>What happens if cars do not stop? (如果車不停下來會發生什麼？)</li>
+                        <li>What do drivers do when they see a stop sign? (駕駛看到停止標誌時要做什麼？)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5;
+        
+        const storyText = `Stop Signs Are for Safety
+
+Stop signs are red signs. They have eight sides. They have the word stop on them. You may have noticed stop signs on the street. Do you know why we use stop signs?
+
+Stop signs help people stay safe. When two roads come together, cars must stop. It can be dangerous if they do not stop. Cars can crash into each other.
+
+Drivers stop when they come to stop signs. Then they wait their turn. As long as everyone follows the rules, the road is safe!`;
+
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') { container.appendChild(document.createElement('br')); return; }
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+                        if (wordIndex < words.length - 1) container.appendChild(document.createTextNode(' '));
+                    }
+                });
+                if (lineIndex < lines.length - 1) container.appendChild(document.createElement('br'));
+            });
+        }
+
+        function loadVoices() {
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+                if (voice.lang.startsWith('zh-TW')) select.selectedIndex = i;
+            });
+        }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+
+        function highlightWord(index) {
+            if (index < currentIndex) return;
+            currentIndex = index;
+            wordElements.forEach((word, i) => { word.classList.remove('active', 'completed'); if (i < index) word.classList.add('completed'); });
+            if (index < wordElements.length) wordElements[index].classList.add('active');
+        }
+
+        function speakText() {
+            if (synth.speaking) synth.cancel();
+            if (highlightTimer) clearInterval(highlightTimer);
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+            const utterance = new SpeechSynthesisUtterance(storyText);
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            if (voices[voiceIndex]) utterance.voice = voices[voiceIndex];
+            utterance.rate = parseFloat(document.getElementById('rateSlider').value);
+            utterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            utterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            let boundarySupported = false;
+            utterance.addEventListener('boundary', (event) => {
+                if (event.name === 'word') {
+                    boundarySupported = true;
+                    const textBeforeWord = storyText.substring(0, event.charIndex);
+                    const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0);
+                    if (wordsBefore.length < wordElements.length) highlightWord(wordsBefore.length);
+                }
+            });
+            utterance.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); };
+            synth.speak(utterance);
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    const rate = utterance.rate;
+                    const msPerWord = (60000 / (150 * rate)) * timingAdjustment;
+                    currentIndex = 0; highlightWord(0);
+                    let nextWordIndex = 1;
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) { if (nextWordIndex >= currentIndex) highlightWord(nextWordIndex); nextWordIndex++; }
+                        else clearInterval(highlightTimer);
+                    }, msPerWord);
+                }
+            }, 300);
+        }
+
+        function stopSpeaking() {
+            if (synth.speaking) synth.cancel();
+            if (highlightTimer) clearInterval(highlightTimer);
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        window.onload = initText;
+    </script>
+</body>
+</html>

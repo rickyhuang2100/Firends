@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Kai's Life in Hawaii</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; } .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; } .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; } .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; } .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; } .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; } .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Kai's Life in Hawaii</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 中文翻譯分頁 -->
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                
+                <div class="info-box">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">Kai 在夏威夷的生活</h4>
+                    <p style="line-height: 2; font-size: 16px;">
+                        Kai 住在夏威夷。夏威夷是美國的一部分。夏威夷由島嶼組成。夏威夷是一個溫暖的居住地方。這是 Kai 一天的生活。Kai 很早起床。他吃穀物早餐和木瓜。木瓜是一種水果。它是橘色的而且很甜。然後 Kai 去上學。他喜歡學很多新東西。午餐時，開始下雨了。雨下了一小段時間。然後太陽又出來了。然後 Kai 去海灘。他遇到他的朋友們。他們用衝浪板乘風破浪。然後他們回家。他們晚餐吃魚和飯。晚餐後，Kai 準備上床睡覺。
+                    </p>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;">
+                                <strong style="color: #4CAF50;">English:</strong><br>
+                                Kai lives in Hawaii.
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;">
+                                <strong style="color: #2196F3;">中文:</strong><br>
+                                Kai 住在夏威夷。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Hawaii is part of the United States.</td>
+                            <td style="padding: 10px; vertical-align: top;">夏威夷是美國的一部分。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Hawaii is made up of islands.</td>
+                            <td style="padding: 10px; vertical-align: top;">夏威夷由島嶼組成。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Hawaii is a warm place to live.</td>
+                            <td style="padding: 10px; vertical-align: top;">夏威夷是一個溫暖的居住地方。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Here is a day in Kai's life.</td>
+                            <td style="padding: 10px; vertical-align: top;">這是 Kai 一天的生活。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Kai wakes up early.</td>
+                            <td style="padding: 10px; vertical-align: top;">Kai 很早起床。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">He eats cereal and papaya.</td>
+                            <td style="padding: 10px; vertical-align: top;">他吃穀物早餐和木瓜。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Papaya is a fruit. It is orange and sweet.</td>
+                            <td style="padding: 10px; vertical-align: top;">木瓜是一種水果。它是橘色的而且很甜。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Then Kai goes to school.</td>
+                            <td style="padding: 10px; vertical-align: top;">然後 Kai 去上學。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">He likes to learn many new things.</td>
+                            <td style="padding: 10px; vertical-align: top;">他喜歡學很多新東西。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">At lunch, it starts to rain. It rains for a short time.</td>
+                            <td style="padding: 10px; vertical-align: top;">午餐時，開始下雨了。雨下了一小段時間。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Then the sun comes back out.</td>
+                            <td style="padding: 10px; vertical-align: top;">然後太陽又出來了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Then Kai goes to the beach. He meets his friends.</td>
+                            <td style="padding: 10px; vertical-align: top;">然後 Kai 去海灘。他遇到他的朋友們。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">They use surfboards to ride the waves.</td>
+                            <td style="padding: 10px; vertical-align: top;">他們用衝浪板乘風破浪。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Then they go home. They eat fish and rice for dinner.</td>
+                            <td style="padding: 10px; vertical-align: top;">然後他們回家。他們晚餐吃魚和飯。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; vertical-align: top;">After dinner, Kai gets ready for bed.</td>
+                            <td style="padding: 10px; vertical-align: top;">晚餐後，Kai 準備上床睡覺。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">Hawaii</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">夏威夷</div></div>
+                    <div class="vocab-item"><div class="vocab-word">islands</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">島嶼</div></div>
+                    <div class="vocab-item"><div class="vocab-word">cereal</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">穀物早餐</div></div>
+                    <div class="vocab-item"><div class="vocab-word">papaya</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">木瓜</div></div>
+                    <div class="vocab-item"><div class="vocab-word">surfboards</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">衝浪板</div></div>
+                    <div class="vocab-item"><div class="vocab-word">waves</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">海浪</div></div>
+                    <div class="vocab-item"><div class="vocab-word">beach</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">海灘</div></div>
+                    <div class="vocab-item"><div class="vocab-word">wakes up</div><div class="vocab-type">[片語]</div><div class="vocab-meaning">醒來</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 現在簡單式描述日常習慣</div>
+                    <div class="example">Kai <span class="highlight">wakes up</span> early. He <span class="highlight">eats</span> cereal. Kai <span class="highlight">goes</span> to school.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "is made up of"</div>
+                    <div class="example">Hawaii <span class="highlight">is made up of</span> islands. → 由……組成</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "Then" 時間順序</div>
+                    <div class="example"><span class="highlight">Then</span> Kai goes to school. <span class="highlight">Then</span> Kai goes to the beach.</div>
+                </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern"><strong>句型: a + 形容詞 + place to + 動詞</strong><div class="example">Hawaii is <span class="highlight">a warm place to live</span>.</div></div>
+                <div class="sentence-pattern"><strong>句型: use + 工具 + to + 動作</strong><div class="example">They <span class="highlight">use surfboards to ride</span> the waves.</div></div>
+                <div class="sentence-pattern"><strong>句型: gets ready for + 名詞</strong><div class="example">Kai <span class="highlight">gets ready for</span> bed.</div></div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                <div class="info-box"><strong>文章結構 - 一天的活動</strong><p>早上→上學→中午→海灘→晚上</p></div>
+                <div class="info-box"><strong>夏威夷小知識</strong><ul><li>由多個島嶼組成</li><li>氣候溫暖</li><li>衝浪很受歡迎</li></ul></div>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Where does Kai live?</li><li>What does Kai eat for breakfast?</li><li>What does Kai do at the beach?</li></ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Kai's Life in Hawaii\n\nKai lives in Hawaii. Hawaii is part of the United States. Hawaii is made up of islands.\n\nHawaii is a warm place to live. Here is a day in Kai's life.\n\nKai wakes up early. He eats cereal and papaya. Papaya is a fruit. It is orange and sweet.\n\nThen Kai goes to school. He likes to learn many new things. At lunch, it starts to rain. It rains for a short time. Then the sun comes back out.\n\nThen Kai goes to the beach. He meets his friends. They use surfboards to ride the waves.\n\nThen they go home. They eat fish and rice for dinner. After dinner, Kai gets ready for bed.`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } line.split(' ').forEach((word, wi, arr) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < arr.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const s = document.getElementById('voiceSelect'); s.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; s.appendChild(o); if (v.lang.startsWith('zh-TW')) s.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(i) { if (i < currentIndex) return; currentIndex = i; wordElements.forEach((w, j) => { w.classList.remove('active', 'completed'); if (j < i) w.classList.add('completed'); }); if (i < wordElements.length) wordElements[i].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const wb = storyText.substring(0, e.charIndex).trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = () => { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => wordElements.forEach(w => w.classList.remove('active', 'completed')), 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const ms = (60000 / (150 * u.rate)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(e, t) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(b => b.classList.remove('active')); document.getElementById(t).classList.add('active'); e.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

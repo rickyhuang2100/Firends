@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Moving Through Space</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; } .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; } .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; } .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; } .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; } .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; } .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Moving Through Space</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 中文翻譯分頁 -->
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                
+                <div class="info-box">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">在太空中移動</h4>
+                    <p style="line-height: 2; font-size: 16px;">
+                        我們住在地球上。地球是一顆行星。對我們來說，感覺地球好像靜止不動。但事實上，它一直在移動。地球每天自轉一次。同時，它在太空中移動。它移動時形成一個大橢圓形。在橢圓形的中心是太陽。地球繞著太陽轉！其他東西在太空中也會移動。除了地球之外還有其他行星。它們也都繞著太陽轉。月亮也在太空中移動。但它繞的是地球！
+                    </p>
+                </div>
+
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;">
+                                <strong style="color: #4CAF50;">English:</strong><br>
+                                We live on Earth. Earth is a planet.
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;">
+                                <strong style="color: #2196F3;">中文:</strong><br>
+                                我們住在地球上。地球是一顆行星。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">To us, it feels like Earth stays in place.</td>
+                            <td style="padding: 10px; vertical-align: top;">對我們來說，感覺地球好像靜止不動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">But really, it is always moving.</td>
+                            <td style="padding: 10px; vertical-align: top;">但事實上，它一直在移動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Earth spins once every day.</td>
+                            <td style="padding: 10px; vertical-align: top;">地球每天自轉一次。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">At the same time, it moves through space.</td>
+                            <td style="padding: 10px; vertical-align: top;">同時，它在太空中移動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">It makes a big oval shape as it moves.</td>
+                            <td style="padding: 10px; vertical-align: top;">它移動時形成一個大橢圓形。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">At the center of the oval shape is the sun.</td>
+                            <td style="padding: 10px; vertical-align: top;">在橢圓形的中心是太陽。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Earth goes around the sun!</td>
+                            <td style="padding: 10px; vertical-align: top;">地球繞著太陽轉！</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Other things move through space, too.</td>
+                            <td style="padding: 10px; vertical-align: top;">其他東西在太空中也會移動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">There are other planets besides Earth. They all move around the sun, too.</td>
+                            <td style="padding: 10px; vertical-align: top;">除了地球之外還有其他行星。它們也都繞著太陽轉。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">The moon also moves through space.</td>
+                            <td style="padding: 10px; vertical-align: top;">月亮也在太空中移動。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; vertical-align: top;">But it goes around the Earth!</td>
+                            <td style="padding: 10px; vertical-align: top;">但它繞的是地球！</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">planet</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">行星</div></div>
+                    <div class="vocab-item"><div class="vocab-word">space</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">太空</div></div>
+                    <div class="vocab-item"><div class="vocab-word">spins</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">旋轉</div></div>
+                    <div class="vocab-item"><div class="vocab-word">oval</div><div class="vocab-type">[名詞/形容詞]</div><div class="vocab-meaning">橢圓形</div></div>
+                    <div class="vocab-item"><div class="vocab-word">moon</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">月亮</div></div>
+                    <div class="vocab-item"><div class="vocab-word">besides</div><div class="vocab-type">[介系詞]</div><div class="vocab-meaning">除了……之外</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "it feels like" 感覺像</div>
+                    <div class="example">To us, <span class="highlight">it feels like</span> Earth stays in place.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "is always + V-ing" 進行式表持續動作</div>
+                    <div class="example">But really, it <span class="highlight">is always moving</span>.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "besides" 除了……之外還有</div>
+                    <div class="example">There are other planets <span class="highlight">besides</span> Earth.</div>
+                </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern"><strong>句型: goes around</strong><div class="example">Earth <span class="highlight">goes around</span> the sun! The moon goes around the Earth!</div></div>
+                <div class="sentence-pattern"><strong>句型: once every + 時間</strong><div class="example">Earth spins <span class="highlight">once every day</span>.</div></div>
+                <div class="sentence-pattern"><strong>句型: At the center of</strong><div class="example"><span class="highlight">At the center of</span> the oval shape is the sun.</div></div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                <div class="info-box"><strong>太空知識</strong><ul><li>地球是行星</li><li>地球每天自轉一次</li><li>地球繞太陽公轉（橢圓形軌道）</li><li>月亮繞地球轉</li><li>還有其他行星也繞太陽轉</li></ul></div>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What is Earth? (地球是什麼？)</li><li>How often does Earth spin? (地球多久自轉一次？)</li><li>What is at the center of Earth's path? (地球軌道的中心是什麼？)</li><li>What goes around the Earth? (什麼繞地球轉？)</li></ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Moving Through Space\n\nWe live on Earth. Earth is a planet. To us, it feels like Earth stays in place. But really, it is always moving.\n\nEarth spins once every day. At the same time, it moves through space. It makes a big oval shape as it moves. At the center of the oval shape is the sun. Earth goes around the sun!\n\nOther things move through space, too. There are other planets besides Earth. They all move around the sun, too.\n\nThe moon also moves through space. But it goes around the Earth!`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } line.split(' ').forEach((word, wi, arr) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < arr.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const s = document.getElementById('voiceSelect'); s.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; s.appendChild(o); if (v.lang.startsWith('zh-TW')) s.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(i) { if (i < currentIndex) return; currentIndex = i; wordElements.forEach((w, j) => { w.classList.remove('active', 'completed'); if (j < i) w.classList.add('completed'); }); if (i < wordElements.length) wordElements[i].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const wb = storyText.substring(0, e.charIndex).trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = () => { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => wordElements.forEach(w => w.classList.remove('active', 'completed')), 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const ms = (60000 / (150 * u.rate)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(e, t) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(b => b.classList.remove('active')); document.getElementById(t).classList.add('active'); e.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

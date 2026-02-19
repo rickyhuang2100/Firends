@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Helping Drivers See Safely</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; }
+        h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; }
+        .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; }
+        .btn:hover { background-color: #45a049; }
+        .btn-stop { background-color: #f44336; }
+        .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; }
+        .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; }
+        select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; }
+        .vocab-type { color: #666; font-style: italic; font-size: 14px; }
+        .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; }
+        .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Helping Drivers See Safely</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 中文翻譯分頁 -->
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">幫助駕駛安全看路</h4>
+                    <p style="line-height: 2; font-size: 16px;">
+                        你有沒有坐在車裡遇到下雨？雨、雪和雨夾雪會讓人很難看清楚。在看不清楚的情況下開車是很危險的。很久以前，Mary Anderson 注意到駕駛在惡劣天氣中很難看清楚。雨和雪覆蓋了擋風玻璃。駕駛看不到路。Mary Anderson 發明了一種可以清除擋風玻璃上雨雪的裝置。這就是第一個雨刷！駕駛可以用車內的把手來回移動雨刷擦拭擋風玻璃。多虧了 Mary Anderson，駕駛現在即使在雨中也能安全地看路。今天每輛車都有雨刷！
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Have you ever been in a car when it was raining? Rain, snow, and sleet can make it hard to see. It can be dangerous to drive without seeing clearly.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你有沒有坐在車裡遇到下雨？雨、雪和雨夾雪會讓人很難看清楚。在看不清楚的情況下開車是很危險的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Long ago, Mary Anderson noticed that drivers had trouble seeing in bad weather. Rain and snow covered the windshield. Drivers could not see the road.</td>
+                            <td style="padding: 10px; vertical-align: top;">很久以前，Mary Anderson 注意到駕駛在惡劣天氣中很難看清楚。雨和雪覆蓋了擋風玻璃。駕駛看不到路。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Mary Anderson invented a device that could clear rain and snow from a windshield. This was the first windshield wiper! The driver could use a handle inside the car to move the wiper back and forth across the windshield.</td>
+                            <td style="padding: 10px; vertical-align: top;">Mary Anderson 發明了一種可以清除擋風玻璃上雨雪的裝置。這就是第一個雨刷！駕駛可以用車內的把手來回移動雨刷擦拭擋風玻璃。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; vertical-align: top;">Thanks to Mary Anderson, drivers can now see safely even in the rain. Every car today has windshield wipers!</td>
+                            <td style="padding: 10px; vertical-align: top;">多虧了 Mary Anderson，駕駛現在即使在雨中也能安全地看路。今天每輛車都有雨刷！</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">windshield</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">擋風玻璃</div></div>
+                    <div class="vocab-item"><div class="vocab-word">wiper</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">雨刷</div></div>
+                    <div class="vocab-item"><div class="vocab-word">invention</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">發明</div></div>
+                    <div class="vocab-item"><div class="vocab-word">dangerous</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">危險的</div></div>
+                    <div class="vocab-item"><div class="vocab-word">sleet</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">雨夾雪</div></div>
+                    <div class="vocab-item"><div class="vocab-word">device</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">裝置</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box"><div class="grammar-title">1. 過去式敘述歷史發明</div><div class="example">Mary Anderson <span class="highlight">noticed</span> that drivers had trouble seeing.<br>She <span class="highlight">invented</span> the first windshield wiper.</div></div>
+                <div class="grammar-box"><div class="grammar-title">2. "Without..." 沒有...</div><div class="example"><span class="highlight">Without</span> wipers, drivers could not see the road clearly.</div></div>
+                <div class="grammar-box"><div class="grammar-title">3. "Thanks to..." 多虧了...</div><div class="example"><span class="highlight">Thanks to</span> Mary Anderson, drivers can see safely in the rain.</div></div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern"><strong>句型 1: noticed + that 子句</strong><div class="example">Mary <span class="highlight">noticed that</span> drivers had trouble seeing in the rain.</div></div>
+                <div class="sentence-pattern"><strong>句型 2: invented + a device + that 子句</strong><div class="example">She <span class="highlight">invented a device that</span> could clear rain from a windshield.</div></div>
+                <div class="sentence-pattern"><strong>句型 3: It + was + too + 形容詞 + to + V</strong><div class="example"><span class="highlight">It was too dangerous to</span> drive without seeing clearly.</div></div>
+                <div class="info-box"><strong>💡 "Invent" 詞彙家族</strong><ul><li>invent (動詞) → 發明</li><li>inventor (名詞) → 發明者</li><li>invention (名詞) → 發明物</li></ul></div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                <div class="info-box"><strong>文章結構：問題→發明→影響</strong><p>問題：下雨時駕駛看不清楚</p><p>發明：Mary Anderson 發明雨刷</p><p>影響：至今每輛車都有雨刷</p></div>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What problem did Mary Anderson notice?</li><li>What did she invent?</li><li>Why are windshield wipers important?</li></ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Helping Drivers See Safely\n\nHave you ever been in a car when it was raining? Rain, snow, and sleet can make it hard to see. It can be dangerous to drive without seeing clearly.\n\nLong ago, Mary Anderson noticed that drivers had trouble seeing in bad weather. Rain and snow covered the windshield. Drivers could not see the road.\n\nMary Anderson invented a device that could clear rain and snow from a windshield. This was the first windshield wiper! The driver could use a handle inside the car to move the wiper back and forth across the windshield.\n\nThanks to Mary Anderson, drivers can now see safely even in the rain. Every car today has windshield wipers!`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

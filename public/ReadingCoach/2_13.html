@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Sunrise, Sunset</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; }
+        h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; }
+        .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; }
+        .btn:hover { background-color: #45a049; }
+        .btn-stop { background-color: #f44336; }
+        .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; }
+        .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; }
+        select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; }
+        .vocab-type { color: #666; font-style: italic; font-size: 14px; }
+        .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; }
+        .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Sunrise, Sunset</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 中文翻譯分頁 -->
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">日出，日落</h4>
+                    <p style="line-height: 2; font-size: 16px;">
+                        你有沒有在夏天日落之前就上床睡覺？在夏天，白天非常長。太陽很早升起，很晚才落下。日照時間比一年中其他時候更多。你有沒有在冬天的早上天還黑時就醒來？在冬天，夜晚非常長。太陽很晚升起，很早就落下。冬天的日照時間比一年中其他時候更少。你的城市今天有多少陽光？
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Did you ever go to bed before sunset in the summer?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你有沒有在夏天日落之前就上床睡覺？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">In summer, the days are very long. The sun rises early. It sets late.</td>
+                            <td style="padding: 10px; vertical-align: top;">在夏天，白天非常長。太陽很早升起，很晚才落下。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">There are more hours of sunlight than at other times of year.</td>
+                            <td style="padding: 10px; vertical-align: top;">日照時間比一年中其他時候更多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Did you ever wake up in the dark on a winter morning?</td>
+                            <td style="padding: 10px; vertical-align: top;">你有沒有在冬天的早上天還黑時就醒來？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">In winter, the nights are very long. The sun rises late. It sets early.</td>
+                            <td style="padding: 10px; vertical-align: top;">在冬天，夜晚非常長。太陽很晚升起，很早就落下。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">There are fewer hours of sunlight in winter than at other times of year.</td>
+                            <td style="padding: 10px; vertical-align: top;">冬天的日照時間比一年中其他時候更少。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; vertical-align: top;">How much sun is your town getting today?</td>
+                            <td style="padding: 10px; vertical-align: top;">你的城市今天有多少陽光？</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">sunrise</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">日出</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sunset</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">日落</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sunlight</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">陽光</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">rise</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">升起（過去式: rose）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">set</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">落下（太陽下山）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">fewer</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">較少的（few 的比較級）</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 比較級 (Comparative)</div>
+                    <p>用 "more / fewer" 比較數量：</p>
+                    <div class="example">
+                        ✓ There are <span class="highlight">more</span> hours of sunlight than at other times of year.<br>
+                        ✓ There are <span class="highlight">fewer</span> hours of sunlight in winter.
+                    </div>
+                    <p><strong>注意：</strong>more 用於較多，fewer 用於可數名詞的較少。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "Did you ever...?" 疑問句</div>
+                    <p>用來問對方是否有過某種經歷：</p>
+                    <div class="example">
+                        <span class="highlight">Did you ever</span> go to bed before sunset in the summer?<br>
+                        <span class="highlight">Did you ever</span> wake up in the dark on a winter morning?
+                    </div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. 對比結構 (Contrast)</div>
+                    <p>文章用夏天和冬天做對比：</p>
+                    <div class="example">
+                        夏天：The sun rises <span class="highlight">early</span>. It sets <span class="highlight">late</span>.<br>
+                        冬天：The sun rises <span class="highlight">late</span>. It sets <span class="highlight">early</span>.<br>
+                        → 使用相同句型但相反的形容詞來對比
+                    </div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>句型 1: In + 季節, the days are + 形容詞</strong>
+                    <div class="example">
+                        <span class="highlight">In summer</span>, the days are very long.<br>
+                        → 描述不同季節的特徵
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>句型 2: There are + more/fewer + 名詞 + than...</strong>
+                    <div class="example">
+                        <span class="highlight">There are more hours of sunlight than</span> at other times of year.<br>
+                        → 比較句型
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>句型 3: How much + 名詞 + is + 主詞 + V-ing?</strong>
+                    <div class="example">
+                        <span class="highlight">How much sun is</span> your town <span class="highlight">getting</span> today?<br>
+                        → 問數量的疑問句
+                    </div>
+                </div>
+                <div class="info-box">
+                    <strong>💡 反義詞配對</strong>
+                    <ul>
+                        <li>sunrise ↔ sunset (日出 ↔ 日落)</li>
+                        <li>early ↔ late (早 ↔ 晚)</li>
+                        <li>long ↔ short (長 ↔ 短)</li>
+                        <li>more ↔ fewer (多 ↔ 少)</li>
+                        <li>summer ↔ winter (夏天 ↔ 冬天)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                <div class="info-box">
+                    <strong>文章結構分析（比較對照文）</strong>
+                    <p><strong>段落一：</strong> 介紹夏天的日照特徵（白天長、太陽早升晚落）</p>
+                    <p><strong>段落二：</strong> 介紹冬天的日照特徵（夜晚長、太陽晚升早落）</p>
+                    <p><strong>結尾：</strong> 提問互動，引導讀者思考自己所在城市的日照情況</p>
+                </div>
+                <div class="info-box">
+                    <strong>科學知識連結</strong>
+                    <ul>
+                        <li>地球的傾斜軸導致四季變化</li>
+                        <li>夏天太陽照射時間長，冬天則較短</li>
+                        <li>靠近赤道的地方，日照時間變化較小</li>
+                    </ul>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗問題</div>
+                    <ol>
+                        <li>In summer, are the days long or short? (夏天白天是長還是短？)</li>
+                        <li>When does the sun rise in winter? (冬天太陽什麼時候升起？)</li>
+                        <li>Which season has more hours of sunlight? (哪個季節有較多日照？)</li>
+                        <li>What is the difference between sunrise and sunset? (日出和日落有什麼不同？)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5;
+        
+        const storyText = `Sunrise, Sunset
+
+Did you ever go to bed before sunset in the summer? In summer, the days are very long. The sun rises early. It sets late. There are more hours of sunlight than at other times of year.
+
+Did you ever wake up in the dark on a winter morning? In winter, the nights are very long. The sun rises late. It sets early. There are fewer hours of sunlight in winter than at other times of year.
+
+How much sun is your town getting today?`;
+
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') { container.appendChild(document.createElement('br')); return; }
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+                        if (wordIndex < words.length - 1) container.appendChild(document.createTextNode(' '));
+                    }
+                });
+                if (lineIndex < lines.length - 1) container.appendChild(document.createElement('br'));
+            });
+        }
+
+        function loadVoices() {
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+                if (voice.lang.startsWith('zh-TW')) select.selectedIndex = i;
+            });
+        }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+
+        function highlightWord(index) {
+            if (index < currentIndex) return;
+            currentIndex = index;
+            wordElements.forEach((word, i) => { word.classList.remove('active', 'completed'); if (i < index) word.classList.add('completed'); });
+            if (index < wordElements.length) wordElements[index].classList.add('active');
+        }
+
+        function speakText() {
+            if (synth.speaking) synth.cancel();
+            if (highlightTimer) clearInterval(highlightTimer);
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+            const utterance = new SpeechSynthesisUtterance(storyText);
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            if (voices[voiceIndex]) utterance.voice = voices[voiceIndex];
+            utterance.rate = parseFloat(document.getElementById('rateSlider').value);
+            utterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            utterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            let boundarySupported = false;
+            utterance.addEventListener('boundary', (event) => {
+                if (event.name === 'word') {
+                    boundarySupported = true;
+                    const textBeforeWord = storyText.substring(0, event.charIndex);
+                    const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0);
+                    if (wordsBefore.length < wordElements.length) highlightWord(wordsBefore.length);
+                }
+            });
+            utterance.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); };
+            synth.speak(utterance);
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    const rate = utterance.rate;
+                    const msPerWord = (60000 / (150 * rate)) * timingAdjustment;
+                    currentIndex = 0; highlightWord(0);
+                    let nextWordIndex = 1;
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) { if (nextWordIndex >= currentIndex) highlightWord(nextWordIndex); nextWordIndex++; }
+                        else clearInterval(highlightTimer);
+                    }, msPerWord);
+                }
+            }, 300);
+        }
+
+        function stopSpeaking() {
+            if (synth.speaking) synth.cancel();
+            if (highlightTimer) clearInterval(highlightTimer);
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        window.onload = initText;
+    </script>
+</body>
+</html>
