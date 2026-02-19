@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Power and Cherokee Women</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Power and Cherokee Women</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+        <h3>🌏 中文翻譯</h3>
+        <div class="info-box"><p style="line-height: 2; font-size: 16px;">歷史上世界各地的許多人一直在為男女平等而奮鬥。在許多地方，女性被視為不如男性重要或有價值。但切羅基人長期以來一直相信切羅基女性的高度重要性和價值。切羅基人是一個原住民族，最初來自現在的美國東南部。<br><br>歷史上，切羅基女性和男性有不同的角色，但兩者都很重要且有價值。切羅基村莊的婦女擁有土地和房屋。她們在社區中有很大的影響力。有時切羅基婦女會領導村莊委員會。切羅基人只有在討論了問題的每個部分之後才會做出決定。婦女大量參與這些會議。她們參與了為村莊做出的許多決定。<br><br>切羅基婦女在家庭中也有很強的影響力。她們控制家庭，比如控制她們的孩子。她們也能夠很容易地離婚。根據家庭的需要，切羅基婦女可能會務農或製作籃子、陶器和衣服。<br><br>切羅基男子狩獵並與歐洲人和其他原住民族作戰。有時，在戰爭時期，婦女甚至會與男子一起戰鬥。切羅基人稱她們為「戰爭婦女」。她們備受尊敬。切羅基人稱讚她們的勇敢。<br><br>切羅基婦女和男子都努力尋找食物，即使在食物難以獲得的時候。有時，為了獵殺動物，男子會行進數百英里。<br><br>切羅基社會被稱為「母系」社會，這意味著家庭是通過母親的家庭而不是父親的家庭來追溯的。這意味著婦女擁有家庭房屋，女兒從母親那裡繼承這些房屋。<br><br>隨著切羅基人與歐洲定居者以及後來的美國政府互動增多，切羅基社會發生了變化。切羅基的性別關係也發生了變化。定居者和美國都有與切羅基人不同的性別角色觀念。他們想改變切羅基民族中男女互動的方式。他們由為婦女在政治和婚姻中的權力應該減少。與此同時，越來越多的切羅基土地被定居者和後來的美國政府奪走。<br><br>切羅基人不想被趕出他們所有的土地。他們認為，如果他們看起來更像歐洲定居者和美國的社會，就不會再有土地被奪走。所以切羅基人會使用定居者和美國的一些性別角色。例如，切羅基民族在 1800 年代制定了切羅基憲法。這部憲法極大地限制了切羅基婦女的權利，比如投票權。最終，切羅基人的努力並沒有阻止美國強迫他們離開土地。切羅基人被迫搬遷到現在的俄克拉荷馬州。<br><br>今天，切羅基婦女再次成為切羅基社會的重要成員。隨著時間的推移，切羅基人多次重修憲法。這些新版本為婦女提供了更多權利。現在，切羅基婦女和男子重視彼此的意見。他們共同努力創建一個平等的社會，並為他們的人民做出正確的決定。</p></div>
+    </div>
+            <div id="vocabulary" class="tab-content">
+        <h3>📖 重點單字與片語</h3>
+        <div class="vocab-grid">
+            
+            <div class="vocab-item">
+                <div class="vocab-word">equality</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">平等</div>
+                <div class="example">They fought for equality.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">influence</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">影響力</div>
+                <div class="example">She has a lot of influence.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">matrilineal</div>
+                <div class="vocab-type">adj. (adjective)</div>
+                <div class="vocab-meaning">母系的</div>
+                <div class="example">Cherokee society was matrilineal.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">relocate</div>
+                <div class="vocab-type">v. (verb)</div>
+                <div class="vocab-meaning">搬遷、重新安置</div>
+                <div class="example">The company relocated to a new city.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">constitution</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">憲法</div>
+                <div class="example">The constitution defines our rights.</div>
+            </div>
+        </div>
+    </div><div class="vocab-meaning">單字內容準備中</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+        <h3>✏️ 文法重點解析</h3>
+        
+      <div class="grammar-box">
+        <div class="grammar-title">Passive Voice (被動語態)</div>
+        <p>"women have been treated as less important" (女性被視為較不重要)；"Cherokee land was being taken" (土地正在被奪走)。被動語態用於強調受害者或被影響的事物。</p>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">By + V-ing (藉由)</div>
+        <p>"The Cherokee made decisions only after talking about every part of the problem." (after 是介係詞，接動名詞 talking)。</p>
+      </div>
+    
+    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+         <h3>💬 重要句型分析</h3>
+         
+      <div class="sentence-pattern">
+        <strong>Trace through (追溯)</strong>
+        <div class="example">families were traced through the mother’s family</div>
+        <p>"trace through" 表示通過...來追蹤或確定來源。</p>
+      </div>
+    
+    </div>
+            </div>
+            <div id="reading" class="tab-content">
+        <h3>🎯 閱讀理解</h3>
+        <div class="grammar-box">
+            <div class="grammar-title">理解測驗</div>
+            
+      <ol>
+        <li>What does it mean that Cherokee society was "matrilineal"?<br>
+          <span class="highlight">Answer: Families were traced through the mother's family, and women owned houses.</span>
+        </li>
+        <li>Why did the Cherokee change their gender roles in the 1800s?<br>
+          <span class="highlight">Answer: They hoped that by looking more like US/European society, they could keep their land.</span>
+        </li>
+        <li>Where were the Cherokee forced to relocate?<br>
+          <span class="highlight">Answer: To what is now the state of Oklahoma.</span>
+        </li>
+      </ol>
+    
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Many people around the world have fought throughout history for men and women to be treated equally. In many places, women have been treated as less important or valuable than men. But the Cherokee people have long believed in the high importance and value of Cherokee women. The Cherokee are a Native people originally from what is now the southeastern United States.\\n\\nHistorically, Cherokee women and men had different roles, but both were important and valuable. The women in Cherokee villages owned their land and houses. They had a lot of influence in the community. Sometimes Cherokee women would lead village councils. The Cherokee made decisions only after talking about every part of the problem. Women participated a lot in these meetings. They shared in making many decisions for the village.\\n\\nCherokee women also had a strong influence in their families. They controlled the household, like having control over their children. They were also able to get a divorce very easily. Based on what their families needed, Cherokee women might farm or create baskets, pottery, and clothing.\\n\\nCherokee men hunted and fought against Europeans and other Native peoples. Sometimes, women would even battle with the men in times of war. The Cherokee called them “War Women.” They were highly respected. The Cherokee praised them for their bravery.\\n\\nBoth Cherokee women and men worked hard to find food, even in times when it was hard to come by. Sometimes, men would travel hundreds of miles to hunt down animals.\\n\\nThe Cherokee society was called a “matrilineal” society, which means that families were traced through the mother’s family, not the father’s family. This meant that women owned the family houses, and that daughters inherited these houses from their mothers.\\n\\nAs the Cherokee interacted more with European settlers and then later the United States government, Cherokee society changed. Cherokee gender relationships changed, too. Both the settlers and the U.S. had ideas about gender roles that were different from the Cherokee. They wanted to change the way that men and women interacted in the Cherokee Nation. They thought that women should have less power in politics and in marriages. At the same time, more and more Cherokee land was being taken by the settlers and then the U.S. government.\\n\\nThe Cherokee do not want to be forced off all their land. They thought that no more of their land would be taken if they seemed more similar to the society of the European settlers and United States. So the Cherokee would use some of the gender roles of the settlers and the U.S. For example, the Cherokee Nation created a Cherokee Constitution in the 1800s. This Constitution greatly limited the rights of Cherokee women, like the right to vote. Ultimately, the efforts of the Cherokee people did not stop the United States from forcing them off their land. The Cherokee were forced to relocate to what is now the state of Oklahoma.\\n\\nToday, Cherokee women are valued members of the Cherokee society again. Over time, the Cherokee redrafted their Constitution several times. These new versions had more rights for women. Now, Cherokee women and men value each other's opinions. They work together to create an equal society and make the right decisions for their people.`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

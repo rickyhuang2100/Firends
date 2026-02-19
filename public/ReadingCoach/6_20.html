@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Underground Railroad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 The Underground Railroad</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box" style="line-height: 2; font-size: 16px;"><p>地下鐵路實際上不是鐵路，也不在地下。它是一個由秘密路線、安全屋和勇敢的人組成的網絡，在美國內戰之前的年代幫助被奴役的非裔美國人逃往自由。</p><p>地下鐵路從1700年代末期運作到1860年代。被奴役的人會在夜間旅行，通常步行，跟隨北極星引導他們向北走。他們從一個安全屋移動到另一個，有時躲在穀倉、閣樓或秘密房間裡。安全屋被稱為「站點」，幫助引導逃亡者的人被稱為「車掌」。</p><p>最著名的車掌之一是哈莉特·塔布曼。塔布曼出生在馬里蘭州的奴隸家庭，1849年逃脫，然後多次冒著生命危險返回南方幫助其他人逃跑。她大約進行了13次旅程，幫助解放了大約70人，包括她自己的父母。塔布曼從未被抓住，也從未失去過一位乘客。</p><p>北上的旅程極其危險。如果被抓住，逃跑的奴隸可能受到嚴厲的懲罰甚至被殺害。幫助他們的人也面臨嚴厲的處罰。儘管有風險，仍有數千人參與了地下鐵路。</p><p>歷史學家估計有25,000到100,000名被奴役的人通過地下鐵路逃脫。許多人定居在北方各州或繼續前往加拿大——那裡奴隸制是非法的。地下鐵路在美國廢除奴隸制的運動中發揮了重要作用。</p></div>
+            </div>
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">enslaved</div><div class="vocab-type">adj. 形容詞</div><div class="vocab-meaning">被奴役的</div><div class="example">Helped <span class='highlight'>enslaved</span> African Americans escape.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">conductors</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">車掌（引導者）</div><div class="example">People who guided the escapees were called <span class='highlight'>conductors</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">penalties</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">懲罰</div><div class="example">People who helped them faced harsh <span class='highlight'>penalties</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">approximately</div><div class="vocab-type">adv. 副詞</div><div class="vocab-meaning">大約</div><div class="example">Helped free <span class='highlight'>approximately</span> 70 people.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">settled</div><div class="vocab-type">v. 動詞</div><div class="vocab-meaning">定居</div><div class="example">Many <span class='highlight'>settled</span> in northern states.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">illegal</div><div class="vocab-type">adj. 形容詞</div><div class="vocab-meaning">非法的</div><div class="example">Slavery was <span class='highlight'>illegal</span> in Canada.</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                    <div class="grammar-box"><div class="grammar-title">not actually...（實際上不是……）</div><p>用來糾正常見的誤解。</p>
+                        <div class="example">It was <span class='highlight'>not actually</span> a railroad.</div>
+                        <div class="example">The story is <span class='highlight'>not actually</span> true.</div>
+                    </div>
+                    <div class="grammar-box"><div class="grammar-title">Despite + 名詞（儘管……）</div><p>表示讓步。</p>
+                        <div class="example"><span class='highlight'>Despite</span> the risks, thousands participated.</div>
+                        <div class="example"><span class='highlight'>Despite</span> the danger, she kept going back.</div>
+                    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                    <div class="sentence-pattern"><strong>risk one's life to...（冒著生命危險去……）</strong><p>表示為了某個目的甘冒極大的風險。</p>
+                        <div class="example">Tubman <span class='highlight'>risked her life</span> many times <span class='highlight'>to</span> return to the South.</div>
+                        <div class="example">Firefighters <span class='highlight'>risk their lives to</span> save people.</div>
+                    </div>
+                    <div class="sentence-pattern"><strong>play an important role in...（在……中扮演重要角色）</strong><p>表示某人或某事的重要貢獻。</p>
+                        <div class="example">The Underground Railroad <span class='highlight'>played an important role in</span> the movement to end slavery.</div>
+                        <div class="example">Teachers <span class='highlight'>play an important role in</span> society.</div>
+                    </div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                        <li style="margin-bottom: 15px;">地下鐵路是什麼？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 真正的地下鐵路</li><li>B) 一個秘密的逃亡網絡</li><li>C) 一種交通工具</li><li>D) 一座橋</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">哈莉特·塔布曼幫助了大約多少人逃跑？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 約30人</li><li>B) 約50人</li><li>C) 約70人</li><li>D) 約100人</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                        <li style="margin-bottom: 15px;">被奴役的人在逃跑時靠什麼導航？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 地圖</li><li>B) 北極星</li><li>C) 指南針</li><li>D) 河流</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">歷史學家估計有多少人通過地下鐵路逃脫？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 1,000-5,000人</li><li>B) 5,000-10,000人</li><li>C) 25,000-100,000人</li><li>D) 超過100萬人</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                </ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = \`The Underground Railroad was not actually a railroad, and it was not underground. It was a secret network of routes, safe houses, and brave people who helped enslaved African Americans escape to freedom in the years before the American Civil War.
+
+The Underground Railroad operated from the late 1700s to the 1860s. Enslaved people would travel at night, often on foot, following the North Star to guide them north. They moved from one safe house to another, sometimes hiding in barns, attics, or secret rooms. The safe houses were called "stations," and the people who helped guide the escapees were called "conductors."
+
+One of the most famous conductors was Harriet Tubman. Born into slavery in Maryland, Tubman escaped in 1849 and then risked her life many times to return to the South and help others escape. She made about 13 trips and helped free approximately 70 people, including her own parents. Tubman was never caught and never lost a passenger.
+
+The journey north was extremely dangerous. If caught, escaped slaves could be severely punished or even killed. People who helped them also faced harsh penalties. Despite the risks, thousands of people participated in the Underground Railroad.
+
+Historians estimate that between 25,000 and 100,000 enslaved people escaped through the Underground Railroad. Many settled in northern states or continued to Canada, where slavery was illegal. The Underground Railroad played an important role in the movement to end slavery in the United States.\`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = \`\${v.name} (\${v.lang})\`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

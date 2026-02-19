@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - A Big Birthday Celebration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 A Big Birthday Celebration</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box" style="line-height: 2; font-size: 16px;"><p>梅芙·威爾遜四年級時第一次去了首爾的蓮花燈節。首爾是韓國的首都。這個節日慶祝佛教創始人佛陀的生日。十二年後，在2013年，梅芙在大學讀書，但她仍然清楚記得第一次去時慶典有多美麗。</p><p>「城裡所有人都在首爾的傳統區域仁寺洞遊行，那裡有很多寺廟，」她回憶道。人們從一座寺廟走到另一座寺廟，觀看不同的裝飾和燈籠。點亮的燈籠是對佛陀的尊敬。韓國近一半的人口是佛教徒，所以這個節日在國內非常受歡迎。遊行花車被建造成蓮花或傳統佛教人物的樣子。「有些花車甚至完全由蓮花製成，」梅芙說。</p><p>這個節日每年大約在5月16日慶祝，並邀請來自世界各地的遊客。梅芙第一次參加慶典時，她和父親一起去的。他們手牽手穿過人群走到一個主要舞台，那裡有僧侶演奏傳統佛教音樂。梅芙說主要是敲鑼，大家都在跳舞唱歌。台上的人向觀眾拋撒蓮花和做成小象牙形狀的薄荷糖。當她和父親站在那裡聽韓國傳統音樂時，旁邊一位僧侶輕拍了她父親的手臂。「你女兒想不想坐在我肩膀上看得更清楚？」僧侶問他。梅芙興奮地點頭，然後她飛到了空中看舞台。她看到幾位穿著灰色和橙色長袍的僧侶在台上，他們打鼓並唱佛教禱詞。</p><p>隨著梅芙長大，她每年都試著去燈節。「我總是想去看燈籠，」她說。「有些看起來像花，花瓣掛在燈上。那些比較小。其他的很大，是手繪的。」即使她去了愛爾蘭的寄宿學校和紐約的大學，她也會試著在五月份回到韓國看燈籠，以紀念佛陀的生日。</p></div>
+            </div>
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">festival</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">節日；慶典</div><div class="example">The Lotus Lantern <span class='highlight'>Festival</span> in Seoul.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">parade</div><div class="vocab-type">v./n. 動詞/名詞</div><div class="vocab-meaning">遊行</div><div class="example">All the people <span class='highlight'>parade</span> through the traditional area.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">lanterns</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">燈籠</div><div class="example">The lit <span class='highlight'>lanterns</span> are a sign of respect to Buddha.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">monks</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">僧侶</div><div class="example"><span class='highlight'>Monks</span> played traditional Buddhist music.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">miniature</div><div class="vocab-type">adj. 形容詞</div><div class="vocab-meaning">微型的；小型的</div><div class="example">Mints shaped like <span class='highlight'>miniature</span> elephant tusks.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">boarding school</div><div class="vocab-type">n. 名詞片語</div><div class="vocab-meaning">寄宿學校</div><div class="example">She went to <span class='highlight'>boarding school</span> in Ireland.</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                    <div class="grammar-box"><div class="grammar-title">過去式敘事 (Past Tense Narration)</div><p>用過去式講述個人經歷和回憶。</p>
+                        <div class="example">Maeve <span class='highlight'>was</span> in fourth grade the first time she <span class='highlight'>went</span>.</div>
+                        <div class="example">They <span class='highlight'>held</span> hands as they <span class='highlight'>pushed</span> through the crowd.</div>
+                    </div>
+                    <div class="grammar-box"><div class="grammar-title">Even when...（即使當……）</div><p>表示在更極端的情況下仍然如此。</p>
+                        <div class="example"><span class='highlight'>Even when</span> she went to boarding school, she tried to travel to South Korea.</div>
+                        <div class="example"><span class='highlight'>Even when</span> it rained, the festival continued.</div>
+                    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                    <div class="sentence-pattern"><strong>be built to look like...（被建造成看起來像……）</strong><p>描述某物被設計成某種外觀。</p>
+                        <div class="example">The floats <span class='highlight'>are built to look like</span> lotus flowers.</div>
+                        <div class="example">The house <span class='highlight'>was built to look like</span> a castle.</div>
+                    </div>
+                    <div class="sentence-pattern"><strong>in honor of...（為了紀念……）</strong><p>表示對某人或某事的尊敬。</p>
+                        <div class="example">She traveled to see the lanterns <span class='highlight'>in honor of</span> Buddha's birthday.</div>
+                        <div class="example">A monument was built <span class='highlight'>in honor of</span> the heroes.</div>
+                    </div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                        <li style="margin-bottom: 15px;">蓮花燈節慶祝的是什麼？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 新年</li><li>B) 佛陀的生日</li><li>C) 韓國獨立紀念日</li><li>D) 中秋節</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">韓國有多少比例的人口是佛教徒？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 約10%</li><li>B) 約25%</li><li>C) 近一半</li><li>D) 約75%</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                        <li style="margin-bottom: 15px;">梅芙在舞台上看到了什麼？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 舞者</li><li>B) 穿灰色和橙色長袍打鼓唱禱詞的僧侶</li><li>C) 歌手</li><li>D) 雜技表演</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">燈節每年大約在什麼時候舉行？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 1月</li><li>B) 3月</li><li>C) 5月</li><li>D) 10月</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                </ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = \`Maeve Wilson was in fourth grade the first time she went to the Lotus Lantern Festival in Seoul, the capital of South Korea. The festival celebrates the birthday of Buddha, the founder of the Buddhist religion. Twelve years later, in 2013, Maeve was studying in university, but she could clearly remember how beautiful the celebration was the first time she went.
+
+"All the people in the city parade through the traditional area of Seoul, called Insadong, where there are many temples," she remembered. People walk from temple to temple to see the different decorations and lanterns. The lit lanterns are a sign of respect to Buddha. Almost half the population of South Korea is Buddhist, so the festival is very popular in the country. The parade floats are built to look like lotus flowers or traditional Buddhist figures. "Some of the floats are even completely made of lotus flowers," said Maeve.
+
+The festival is celebrated around May 16th every year and invites visitors from all over the world. The first time Maeve attended the celebration, she went with her father. They held hands as they pushed through the large crowd to a main stage, where monks played traditional Buddhist music. Maeve said that it was mostly just drumming on gongs, and everyone was dancing and singing. Onstage, people tossed lotus flowers and mints shaped like miniature elephant tusks into the big audience. While she and her father stood there, listening to the traditional Korean music, a monk next to them tapped the arm of Maeve's father. "Would your daughter like to go on my shoulders to see more?" the monk asked him. Maeve nodded in excitement, and up she soared into the air to see the stage. She saw several monks in both gray and orange robes on the stage. They played their drums and sang Buddhist prayers.
+
+As Maeve grew older, she tried to go to the Lantern Festival every year. "I always just wanted to see the lanterns," she said. "Some looked like flowers, with petals hanging off the lamps. Those were smaller. Others were big, and hand-painted." Even when she went to boarding school in Ireland and attended university in New York, she tried to travel to South Korea in May to see the lanterns in honor of Buddha's birthday.\`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = \`\${v.name} (\${v.lang})\`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

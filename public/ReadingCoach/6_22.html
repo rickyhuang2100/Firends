@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Rosa Parks and the Civil Rights Movement</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Rosa Parks and the Civil Rights Movement</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box" style="line-height: 2; font-size: 16px;"><p>1955年12月1日，一位名叫羅莎·帕克斯的42歲非裔美國女性在阿拉巴馬州蒙哥馬利的一輛公車上坐下。她坐在公車的中間區域。當時，前排座位是保留給白人乘客的，非裔美國人必須坐在後面。如果前面的區域滿了，中間區域的非裔美國人被要求將座位讓給白人乘客。</p><p>當公車變得擁擠時，司機要求帕克斯和另外三位非裔美國人讓出座位。其他三人移動了，但帕克斯拒絕了。她厭倦了屈服於不公平的待遇。帕克斯因違反城市的種族隔離法而被逮捕和罰款。</p><p>帕克斯的被捕引發了一場重大抗議。蒙哥馬利的非裔美國領袖，包括一位名叫馬丁·路德·金恩博士的年輕牧師，組織了對該市公車的抵制。連續381天，非裔美國人拒絕搭乘公車。他們走路、共乘或找其他方式出行。抵制活動導致公車公司損失了大量金錢。</p><p>1956年11月13日，美國最高法院裁定公共公車上的種族隔離是違憲的。蒙哥馬利公車抵制結束了，民權運動贏得了一場重要的勝利。</p><p>羅莎·帕克斯被稱為「民權運動之母」。她簡單的勇敢行為激勵了數百萬人挺身對抗不公正。她的餘生都致力於民權和平等。帕克斯獲得了許多榮譽，包括總統自由勳章和國會金質獎章。她於2005年10月24日去世，享年92歲。</p></div>
+            </div>
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">segregation</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">種族隔離</div><div class="example">Breaking the city's <span class='highlight'>segregation</span> laws.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">boycott</div><div class="vocab-type">n./v. 名詞/動詞</div><div class="vocab-meaning">抵制</div><div class="example">They organized a <span class='highlight'>boycott</span> of the buses.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">unconstitutional</div><div class="vocab-type">adj. 形容詞</div><div class="vocab-meaning">違憲的</div><div class="example">Segregation on buses was <span class='highlight'>unconstitutional</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">injustice</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">不公正</div><div class="example">Stand up against <span class='highlight'>injustice</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">courage</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">勇氣</div><div class="example">Her simple act of <span class='highlight'>courage</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">equality</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">平等</div><div class="example">Working for civil rights and <span class='highlight'>equality</span>.</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                    <div class="grammar-box"><div class="grammar-title">be expected to + V（被期望……）</div><p>被動語態表示社會或制度的要求。</p>
+                        <div class="example">African Americans <span class='highlight'>were expected to</span> give up their seats.</div>
+                        <div class="example">Students <span class='highlight'>are expected to</span> follow the rules.</div>
+                    </div>
+                    <div class="grammar-box"><div class="grammar-title">become known as...（被稱為……）</div><p>表示某人或某物獲得了某個稱號。</p>
+                        <div class="example">Parks <span class='highlight'>became known as</span> the 'Mother of the Civil Rights Movement.'</div>
+                        <div class="example">He <span class='highlight'>became known as</span> a great leader.</div>
+                    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                    <div class="sentence-pattern"><strong>be tired of + V-ing（厭倦了……）</strong><p>表示對反覆發生的事情感到不耐煩。</p>
+                        <div class="example">She <span class='highlight'>was tired of</span> giving in to unfair treatment.</div>
+                        <div class="example">I <span class='highlight'>am tired of</span> waiting.</div>
+                    </div>
+                    <div class="sentence-pattern"><strong>inspire + 受詞 + to V（激勵……去做……）</strong><p>表示某人的行為鼓舞了他人。</p>
+                        <div class="example">Her courage <span class='highlight'>inspired</span> millions <span class='highlight'>to</span> stand up against injustice.</div>
+                        <div class="example">The speech <span class='highlight'>inspired</span> students <span class='highlight'>to</span> work harder.</div>
+                    </div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                        <li style="margin-bottom: 15px;">羅莎·帕克斯在公車上做了什麼？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 大聲抗議</li><li>B) 拒絕讓座給白人乘客</li><li>C) 坐在前排</li><li>D) 離開公車</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">蒙哥馬利公車抵制持續了多少天？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 100天</li><li>B) 200天</li><li>C) 381天</li><li>D) 一年</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                        <li style="margin-bottom: 15px;">美國最高法院做了什麼裁決？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 公車票價應降低</li><li>B) 公車上的種族隔離違憲</li><li>C) 所有公車應免費</li><li>D) 公車應增加座位</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">羅莎·帕克斯被稱為什麼？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 自由女神</li><li>B) 民權運動之母</li><li>C) 和平使者</li><li>D) 公車女王</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                </ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = \`On December 1, 1955, a 42-year-old African American woman named Rosa Parks boarded a city bus in Montgomery, Alabama. She sat down in the middle section of the bus. At that time, the front seats were reserved for white passengers, and African Americans had to sit in the back. If the front section was full, African Americans in the middle section were expected to give up their seats to white passengers.
+
+When the bus became crowded, the bus driver asked Parks and three other African Americans to give up their seats. The other three moved, but Parks refused. She was tired of giving in to unfair treatment. Parks was arrested and fined for breaking the city's segregation laws.
+
+Parks's arrest sparked a major protest. African American leaders in Montgomery, including a young minister named Dr. Martin Luther King Jr., organized a boycott of the city's buses. For 381 days, African Americans refused to ride the buses. They walked, carpooled, or found other ways to get around. The boycott caused the bus company to lose a lot of money.
+
+On November 13, 1956, the U.S. Supreme Court ruled that segregation on public buses was unconstitutional. The Montgomery Bus Boycott was over, and the civil rights movement had won an important victory.
+
+Rosa Parks became known as the "Mother of the Civil Rights Movement." Her simple act of courage inspired millions of people to stand up against injustice. She spent the rest of her life working for civil rights and equality. Parks received many honors, including the Presidential Medal of Freedom and the Congressional Gold Medal. She passed away on October 24, 2005, at the age of 92.\`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = \`\${v.name} (\${v.lang})\`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

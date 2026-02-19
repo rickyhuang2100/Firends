@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - A Camping Trip</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 A Camping Trip</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <!-- 中文翻譯分頁 -->
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">一趟露營旅行</h4>
+                    <p style="line-height: 2; font-size: 16px;">
+                        Ryan 和他的家人去露營了。他們搭好帳篷和睡袋。Ryan 的媽媽開始在火坑裡生火。Ryan 和他的妹妹 Lily 去找棍子。棍子必須是長的，而且末端要有尖頭。這家人要烤棉花糖了！Ryan 和 Lily 找到了完美的棍子。他們的媽媽打開了一袋棉花糖。Ryan 在他的棍子末端放了一顆棉花糖。Lily 也放了一顆。然後他們小心地把棉花糖放在火上面等待。棉花糖開始加熱了。Ryan 觀察到白色的點心變成了棕色。他知道他的棉花糖不可能再變回白色了。他確保不要把它烤焦。然後 Ryan 把棕色的棉花糖從火上拿開。他等了一分鐘讓它冷卻。然後他咬了一口。又溫暖、又黏糊糊的，非常美味！
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Ryan and his family went camping. They set up a tent and sleeping bags. Ryan's mom started to make a fire in the fire pit. Ryan and his sister, Lily, searched for sticks. The sticks had to be long with a point at the end. The family was going to roast marshmallows!</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>Ryan 和他的家人去露營了。他們搭好帳篷和睡袋。Ryan 的媽媽開始在火坑裡生火。Ryan 和他的妹妹 Lily 去找棍子。棍子必須是長的，而且末端要有尖頭。這家人要烤棉花糖了！</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Ryan and Lily found the perfect sticks. Their mom opened a bag of marshmallows. Ryan put one marshmallow at the end of his stick. Lily did, too. Then they carefully held their marshmallows over the fire and waited.</td>
+                            <td style="padding: 10px; vertical-align: top;">Ryan 和 Lily 找到了完美的棍子。他們的媽媽打開了一袋棉花糖。Ryan 在他的棍子末端放了一顆棉花糖。Lily 也放了一顆。然後他們小心地把棉花糖放在火上面等待。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; vertical-align: top;">The marshmallows started to heat up. Ryan observed as the white treat turned brown. He knew that his marshmallow could not change back to white. He made sure not to burn it. Then Ryan removed the brown marshmallow from the fire. He waited a minute for it to cool. Then he took a bite. It was warm, gooey, and delicious!</td>
+                            <td style="padding: 10px; vertical-align: top;">棉花糖開始加熱了。Ryan 觀察到白色的點心變成了棕色。他知道他的棉花糖不可能再變回白色了。他確保不要把它烤焦。然後 Ryan 把棕色的棉花糖從火上拿開。他等了一分鐘讓它冷卻。然後他咬了一口。又溫暖、又黏糊糊的，非常美味！</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">camping</div><div class="vocab-type">[名詞/動名詞]</div><div class="vocab-meaning">露營</div></div>
+                    <div class="vocab-item"><div class="vocab-word">tent</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">帳篷</div></div>
+                    <div class="vocab-item"><div class="vocab-word">sleeping bag</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">睡袋</div></div>
+                    <div class="vocab-item"><div class="vocab-word">fire pit</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">火坑</div></div>
+                    <div class="vocab-item"><div class="vocab-word">marshmallow</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">棉花糖</div></div>
+                    <div class="vocab-item"><div class="vocab-word">roast</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">烤</div></div>
+                    <div class="vocab-item"><div class="vocab-word">observed</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">觀察（observe 的過去式）</div></div>
+                    <div class="vocab-item"><div class="vocab-word">gooey</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">黏糊糊的、軟綿綿的</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box"><div class="grammar-title">1. "was/were going to" 即將要做某事</div><p>表示過去的計畫或即將發生的事：</p><div class="example">The family <span class="highlight">was going to</span> roast marshmallows!<br>→ 這家人即將要烤棉花糖！</div></div>
+                <div class="grammar-box"><div class="grammar-title">2. "had to" 必須</div><p>表示某事是必要的或有條件的：</p><div class="example">The sticks <span class="highlight">had to</span> be long with a point at the end.<br>→ 棍子必須是長的，末端要有尖頭。</div></div>
+                <div class="grammar-box"><div class="grammar-title">3. "could not + V" 不能夠</div><p>表示不可能做某事（物理上的不可逆）：</p><div class="example">His marshmallow <span class="highlight">could not</span> change back to white.<br>→ 他的棉花糖不可能再變回白色了。</div><p><strong>科學知識：</strong>這是一個「不可逆變化」(irreversible change) 的例子！</p></div>
+                <div class="grammar-box"><div class="grammar-title">4. "made sure not to..." 確保不要...</div><p>表示小心避免某事：</p><div class="example">He <span class="highlight">made sure not to</span> burn it.<br>→ 他確保不要把它烤焦。</div></div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern"><strong>句型 1: searched for + 名詞</strong><div class="example">Ryan and Lily <span class="highlight">searched for</span> sticks.<br>→ 尋找某東西（search for = look for）</div></div>
+                <div class="sentence-pattern"><strong>句型 2: observed + as + 子句</strong><div class="example">Ryan <span class="highlight">observed as</span> the white treat turned brown.<br>→ 觀察到某事正在發生</div></div>
+                <div class="sentence-pattern"><strong>句型 3: waited + for + 名詞 + to + V</strong><div class="example">He <span class="highlight">waited</span> a minute <span class="highlight">for it to</span> cool.<br>→ 等待某事發生</div></div>
+                <div class="sentence-pattern"><strong>句型 4: It was + 形容詞, 形容詞, and 形容詞!</strong><div class="example"><span class="highlight">It was</span> warm, gooey, <span class="highlight">and</span> delicious!<br>→ 用連續形容詞描述感受</div></div>
+                <div class="info-box"><strong>💡 露營相關英文</strong><ul><li>go camping → 去露營</li><li>set up a tent → 搭帳篷</li><li>make a fire → 生火</li><li>roast marshmallows → 烤棉花糖</li><li>sleeping bag → 睡袋</li></ul></div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解技巧</h3>
+                <div class="info-box"><strong>文章結構：敘事文（時間順序）</strong><p><strong>開始：</strong>家人到達營地，搭好帳篷</p><p><strong>準備：</strong>媽媽生火，孩子們找棍子</p><p><strong>過程：</strong>烤棉花糖，觀察顏色變化</p><p><strong>結尾：</strong>品嘗美味的棉花糖</p></div>
+                <div class="info-box"><strong>科學知識連結</strong><ul><li><strong>不可逆變化：</strong>棉花糖從白色變棕色是一種不可逆變化，加熱改變了它的結構</li><li><strong>物質狀態：</strong>棉花糖加熱後從固體變成軟黏的狀態</li><li><strong>觀察技能：</strong>Ryan 注意到顏色的變化，這就是科學觀察</li></ul></div>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What did Ryan's family do on the camping trip? (Ryan 的家人露營時做了什麼？)</li><li>Why did the sticks have to be long with a point? (為什麼棍子必須是長的且末端有尖頭？)</li><li>What happened to the marshmallow when it was heated? (棉花糖加熱後發生了什麼？)</li><li>Can the marshmallow change back to white? Why? (棉花糖能變回白色嗎？為什麼？)</li><li>How did Ryan describe the taste? (Ryan 如何描述棉花糖的味道？)</li></ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `A Camping Trip\n\nRyan and his family went camping. They set up a tent and sleeping bags. Ryan's mom started to make a fire in the fire pit. Ryan and his sister, Lily, searched for sticks. The sticks had to be long with a point at the end. The family was going to roast marshmallows!\n\nRyan and Lily found the perfect sticks. Their mom opened a bag of marshmallows. Ryan put one marshmallow at the end of his stick. Lily did, too. Then they carefully held their marshmallows over the fire and waited.\n\nThe marshmallows started to heat up. Ryan observed as the white treat turned brown. He knew that his marshmallow could not change back to white. He made sure not to burn it. Then Ryan removed the brown marshmallow from the fire. He waited a minute for it to cool. Then he took a bite. It was warm, gooey, and delicious!`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

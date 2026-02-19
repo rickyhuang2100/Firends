@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Story of Chocolate</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 The Story of Chocolate</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box" style="line-height: 2; font-size: 16px;"><p>巧克力有一段漫長而迷人的歷史。巧克力的故事始於中美洲和南美洲，那裡生長著可可樹。古代瑪雅人是最早使用可可豆的民族之一。他們將可可豆磨成糊狀，加入水、辣椒和其他香料，製成一種苦味飲品。瑪雅人相信可可是神靈的禮物。</p><p>阿茲特克人也非常重視可可。事實上，他們用可可豆當作貨幣。一隻兔子大約可以用十顆可可豆購買。據說阿茲特克皇帝蒙特祖馬每天喝50杯巧克力飲品。</p><p>1500年代西班牙探險家到達美洲時，他們將可可豆帶回了歐洲。西班牙人在苦味的巧克力飲品中加入糖，使它更符合歐洲人的口味。巧克力飲品在歐洲富人中變得非常流行。</p><p>在1800年代，巧克力發生了永遠的改變。1828年，一位荷蘭化學家發明了一種製造巧克力粉的方法，使巧克力更便宜、更容易生產。1847年，一家英國公司製造了第一塊巧克力棒。1875年，一位名叫丹尼爾·彼得的瑞士人想出了如何在巧克力中加入牛奶，創造了牛奶巧克力。</p><p>今天，巧克力是世界上最受歡迎的零食之一。全球巧克力產業價值超過1000億美元。世界上大部分的可可種植在西非，特別是象牙海岸和迦納。從古代瑪雅人的苦味飲品到我們今天享用的甜食，巧克力走過了一段漫長的路。</p></div>
+            </div>
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">cacao</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">可可</div><div class="example">The <span class='highlight'>cacao</span> tree grows in Central and South America.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">paste</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">糊狀物</div><div class="example">They ground the beans into a <span class='highlight'>paste</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">appealing</div><div class="vocab-type">adj. 形容詞</div><div class="vocab-meaning">吸引人的</div><div class="example">Making it more <span class='highlight'>appealing</span> to European tastes.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">chemist</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">化學家</div><div class="example">A Dutch <span class='highlight'>chemist</span> invented powdered chocolate.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">figure out</div><div class="vocab-type">phr.v. 片語動詞</div><div class="vocab-meaning">想出；弄清楚</div><div class="example">Daniel Peter <span class='highlight'>figured out</span> how to add milk.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">industry</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">產業</div><div class="example">The global chocolate <span class='highlight'>industry</span> is worth over 100 billion.</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                    <div class="grammar-box"><div class="grammar-title">be among the first to...（是最早……之一）</div><p>表示在做某事方面屬於先驅。</p>
+                        <div class="example">The Maya <span class='highlight'>were among the first to</span> use cacao beans.</div>
+                        <div class="example">She <span class='highlight'>was among the first to</span> graduate.</div>
+                    </div>
+                    <div class="grammar-box"><div class="grammar-title">making + 受詞 + adj.（使……變得……）</div><p>分詞構句，表示結果。</p>
+                        <div class="example">They added sugar, <span class='highlight'>making</span> it more appealing.</div>
+                        <div class="example">This made chocolate cheaper, <span class='highlight'>making</span> it easier to produce.</div>
+                    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                    <div class="sentence-pattern"><strong>...has come a long way（經歷了漫長的發展）</strong><p>表示某事物經歷了很大的變化或進步。</p>
+                        <div class="example">Chocolate <span class='highlight'>has come a long way</span>.</div>
+                        <div class="example">Technology <span class='highlight'>has come a long way</span> in the past 20 years.</div>
+                    </div>
+                    <div class="sentence-pattern"><strong>be worth + 金額（價值……）</strong><p>表示某物的金錢價值。</p>
+                        <div class="example">The industry <span class='highlight'>is worth</span> over 100 billion dollars.</div>
+                        <div class="example">This painting <span class='highlight'>is worth</span> millions.</div>
+                    </div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                        <li style="margin-bottom: 15px;">最早使用可可豆的民族是？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 阿茲特克人</li><li>B) 瑪雅人</li><li>C) 西班牙人</li><li>D) 荷蘭人</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">第一塊巧克力棒是在哪一年製造的？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 1828年</li><li>B) 1847年</li><li>C) 1875年</li><li>D) 1900年</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">牛奶巧克力是誰發明的？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 蒙特祖馬</li><li>B) 一位荷蘭化學家</li><li>C) 丹尼爾·彼得</li><li>D) 一家英國公司</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                        <li style="margin-bottom: 15px;">世界上大部分可可種植在哪裡？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 南美洲</li><li>B) 東南亞</li><li>C) 西非</li><li>D) 中美洲</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                </ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = \`Chocolate has a long and fascinating history. The story of chocolate begins in Central and South America, where the cacao tree grows. The ancient Maya people were among the first to use cacao beans. They ground the beans into a paste and mixed it with water, chili peppers, and other spices to create a bitter drink. The Maya believed that cacao was a gift from the gods.
+
+The Aztecs also valued cacao highly. In fact, they used cacao beans as money. A rabbit could be bought for about ten cacao beans. The Aztec emperor Montezuma reportedly drank 50 cups of a chocolate drink every day.
+
+When Spanish explorers arrived in the Americas in the 1500s, they brought cacao beans back to Europe. The Spanish added sugar to the bitter chocolate drink, making it much more appealing to European tastes. Chocolate drinks became very popular among the wealthy in Europe.
+
+In the 1800s, chocolate changed forever. In 1828, a Dutch chemist invented a way to make powdered chocolate. This made chocolate cheaper and easier to produce. In 1847, a British company created the first chocolate bar. And in 1875, a Swiss man named Daniel Peter figured out how to add milk to chocolate, creating milk chocolate.
+
+Today, chocolate is one of the most popular treats in the world. The global chocolate industry is worth over 100 billion dollars. Most of the world's cacao is grown in West Africa, particularly in Ivory Coast and Ghana. From a bitter drink of the ancient Maya to the sweet treats we enjoy today, chocolate has come a long way.\`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = \`\${v.name} (\${v.lang})\`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

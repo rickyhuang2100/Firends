@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Jean-Michel Basquiat</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Jean-Michel Basquiat</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box"><p style="line-height: 2; font-size: 16px;">乚-米歇爾·巴斯奎特<br><br>Jean-Michel Basquiat 是一位畫家。他的藝術經常展示文字、符號、火柴人和動物。他在藝術中使用強烈的色彩。他通過藝術表達情感。Jean-Michel 在紐約市長大。小時候，Jean-Michel 的母親會帶他去博物館。她鼓勵他對藝術的興趣。她會和 Jean-Michel 一起畫畫。他喜歡畫卡通。Jean-Michel 曾說他的藝術來自他的母親。<br><br>十幾歲時，Jean-Michel 開始在紐約市的建築物和火車上創作塗鴉。塗鴉是在地鐵車廂、公車或公共空間牆壁上書寫、刮擦或繪畫的東西。他也創作繪畫。它們很快就在紐約的博物館展出。Basquiat 在二十多歲時開始出名。他的畫作開始以高價出售。<br><br>不幸的是，Jean-Michel 年紀輕輕就去世了。他去世時只有27歲。但即使在他短暫的人生中，他也能用他的藝術產生巨大的影響。</p></div>
+            </div>
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">symbols</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">符號</div></div>
+                    <div class="vocab-item"><div class="vocab-word">emotion</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">情感</div></div>
+                    <div class="vocab-item"><div class="vocab-word">encourage</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">鼓勵</div></div>
+                    <div class="vocab-item"><div class="vocab-word">graffiti</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">塗鴉</div></div>
+                    <div class="vocab-item"><div class="vocab-word">unfortunately</div><div class="vocab-type">[副詞]</div><div class="vocab-meaning">不幸的是</div></div>
+                    <div class="vocab-item"><div class="vocab-word">impact</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">影響</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box"><div class="grammar-title">1. "would + V (過去習慣)"</div><p>過去經常...：</p><div class="example">His mother <span class='highlight'>would</span> take him to museums.</div></div>
+                <div class="grammar-box"><div class="grammar-title">2. "started to + V"</div><p>開始做...：</p><div class="example">He <span class='highlight'>started to</span> create graffiti.</div></div>
+                <div class="grammar-box"><div class="grammar-title">3. "even in + N"</div><p>即使在...中：</p><div class="example"><span class='highlight'>Even in</span> his short life, he was able to make a big impact.</div></div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern"><strong>句型 1: would + V (過去習慣)</strong><div class="example">His mother <span class='highlight'>would</span> take him to museums.<br>→ 過去經常做...（表重複過去行為）</div></div>
+                <div class="sentence-pattern"><strong>句型 2: started to + V</strong><div class="example">He <span class='highlight'>started to</span> create graffiti on buildings.<br>→ 開始做...</div></div>
+                <div class="sentence-pattern"><strong>句型 3: even in + N, S + was able to + V</strong><div class="example"><span class='highlight'>Even in</span> his short life, he <span class='highlight'>was able to</span> make a big impact.<br>→ 即使在...中，也能夠...</div></div>
+                <div class="sentence-pattern"><strong>句型 4: once said that + 引述</strong><div class="example">Jean-Michel <span class='highlight'>once said that</span> he got his art from his mother.<br>→ 曾說過...（間接引述）</div></div>
+                <div class="info-box"><strong>💡 實用表達</strong><ul><li>"show emotion" → 表達情感</li><li>"become famous" → 變得有名</li><li>"make an impact" → 產生影響</li></ul></div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                        <li>What kind of art did Basquiat make? (Basquiat 創作什麼樣的藝術？)</li>
+                        <li>Who inspired his art? (誰啟發了他的藝術？)</li>
+                        <li>What is graffiti? (什麼是塗鴉？)</li>
+                        <li>How old was he when he died? (他去世時幾歲？)</li>
+                    </ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Jean-Michel Basquiat
+
+Jean-Michel Basquiat was a painter. His art often shows words, symbols, stick figures, and animals. He used strong colors in his art. He showed emotion through his art. Jean-Michel grew up in New York City. When he was a child, Jean-Michel's mother would take him to museums. She would encourage his interest in art. She would draw with Jean-Michel. He loved to draw cartoons. Jean-Michel once said that he got his art from his mother.
+
+When he was a teenager, Jean-Michel started to create graffiti on buildings and trains in New York City. Graffiti is something written, scratched, or drawn on subway cars, buses, or walls in public spaces. He also made paintings. They were soon shown in museums in New York. Basquiat started to become famous in his twenties. His paintings started to sell for a lot of money.
+
+Unfortunately, Jean-Michel died when he was young. He was only 27 years old when he died. But even in his short life, he was able to make a big impact with his art.`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>

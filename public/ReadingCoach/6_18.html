@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Great Wall of China</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 The Great Wall of China</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box" style="line-height: 2; font-size: 16px;"><p>中國萬里長城是有史以來最著名的建築之一。它橫跨中國北部約13,000英里。長城由不同的中國朝代歷經幾個世紀建造，用以抵禦來自北方的入侵。</p><p>最早的城牆大約在公元前7世紀由各個中國諸侯國建造。公元前221年秦始皇統一中國後，他下令將各個分離的城牆連接並延伸。這就是我們現在所稱的萬里長城的開端。數十萬工人——包括士兵、農民和囚犯——被迫在長城上工作。許多人在建造過程中喪生。</p><p>最為人知的長城段落是在明朝（1368-1644年）期間建造的。明朝統治者使用磚石建造更堅固、更持久的城牆。他們還沿著長城增建了瞭望塔、信號塔和堡壘。駐守在塔樓的士兵可以發送煙霧信號來警告敵人接近。</p><p>與流行的看法相反，用肉眼從太空看不到萬里長城。這是一個常見的迷思。長城只有約15到30英尺寬，太窄了，從軌道上看不見。</p><p>今天，萬里長城是中國最受歡迎的旅遊景點之一。每年有數百萬遊客前來沿著長城散步，欣賞其令人印象深刻的建築。1987年，萬里長城被列為聯合國教科文組織世界遺產。它仍然是中國文明和決心的強大象徵。</p></div>
+            </div>
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="vocab-word">dynasties</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">朝代</div><div class="example">Built by different Chinese <span class='highlight'>dynasties</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">invasions</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">入侵</div><div class="example">To protect against <span class='highlight'>invasions</span> from the north.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">peasants</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">農民</div><div class="example">Soldiers, <span class='highlight'>peasants</span>, and prisoners.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">fortresses</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">堡壘</div><div class="example">They added watchtowers and <span class='highlight'>fortresses</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">myth</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">迷思；神話</div><div class="example">This is a common <span class='highlight'>myth</span>.</div></div>
+                    <div class="vocab-item"><div class="vocab-word">Heritage</div><div class="vocab-type">n. 名詞</div><div class="vocab-meaning">遺產</div><div class="example">UNESCO World <span class='highlight'>Heritage</span> Site.</div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                    <div class="grammar-box"><div class="grammar-title">Contrary to...（與……相反）</div><p>用來推翻常見的錯誤觀念。</p>
+                        <div class="example"><span class='highlight'>Contrary to</span> popular belief, the Wall cannot be seen from space.</div>
+                        <div class="example"><span class='highlight'>Contrary to</span> what people think, he is not rich.</div>
+                    </div>
+                    <div class="grammar-box"><div class="grammar-title">be forced to + V（被迫……）</div><p>被動語態表示非自願的行動。</p>
+                        <div class="example">Workers <span class='highlight'>were forced to</span> work on the wall.</div>
+                        <div class="example">They <span class='highlight'>were forced to</span> leave their homes.</div>
+                    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                    <div class="sentence-pattern"><strong>What we now call...（我們現在所稱的……）</strong><p>用來介紹事物現在的名字與過去的關聯。</p>
+                        <div class="example">This was the beginning of <span class='highlight'>what we now call</span> the Great Wall.</div>
+                        <div class="example">This is <span class='highlight'>what we now call</span> democracy.</div>
+                    </div>
+                    <div class="sentence-pattern"><strong>remain + 名詞/形容詞（仍然是……）</strong><p>表示某事物持續保持某種狀態。</p>
+                        <div class="example">It <span class='highlight'>remains</span> a powerful symbol.</div>
+                        <div class="example">The mystery <span class='highlight'>remains</span> unsolved.</div>
+                    </div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                        <li style="margin-bottom: 15px;">萬里長城大約有多長？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 5,000英里</li><li>B) 8,000英里</li><li>C) 13,000英里</li><li>D) 20,000英里</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：C</p></li>
+                        <li style="margin-bottom: 15px;">哪個朝代建造了最著名的長城段落？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 秦朝</li><li>B) 漢朝</li><li>C) 唐朝</li><li>D) 明朝</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：D</p></li>
+                        <li style="margin-bottom: 15px;">從太空能看到萬里長城嗎？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 可以</li><li>B) 不能，這是一個迷思</li><li>C) 只有在晴天可以</li><li>D) 需要望遠鏡</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                        <li style="margin-bottom: 15px;">萬里長城何時成為世界遺產？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 1977年</li><li>B) 1987年</li><li>C) 1997年</li><li>D) 2007年</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
+                </ol></div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = \`The Great Wall of China is one of the most famous structures ever built. It stretches across northern China for about 13,000 miles. The wall was built over many centuries by different Chinese dynasties to protect against invasions from the north.
+
+The earliest walls were built around the 7th century B.C.E. by individual Chinese states. When Emperor Qin Shi Huang united China in 221 B.C.E., he ordered that the separate walls be connected and extended. This was the beginning of what we now call the Great Wall. Hundreds of thousands of workers, including soldiers, peasants, and prisoners, were forced to work on the wall. Many died during construction.
+
+The most well-known sections of the Great Wall were built during the Ming Dynasty (1368-1644 C.E.). The Ming rulers used bricks and stone to build stronger, more permanent walls. They also added watchtowers, signal towers, and fortresses along the wall. Soldiers stationed at the towers could send smoke signals to warn of approaching enemies.
+
+Contrary to popular belief, the Great Wall cannot be seen from space with the naked eye. This is a common myth. The wall is only about 15 to 30 feet wide, which is too narrow to be visible from orbit.
+
+Today, the Great Wall is one of China's most popular tourist attractions. Millions of visitors come every year to walk along the wall and admire its impressive architecture. In 1987, the Great Wall was named a UNESCO World Heritage Site. It remains a powerful symbol of Chinese civilization and determination.\`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = \`\${v.name} (\${v.lang})\`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>
