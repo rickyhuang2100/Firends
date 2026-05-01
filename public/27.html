@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S02E03 學習指南 | The One Where Heckles Dies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfdfc;
+            color: #333;
+        }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #c7a17a; border-bottom-color: #c7a17a; }
+        .play-btn { cursor: pointer; font-size: 1.2rem; color: #c7a17a; transition: transform 0.2s ease; }
+        .play-btn:hover { transform: scale(1.2); }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+        .section-title { color: #8c6f51; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #f59e0b; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s; z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; opacity: 0.98; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .flex.items-center.justify-between.h-16 { flex-direction: column; align-items: flex-start; height: auto; }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; background: transparent; transition: background 0.18s, color 0.18s, box-shadow 0.18s; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg, #fbeee6 0%, #f7d9b9 100%); color: #b97a3a; box-shadow: 0 2px 8px 0 rgba(247, 205, 120, 0.08); }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S02E03</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card">
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>歡迎來到《六人行》第二季第三集的學習指南！這一集的英文標題是 <strong>"The One Where Heckles Dies"</strong>（海先生之死）。</p>
+                <p>本集有一個非常有趣的學習亮點：如何用英文描述外貌上的「缺陷」，以及美國人如何透過誇飾法（hyperbole）來說笑。從 Chandler 拒絕女友只因為鼻孔太大，到 Joey 鬧出的超級烏龍——女人沒有喉結——這些對話充滿了道地的口語表達和幽默感。此外，本集也將帶你認識「gotta」這個超級實用的口語縮寫！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景</h2>
+            <div class="content-card space-y-6">
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景一：Chandler 的「挑剔」分手史</h3>
+                    <p class="text-gray-600 mb-4">Rachel 和 Monica 質疑 Chandler，他為什麼和 Joan 分手？原來只是因為鼻孔太大，還誇張說「她打噴嚏時蝙蝠會飛出來」。Rachel 反問他到底拒絕過多少女人，只因為這些膚淺的小事。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <span class="play-btn" data-start="0:26" data-end="0:31">▶️</span>
+                        <strong>Rachel:</strong> "How many women will you reject over superficial, insignificant things?"
+                    </p>
+                    <p class="text-gray-500 mt-1 ml-6">你到底要拒絕多少好女孩，只是因為非常膚淺的事情？</p>
+                </div>
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：Joey 的超大烏龍</h3>
+                    <p class="text-gray-600 mb-4">Joey 想支持 Chandler，說自己也曾因為女友的喉結而分手，卻渾然不知——女人根本沒有喉結！朋友們先是愣住，然後一起捉弄他，讓他信以為真，最後 Joey 才終於回過神來。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <span class="play-btn" data-start="0:50" data-end="0:53">▶️</span>
+                        <strong>Ross:</strong> "Joey, women don't have Adam's apples."
+                    </p>
+                    <p class="text-gray-500 mt-1 ml-6">喬伊，女人沒有喉結。</p>
+                </div>
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景三：樓下怪鄰居 Heckles 先生</h3>
+                    <p class="text-gray-600 mb-4">樓下的奇怪老房客 Heckles 先生上樓抗議，說他們走路聲音太大，「嚇到了他的鳥」——但他實際上根本沒有養鳥。Rachel 和 Monica 禮貌應對，但私下難掩無奈。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <span class="play-btn" data-start="2:19" data-end="2:28">▶️</span>
+                        <strong>Heckles:</strong> "You're stomping. It's disturbing my birds."<br>
+                        <strong>Monica:</strong> "You don't have birds."<br>
+                        <strong>Heckles:</strong> "I could have birds."
+                    </p>
+                    <p class="text-gray-500 mt-1 ml-6">你們腳步聲太響，嚇到了我的鳥兒。／你沒有養鳥。／我可以養鳥。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">break up with</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">與（某人）分手</td>
+                                <td class="p-4"><strong>Chandler:</strong> "Broke up with her." （他和 Joan 分手了，省略了主詞，因為口語常這樣說。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">nostril</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">鼻孔</td>
+                                <td class="p-4"><strong>Rachel:</strong> "Because of the big nostril thing?" （因為鼻孔問題？這個字很多初學者不知道！）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">superficial</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">膚淺的；表面的</td>
+                                <td class="p-4"><strong>Rachel:</strong> "…over superficial, insignificant things." （只因為這些膚淺又微不足道的事情。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">Adam's apple</td>
+                                <td class="p-4">名詞片語</td>
+                                <td class="p-4">喉結</td>
+                                <td class="p-4"><strong>Joey:</strong> "…but she had the biggest Adam's apple." （但她的喉結非常大粒！——女人沒有喉結，所以這才是笑點。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">drive (someone) nuts</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">讓（某人）抓狂、受不了</td>
+                                <td class="p-4"><strong>Joey:</strong> "Drove me nuts." （真是讓我受不了。口語中非常常用，也可說 drive someone crazy。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">side with</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">站在...那邊；支持</td>
+                                <td class="p-4"><strong>Joey:</strong> "I gotta side with Chandler on this one." （我必須支持錢德這一邊。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono">disturb</td>
+                                <td class="p-4">動詞</td>
+                                <td class="p-4">打擾；干擾</td>
+                                <td class="p-4"><strong>Heckles:</strong> "It's disturbing my birds." （正在打擾我的鳥兒。用現在進行式表示當下正在發生的困擾。）</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音</h2>
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">語法焦點：口語縮寫 <code class="bg-gray-100 px-2 py-1 rounded">gotta</code> 的用法</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    在口語英語中，<strong>「have got to」</strong>通常會縮讀成 <strong>「gotta」</strong>。它的意思等同於「have to / must」（必須），是日常對話中出現頻率極高的縮寫。
+                </p>
+                <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                    <p class="font-semibold text-amber-900 mb-2">📌 本集範例：</p>
+                    <p class="font-mono text-lg">
+                        <span class="play-btn" data-start="0:32" data-end="0:35">▶️</span>
+                        "Hold it. I <strong>gotta</strong> side with Chandler on this one."
+                    </p>
+                    <p class="text-gray-600 mt-2">慢著，我必須（gotta = have got to）支持錢德這一邊。</p>
+                </div>
+                <ul class="list-disc list-inside space-y-2 text-lg">
+                    <li><strong>正式寫法</strong>：I have got to side with Chandler.</li>
+                    <li><strong>口語縮寫</strong>：I gotta side with Chandler.</li>
+                    <li>⚠️ 注意：<code>gotta</code> 只出現在口語或非正式書寫，正式文件請用 <code>have to</code> 或 <code>must</code>。</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">發音焦點：連讀 (Linking) & 弱讀 (Weak Forms)</h3>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-semibold mb-2 text-amber-700">🔗 連讀 (Linking)：子音 + 母音黏在一起說</h4>
+                    <div class="bg-gray-100 p-4 rounded-lg space-y-3">
+                        <div>
+                            <p class="font-mono text-lg">
+                                <span class="play-btn" data-start="0:06" data-end="0:08">▶️</span>
+                                "So how was Joan?"
+                            </p>
+                            <p class="text-gray-600 mt-1">
+                                👉 <strong>「how was」</strong> 連讀：<code>how</code> 的 /w/ 和 <code>was</code> 的 /w/ 連在一起，聽起來像「<strong>how-wuz</strong>」。母語人士說得非常快，幾乎分不清兩個字。
+                            </p>
+                        </div>
+                        <div>
+                            <p class="font-mono text-lg">
+                                <span class="play-btn" data-start="0:28" data-end="0:29">▶️</span>
+                                "How many women will you reject..."
+                            </p>
+                            <p class="text-gray-600 mt-1">
+                                👉 <strong>「will you」</strong> 連讀：<code>will</code> 的 /l/ 和 <code>you</code> 的 /j/ 合流，聽起來像「<strong>will-yuh</strong>」甚至更快地說成 「wil-ya」。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold mb-2 text-sky-700">🔉 弱讀 (Weak Forms)：功能詞在句中被弱化</h4>
+                    <div class="bg-gray-100 p-4 rounded-lg space-y-3">
+                        <div>
+                            <p class="font-mono text-lg">
+                                <span class="play-btn" data-start="0:10" data-end="0:13">▶️</span>
+                                "Because of the big nostril thing?"
+                            </p>
+                            <p class="text-gray-600 mt-1">
+                                👉 <strong>「of」</strong> 弱讀：正式發音是 /ɒv/，但口語中幾乎讀成 <strong>/əv/</strong>（聽起來像「uh」）。整句中 <code>of the</code> 連起來變成「<strong>əv-thə</strong>」，快速地滑過去。
+                            </p>
+                        </div>
+                        <div>
+                            <p class="font-mono text-lg">
+                                <span class="play-btn" data-start="0:40" data-end="0:44">▶️</span>
+                                "...but she had the biggest Adam's apple."
+                            </p>
+                            <p class="text-gray-600 mt-1">
+                                👉 <strong>「had」</strong> 弱讀：在句子中間時，<code>had</code> 的 /h/ 常常被省略，聽起來像 <strong>/əd/</strong>，整句連讀像「but-she-əd」。這在過去式的口語中非常普遍。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 文化 -->
+        <section id="culture" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 文化</h2>
+            <div class="content-card">
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">文化點一：誇飾法（Hyperbole）是美式幽默的靈魂</h3>
+                    <p class="text-lg leading-relaxed">
+                        Chandler 說 Joan「打噴嚏時蝙蝠會飛出來」，或者「仰起頭時我可以看到她的腦子」——這些當然不是真實情況，而是美式喜劇中極度常見的<strong>誇飾法（hyperbole）</strong>。它的目的不是要描述事實，而是要放大情緒、製造笑點。聽到這種表達，不要字字當真，只需感受說話者誇大的情緒就好！
+                    </p>
+                    <div class="mt-4 bg-amber-50 border-l-4 border-amber-300 p-4 rounded-r-lg">
+                        <p class="text-amber-900 font-semibold">常見誇飾句型：</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-700">
+                            <li>"I've told you a million times!" （我跟你說了一百萬次了！）</li>
+                            <li>"I'm so hungry I could eat a horse." （我餓得可以吃下一匹馬。）</li>
+                            <li>"Bats flew out of them." （蝙蝠從她鼻孔飛出來。）</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">文化點二：「Yanni」是誰？</h3>
+                    <p class="text-lg leading-relaxed">
+                        劇中 Rachel 提到 Maureen Rasillo，Chandler 和她分手的理由是「她不討厭 Yanni（雅尼）」。<strong>Yanni</strong> 是一位希臘裔美國新世紀音樂家（New Age musician），他的音樂以輕柔舒緩著稱，在 90 年代非常流行，卻也因太過「甜膩」而受到一些人的嘲笑。劇中這樣拿 Yanni 開玩笑，反映了當時美國流行文化中對這類音樂的戲謔態度。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VI. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VI. 練習</h2>
+            <div class="content-card">
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">練習一：詞彙填空</h3>
+                    <p class="text-lg">請從本課詞彙選出正確的字填入空格（break up with / gotta / superficial / drive me nuts / side with）：</p>
+                    <ol class="list-decimal list-inside mt-4 space-y-3 text-lg">
+                        <li>He always leaves his dishes in the sink. It really __________ !</li>
+                        <li>I __________ go now, or I'll be late for class.</li>
+                        <li>She decided to __________ him after they had a big argument.</li>
+                        <li>Don't make decisions based on __________ reasons. Think deeper!</li>
+                        <li>In this situation, I have to __________ Monica. She's right.</li>
+                    </ol>
+                    <details class="mt-4 cursor-pointer">
+                        <summary class="text-amber-700 font-semibold">👁 點我看答案</summary>
+                        <ol class="list-decimal list-inside mt-2 space-y-1 text-gray-700">
+                            <li>drives me nuts</li>
+                            <li>gotta</li>
+                            <li>break up with</li>
+                            <li>superficial</li>
+                            <li>side with</li>
+                        </ol>
+                    </details>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">練習二：理解問答</h3>
+                    <ol class="list-decimal list-inside space-y-3 text-lg">
+                        <li>Chandler 為什麼和 Joan 分手？</li>
+                        <li>Joey 說他分手是因為女友有什麼？這有什麼問題？</li>
+                        <li>Heckles 先生抗議的理由是什麼？為什麼這個理由很奇怪？</li>
+                    </ol>
+                    <details class="mt-4 cursor-pointer">
+                        <summary class="text-amber-700 font-semibold">👁 點我看答案</summary>
+                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-700">
+                            <li>因為 Joan 的鼻孔太大（big nostrils），Chandler 受不了。</li>
+                            <li>Joey 說因為女友有喉結（Adam's apple），但女人根本沒有喉結，所以這是個烏龍。</li>
+                            <li>Heckles 說女孩們的腳步聲嚇到他的鳥，但他根本沒有養鳥，所以這個理由完全是捏造的。</li>
+                        </ol>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- VII. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">VII. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    恭喜你完成了《六人行》S02E03 的深度學習！這一集讓我們學到了許多實用的口語表達：<strong>gotta（必須）</strong>、<strong>drive sb. nuts（讓人抓狂）</strong>、<strong>side with（支持）</strong>，以及發音上的連讀和弱讀技巧。
+                </p>
+                <div class="mt-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-green-900 mb-2">本課重點複習</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li><strong>gotta</strong> = have got to = must（口語中超常用！）</li>
+                        <li><strong>Adam's apple</strong> = 喉結（女人沒有！）</li>
+                        <li><strong>drive someone nuts</strong> = 讓某人抓狂</li>
+                        <li>美式誇飾法：誇大說法只是為了好笑，不是事實</li>
+                        <li>連讀技巧：<code>how was</code> → how-wuz，<code>will you</code> → wil-ya</li>
+                    </ul>
+                </div>
+                <p class="text-lg leading-relaxed mt-4">繼續保持學習的熱情，嘗試用今天學到的片語說幾個自己的例句，效果會更好！我們下一集再見！🎉</p>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    var allToggle = document.querySelectorAll('.play-btn');
+                    allToggle.forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTimeStr = button.dataset.start;
+                    var endTimeStr = button.dataset.end;
+                    var startTime = parseTimeString(startTimeStr);
+                    var endTime = parseTimeString(endTimeStr);
+                    if (isNaN(startTime) || isNaN(endTime)) {
+                        console.error('Invalid start or end time');
+                        return;
+                    }
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+
+                    let loopId;
+                    const checkLoop = () => {
+                        if (video.paused || video.currentTime < startTime || video.currentTime >= endTime) {
+                            if (!video.paused) {
+                                video.currentTime = startTime;
+                            }
+                        }
+                        if (video.currentTime >= endTime) {
+                            video.currentTime = startTime;
+                        }
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) {
+                video.src = url;
+            } else if (video) {
+                console.log("未在網址中找到 'url' 參數，使用預設影片或處理錯誤。");
+            }
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
