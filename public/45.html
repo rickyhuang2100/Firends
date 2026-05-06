@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S02E22 學習指南 | The One with the Two Parties</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        
+        /* 特別針對 AB Loop 功能做樣式的高亮提示 */
+        .play-btn { 
+            cursor: pointer; 
+            font-size: 1.3rem; 
+            color: #ea580c; 
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { 
+            transform: scale(1.1); 
+            background-color: #ffedd5;
+        }
+
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S02E22</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#about-ab-loop" class="nav-link text-orange-600 font-bold">🎯 AB循環教學</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎓 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p class="mb-4">您特別提到的 <strong>AB Loop (循環區段播放)</strong> 功能已經全部內建在下方的對話方塊中！當您點擊帶有橘色底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕時，影片就會在指定的句子之間<strong>不斷重複循環 (Loop)</strong>。這對於練習聽寫 (Dictation) 與跟讀模仿 (Shadowing) 非常有幫助。</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第二季第二十二集 <strong>"The One with the Two Parties"</strong>（兩個派對）。</p>
+                <p>這集是非常經典的「混亂喜劇」。大家本來要為 Rachel 舉辦生日驚喜派對 (Surprise Party)，結果 Rachel 剛離婚、水火不容的父母竟然不約而同地出現在門外！為了不讓兩老碰面引發世界大戰，大家只好緊急把派對拆成兩半 ── Monica 的公寓變成了規矩超多、無聊透頂的「媽媽局」，而對面 Joey 和 Chandler 的公寓則成為有辣妹、有啤酒的「爸爸瘋狂局」。兩邊的對比不僅製造了大量笑點，也充滿了各種有趣的生活對話！</p>
+            </div>
+        </section>
+
+        <!-- AB Loop 專區說明 -->
+        <section id="about-ab-loop" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-orange-700 mb-4 flex items-center"><span class="text-4xl mr-2">🎧</span> 什麼是 AB Loop 跟讀法？</h2>
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-orange-100 text-lg">
+                <p class="mb-4">語言學習中最有效的方法之一就是利用 <strong>A-B 點循環播放</strong>，強迫耳朵適應美式英語的真實語速，並透過模仿來改善口音。在看下方的場景範例時，建議您：</p>
+                <ol class="list-decimal pl-6 space-y-2 text-stone-700">
+                    <li><strong>第一遍：</strong> 點擊播放按鈕 <span class="play-btn text-sm p-1 mx-1">▶️</span>，不看字幕，純聽聲音，嘗試抓取大意。</li>
+                    <li><strong>第二至三遍：</strong> 看著英文字幕，仔細聽字與字之間的「連讀 (Linking)」與「弱化 (Weak forms)」。</li>
+                    <li><strong>第四遍以上 (Shadowing)：</strong> 電腦發音的同時，您也跟著同時讀出來，確保節奏與語調一致！想暫停只需點擊 <span class="play-btn text-sm p-1 mx-1">⏹️</span> 即可。</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+                <div class="p-4 border-l-4 border-slate-300 bg-slate-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-slate-800">場景一：不受歡迎的派對規矩</h3>
+                    <p class="text-gray-600 mb-4">Monica 把好好的一個派對搞得像開會，不僅不供應垃圾食物，大家還得小心翼翼。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:24" data-end="0:31">▶️</button>
+                        <br>
+                        <strong>Joey:</strong> "Why do we always have parties with committees? Why can't we just get pizza and beer and have fun?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（為什麼我們總是要參加有『委員會』的派對？為什麼我們不能直接買披薩和啤酒好好樂一樂？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 注意聽 "Why can't we just get..." 的語速與連貫性。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-blue-300 bg-blue-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-blue-800">場景二：收禮物的潛規則</h3>
+                    <p class="text-gray-600 mb-4">Rachel 收到禮物後，朋友貼心地告訴她其實可以拿去退換。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="7:32" data-end="7:36">▶️</button>
+                        <br>
+                        <strong>Friend:</strong> "Now, you can exchange them if you want, okay?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（如果妳想的話，妳隨時可以拿去退換，好嗎？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 聽聽美國人怎麼把 "exchange them" 唸得很順，them 的 'th' 常常會弱化念得又快又輕。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景三：兩個極端的派對</h3>
+                    <p class="text-gray-600 mb-4">Monica 在自己的公寓裡準備了燉鮭魚 (poached salmon)，完全不符合年輕人開趴的口味。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:18" data-end="0:21">▶️</button>
+                        <br>
+                        <strong>Guest:</strong> "Why do we always have parties where you poach things"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（誰開派對還煮那種健康燉菜的啊？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 注意 "always have parties" 中的 parties 的 t 發成 d (Flap T) 的彈舌音效果。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">committee</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">委員會</td>
+                                <td class="p-4">Joey 抱怨: "Why do we always have parties with <strong>committees</strong>?" (形容 Monica 籌辦派對龜毛到像在開什麼正式代表大會一樣)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">exchange</td>
+                                <td class="p-4">動詞</td>
+                                <td class="p-4">交換 / 退換貨</td>
+                                <td class="p-4">"Now, you can <strong>exchange</strong> them if you want..." (在國外送禮通常會附上 Gift Receipt，讓收禮者不喜歡時可以自己拿去店裡換貨。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">poach</td>
+                                <td class="p-4">動詞</td>
+                                <td class="p-4">水煮 / 燉煮</td>
+                                <td class="p-4">"Who has parties where you <strong>poach</strong> things?" (相較於炸雞、披薩，poach 水煮的食物對年輕人的派對來說太無聊了。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">goon</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">呆子 / 笨蛋 / 打手</td>
+                                <td class="p-4">"you <strong>goon</strong>!!" (常指有點傻氣、動作笨重，或做些滑稽舉動的人。這裡帶有一點嘲笑和開玩笑的語氣。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語句的情境暗示 (Sarcasm)</h2>
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">美式幽默靈魂：Sarcasm 表裡不一的嘲諷</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    在本集中，當大家看到 Monica 準備的高級、無聊、又不能弄亂場地的派對，以及健康的「水煮鮭魚」時，充滿了各種酸言酸語。<br>
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="text-gray-700 mb-2">
+                        <strong>"Fancy parties are only fun if you're fancy on the inside."</strong><br>
+                        (高級的派對只有當你骨子裡也是個高級作派的人時，才會覺得好玩。)
+                    </p>
+                    <p class="text-gray-700 mt-4">
+                        美國人非常喜歡用這種挖苦自己的反諷來幽默地抱怨。雖然嘴巴上說著 "fancy (高級)"，但其實骨子裡是在喊「快把披薩跟啤酒交出來，這太無聊了！」
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集因為兩個派對的情境極端反差，對話也分成了「嚴肅禮貌」跟「隨興口語」兩種截然不同的語氣。請多利用上方的 <strong>AB 循環播放按鈕</strong>，聆聽劇本原音並練習跟讀 (Shadowing)。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">請多運用這個功能：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>點擊橘色的 <strong>[▶️] 播放鍵</strong>，就能讓影片持續在對話區間內反覆播放！</li>
+                        <li>聽到習慣為止，再按下 <strong>[⏹️] 停止鍵</strong> 或點其他區段。</li>
+                        <li>用這樣的「肌肉記憶」方式背誦單字跟句型，您的英文語威將突飛猛進喔！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
