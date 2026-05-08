@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E09 學習指南 | The One with the Football</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S03E09</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季第九集，<strong>"The One with the Football"</strong>（橄欖球的那集）。</p>
+                <p>感恩節特輯！Monica 和 Ross 在準備感恩節大餐的過程中，提議重拾他們家的傳統——Geller Ball 觸身橄欖球。但原來這個傳統被他們的媽媽禁止了 12 年，因為那年 Monica 把 Ross 的鼻子打斷了（Monica 說是意外，Ross 說是故意）。Chandler 剛和 Janice 分手，整個人萎靡不振，Joey 試圖激勵他出來玩球。球賽過程中遇到了荷蘭女孩 Marja，Joey 和 Chandler 雙雙墜入情網，上演了一場搶人大戰。</p>
+                <p>這集台詞充滿了<strong>運動術語、家族傳說式的誇大陳述，以及典型的爭論英語</strong>，又好笑又實用！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：Geller Ball 傳說——Monica 打斷 Ross 的鼻子！</h3>
+                    <p class="text-gray-600 mb-4">Ross 和 Monica 各執一詞，爭論 12 年前那紛歸鼻子事件到底是意外還是故意。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="2:56" data-end="3:15">▶️</button><br>
+                        <strong>Monica:</strong> "One year, Geller Ball 6, I accidentally broke Ross's nose."<br>
+                        <strong>Ross:</strong> "It was so not an accident. She saw I was about to tag her, so she threw her big fat grandma arm elbow in my face. Just kept running."<br>
+                        <strong>Monica:</strong> "To score the winning touchdown, by the way."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（那一年的 Geller Ball 6，我不小心打斷了 Ross 的鼻子。／根本不是意外。她看到我要抓她，就把她那又大又肥的奶奶手肘甩進我臉裡，然後繼續跑。／順便說一句，是為了取得制勝達陣。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"by the way"</em> 是英文最常用的過渡短語，= 順帶一提。Monica 說這句話的語氣帶著得意，彷彿在說「不管如何，我贏了」。注意 Ross 的 <em>"It was so not an accident"</em>——用 <em>so not</em> 來強調否定，是口語中的強調句型。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-indigo-300 bg-indigo-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-indigo-800">場景二：Chandler 失戀後的「目標清單」</h3>
+                    <p class="text-gray-600 mb-4">Joey 說 Chandler 自從和 Janice 分手後什麼都不想做，Chandler 反駁：我有很多目標！</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="1:53" data-end="2:10">▶️</button><br>
+                        <strong>Joey:</strong> "Come on, man, you haven't wanted to do anything since you and Janice broke up."<br>
+                        <strong>Chandler:</strong> "That's not true. I wanted to wear my bathrobe and eat peanut clusters all day."<br>
+                        <strong>Chandler:</strong> "I wanted to start drinking in the morning. Don't say that I don't have goals."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（得啦，自從你和 Janice 分手後你什麼都不想做。／那不是真的。我想穿著浴袍整天吃花生糖。我還想從早上開始喝酒。別說我沒有目標。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"Don't say that I don't have goals."</em> 是雙重否定句，邏輯上等於肯定：= 我是有目標的！這句話的笑點來自 Chandler 以非常認真的語氣為「穿浴袍吃花生糖」辯護，反差極強。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景三：球是 Janice！還有「我以為你說的是人生」</h3>
+                    <p class="text-gray-600 mb-4">Monica 的球隊在 huddle（戰術討論）裡想到絕招，而 Phoebe 對 "know what you're doing" 有完全不同的理解。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:00" data-end="6:10">▶️</button><br>
+                        <strong>Monica:</strong> "The ball is Janice, the ball is Janice."<br>
+                        <br>
+                        <button class="play-btn" data-start="5:58" data-end="6:08">▶️</button><br>
+                        <strong>Monica:</strong> "Phoebe, you know what you're doing, right?"<br>
+                        <strong>Phoebe:</strong> "Yeah."<br>
+                        <strong>Monica:</strong> "...Joey's gonna catch it and you and I are gonna block."<br>
+                        <strong>Phoebe:</strong> "I thought you meant in life."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（球就是 Janice，球就是 Janice。／Phoebe，你知道自己在做什麼吧？／當然。／Joey 去接球，你和我去阻截。／我以為你說的是⋯人生。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"I thought you meant..."</em> = 我以為你的意思是⋯。這是誤解場景中最自然的說法，表示「我把你的話解讀成另一個意思了」。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-green-300 bg-green-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-green-800">場景四：失敗的「戰術」——Part of my plan to fall behind</h3>
+                    <p class="text-gray-600 mb-4">Ross 的球隊先失分，Rachel 問 Ross 說他說要阻截 Joey 但沒做到，難道是策略？</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:44" data-end="6:58">▶️</button><br>
+                        <strong>Rachel:</strong> "You said in the huddle that if Joey caught the ball, you were gonna be the one to stop him. Now, you didn't. So is that like, like a football strategy?"<br>
+                        <strong>Ross:</strong> "Yeah, it was part of my plan to fall instantly behind."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你在戰術討論時說，如果 Joey 接到球，你要去阻截他。但你沒有。那是⋯足球戰術嗎？／對，那是我計劃「立刻落後」策略的一環。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"It was part of my plan to..."</em> = 那是我計劃的一部分，去做⋯。Ross 這句話是典型的英式幽默——用非常正式、鎮定的語氣承認自己根本沒有計劃。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景五：荷蘭女孩出現！Joey 搭訕花招</h3>
+                    <p class="text-gray-600 mb-4">一個荷蘭女孩 Marja 闖入球場，Joey 立刻上前搭訕，Chandler 緊跟其後。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="8:06" data-end="8:22">▶️</button><br>
+                        <strong>Joey:</strong> "Hey, thanks for stopping our ball."<br>
+                        <strong>Marja:</strong> "You are playing American football?"<br>
+                        <strong>Joey:</strong> "Wow, you're like from a whole other country."<br>
+                        <strong>Marja:</strong> "I'm Dutch."<br>
+                        <strong>Joey:</strong> "Hi, I'm Joey."<br>
+                        <strong>Joey:</strong> "I'm sorry, Dutch, I didn't get that last little bit."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（嘿，謝謝你幫我們把球擋住。／你們在玩美式足球嗎？／哇，你好像是從另一個國家來的。／我是荷蘭人。／嗨，我是 Joey。／對不起，荷蘭⋯我沒聽清楚你最後說的那一點。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"I didn't get that."</em> = 我沒聽懂。在聽不清楚或不明白時，這比 "What?" 更禮貌也更自然。<em>"that last little bit"</em> 加了 "little bit" 表達「最後那一小段」，讓語氣更輕鬆而不生硬。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">by the way</td>
+                                <td class="p-4">連接語</td>
+                                <td class="p-4">順帶一提 / 附帶說一聲</td>
+                                <td class="p-4">"To score the winning touchdown, <strong>by the way</strong>." (用來補充一個相關資訊，常帶有強調或挑釁語氣。縮寫：BTW（多用於書面）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">huddle</td>
+                                <td class="p-4">名詞/動詞</td>
+                                <td class="p-4">聚在一起討論；（美橄）暫停討論戰術</td>
+                                <td class="p-4">"Oh, cool, this is my first <strong>huddle</strong>." (美式足球中球員聚在一起討論下一步策略。也可比喻為非正式的小型秘密討論。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">I didn't get that.</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">我沒聽懂 / 我沒明白那部分</td>
+                                <td class="p-4">"I didn't <strong>get</strong> that last little bit." (<em>get</em> 在這裡 = 理解/聽清。比 "What?" 或 "I don't understand" 更自然、更禮貌。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">It was so not [adjective].</td>
+                                <td class="p-4">口語句型</td>
+                                <td class="p-4">那根本就不是⋯ / 完全不是那樣</td>
+                                <td class="p-4">"It was <strong>so not</strong> an accident." (<em>so not</em> 是強調否定的口語說法，比 "definitely not" 更有情緒張力。常見：<em>That is so not okay.</em>（那完全不行。）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">start drinking in the morning</td>
+                                <td class="p-4">片語</td>
+                                <td class="p-4">從早上就開始喝酒（表示頹廢、失意）</td>
+                                <td class="p-4">"I wanted to <strong>start drinking in the morning</strong>." (英文文化中「從早喝到晚」是形容一個人極度消沉或放棄的誇張比喻，不一定是真的要喝。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">get over sb/sth</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">從（失戀/痛苦）中走出來 / 療癒</td>
+                                <td class="p-4">"you have to start <strong>getting over</strong> her." (= 開始從對某人的感情或創傷中恢復。<em>get over</em> 也可以是「克服」困難：<em>get over a cold</em>（病好了）。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🏈 運動術語：美式足球常用英語</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集充滿了橄欖球相關的英語術語，一次學起來：
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>touchdown</strong> = 達陣（得分）</p>
+                            <p>"score the winning <em>touchdown</em>"</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>huddle</strong> = 球員聚集討論戰術</p>
+                            <p>"this is my first <em>huddle</em>"</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>two-hand touch</strong> = 觸身橄欖球（非擒抱）</p>
+                            <p>"<em>two hand touch</em>, we'll kick off"</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>tag</strong> = 用手拍/碰到對方（觸身）</p>
+                            <p>"I was about to <em>tag</em> her"</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>go long</strong> = 往後跑遠（接長傳）</p>
+                            <p>"You, you go <em>long</em>."</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>block</strong> = 阻截對方</p>
+                            <p>"you and I are gonna <em>block</em>"</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>shotgun</strong> = 散彈槍陣型（QB後退開球）</p>
+                            <p>"You wanna go <em>shotgun</em>?"</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p><strong>one Mississippi, two Mississippi...</strong> = 數秒的方式（限制衝傳）</p>
+                            <p>"one <em>Mississippi</em>, two <em>Mississippi</em>"</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-base mt-3">💡 在觸身橄欖球中，防守方要等 "three Mississippi" 才能衝向四分衛，用這種數字來代替碼錶計時。</p>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🗣️ 禮貌表示聽不懂的說法</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Joey 對荷蘭女孩 Marja 說的這句話，示範了聽不清楚時的禮貌表達方式：
+                </p>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-emerald-900 text-xl mb-3">
+                        <button class="play-btn" data-start="8:15" data-end="8:22">▶️</button>
+                        "I'm sorry, Dutch, I didn't get that last little bit."
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p>從最簡單到最正式，幾種說法：</p>
+                        <div class="bg-white rounded p-3 border border-emerald-100 space-y-2 text-base">
+                            <p>😊 <em>"I didn't get that."</em>（我沒聽懂。）</p>
+                            <p>😊 <em>"Sorry, could you say that again?"</em>（抱歉，你能再說一遍嗎？）</p>
+                            <p>😊 <em>"I'm not sure I follow."</em>（我不確定我有跟上你說的。）</p>
+                            <p>😊 <em>"Could you repeat that, please?"</em>（可以請你再說一次嗎？）</p>
+                            <p>😊 <em>"Sorry, what was that?"</em>（抱歉，你說什麼？）</p>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-2">⚠️ 盡量避免只說 "Huh?" 或 "What?"——這在正式場合會顯得比較粗魯。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📝 "I thought you meant..." ——誤解時的說法</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Phoebe 那句神來一筆，示範了英文中解釋誤解的最自然方式：
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="6:00" data-end="6:08">▶️</button>
+                        "I thought you meant in life."
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>I thought you meant [X].</strong> = 我以為你說的是 X 的意思。</p>
+                        <p>當你誤解了別人的話，或想解釋你為什麼會有那樣的理解時使用：</p>
+                        <div class="bg-white rounded p-3 border border-yellow-100 space-y-2 text-base">
+                            <p><em>"I thought you meant next week!"</em>（我以為你說的是下週！）</p>
+                            <p><em>"Oh, I thought you meant you were leaving permanently."</em>（哦，我以為你說的是永久離開。）</p>
+                            <p><em>"Sorry, I thought you meant something else."</em>（抱歉，我以為你是別的意思。）</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    感恩節的 Geller Ball 告訴我們：競爭不是壞事，只要最後大家能在同一張桌子上吃火雞。Chandler 從穿浴袍吃花生的失戀廢人，到出來玩球還搶到一個荷蘭女孩的電話，說明了「出門」永遠是最好的療傷藥。而 Phoebe 說的「我以為你說的是人生」，值得所有人時刻記住——有時候我們需要把對足球的配合，換成對人生的清醒。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">記得多利用聽力練習：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>把五個 <strong>AB 循環播放點</strong> 都再練習一遍！</li>
+                        <li>模仿 Chandler 說 <strong>"Don't say that I don't have goals."</strong>——語氣要正經又委屈！</li>
+                        <li>練習 <strong>"I didn't get that last little bit."</strong> ——下次英文聽不懂時就用這句！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

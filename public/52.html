@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E05 學習指南 | The One with Frank Jr.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S03E05</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季第五集，<strong>"The One with Frank Jr."</strong>（小弟弟 Frank 的那集）。</p>
+                <p>Phoebe 第一次正式和同父異母的弟弟 Frank Jr. 見面，努力建立姊弟感情——但 Frank 最大的興趣就是「融化東西」。與此同時，朋友們討論起那個讓人又興奮又好笑的話題：如果可以和五位名人約會而配偶不生氣，你的「Freebie List」會是誰？Ross 認真研究到需要分類，被大家笑說是書呆子。Joey 穿著緊繃的 80 年代復古工作褲幫 Chandler 裝修，卻意外把 Monica 的浴室地板弄了個洞，釀成一連串糊塗喜劇。</p>
+                <p>這集台詞生動兼具文化背景，包含大量<strong>日常口語、幽默說法和感情俚語</strong>！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-pink-300 bg-pink-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-pink-800">場景一：Freebie List——名人特許名單登場！</h3>
+                    <p class="text-gray-600 mb-4">Chandler 提到 Janice 把大衛·科波菲爾列在她的「freebie list」，朋友們立刻好奇追問規則。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="2:47" data-end="3:03">▶️</button><br>
+                        <strong>Chandler:</strong> "Well, we have a deal where we each get to pick five different celebrities that we can sleep with. And the other one can't get mad."<br>
+                        <strong>Ross:</strong> "Ah, the heart of every healthy relationship."<br>
+                        <strong>Ross:</strong> "Honesty, respect, and sex with celebrities."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我們有個協議，各自可以選五個名人，就算發生關係對方也不能生氣。／啊，每段健康關係的核心。／誠實、尊重，還有⋯和名人上床。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 注意 Joey 的 <em>"the heart of every healthy relationship"</em> 是反諷語氣——他說得越正經，笑點越強。<em>healthy</em> 的重音在 <em>HEAL-thy</em>。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-orange-300 bg-orange-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-orange-800">場景二：Ross 要把候選人分類——這個書呆子！</h3>
+                    <p class="text-gray-600 mb-4">大家問 Ross 他的名單，沒想到他說要先把候選人分類。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="4:08" data-end="4:18">▶️</button><br>
+                        <strong>Ross:</strong> "Why, you know, that kind of thing requires some serious thought. First, I'll divide my prospective candidates into categories."<br>
+                        <strong>Chandler:</strong> "What a geek."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（這種事情需要認真思考，我要先把潛在候選人分類。／真是書呆子。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"prospective candidates"</em> 是很正式的用詞，搭配 "freebie list" 這種八卦話題，對比效果極強。注意 <em>prospective</em> 的重音：<em>pros-PEC-tive</em>。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景三：I'm not a mind reader！</h3>
+                    <p class="text-gray-600 mb-4">Joey 在 Chandler 家裝修時差點電鑽傷到 Chandler，Chandler 大喊，Joey 卻完全不覺得是自己的問題。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="5:29" data-end="5:48">▶️</button><br>
+                        <strong>Chandler:</strong> "You get me, you kill me."<br>
+                        <strong>Joey:</strong> "Calm down. Do you want this unit or not?"<br>
+                        <strong>Chandler:</strong> "I do not want this unit."<br>
+                        <strong>Joey:</strong> "Oh, you should have told me that before. I'm not a mind reader."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你傷到我，你就害死我了。／冷靜，你到底要不要這個置物架？／我不要了。／你早說啊，我又不是心靈感應師。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"You should have told me"</em> = 過去應該做卻沒做的「遺憾句型」，發音上 <em>should have</em> 常縮成 <em>"shoulda"</em>。<em>"mind reader"</em> 的語氣不滿而理直氣壯，是 Joey 式喜劇的精髓。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景四：我付兩倍！我付三倍！</h3>
+                    <p class="text-gray-600 mb-4">Joey 在 Monica 浴室挖了個洞，Monica 要他修地板不要做置物架，Joey 說 Chandler 不付錢，Monica 立刻加價。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="7:16" data-end="7:22">▶️</button><br>
+                        <strong>Monica:</strong> "I'll pay you double what he's paying you."<br>
+                        <strong>Joey:</strong> "He's not paying me anything."<br>
+                        <strong>Monica:</strong> "Triple."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我付你他給你的兩倍。／他根本一毛都沒給我。／那三倍！）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> Monica 的 <em>"Triple"</em> 一字說得斬釘截鐵，是整集最乾淨的笑點。注意 <em>double → triple</em> 這兩個數量倍數詞：double = 兩倍，triple = 三倍，quadruple = 四倍。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景五：Phoebe 和弟弟 Frank 的初次連線</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 緊張等待素未謀面的弟弟 Frank，努力找話題，卻只得到一個字的答案。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="8:31" data-end="9:51">▶️</button><br>
+                        <strong>Phoebe:</strong> "So, um, what kind of things do you like to do at home?"<br>
+                        <strong>Frank:</strong> "Melt stuff."<br>
+                        <strong>Phoebe:</strong> "Okay, so by melting, you meant melting."<br>
+                        <strong>Frank:</strong> "Yeah."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你平常在家喜歡做什麼？／融化東西。／好⋯所以你說的融化，就是字面上的融化。／對。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> Phoebe 說 <em>"by melting, you meant melting"</em> ── 用 <em>by X, you meant X</em> 來反問確認，是非常英式/美式的說法，表達「你真的是說字面意思？」語氣帶著不可置信卻維持禮貌。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">freebie list</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">「特許名單」/ 例外清單</td>
+                                <td class="p-4">"she put him on her freebie list." (<em>freebie</em> = 免費的東西/特殊豁免，這裡指感情中「特許可以和某人約會的名單」，是幽默的流行文化說法。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">mind reader</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">心靈感應者 / 能猜透別人心思的人</td>
+                                <td class="p-4">"I'm not a <strong>mind reader</strong>." (表示「我又不知道你在想什麼，你早說啊！」是日常爭執中的萬用推卸台詞。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">double / triple</td>
+                                <td class="p-4">形容詞/動詞</td>
+                                <td class="p-4">兩倍 / 三倍</td>
+                                <td class="p-4">"I'll pay you <strong>double</strong>." / "<strong>Triple</strong>." (倍數詞非常實用：double/triple/quadruple = 2x/3x/4x。作動詞時：<em>to double</em> = 使加倍。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">geek</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">書呆子 / 理工宅 / 太認真的人</td>
+                                <td class="p-4">"What a <strong>geek</strong>." (現在 <em>geek</em> 已從貶義轉為中性甚至帶親切感，指對某事超級投入鑽研的人。與 <em>nerd</em> 類似但略有差別。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">prospective</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">潛在的 / 未來可能的</td>
+                                <td class="p-4">"I'll divide my <strong>prospective</strong> candidates into categories." (= potential，但更正式。常用於：<em>prospective client</em>（潛在客戶）、<em>prospective employee</em>（求職者）。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">take advantage of</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">充分利用 / 把握（機會）</td>
+                                <td class="p-4">"we really don't <strong>take advantage of</strong> living in the city." (正面含義：充分利用某資源或機會。注意與負面含義「佔人便宜」的區別要看語境。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">⏪ 過去完成式的「遺憾句型」：should have / could have</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Joey 說的這句話示範了英文中一個非常重要的句型：
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="5:37" data-end="5:39">▶️</button>
+                        "You <span class="text-rose-600">should have</span> told me that before."
+                    </p>
+                    <p class="text-gray-700 mb-3">
+                        <strong>should have + 過去分詞</strong> = 過去「本應該做但沒做」，帶有指責或遺憾語氣。
+                    </p>
+                    <div class="bg-white rounded p-3 border border-indigo-100 space-y-2">
+                        <p><strong>should have done</strong> = 本應該做（帶批評）<br>
+                        <em>"You should have called me!"</em>（你應該打電話給我的！）</p>
+                        <p><strong>could have done</strong> = 本可以做（表示可能性）<br>
+                        <em>"I could have been there."</em>（我本可以在那裡的。）</p>
+                        <p><strong>would have done</strong> = 如果…就本來會做<br>
+                        <em>"I would have helped if you'd asked."</em>（你要是開口，我本來會幫的。）</p>
+                    </div>
+                    <p class="text-gray-500 text-base mt-3">⚠️ 口語中 <em>should have</em> 常縮讀成 <em>"shoulda"</em>，<em>could have</em> → <em>"coulda"</em>，<em>would have</em> → <em>"woulda"</em>。</p>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🔗 確認反問句型：by X, you meant X?</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Phoebe 的這個句型是英文中非常好用的確認方式：
+                </p>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-emerald-900 text-xl mb-2">
+                        <button class="play-btn" data-start="9:46" data-end="9:50">▶️</button>
+                        "So by melting, you meant melting."
+                    </p>
+                    <p class="text-gray-700 mt-2">
+                        <strong>By [詞A], you meant [詞B]</strong> 用來確認對方說的是否就是字面意思，帶有一絲「我沒理解錯吧」的語氣。<br><br>
+                        ✅ 更多例子：<br>
+                        <em>"So by 'later,' you meant never?"</em>（所以你說的「之後」，是指永遠不？）<br>
+                        <em>"By 'fine,' do you actually mean fine?"</em>（你說的「沒事」，是真的沒事嗎？）<br><br>
+                        這個句型在英文對話中特別有用，當你想確認卻不想直接說「我不懂」時，用它來請對方澄清。
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">🔉 發音：強調詞與節奏感</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集有幾個重音位置非常值得模仿：
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg space-y-3">
+                    <div>
+                        <p class="font-bold text-yellow-900">① "What a <span class="text-rose-600">GEEK</span>." ↘</p>
+                        <p class="text-gray-700">重音落在 <em>geek</em>，語調下降，表達嘲笑和無奈。如果語調上升則變成真心好奇的問句。</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-yellow-900">② "<span class="text-rose-600">TRI</span>ple." ↘ (一字斬釘截鐵)</p>
+                        <p class="text-gray-700">Monica 只說一個字，重音在第一音節 <em>/ˈtrɪ.pəl/</em>，語調堅定下降，完全展現她的霸氣與幽默。</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-yellow-900">③ "I'm <span class="text-rose-600">NOT</span> a mind reader."</p>
+                        <p class="text-gray-700">not 是強調字，Joey 的語氣帶著委屈又理直氣壯，表示這完全不是他的錯。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集的核心是「連結」——Phoebe 和弟弟 Frank 找到了共通點（儘管那個共通點是「融化東西」）；Chandler 在煩惱 freebie list 時意外拉近了和 Janice 的關係；Joey 和 Monica 的浴室大作戰，也意外強化了他們的友情。
+                </p>
+                <p class="text-lg leading-relaxed mb-4">
+                    學英文也是這樣，一開始感覺陌生，但透過反覆聽、反覆說，漸漸就能找到語感的共鳴點。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">記得多利用聽力練習：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>把五個 <strong>AB 循環播放點</strong> 都再練習一遍！</li>
+                        <li>用 <strong>"You should have told me"</strong> 造一個日常生活中的句子。</li>
+                        <li>模仿 Monica 說 <strong>"Triple."</strong> ——注意那種一字千鈞的氣勢！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
