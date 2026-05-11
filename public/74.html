@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S04E02 學習指南 | The One with the Cat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第74集 (S04E02)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>遇到生字或句子太長時，點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，這集會特別著重 Chandler 與 Joey 之間「賣櫃子」的荒謬談判，聽聽超生動的情緒轉變語調！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第四季第二集：<strong>"The One with the Cat"</strong>（靈貓）。</p>
+                <p>這集中 Phoebe 在路邊撿到一隻迷路的貓，深陷失去養母的悲傷中的她，堅信這隻貓是她死去的養母轉世！另一方面，為了賣掉佔空間的巨無霸娛樂櫃（Entertainment Center），Joey 不僅在網路上胡亂登廣告，甚至鬧出了引狼入室的笑話。而 Monica 在回覆高中風雲人物 Chip 的約會邀請時，也面臨和 Rachel 之間深層的內心煎熬。</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：自己釘的娛樂櫃</h3>
+                    <p class="text-gray-600 mb-4">Joey 親手做了一個超級大櫃子，這櫃子把 Chandler 兩件西裝都刮破了，Chandler 要求當作二手賣掉。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:12" data-end="0:18">▶️</button><br>
+                        <strong>Joey:</strong> "How many times do I have to tell you? You turn and slide... Turn and slide."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你要我說幾次？你要側著身體滑出來... 側身滑出來喔。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 聽聽 <em>turn and slide</em> 重複的地方。這裡 <em>and</em> 可以弱化成 <em>'n'</em>（讀作 turn-n-slide）。Joey 的語氣強調了某種荒謬的理所當然。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：破傷風的恐懼</h3>
+                    <p class="text-gray-600 mb-4">由於木櫃充滿釘子跟銳角，Chandler 對這座櫃子忍無可忍。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:23" data-end="0:26">▶️</button><br>
+                        <strong>Chandler:</strong> "I get tetanus shots every time I get dressed!"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我每次穿衣服，都得打破傷風疫苗！）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>tetanus shots</em>（破傷風預防針）。注意 Chandler 快速、抱怨連連的美式喜劇語調，將 <em>every time I get dressed</em> 一口氣講完。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景三：浮誇的二手拍賣廣告</h3>
+                    <p class="text-gray-600 mb-4">Chandler 發現原價幾十塊的櫃子，Joey 在報紙上的廣告竟然開天價五千元。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="4:40" data-end="4:48">▶️</button><br>
+                        <strong>Chandler:</strong> "Stunning entertainment center, fine... fine Italian craftsmanship."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（「高級視聽娛樂櫃，精緻的義大利手工藝」）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>stunning</em> (極好的/非常吸引人的)、<em>craftsmanship</em> (手工藝)。Chandler 念這幾個字時刻意放慢，因為這廣告實在太扯了。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：不可理喻的媽媽貓</h3>
+                    <p class="text-gray-600 mb-4">Ross 對於 Phoebe 撿到一隻貓就認為是媽媽轉世感到相當無言。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn ml-2" data-start="6:02" data-end="6:28">▶️</button><br>
+                        <strong>Phoebe:</strong> "I just have this really strong feeling that this cat is my mother."<br>
+                        <strong>Ross:</strong> "Have you been taking your grandmother's glaucoma medicine again?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我就是有一股強烈的直覺這隻貓是我媽。／妳又偷吃外婆的青光眼藥了嗎？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>glaucoma medicine</em>（青光眼藥物）。這是一段經典的 Ross 酸言酸語。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-green-300 bg-green-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-green-800">場景五：瘋狂的以物易物</h3>
+                    <p class="text-gray-600 mb-4">有買家來看那個爛櫃子，不想付 50 美金，於是提出了「交換條件」。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="11:16" data-end="11:22">▶️</button><br>
+                        <strong>Buyer:</strong> "We don't have $50. But would you trade for it? We got a canoe."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我們沒有 50 塊美金。但你願意交換嗎？我們有一艘獨木舟。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>trade for it</em> (拿東西換)、<em>canoe</em> /kəˈnuː/ (獨木舟)。聽 Joey 從錯愕到後來興奮的反應！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">tetanus shot</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">破傷風疫苗</td>
+                                <td class="p-4">"I get <strong>tetanus shots</strong> every time I get dressed!"（tetanus 破傷風；shot 注射/打針。指被鐵釘刮傷可能造成的感染）。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">craftsmanship</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">巧手 / 匠人工藝</td>
+                                <td class="p-4">"fine Italian <strong>craftsmanship</strong>."（形容某件物品製作的技術或精緻度，在此為浮誇的說詞）。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">glaucoma</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">青光眼</td>
+                                <td class="p-4">"your grandmother's <strong>glaucoma</strong> medicine..."（眼疾的一種；據說有些青光眼藥含有可令人產生幻覺的成分，以此諷刺 Phoebe 瘋言瘋語）。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">trade for</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">以物易物 / 交換</td>
+                                <td class="p-4">"would you <strong>trade for</strong> it?"（生活中我們想拿東西換東西不用錢時，就可以用 trade）。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">👂 發音語調：爭執辯論時的美式重音 "Suck me into this"</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Ross 非常不屑於爭論「那隻貓究竟是不是貓還是媽媽」，他想抽身離開時的道地用語。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="10:27" data-end="10:30">▶️</button>
+                        "You won't <span class="text-indigo-700">suck me</span> into this."
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>語調分析：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><strong>suck (someone) into</strong> 字面是把人給吸進去，引申為「誘使、捲入」。</li>
+                            <li>聽 Ross 講 <em>suck</em> 的時候重拍下得很重，而 <em>into this</em> 稍微放低，表達「你別想把我拖下水/捲進來」的抵抗心理。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📖 文法焦點：祈使句配合 Let someone + do something</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    當我們要求別人「放手 / 放棄 / 讓某事隨風去」時的萬用句。
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="7:14" data-end="7:15">▶️</button>
+                        "<span class="text-red-500 font-bold">Let it</span> go!"
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>說明：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><strong>let it go</strong> 超級常聽到的短語（也是冰雪奇緣的主題曲），意思是「算了吧 / 別提了 / 放下吧」。</li>
+                            <li>在對話裡，別人正在探討敏感話題時，快速說出 <em>let it go.</em>，帶有美式Ｔ字微閃的彈舌，聽起來像是 let'it-go（雷麗狗）。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這一集「以物易物」的橋段非常精彩！我們學到了不僅是 <em>tetanus shot</em>（破傷風預防針）這類幽默又實用的醫療字彙，還順便學了一句道地的日常片語 <em>suck someone into something</em>，以後遇到不想參與的爭吵時，你也可以自信地甩下一句：<em>You won't suck me into this!</em>
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">課後建議：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>試著利用今天學到的片語 <em>Let it go</em> 和 <em>trade for</em> 造句。例如：你如果想要借我的筆記，我們來做個交易（<em>would you trade for it</em>？）。</li>
+                        <li>再聽一次頻道中 Chandler 發現那起誇張二手拍賣廣告的反應，注意母語人士在嘲諷（Sarcasm）時的氣音與重音起伏。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

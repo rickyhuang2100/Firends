@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S04E12 學習指南 | The One with the Embryos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer; font-size: 1.3rem; color: #ea580c; transition: all 0.2s ease;
+            display: inline-block; background-color: #fff7ed; padding: 2px 8px;
+            border-radius: 8px; border: 1px solid #ffedd5; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        .quiz-card { background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border: 1px solid #fcd34d; border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第84集 (S04E12)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>這是《六人行》史上最最精彩的集數之一！點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，感受那場緊張刺激的問答大賽！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第四季第十二集：<strong>"The One with the Embryos"</strong>（公寓大搬風），也是整部影集最廣受歡迎的集數之一！</p>
+                <p>這集分兩條主線：一、Phoebe 今天要去醫院進行胚胎移植手術，看能否成功懷上弟弟 Frank Jr. 和 Alice 的孩子；二、從一場賭「購物袋裡裝什麼」的小遊戲開始，男生隊（Chandler & Joey）與女生隊（Monica & Rachel）的知識大戰越來越激烈，最後演變成用<strong>公寓</strong>做賭注的豪賭，輸了的一方必須和對方換住！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：男生隊發出挑戰！</h3>
+                    <p class="text-gray-600 mb-4">Joey 和 Chandler 成功猜中購物袋裡的東西，Monica 不服氣要求再比一次，賭金直升 100 美元、升級為「了解彼此」的個人問題。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="4:54" data-end="5:00">▶️</button><br>
+                        <strong>Chandler:</strong> "All right! Ten bucks. Fork it over."<br>
+                        <strong>Joey:</strong> "Cough it up. Pay the piper."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（好啊！十塊錢，拿出來。——開心點，願賭服輸。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>fork it over</em> / <em>cough it up</em>（乖乖把錢交出來）——兩個非常口語、充滿霸氣的片語，都是「叫對方付錢」的意思。<em>Pay the piper</em> 則是「為自己的行為付出代價」的諺語。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：經典問題——Chandler 最怕什麼？</h3>
+                    <p class="text-gray-600 mb-4">問答大賽進行中，Ross 問起 Chandler 最恐懼的事物，Monica 和 Rachel 完美答出，然後 Chandler 親口解釋了那個讓他毛骨悚然的原因！</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="8:56" data-end="9:11">▶️</button><br>
+                        <strong>Monica/Rachel:</strong> "Michael Flatley, Lord of the Dance!"<br>
+                        <strong>Chandler:</strong> "His legs flail about as if independent from his body!"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（踢踏舞之王 Michael Flatley！——他的雙腿胡亂甩動，好像和身體脫節了一樣！）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>flail about</em>（胡亂揮動、甩動）。<em>as if + 假設語氣</em>——<em>as if independent from his body</em> 是省略主詞和 be 動詞的口語寫法，完整版是 <em>as if they were independent from his body</em>。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景三：最爆笑的問題——電視週刊的收件人！</h3>
+                    <p class="text-gray-600 mb-4">Ross 問 Chandler 和 Joey 公寓的電視週刊收件人是誰——Monica 和 Rachel 搶答「Chandler Bing！」，卻被 Ross 糾正了！</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="9:54" data-end="10:09">▶️</button><br>
+                        <strong>Monica:</strong> "It's Chandler Bing!"<br>
+                        <strong>Ross:</strong> "I'm afraid the TV Guide comes to 'Chanandler Bong.'"<br>
+                        <strong>Joey:</strong> "I knew that!"<br>
+                        <strong>Ross:</strong> "Actually, it's <em>Ms.</em> Chanandler Bong."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（是 Chandler Bing！——電視週刊的收件人其實是「Chanandler Bong」——我早就知道！——事實上，是「Chanandler Bong 小姐」。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>I'm afraid (that)...</em> 在這裡不是「我很害怕」，而是「我恐怕得說……/很遺憾……」，是一種禮貌性的否定語氣，非常英式！</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：Phoebe 對胚胎說話</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 躺在醫院病床上，對著即將進入她子宮的小胚胎輕聲說話，這段溫柔又好笑的獨白感動了所有人。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="10:17" data-end="10:43">▶️</button><br>
+                        <strong>Phoebe:</strong> "I'm hoping to be your uterus for the next nine months... So when you guys get in there, really grab on."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我希望我的子宮能成為你們未來九個月的家……所以你們進去之後，好好抓緊！）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>grab on</em>（抓緊）在這裡是 Phoebe 用最直白的比喻希望胚胎能成功著床。感受她輕聲說話和停頓的節奏——這才是真實英語語感中「語氣表達情緒」的精髓！</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 特別單元：問答大賽題庫 -->
+        <section class="mb-16">
+            <div class="content-card bg-amber-50 border-amber-200">
+                <h2 class="text-3xl font-bold text-amber-900 mb-4">🎮 劇中問答大賽題庫回顧</h2>
+                <p class="text-lg text-gray-700 mb-6">這些問題不只是節目梗，更是理解英文問答句型的絕佳教材！</p>
+                <div class="quiz-card">
+                    <p class="font-bold text-amber-900">Q: What is Monica's biggest pet peeve?</p>
+                    <p class="text-gray-700 mt-1">A: Animals dressed as humans.（動物穿著人類的衣服。）</p>
+                </div>
+                <div class="quiz-card">
+                    <p class="font-bold text-amber-900">Q: According to Chandler, what phenomenon scares the bejesus out of him?</p>
+                    <p class="text-gray-700 mt-1">A: Michael Flatley, Lord of the Dance!（踢踏舞之王 Michael Flatley！）</p>
+                </div>
+                <div class="quiz-card">
+                    <p class="font-bold text-amber-900">Q: Every week the TV Guide comes to Chandler and Joey's. What name appears on the address label?</p>
+                    <p class="text-gray-700 mt-1">A: Ms. Chanandler Bong.（Chanandler Bong 小姐。）</p>
+                </div>
+                <p class="text-gray-500 mt-4 text-base">🔑 <em>scare the bejesus out of someone</em> = 把某人嚇得半死（非常口語的強調表達）</p>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">fork it over / cough it up</td>
+                                <td class="p-4">口語片語</td>
+                                <td class="p-4">把錢（東西）乖乖交出來</td>
+                                <td class="p-4">"Ten bucks. <strong>Fork it over</strong>. <strong>Cough it up</strong>."（要人交出物品或金錢時的強硬說法，帶有玩笑或霸氣語氣。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">pet peeve</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">特別讓人抓狂的怪癖/討厭的事</td>
+                                <td class="p-4">"What is Monica's biggest <strong>pet peeve</strong>?"（不是一般的討厭，而是某件每次發生都讓你特別受不了的事。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">scare the bejesus out of sb</td>
+                                <td class="p-4">口語片語</td>
+                                <td class="p-4">把某人嚇個半死</td>
+                                <td class="p-4">"What phenomenon <strong>scares the bejesus out of him</strong>?"（非常強烈的口語誇飾法，強調被嚇得魂飛魄散的程度。）</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">I'm afraid (that)...</td>
+                                <td class="p-4">口語句型</td>
+                                <td class="p-4">恐怕……（禮貌否定或更正）</td>
+                                <td class="p-4">"<strong>I'm afraid</strong> the TV Guide comes to 'Chanandler Bong.'"（在英語中用來禮貌地更正或帶來壞消息，絕非字面上的「感到恐懼」。）</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">👂 "as if" 假設語氣的省略用法</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Chandler 解釋他怕 Michael Flatley 的原因時，用了一個非常自然的 <em>as if</em> 省略句。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="9:07" data-end="9:11">▶️</button>
+                        "His legs flail about <span class="text-indigo-700">as if independent from his body</span>!"
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>語法說明：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li>完整版：<em>as if they were independent from his body</em>（就好像完全與身體脫節了一樣）</li>
+                            <li>口語中常省略主詞 + be 動詞：<em>as if [they were]</em> → <em>as if</em></li>
+                            <li>類似例子：<em>She spoke to me as if [I were] a child.</em>（她用對待小孩的方式跟我說話。）</li>
+                            <li><em>flail about</em>（胡亂揮甩）：動詞 <em>flail</em>（鞭打、揮動），加上 <em>about</em> 表示方向不固定的動作。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📖 "I'm afraid" 的禮貌否定/帶來壞消息</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Ross 更正 Monica 的答案時說了 <em>"I'm afraid..."</em>，這是英語中非常常見但容易被誤解的語氣用法。
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="9:54" data-end="9:59">▶️</button>
+                        "<span class="text-red-500 font-bold">I'm afraid</span> the TV Guide comes to 'Chanandler Bong.'"
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>用法比較：</strong></p>
+                        <div class="overflow-x-auto mt-2">
+                            <table class="w-full text-left border border-gray-200 text-base">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="p-2 border">句子</th>
+                                        <th class="p-2 border">實際含意</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-2 border"><em>I'm afraid of dogs.</em></td>
+                                        <td class="p-2 border">我怕狗。（真的感到恐懼）</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 border"><em>I'm afraid you're wrong.</em></td>
+                                        <td class="p-2 border">恐怕你錯了。（禮貌否定）</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 border"><em>I'm afraid I can't help you.</em></td>
+                                        <td class="p-2 border">很抱歉我無法幫你。（委婉拒絕）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集絕對是《六人行》必看名集！從 <em>fork it over / cough it up</em>（把東西乖乖交出來），到讓人拍桌大笑的「Chanandler Bong 小姐」，以及 Phoebe 那段輕聲對胚胎說話的感人時刻——每一個場景都是英語學習的寶庫。<em>pet peeve</em>（特別讓人抓狂的事）和 <em>I'm afraid...</em>（禮貌性否定/更正）這兩個語言點，在日常英語對話中的出現頻率超級高！
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">課後建議：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>說說你自己的 <em>pet peeve</em> 是什麼？試著用英文造句：<em>"My biggest pet peeve is..."</em></li>
+                        <li>練習用 <em>I'm afraid</em> 禮貌地更正或拒絕朋友：<em>"I'm afraid that's not quite right..."</em></li>
+                        <li>下次朋友說錯，可以配合 Ross 的語氣說：<em>"I'm afraid you're wrong."</em>（確保有帶著他那副偷笑的表情！）</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
