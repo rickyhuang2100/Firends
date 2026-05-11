@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E25 學習指南 | The One at the Beach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S03E25</div>
+                <div class="hidden md:flex items-center space-x-6 text-base font-semibold">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#culture" class="nav-link">文化</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季的季終集，<strong>"The One at the Beach"（海灘之行）</strong>。</p>
+                <p>六個好朋友週末計畫前往紐約長島以東的蒙托克 (Montauk) 海灘別墅度假！Phoebe 找到了一個跟她生母同名的女子 "Phoebe Abbott" 也住在當地，因此前往拜訪，想打聽父母的下落。同時，Monica 擔心自己終生會像老處女般嫁不出去，而 Chandler 卻在此刻自告奮勇當她的「備胎男友」，結果反而引起了一連串爆笑的吐槽。準備好體驗美國人去海灘度假時的情境用語與超實用的口語表達了嗎？</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景 (Scene)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：我來當你的備胎男友？</h3>
+                    <p class="text-gray-600 mb-4">Monica 在抱怨自己可能會孤獨終老。Chandler 出於好意安慰她，拋出了「最糟的情況下，大不了我來當妳男友」的提案，引爆 Monica 失控大笑。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="2:37" data-end="2:57">▶️</button><br>
+                        <strong>Monica:</strong> "Die an old maid."<br>
+                        <strong>Chandler:</strong> "You're not going to die an old maid. Maybe an old spinster cook."<br>
+                        <strong>Monica:</strong> "Thanks."<br>
+                        <strong>Chandler:</strong> "Hey, no, besides, worse comes to worse, I'll be your boyfriend."<br>
+                        <strong>Monica:</strong> (Laughs) "Yeah, right."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（像個老處女一樣死去。／你不會像老處女一樣死去的。也許是個老處女廚師。／謝了。／嘿，不，再說了，最糟的情況下，我就當妳男朋友吧。／對啦，是啦 (大笑)。）</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：計畫泡湯，真是超級倒楣！</h3>
+                    <p class="text-gray-600 mb-4">大家正在熱烈討論去海灘的計劃，而 Rachel 忽然發現自己因工作無法成行，忍不住抱怨了起來。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="1:18" data-end="1:24">▶️</button><br>
+                        <strong>Rachel:</strong> "Shoot, I can't go. I have to work."<br>
+                        <strong>Others:</strong> "That's too bad."<br>
+                        <strong>Rachel:</strong> "Oh, big fat bummer."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（可惡，我不能去。我得工作。／太可惜了。／哦，真是超級倒楣。）</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">單字/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">例句與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">bummer</td>
+                                <td class="p-4">倒楣的事 / 令人掃興的事</td>
+                                <td class="p-4">
+                                    劇中 Rachel 說: "Oh, big fat <strong>bummer</strong>!"<br>
+                                    <strong>生活例句：</strong> It's a bummer that we can't go to the party tonight. (今晚不能去派對真是太掃興了。)
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">make out</td>
+                                <td class="p-4">親熱 / 接吻</td>
+                                <td class="p-4">
+                                    劇中提到: "...we were <strong>making out</strong>."<br>
+                                    <strong>生活例句：</strong> I saw them making out in the library. (我看到他們在圖書館裡親熱。)
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">old maid / spinster</td>
+                                <td class="p-4">老處女 (帶貶義)</td>
+                                <td class="p-4">
+                                    劇中 Monica 說: "Die an <strong>old maid</strong>."<br>
+                                    <strong>生活例句：</strong> She was afraid of ending up an old maid. (她害怕自己最後會變成老處女。)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar & Pronunciation)</h2>
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🎵 發音亮點 1: 連讀與弱讀 "worse comes to worse"</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>Worse comes to worse</strong>（或 worse comes to worst）是個超級普遍的假設語氣，意思是「最壞的情況下」。
+                </p>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-blue-900 text-xl mb-3">
+                        <button class="play-btn" data-start="2:48" data-end="2:52">▶️</button>
+                        "Hey, no, besides, <span class="text-blue-700">worse comes to worse</span>, I'll be your boyfriend."
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>弱讀 (Weak Forms)：</strong> 句子裡的 <strong>to</strong> 會輕輕帶過，不會發出飽滿的 /tuː/ 音，而是弱化成 /tə/ 甚至類似輕聲的 "t"。聽起來會像 "worse comes-tə worse"！就如同膠水一般，前後順暢黏合。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">🎵 發音亮點 2: 子音＋母音連讀 "scared of"</h3>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="3:34" data-end="3:38">▶️</button>
+                        "I'd probably be <span class="text-indigo-700">scared of the</span> guy using a fake voice."
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>連讀 (Linking)：</strong> "scare<strong>d_o</strong>f"。前一個字以子音 d 結尾，後一個字以母音 o 開頭，嘴型不需要中斷，會毫不費力地念成 "scare-dof"。</p>
+                        <p><strong>弱讀 (Weak Forms)：</strong> "of" 的 f 音經常會在正常語速中弱化甚至消失，只留下輕輕的母音，整段聽起來像 "scare-də-the guy"。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 文化 -->
+        <section id="culture" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 文化 (Culture)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <h3 class="text-xl font-bold text-amber-900">🏖️ Montauk (蒙托克)</h3>
+                <p>位於紐約州長島的最東端，常被稱為 "The End"。它是紐約都會區居民非常熱門的夏季度假勝地，有著美麗的海岸線和別墅文化。這也是為什麼這集大家要包車開往海灘度過週末。</p>
+                <br>
+                <h3 class="text-xl font-bold text-amber-900">💖 BFF (Best Friends Forever)</h3>
+                <p>
+                    <button class="play-btn" data-start="1:00" data-end="1:04">▶️</button>
+                    Phoebe 在劇中提到她媽媽與朋友 "they were like <strong>BFF</strong>. Best friends forever." <br>
+                    <strong>BFF</strong> 這個簡寫在美國流行文化中極度知名，不僅在簡訊中會打出這三個字母，連在日常對話中大家也常常直接發音唸出 "B-F-F"。這個詞彙特別多見於帶有青春、密友氣息的情境。
+                </p>
+            </div>
+        </section>
+
+        <!-- VI. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VI. 練習 (Practice)</h2>
+            <div class="content-card space-y-6">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-green-900 mb-4">✏️ 隨堂小測驗</h3>
+                    <p class="mb-4 text-lg">現在，請挑戰用剛剛學過的實用詞彙與句型填空：</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-semibold text-gray-800">1. 如果你非常期待晚上的烤肉，卻突然下起了大豪雨，你會怎麼用英文抱怨？</p>
+                            <p class="ml-4 text-gray-600">"Oh, what a big fat ________!"</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">2. 想像你忘記帶錢包，準備跟朋友借錢，你想表示「最糟的情況下，我就只能走路回家了」：</p>
+                            <p class="ml-4 text-gray-600">"________ comes to ________, I'll just walk home."</p>
+                        </div>
+                    </div>
+                    <details class="mt-6">
+                        <summary class="cursor-pointer text-green-700 font-bold underline">👀 點我看解答</summary>
+                        <div class="mt-3 p-3 bg-white rounded border border-green-100">
+                            <p>1. <strong>bummer</strong> (What a bummer! = 真是掃興！)</p>
+                            <p>2. <strong>Worse</strong> comes to <strong>worse</strong> (最壞的打算下)</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- VII. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">VII. 結論 (Conclusion)</h2>
+            <div class="content-card">
+                <p class="text-lg leading-relaxed mb-4">
+                    在這一集裡，我們學到了如何在日常生活中自然地抱怨（bummer）、如何形容親密關係（make out / BFF），更重要的是掌握了「worse comes to worse」這種實用萬能的假設語氣。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">🎉 結語與提醒</h3>
+                    <p class="text-lg text-gray-700">記住語言學習沒有捷徑！多點擊對話片段的 <strong>▶️ AB Loop 按鈕</strong> 感受角色的音調高低與語速。當你能夠把 "scared of" 說得滑順連貫、把 "to" 弱讀得恰到好處時，聽起來就會非常自然道地！Keep it up!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <!-- 影片播放器 (與前面的章節架構共用) -->
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

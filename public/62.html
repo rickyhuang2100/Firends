@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E15 學習指南 | The One Where Ross and Rachel Take a Break</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第62集 (S03E15)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季第十五集，<strong>"The One Where Ross and Rachel Take a Break"</strong>（Ross 與 Rachel 決定冷靜一下的那集）。這集不僅標誌著劇中最知名的情感轉折點，在對話安排上也極具戲劇張力。</p>
+                <p>這一集內，Joey 和 Chandler 對影印店女孩 Chloe 展開了追求；Phoebe 則認識了一名不黯英語的外交官，卻發現最大的阻礙居然是外交官那喋喋不休的翻譯員；而在主線上，Ross 對 Rachel 工作的嫉妒終於爆發，引發了讓劇迷爭論數十年的「We were on a break」開端。</p>
+                <p>準備好體驗這集濃厚的情緒起伏了嗎？讓我們一起挖掘這些充滿情緒轉折的經典英語對白吧！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：Phoebe 的「地球儀」</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 認識了一位外國外交官，想知道他的國家在哪，結果翻出來的卻是一個削鉛筆機地球儀。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="00:53" data-end="1:21">▶️</button><br>
+                        <strong>Monica:</strong> "I don't have an atlas. Oh, but wait, I do have a globe. Hold on."<br>
+                        <strong>Monica:</strong> "Okay, here you go."<br>
+                        <strong>Phoebe:</strong> "What is this?"<br>
+                        <strong>Monica:</strong> "It's a globe. And a pencil sharpener."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我沒有地圖集。哦，等等，我有一個地球儀。等一下。... 好了，給你。／這是什麼？／這是一個地球儀，還有一個削鉛筆機。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 區分 <em>atlas</em> (地圖集) 與 <em>globe</em> (地球儀)。<em>Hold on</em> = 等一下。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：影印店的搭訕策略</h3>
+                    <p class="text-gray-600 mb-4">Joey 和 Chandler 特地跑到影印中心 (Xerox place) 搭訕女孩，卻不知要印什麼，最後臨時反悔。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="2:54" data-end="3:01">▶️</button><br>
+                        <strong>Joey:</strong> "You know what? We're having second thoughts about our copying needs. And we'll need a little more time to think about it."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你知道嗎？我們正在重新考慮我們的影印需求。我們需要多一點時間來想想。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>have second thoughts</em> 是一個非常實用的片語，意思是「重新考慮 / 改變主意」。即使是在尷尬地找藉口，Chandler 的說詞依舊文縐縐的惹人發笑。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景三：礙事的翻譯大哥</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 在雙方約會時，翻譯員的過度介入讓氣氛降到冰點，此為一段精彩的抱怨。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="5:36" data-end="5:42">▶️</button><br>
+                        <strong>Phoebe:</strong> "You know when you're on a date and you're getting along really great, but the guy's translator keeps getting in the way?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你知道當你正在約會，相處得特別融洽時，但那傢伙的翻譯總是礙手礙腳的嗎？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"getting along really great"</em> = 相處得很好。<em>"getting in the way"</em> = 妨礙 / 擋路，這是描述有人當電燈泡的絕佳用詞！</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：Rachel 辦公室的物流災難</h3>
+                    <p class="text-gray-600 mb-4">Ross 想給 Rachel 一個週年紀念驚喜，但 Rachel 卻被困在工作中無法脫身。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:18" data-end="6:28">▶️</button><br>
+                        <strong>Rachel:</strong> "Well, kind of having an underwear emergency. There was a disaster in shipping, and now I've gotta get this order in."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（嗯，遇到了一點內衣的緊急狀況。運輸那邊發生了災難，現在我必須把這份訂單處理好。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"disaster in shipping"</em> = 運輸災難。<em>"get this order in"</em> = 把訂單建檔 / 處理好。在口語中 <em>Emergency</em> 常被用來誇張描述任何微小但急迫的問題。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">atlas</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">地圖集</td>
+                                <td class="p-4">"I need an <strong>atlas</strong>." (裝訂成冊的地圖集。與 <em>globe</em> 地球儀不同。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">have second thoughts</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">改變主意 / 重新考慮</td>
+                                <td class="p-4">"We're having <strong>second thoughts</strong> about our copying needs." (在做了決定或即將行動時，突然產生猶豫與動搖。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">get in the way</td>
+                                <td class="p-4">片語</td>
+                                <td class="p-4">礙事 / 擋路 / 妨礙</td>
+                                <td class="p-4">"the guy's translator keeps <strong>getting in the way</strong>." (用來形容某人或某物阻礙了事情的進展，當電燈泡也可用這個詞彙！)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">emergency</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">緊急狀況</td>
+                                <td class="p-4">"kind of having an underwear <strong>emergency</strong>." (原指嚴重的事故，但在朋友間的隨性口語中，舉凡衣服太醜、工作延誤都可以稱為 emergency。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">beeps</td>
+                                <td class="p-4">動詞</td>
+                                <td class="p-4">發出嗶嗶聲</td>
+                                <td class="p-4">"a watched pot never <strong>beeps</strong>." (Beeper/Pager，也就是呼叫器，在90年代極為盛行，此字模擬電器設備的提示音。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">🔤 委婉的 "kind of" 與連讀 "kinda"</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    當我們想讓語氣不那麼絕對或尖銳時，很常使用 <em>kind of</em> 來緩和語氣。
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="6:18" data-end="6:21">▶️</button>
+                        "Well, <span class="text-yellow-700">kind of</span> having an underwear emergency."
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>發音重點：</strong> 這裡 <strong>kind of</strong> 快速連讀被發成了 <strong>kinda</strong>。當 Rachel 告訴 Ross 她遇到大麻蠻無法脫身時，加上 <em>kinda</em> 可以軟化「我有危機」的驚悚感，使得對話聽來更偏向無奈與疲憊，而不是真的著火了那種緊急。</p>
+                        <p>例：<em>I'm kinda tired.</em> (我有點累。)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這一集絕對是《Friends》感情線上最強烈的轉折。Ross 無法壓抑自己的不安與佔有慾，用錯誤的方式展現「愛與關心」；而剛踏入時尚圈的 Rachel 為了事業焦頭爛額，無力兼顧情緒勞動。從兩人的用詞中（例如 <em>emergency</em>、<em>been a couple hours</em>），我們看見了關係中常見的溝通錯位。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">課後聽力建議：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>反覆聆聽場景二中 Chandler 講出 <strong>"having second thoughts"</strong> 時的假正經語氣。</li>
+                        <li>熟悉 <strong>kinda (kind of)</strong> 在日常語氣中的運用，以及其弱讀方式。</li>
+                        <li>最後，打開 AB Loop 感受一下最後大爭吵前，那股暴風雨前的寧靜！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
