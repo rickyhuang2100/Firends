@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E08 學習指南 | The One with the Giant Poking Device</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S03E08</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季第八集，<strong>"The One with the Giant Poking Device"</strong>（大棍子戳戳的那集）。</p>
+                <p>Phoebe 有個魔咒：每次她去看牙醫，就會有人死——所以她用牙線認真刷牙，不為口腔健康，而是「為了拯救生命」。Joey 目擊了 Janice 在街上親吻她的前夫（就是那個「床墊大王」），現在他進退兩難：要告訴 Chandler 嗎？与此同時，Rachel 和 Joey 在幫 Ross 顧兒子 Ben 時，因為玩飛機遊戲不小心讓 Ben 撞到頭，兩人慌亂地試圖善後。Ross 博物館的 Homo sapien 展示區被熊孩子搞壞，需要回去處理。</p>
+                <p>這集的英文笑點充滿了<strong>邏輯謬誤的幽默、偷藏秘密的掙扎，以及大量生動的口語驚嘆詞</strong>！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景一：Phoebe 的牙醫魔咒——我用牙線是為了救人！</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 解釋她為什麼不敢去看牙醫：每次她一坐上牙椅，就會有人在同一時間離世。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:37" data-end="1:13">▶️</button><br>
+                        <strong>Phoebe:</strong> "Because every time I go to the dentist, somebody dies."<br>
+                        <strong>Phoebe:</strong> "That's why I take such good care of my teeth now, you know? It's not about oral hygiene."<br>
+                        <strong>Phoebe:</strong> "I floss to save lives."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（因為每次我去看牙醫就會有人死。這就是我為什麼現在這麼認真照顧牙齒。不是為了口腔衛生。我用牙線是為了拯救生命。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"It's not about X."</em> = 「這跟 X 無關」，是非常實用的說法，用來否定外觀上的第一直覺並揭示真實動機。注意 Phoebe 說 <em>"I floss to save lives"</em> 時語氣非常鄭重，和荒謬的內容形成強烈反差。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：Monica 的告誡——Phoebe，去看牙醫！</h3>
+                    <p class="text-gray-600 mb-4">Rachel 說服 Phoebe 的方式直接而不加掩飾，Phoebe 在去之前留下了一道超獨特的「死後叮嚀」。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="2:25" data-end="2:40">▶️</button><br>
+                        <strong>Rachel:</strong> "Phoebe, you're in pain. Would you just go to the dentist?"<br>
+                        <strong>Phoebe:</strong> "But if you're my next victim, don't come back as a poltergeist like sucks me into the TV set."<br>
+                        <strong>Rachel:</strong> "I promise."<br>
+                        <strong>Phoebe:</strong> "Although don't feel like you can't visit."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（Phoebe〕，你在痛，去看牙醫吧。／但如果你是我的下一個受害者，請不要化成鬼魂把我吸進電視裡。／我保證。／不過，不代表你不能來看我。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"poltergeist"</em> /ˈpoʊltərɡaɪst/ = 惡鬼、嘈雜鬼，德語借詞。另外 <em>"don't feel like you can't visit"</em> 是雙重否定——「不要覺得你不能來」= 歡迎你來，Phoebe 的語氣非常貼心又荒謬。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景三：Joey 的難題——要告訴 Chandler 嗎？</h3>
+                    <p class="text-gray-600 mb-4">Joey 親眼看到 Janice 親吻前夫，進退兩難。Monica 說必須告訴 Chandler，Joey 最初認為最好的辦法是「不要說」。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="3:03" data-end="3:12">▶️</button><br>
+                        <strong>Rachel:</strong> "Joey, you can't keep this to yourself. If you know about this, you have to tell him."<br>
+                        <strong>Joey:</strong> "It'll kill him. I mean, it'll just kill him."<br>
+                        <strong>Phoebe:</strong> "Well, you could wait till I go to the dentist. Maybe I'll kill him."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（喬伊，你不能把這事藏在心裡。你知道了就必須告訴他。／這會要了他的命。我是說，真的會把他弄垮。／那你可以等我去看牙醫，也許我會殺了他。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"keep this to yourself"</em> = 把秘密保留在自己心裡/不要說出去。<em>"It'll kill him."</em> 這裡是比喻用法，= 這消息會讓他非常難受。英文中用 kill 表達「衝擊巨大」非常常見：<em>That joke killed me!</em>（那個笑話笑死我了！）</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：Joey 的科學問題——Homo sapiens 難道是⋯？</h3>
+                    <p class="text-gray-600 mb-4">Ross 說有孩子把博物館的「Homo sapien」展示區破壞，Joey 忍住沒發問，但終于還是問了一個讓大家無言以對的問題。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="4:32" data-end="4:50">▶️</button><br>
+                        <strong>Joey:</strong> "If the Homo sapiens were, in fact, Homo sapiens... is that why they're extinct?"<br>
+                        <strong>Ross:</strong> "Joey, Homo sapiens are people."<br>
+                        <strong>Joey:</strong> "Hey, I'm not judging."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（如果智人其實是「那種」同性戀⋯那他們是因此滅絕的嗎？／Joey，Homo sapiens 就是人類。／嘿，我沒有在評判。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"in fact"</em> = 事實上、實際上，常用來強調或修正一個陳述。另外 <em>"I'm not judging"</em> = 我不是在評判，是當代英文口語中表示保持中立、不帶批判的非常常見說法。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景五：We're okay. We're okay. We're okay⋯都不 okay！</h3>
+                    <p class="text-gray-600 mb-4">Joey 和 Rachel 照顧 Ben 時玩飛機遊戲，不慎讓 Ben 的頭撞到天花板，兩人一邊反覆確認「我們沒事」，一面發現頭上長了個包。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="5:41" data-end="5:47">▶️</button><br>
+                        <strong>Joey:</strong> "So we're okay."<br>
+                        <strong>Rachel:</strong> "We're okay."<br>
+                        <strong>Joey:</strong> "We're okay, aren't we?"<br>
+                        <strong>Rachel:</strong> "No, we're not okay. We're not okay. There's a bump. There's a bump. There's a bump."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我們沒事。／我們沒事。／我們沒事，對吧？／不，我們不妙。不妙。有一個包。有一個包。有一個包。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"We're okay"</em> 在這裡被重複說了四次，每次語氣都在微妙地轉變——從確認 → 懷疑 → 崩潰。注意聽 <em>"aren't we?"</em> 是附加問句（tag question），用來尋求確認，語調上升表示不確定。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">keep (sth) to yourself</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">把（某事）藏在心裡 / 不透露</td>
+                                <td class="p-4">"you can't <strong>keep this to yourself</strong>." (表示不把消息說出去。也可以是正面建議：<em>Keep your opinions to yourself.</em>（把你的意見留著不必說。）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">It's not about...</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">這不是關於⋯的事 / 這跟⋯無關</td>
+                                <td class="p-4">"<strong>It's not about</strong> oral hygiene." (非常實用的句型，用來否定表面原因並指向真實動機。反面：<em>It's all about...</em>（這全都是關於⋯）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">I'm not judging.</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">我不是在批判 / 我沒有評斷的意思</td>
+                                <td class="p-4">"<strong>I'm not judging.</strong>" (當代英文口語中表示「我保持中立、不帶有主觀批評」，常跟在令人驚訝的事情後面使用，語氣可以很中性也可以帶幽默。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">It'll kill him/her.</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">這會讓他/她非常難受 / 這消息會讓他崩潰</td>
+                                <td class="p-4">"<strong>It'll kill him.</strong>" (比喻用法，= 某事對某人的打擊非常大。也可說：<em>It would break his heart.</em> 或 <em>It'll devastate him.</em>)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">coincidence</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">巧合</td>
+                                <td class="p-4">"It's just a <strong>coincidence</strong>." (重音：co-IN-ci-dence，四個音節。形容詞：<em>coincidental</em>。常用說法：<em>What a coincidence!</em>（真巧！）/ <em>by coincidence</em>（碰巧）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">let's just leave it at that</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">就說到這裡吧 / 我們就這樣算了</td>
+                                <td class="p-4">"<strong>Let's just leave it at that.</strong>" (表示不想再多說細節，或某件事暫時到此為止。常用於結束話題或避免進一步解釋。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">❓ 附加問句（Tag Questions）：aren't we?</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Joey 說的 <em>"We're okay, aren't we?"</em> 是英文中非常重要的語法結構：
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="5:43" data-end="5:45">▶️</button>
+                        "We're okay, <span class="text-rose-600">aren't we?</span>"
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>附加問句規則：</strong>前面是正面句 → 後面接否定附加問句</p>
+                        <div class="bg-white rounded p-3 border border-indigo-100 space-y-2 text-base">
+                            <p>→ <em>It's cold, <strong>isn't it?</strong></em>（很冷，對吧？）</p>
+                            <p>→ <em>You're coming, <strong>aren't you?</strong></em>（你要來，對吧？）</p>
+                            <p>→ <em>She likes him, <strong>doesn't she?</strong></em>（她喜歡他，對吧？）</p>
+                            <p>→ <em>They left, <strong>didn't they?</strong></em>（他們走了，對吧？）</p>
+                        </div>
+                        <div>
+                            <p><strong>語調的差別：</strong></p>
+                            <p>↗ 語調上升 = 真的在詢問/不確定（Joey 就是這個情況——他其實不確定 Ben 沒事）</p>
+                            <p>↘ 語調下降 = 只是在確認、期待對方同意</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🔉 語氣：重複疊字的恐慌感</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Rachel 的「There's a bump」三連說，是英文口語中用<strong>重複表達驚慌或強調</strong>的典型例子：
+                </p>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-emerald-900 text-xl mb-2">
+                        <button class="play-btn" data-start="5:45" data-end="5:48">▶️</button>
+                        "There's a bump. There's a bump. There's a bump."
+                    </p>
+                    <p class="text-gray-700 mt-2">
+                        ✦ 英文口語中，重複同一句話通常傳達：<strong>驚慌 / 確認事實 / 情緒遞增</strong><br><br>
+                        ✦ 每次重複，Rachel 的聲調與語速都在微妙變化——從發現事實到恐慌蔓延<br><br>
+                        ✦ 類似例子：<br>
+                        <em>"We have a problem. We have a problem."</em>（像阿波羅13號那種情境）<br>
+                        <em>"No, no, no, no, no!"</em>（否定的連說表示震驚）<br><br>
+                        💡 聽懂這種重複的「遞增感」，是理解英語情緒和語境的關鍵！
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📝 文化補充：What's the matter? vs What's wrong?</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    開場 Chandler 問 Phoebe 時用了一個值得學的問句：
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        "So, what's the matter?"
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>幾種問「怎麼了」的說法比較：</strong></p>
+                        <div class="bg-white rounded p-3 border border-yellow-100 space-y-2 text-base">
+                            <p><strong>What's the matter?</strong> = 怎麼了？（最常見，略帶關心）</p>
+                            <p><strong>What's wrong?</strong> = 出什麼事了？（稍微直接）</p>
+                            <p><strong>What's up?</strong> = 怎麼了 / 發生什麼事？（最口語，也可以只是打招呼）</p>
+                            <p><strong>Is everything okay?</strong> = 一切都好嗎？（溫和詢問）</p>
+                            <p><strong>You seem off. What's going on?</strong> = 你看起來不對勁，怎麼了？（較成熟的說法）</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集的主題其實是「秘密的重量」：Phoebe 扛著牙醫魔咒的秘密，Joey 扛著看見 Janice 親吻前夫的秘密，Joey 和 Rachel 扛著讓 Ben 撞頭的秘密。英文口語中有太多說法來表達「藏秘密」、「忍不住說」、「其實不太 okay」……這些才是真正的生活對話。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">記得多利用聽力練習：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>把五個 <strong>AB 循環播放點</strong> 都再練習一遍！</li>
+                        <li>模仿 Phoebe 說 <strong>"I floss to save lives."</strong>——語氣要正經嚴肅！</li>
+                        <li>用附加問句造一個句子：如 <em>"It's a nice day, <strong>isn't it?</strong>"</em></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

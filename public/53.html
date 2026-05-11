@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E06 學習指南 | The One with the Flashback</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S03E06</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季第六集，<strong>"The One with the Flashback"</strong>（閃回的那集）。</p>
+                <p>整集以倒敘（flashback）方式呈現，透過 Janice 的一個問題——「你們六個人之中，有誰和誰睡過？」——帶出三年前眾人第一次相遇的往事。與此同時在現在時間線上：Chandler 正在找室友面試，遇到了一個喜歡在名字後面說「Bing！」的奇怪男子，還有一個攝影師，聽說其姊妹是色情明星。Phoebe 偷偷搬出室友 Alice 的公寓，卻一直鼓不起勇氣告知本人。Rachel 和 Monica 在酒吧巧遇 Barry 的未婚妻 Mindy，氣氛無比尷尬。</p>
+                <p>這集英文充滿了<strong>幽默的諷刺、轉折句和日常社交英語</strong>，非常值得學習！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：Janice 的開場大哉問——drunk and stupid！</h3>
+                    <p class="text-gray-600 mb-4">Janice 一開口就問了個讓全場尷尬的問題：你們六個人之中，有誰和誰睡過？Chandler 否認，Janice 追問：那有沒有「喝醉然後犯蠢」的時候？</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:23" data-end="0:37">▶️</button><br>
+                        <strong>Janice:</strong> "Come on, over the years, none of you ever got, you know, drunk and stupid?"<br>
+                        <strong>Joey:</strong> "Well, that's really a different question."<br>
+                        <strong>Janice:</strong> "I find it hard to believe that a group of people who spends as much time together as you guys do has never bumped uglies."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（拜託，這麼多年來，你們沒有任何人喝醉然後做蠢事嗎？／唔，那是完全不同的問題了。／我很難相信像你們這樣整天黏在一起的人從沒有…「碰過」。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> Janice 用的 <em>"bumped uglies"</em> 是美式俚語（省略了雙關原意），這裡是委婉暗語。注意 <em>"over the years"</em> 的節奏：<em>/ˈoʊvər ðə jɪrz/</em>，<em>over</em> 音節要明確。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-blue-300 bg-blue-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-blue-800">場景二：Chandler 找室友——最終出現「Bing！」</h3>
+                    <p class="text-gray-600 mb-4">Chandler 面試了幾個奇怪的室友候選人，其中一個每次說到「Chandler Bing」就要加一聲「Bing！」。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="3:16" data-end="3:22">▶️</button><br>
+                        <strong>Chandler:</strong> "Nice to meet you, Chandler Bing."<br>
+                        <strong>Candidate:</strong> "Bing!"<br>
+                        <strong>Chandler:</strong> "Great apartment, Chandler Bing."<br>
+                        <strong>Candidate:</strong> "Bing!"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（很高興認識你，錢德勒·賓。／「賓！」／好棒的公寓，錢德勒·賓。／「賓！」）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 注意「Bing」被「候選人」在每次聽到 Chandler 姓氏後立刻插嘴喊出——這個場景完全靠<strong>節奏感和停頓</strong>製造笑點。英文喜劇對白中，<strong>停頓的時機</strong>往往比台詞本身更重要。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景三：攝影師的條件——姊姊是色情明星！</h3>
+                    <p class="text-gray-600 mb-4">一個看起來很完美的攝影師室友候選人，一口氣說完所有優點，最後加了一句讓 Chandler 瞠目結舌的話。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="4:37" data-end="4:58">▶️</button><br>
+                        <strong>Eric:</strong> "During the summer, I spend most weekends at my sister's beach house, which you are welcome to use, by the way."<br>
+                        <strong>Eric:</strong> "Although I should probably tell you she's a porn star."<br>
+                        <strong>Chandler:</strong> "Well, listen, I still have one more person to meet, but unless it turns out to be your sister, I think your chances are pretty good."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（夏天我大部分週末都在我姊的海濱別墅，順便說一句歡迎你用。／雖然我要說她是個色情明星。／好，我還有另一個人要見，但除非是你姊姊來，不然我覺得你的機會很大。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"unless it turns out to be"</em> = 除非結果是⋯。<em>turn out</em> 是非常常用的動詞片語，表示「結果是/事後發現」。注意 Chandler 最後一句說得飛快，需要多聽幾遍。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：酒吧要變咖啡館——我們以後要去哪裡混？</h3>
+                    <p class="text-gray-600 mb-4">Ross 和 Chandler 在酒吧聽說常去的酒吧要關門，改成咖啡館，他們一臉茫然：那我們要去哪裡？（諷刺地預言了之後 Central Perk 的存在。）</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:19" data-end="6:27">▶️</button><br>
+                        <strong>Monica:</strong> "Apparently they're turning it into some kind of coffee place."<br>
+                        <strong>Chandler:</strong> "Just coffee?"<br>
+                        <strong>Chandler:</strong> "Where are we going to hang out now?"<br>
+                        <strong>Monica:</strong> "Got me."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（聽說他們要把這裡改成一種咖啡館。／只賣咖啡？／那我們以後要去哪裡混？／我也不知道。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"Got me."</em> = <em>"You got me."</em> 的縮短版，表示「我不知道 / 你問倒我了」。是超級日常口語，幾乎不見於教科書，但美劇裡出現頻率很高。<em>hang out</em> = 聚在一起閒逛、消磨時間。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-green-300 bg-green-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-green-800">場景五：Rachel 遇見 Barry 的未婚妻！</h3>
+                    <p class="text-gray-600 mb-4">Rachel 在酒吧因為飲料點錯而上去糾正女服務員，卻發現同桌女生 Mindy 戴著訂婚戒指——正是 Rachel 前男友 Barry 的現在未婚妻。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="7:16" data-end="7:26">▶️</button><br>
+                        <strong>Mindy:</strong> "Well, I would like to propose a toast..."<br>
+                        <strong>Rachel:</strong> "Go on."<br>
+                        <strong>Rachel:</strong> "...to the woman who, in one year from today, will become Mrs. Dr. Barry Barber, DDS."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我想提議一個敬酒⋯／請說。／獻給這位女士，一年後將成為 Barry Barber 博士夫人。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"I would like to propose a toast"</em> = 提議乾杯/敬酒，是非常正式的表達，通常在婚禮、慶祝場合出現。<em>"Go on."</em> = 繼續說吧，是日常對話中非常道地的回應，表示「我在聽，你繼續」。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">hang out</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">聚在一起 / 消磨時間 / 混</td>
+                                <td class="p-4">"Where are we going to <strong>hang out</strong> now?" (非正式的「聚會 / 消磨時間」，常用於朋友之間。名詞形態：<em>a hangout</em> = 常去的地方。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">Got me.</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">我不知道 / 你問倒我了</td>
+                                <td class="p-4">"<strong>Got me.</strong>" (= You got me. = I don't know. 非常口語，相當於中文的「不知道耶」、「你問我，我問誰」。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">turn out (to be)</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">結果是 / 事後發現</td>
+                                <td class="p-4">"unless it <strong>turns out to be</strong> your sister" (表示「最後的結果」，可以是意外或出乎意料的結局。<em>It turned out fine.</em> = 結果還不錯。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">propose a toast</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">提議舉杯 / 敬酒</td>
+                                <td class="p-4">"I would like to <strong>propose a toast</strong>." (正式/半正式場合的固定說法。也可說：<em>Let's raise a glass to...</em>（舉杯敬⋯）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">hit it off</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">一見如故 / 相談甚歡 / 一拍即合</td>
+                                <td class="p-4">"they really <strong>hit it off</strong>" (第一次見面就相處融洽。常用過去式：<em>We hit it off right away.</em> 很難直接翻譯成中文，但意思清楚。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">the longer..., the harder...</td>
+                                <td class="p-4">句型</td>
+                                <td class="p-4">越⋯，越⋯</td>
+                                <td class="p-4">"<strong>The longer</strong> you wait, <strong>the harder</strong> it's going to be." (the + 比較級, the + 比較級 = 越…越… 是英文中非常重要的句型，後面通常接動詞。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">📐 重要句型：The + 比較級, the + 比較級</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Ross 說的這句台詞示範了英文中一個非常實用的句型：
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="2:40" data-end="2:43">▶️</button>
+                        "The longer you wait, the harder it's going to be on her."
+                    </p>
+                    <p class="text-gray-700 mb-3">
+                        <strong>The + 比較級 + 主詞 + 動詞, the + 比較級 + 主詞 + 動詞</strong><br>
+                        = 越…，就越…
+                    </p>
+                    <div class="bg-white rounded p-3 border border-indigo-100 space-y-2 text-base">
+                        <p><em>The <strong>earlier</strong> you start, the <strong>better</strong>.</em>（越早開始越好。）</p>
+                        <p><em>The <strong>more</strong> you practice, the <strong>more fluent</strong> you'll become.</em>（練習越多，就越流利。）</p>
+                        <p><em>The <strong>harder</strong> it rains, the <strong>louder</strong> the thunder.</em>（雨越大，雷聲越響。）</p>
+                    </div>
+                    <p class="text-gray-500 text-base mt-3">💡 注意第二句常省略主詞或動詞（尤其是 <em>the better</em>），比如 "The sooner, the better."</p>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🔗 連讀與弱讀：although / apparently / unless</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集出現了幾個說話時常被弱化或連讀的連接詞：
+                </p>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-lg space-y-4">
+                    <div>
+                        <p class="font-bold text-emerald-900">① although /ɔːlˈðoʊ/ → 口語中常弱讀成 /əlˈðoʊ/</p>
+                        <p class="text-gray-700"><em>"<strong>Although</strong> I should probably tell you she's a porn star."</em><br>
+                        開頭的 al- 音節常被吃掉，聽起來像 "l-though"。</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-emerald-900">② apparently /əˈpærəntli/ → 重音在第二音節</p>
+                        <p class="text-gray-700"><em>"<strong>Apparently</strong> they're turning it into some kind of coffee place."</em><br>
+                        = 聽說、顯然，語氣帶著「不是我說的，但消息是這樣」的距離感。</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-emerald-900">③ unless /ənˈlɛs/ → 口語中常作 /ənlɛs/</p>
+                        <p class="text-gray-700"><em>"<strong>Unless</strong> it turns out to be your sister..."</em><br>
+                        un- 在口語中常弱讀，with 和 unless 都是說話時常被輕聲帶過的詞。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">🎭 文化補充：Go on. vs Keep going. vs Continue.</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Rachel 的這句短短 <em>"Go on."</em> 是英文社交口語中超容易被忽略的精華：
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="7:15" data-end="7:19">▶️</button>
+                        Mindy: "I would like to propose a toast..." / Rachel: "Go on."
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <div>
+                            <p><strong>Go on.</strong> = 請繼續（最口語、最自然、不急迫）</p>
+                            <p><strong>Keep going.</strong> = 繼續啊（鼓勵性，稍微急切）</p>
+                            <p><strong>Continue.</strong> = 請繼續（正式，像老師對學生或主持人說的）</p>
+                            <p><strong>Please, go ahead.</strong> = 請便（讓對方先說/先做）</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-yellow-100">
+                            <p class="font-bold text-rose-700">📌 使用情境：</p>
+                            <p>當有人說話突然停下來，或表示自己要說什麼，但還沒開口，你可以說 <em>"Go on."</em> 或 <em>"Go ahead."</em> 表示「我在聽，你繼續」——這會讓你的英文對話非常自然流暢。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集透過閃回展示了朋友之間的緣分從何而來，也用現在的故事線提醒我們：拖越久只會越難開口（"The longer you wait, the harder it's going to be"）。不論是 Phoebe 遲遲不告訴 Alice，還是 Rachel 在酒吧遇到 Barry 未婚妻的震撼，都在說同一件事：有些話，還是早說早好。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">記得多利用聽力練習：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>把五個 <strong>AB 循環播放點</strong> 都再練習一遍！</li>
+                        <li>用 <strong>"The longer..., the harder..."</strong> 造一個自己的句子！</li>
+                        <li>練習說 <strong>"Got me."</strong> 和 <strong>"Go on."</strong>，這兩句話讓你的英文對話立刻升級！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

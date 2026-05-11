@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S03E11 學習指南 | The One Where Chandler Can't Remember Which Sister</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends S03E11</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動在對話區間內<strong>無限循環 (Loop)</strong>。建議聽個三到五遍後，跟著角色一起唸出來 (Shadowing)，直到節奏和語調完全貼合為止！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第三季第十一集，<strong>"The One Where Chandler Can't Remember Which Sister"</strong>（Chandler 忘記親了哪個姊妹的那集）。</p>
+                <p>這集多線並行：Rachel 在一家時裝公司開始實頓，每天的工作卻是幫老裁縫如廁、分離衣架，令她十分沮喪——直到在咖啡廳偶遇一位在 Bloomingdale's（布魯明岱爾百貨，美國著名高档百貨）工作的人，可能為她帶來真正的面試機會。Monica 為鄰居的噪音所苦，但鄰居實在太迷人，每次上去投訴都反而道歉收場。Chandler 在 Joey 的生日派對上喝了太多 jello shots（果凍酒），醉到不省人事。</p>
+                <p>這集台詞充滿了<strong>職場英語、工作抱怨、以及紐約人的日常社交語言</strong>！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景一：鄰居太吵太迷人——投訴反而道歉</h3>
+                    <p class="text-gray-600 mb-4">Rachel 建議 Monica 直接上樓去跟吵鬧的鄰居說清楚，Monica 解釋：拜訪過五次了，但這個人太有魅力，每次上去都以道歉告終。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:39" data-end="0:56">▶️</button><br>
+                        <strong>Phoebe:</strong> "Why don't you go up there and ask him to just, like, step lightly, please?"<br>
+                        <strong>Monica:</strong> "I have, like, five times, but the guy is so charming that I go up there to yell and then I end up apologizing to him."<br>
+                        <strong>Phoebe:</strong> "Oh, that is silly! I'll go up there, I'll tell him to keep it down."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你為什麼不上去叫他踩輕一點？／我大概上去了五次，但這傢伙太有魅力了，每次我上去要罵他，結果都是我在跟他道歉。／哦，那也太傻了！我去，我去跟他說聲音小一點。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"I'll tell him to keep it down."</em> = 我去叫他小聲一點。<em>keep it down</em> 是英文中最常用來叫別人安靜/降低音量的口語說法。<em>"step lightly"</em> = 走路輕一點。<em>"end up -ing"</em> = 最終結局是⋯（常表示出乎意料的結果）。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景二：Rachel 的時裝公司工作抱怨</h3>
+                    <p class="text-gray-600 mb-4">Rachel 在時裝公司裡幫忙做各種打雜工作，筋疲力盡地向 Monica 訴苦——說自己「paying dues」卻學不到任何東西。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="4:36" data-end="5:14">▶️</button><br>
+                        <strong>Rachel:</strong> "Oh, God, I hate my job. I hate it. I hate my job. I hate it."<br>
+                        <strong>Rachel:</strong> "I want to quit, but then I think I should stick it out."<br>
+                        <strong>Rachel:</strong> "I don't mind paying my dues. It's just, how much am I going to learn about fashion by walking Myra, the arthritic seamstress, to the bathroom?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（老天，我討厭我的工作。我恨它。我要辭職，但我又想撐下去。我不介意熬資歷，只是⋯扶著有關節炎的老裁縫 Myra 去廁所，我能學到什麼時尚知識？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"paying dues"</em> = 熬資歷、付出代價來換取未來機會，是職場常用語。<em>"stick it out"</em> = 咬牙撐下去、堅持到底。<em>"arthritic"</em> = 患有關節炎的。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景三："Barbara Streisandwich"——Gunther 為三明治命名</h3>
+                    <p class="text-gray-600 mb-4">Rachel 在咖啡廳憤憤地跟 Monica 說話，一個陌生男子插話，Rachel 請他回去享用他的漢堡，男子更正：那叫做 "Barbara Streisandwich"。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="5:33" data-end="5:42">▶️</button><br>
+                        <strong>Rachel:</strong> "You can go back to enjoying your little hamburger."<br>
+                        <strong>Monica:</strong> "Actually, that's a Barbara Streisandwich."<br>
+                        <strong>Monica:</strong> "What?"<br>
+                        <strong>Monica:</strong> "I named that one."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（你可以回去享用你的小漢堡了。／其實，那叫 Barbara Streisandwich。／什麼？／那個是我命名的。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> "Barbara Streisandwich" = "Barbara Streisand"（著名歌手）+ "sandwich"（三明治）的雙關語。英文中這種把名字和常用詞拼在一起的笑話叫做 <em>portmanteau</em>（混成詞）或 <em>pun</em>（雙關）。這是 Gunther/咖啡廳對三明治的創意命名。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景四：Rachel 的人生轉機——Bloomingdale's 工作機會</h3>
+                    <p class="text-gray-600 mb-4">那個被 Rachel 趕走的男子其實在 Bloomingdale's 任職，他悄然回來，告訴 Rachel 他的部門可能有職缺，願意幫她安排面試。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="5:43" data-end="5:57">▶️</button><br>
+                        <strong>Man:</strong> "Just one other thing. I work at Bloomingdale's, and I might know of a job possibility if you're interested."<br>
+                        <strong>Rachel:</strong> (surprised sound)<br>
+                        <strong>Man:</strong> "Do you want my pickle?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（只是另一件事。我在 Bloomingdale's 工作，如果你有興趣的話，我可能知道一個工作機會。／你要我的醃瓜嗎？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"I might know of a job possibility."</em> 是職場英語中非常自然的「暗示機會」說法。注意 <em>might</em>（可能）的使用——不說死，留有彈性。<em>"if you're interested"</em> = 如果你有興趣，是極常用的條件句，語氣輕鬆不強迫。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景五：Chandler 喝爛 jello shots——"just like Mom used to make"</h3>
+                    <p class="text-gray-600 mb-4">Joey 生日派對上，Chandler 因為失戀喝了太多果凍酒，大家發現他的狀態出奇地好——原來是 jello shots（純伏特加做成的果凍）搞的。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:41" data-end="6:47">▶️</button><br>
+                        <strong>Joey:</strong> "How many of these did you have? These are pure vodka."<br>
+                        <strong>Chandler:</strong> "Yeah, jello just like Mom used to make."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（這個你喝了幾個？這是純伏特加！／對啊，就像媽媽以前做的果凍一樣。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>"just like Mom used to make"</em> = 就像媽媽以前做的那樣，是英文中形容食物讓人感到親切、懷念的經典說法。Chandler 用這句話形容純伏特加果凍，既天真又好笑。注意 <em>used to</em> = 以前曾經（有規律）做的事，與 <em>be used to</em>（習慣於）不同！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">keep it down</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">小聲一點 / 降低音量</td>
+                                <td class="p-4">"I'll tell him to <strong>keep it down</strong>." (= 叫對方把聲音放低。非常實用的日常口語，可以說：<em>Can you keep it down?</em>（你可以小聲一點嗎？）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">end up -ing</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">最終（出乎意料地）⋯</td>
+                                <td class="p-4">"I <strong>end up</strong> apologizing to him." (表示結局跟原本預期不同。<em>end up</em> 後面接動名詞 (V-ing) 或名詞：<em>end up in trouble</em>（最後惹上麻煩）。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">paying dues</td>
+                                <td class="p-4">慣用語</td>
+                                <td class="p-4">熬資歷 / 付出代價換取未來機會</td>
+                                <td class="p-4">"I don't mind <strong>paying my dues</strong>." (原意是繳納會費，引申為「在底層打滾、做苦差事換取未來晉升機會」。常見：<em>Everyone has to pay their dues.</em>（每個人都要熬資歷。）)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">stick it out</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">咬牙堅持 / 撐下去</td>
+                                <td class="p-4">"I think I should <strong>stick it out</strong>." (= 即使辛苦也繼續撐下去，不放棄。類似的說法：<em>hang in there</em>（撐住）, <em>tough it out</em>（熬過去）。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">demeaning</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">有損尊嚴的 / 屈辱性的</td>
+                                <td class="p-4">"staying in such a <strong>demeaning</strong> job" (= 讓人感到有失身份或尊嚴的。<em>demean</em> 是動詞，= 使⋯有失尊嚴。)<br>類似詞：<em>degrading</em>（羞辱性的）。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">used to + V</td>
+                                <td class="p-4">助動詞片語</td>
+                                <td class="p-4">以前（曾）做⋯（但現在不了）</td>
+                                <td class="p-4">"jello just like Mom <strong>used to</strong> make" (表示過去的習慣，暗示現在情況已不同。注意別和 <em>be used to + V-ing</em>（習慣於做某事）混淆！)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">⚠️ "used to" vs "be used to" ——超容易混淆的文法！</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Chandler 的那句 <em>"Jello just like Mom used to make"</em> 很適合我們來釐清這個超常見混淆：
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="6:45" data-end="6:47">▶️</button>
+                        "Jello just like Mom <span class="text-rose-600">used to</span> make."
+                    </p>
+                    <div class="space-y-4 text-gray-700">
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p class="font-bold text-lg text-indigo-800">1️⃣ used to + 動詞原形 = 以前常做（暗示現在不再做了）</p>
+                            <p class="text-base mt-1"><em>"Mom <strong>used to</strong> bake cookies."</em>（媽媽以前常烤餅乾。暗示現在不烤了。）</p>
+                            <p class="text-base"><em>"I <strong>used to</strong> live in Taipei."</em>（我以前住在台北。）</p>
+                        </div>
+                        <div class="bg-white rounded p-3 border border-indigo-100">
+                            <p class="font-bold text-lg text-indigo-800">2️⃣ be used to + V-ing = 習慣於做某事（現在的習慣）</p>
+                            <p class="text-base mt-1"><em>"I'<strong>m used to</strong> working late."</em>（我習慣工作到很晚。）</p>
+                            <p class="text-base"><em>"She'<strong>s used to</strong> living alone."</em>（她習慣一個人住。）</p>
+                        </div>
+                        <p class="text-sm text-gray-500">💡 記憶，訣竅：<em>used to</em> 單獨出現 = 過去；<em>be/get used to</em> = 習慣。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">🔉 說人「很迷人」的各種說法</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Monica 描述鄰居時反覆用了 "charming"——這是英文裡非常豐富的概念：
+                </p>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-emerald-900 text-xl mb-2">
+                        <button class="play-btn" data-start="0:46" data-end="0:50">▶️</button>
+                        "The guy is so <span class="text-emerald-700">charming</span> that I end up apologizing to him."
+                    </p>
+                    <div class="bg-white rounded p-3 border border-emerald-100 space-y-2 text-base text-gray-700 mt-3">
+                        <p><strong>charming</strong>（迷人的、很有魅力的）— 通用，男女皆可</p>
+                        <p><strong>charismatic</strong>（有個人魅力的）— 常指公眾人物或領導者</p>
+                        <p><strong>enchanting</strong>（令人著迷的）— 帶有些許浪漫或神秘感</p>
+                        <p><strong>irresistible</strong>（難以抵擋的）— 強調讓人無法說不</p>
+                        <p><strong>smooth</strong>（滑頭的、很會說話的）— 偏口語，有時帶一點負面暗示</p>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">💡 Monica 說 "so charming that..." 是結果子句（so... that...）：他迷人到讓我反而道歉。</p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📝 提供工作機會的禮貌英語</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    陌生人提供 Rachel 工作機會的方式非常值得學習——語氣不強迫、不確定、給對方空間：
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="5:49" data-end="5:52">▶️</button>
+                        "I <span class="text-yellow-700">might</span> know of a job possibility, <span class="text-yellow-700">if you're interested.</span>"
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p>這句話的設計非常聰明，分析一下：</p>
+                        <div class="bg-white rounded p-3 border border-yellow-100 space-y-2 text-base">
+                            <p>👉 <em>"I might know of..."</em> — 用 <strong>might</strong> 不說死，給自己和對方留退路</p>
+                            <p>👉 <em>"a job possibility"</em> — 說「可能性」而非「工作」，更謙遜</p>
+                            <p>👉 <em>"if you're interested"</em> — 把選擇權給對方，不強迫</p>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">📌 這種說話方式在英文職場文化非常普遍，顯示對方不強勢、尊重對方意願。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集告訴我們：有時候，在你最沮喪、最憤怒的時刻，轉機就在旁邊那張桌子。Rachel 從時裝公司帶著滿腔怒火去咖啡廳訴苦，卻在那裡遇見了可能改變她人生的人。Chandler 在派對上喝爛了，誤以為果凍酒只是果凍——結果是這集最快樂的人。最重要的是：每個人都要經歷 "paying dues" 的過程，只是要記得別忘了 "stick it out"。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">記得多利用聽力練習：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>把五個 <strong>AB 循環播放點</strong> 都再練習一遍！</li>
+                        <li>用 <strong>"I ended up -ing"</strong> 說一件事情結局出乎意料的經歷！</li>
+                        <li>背一下 <em>used to</em> 和 <em>be used to</em> 的不同，並各造一個句子！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <script>
+        const video = document.getElementById('myVideo');
+        function parseTimeString(timeStr) {
+            if (!timeStr) return 0;
+            if (timeStr.includes(':')) {
+                const [min, sec] = timeStr.split(':');
+                return parseInt(min, 10) * 60 + parseFloat(sec);
+            }
+            return parseFloat(timeStr);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
+                });
+            });
+            document.body.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('play-btn')) {
+                    var button = e.target;
+                    if (button.textContent === "⏹️") {
+                        video.pause();
+                        button.textContent = "▶️";
+                        return;
+                    }
+                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
+                    button.textContent = "⏹️";
+                    var startTime = parseTimeString(button.dataset.start);
+                    var endTime = parseTimeString(button.dataset.end);
+                    if (isNaN(startTime) || isNaN(endTime)) return;
+                    video.pause();
+                    video.currentTime = startTime;
+                    video.play();
+                    let loopId;
+                    const checkLoop = () => {
+                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
+                        loopId = requestAnimationFrame(checkLoop);
+                    };
+                    loopId = requestAnimationFrame(checkLoop);
+                    video.addEventListener('pause', function clearLoop() {
+                        cancelAnimationFrame(loopId);
+                        video.removeEventListener('pause', clearLoop);
+                    }, { once: true });
+                }
+            });
+            const menuButton = document.getElementById('menu-button');
+            const nav = document.querySelector('header nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            if (menuButton && nav) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nav.classList.toggle('open');
+                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
+                });
+                document.body.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
+                        if (!nav.contains(e.target) && e.target !== menuButton) {
+                            nav.classList.remove('open');
+                            menuOverlay.style.display = 'none';
+                        }
+                    }
+                });
+                menuOverlay.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    menuOverlay.style.display = 'none';
+                });
+            }
+            const container = document.getElementById('video-button-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url && video) video.src = url;
+            if (url) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerHTML = `<button class='text-lg font-bold bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
+                container.appendChild(btn);
+            } else {
+                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
+            }
+        });
+    </script>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
