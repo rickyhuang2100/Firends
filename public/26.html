@@ -363,6 +363,7 @@
     </video>
     <script>
         const video = document.getElementById('myVideo');
+        let currentLoopId = null;
         function parseTimeString(timeStr) {
             if (!timeStr) return 0;
             if (timeStr.includes(':')) {
@@ -391,6 +392,10 @@
                     if (button.textContent === "⏹️") {
                         video.pause();
                         button.textContent = "▶️";
+                        if (currentLoopId !== null) {
+                            cancelAnimationFrame(currentLoopId);
+                            currentLoopId = null;
+                        }
                         return;
                     }
                     document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
@@ -398,17 +403,28 @@
                     var startTime = parseTimeString(button.dataset.start);
                     var endTime = parseTimeString(button.dataset.end);
                     if (isNaN(startTime) || isNaN(endTime)) return;
+                    
+                    // 停止上一個循環
+                    if (currentLoopId !== null) {
+                        cancelAnimationFrame(currentLoopId);
+                        currentLoopId = null;
+                    }
+                    
                     video.pause();
                     video.currentTime = startTime;
                     video.play();
-                    let loopId;
+                    
                     const checkLoop = () => {
                         if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
-                        loopId = requestAnimationFrame(checkLoop);
+                        currentLoopId = requestAnimationFrame(checkLoop);
                     };
-                    loopId = requestAnimationFrame(checkLoop);
+                    currentLoopId = requestAnimationFrame(checkLoop);
+                    
                     video.addEventListener('pause', function clearLoop() {
-                        cancelAnimationFrame(loopId);
+                        if (currentLoopId !== null) {
+                            cancelAnimationFrame(currentLoopId);
+                            currentLoopId = null;
+                        }
                         video.removeEventListener('pause', clearLoop);
                     }, { once: true });
                 }

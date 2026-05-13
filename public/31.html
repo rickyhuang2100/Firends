@@ -81,20 +81,20 @@
                     <p class="text-gray-700 font-semibold">
                         <span class="play-btn" data-start="0:03" data-end="0:15">▶️</span>
                         <strong>Chandler:</strong> "What is it about me? Do I not look fun enough? Is there something repellent about me?"<br>
-                        <strong>Monica:</strong> "How was the party?"<br>
+                        <strong>Ross:</strong> "How was the party?"<br>
                         <strong>Chandler:</strong> "It couldn't have been worse. A woman literally passed through me."
                     </p>
                     <p class="text-gray-500 mt-1 ml-6">我是哪裡不對？我看起來不夠有趣嗎？我是有哪裡討人厭嗎？／派對好玩嗎？／難玩死了，有個女人直接穿過我。</p>
                 </div>
 
                 <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
-                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：Monica 的「妙語傷人」——說 Chandler 變胖了</h3>
-                    <p class="text-gray-600 mb-4">Monica 嘗試安慰 Chandler，說她「增加一點重量」的時候也會質疑自己。Chandler 沒想到這句話的意思，愣了一下才反應過來——Monica 是說他變胖了！</p>
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：Phoebe 的「妙語傷人」——說 Chandler 變胖了</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 嘗試安慰 Chandler，說她「增加一點重量」的時候也會質疑自己。Chandler 沒想到這句話的意思，愣了一下才反應過來——Phoebe 是說他變胖了！</p>
                     <p class="text-gray-700 font-semibold">
                         <span class="play-btn" data-start="0:22" data-end="0:41">▶️</span>
-                        <strong>Monica:</strong> "When I put on a little weight, I question everything."<br>
+                        <strong>Phoebe:</strong> "When I put on a little weight, I question everything."<br>
                         <strong>Chandler:</strong> "I've put on weight?"<br>
-                        <strong>Monica:</strong> "No, not weight. More like... insulation."
+                        <strong>Phoebe:</strong> "No, not weight. More like... insulation."
                     </p>
                     <p class="text-gray-500 mt-1 ml-6">每當我增加一點點重量，我就開始質疑一切了。／你說我變胖了？／不是，不是重量……說「絕緣體」比較恰當。</p>
                 </div>
@@ -427,95 +427,6 @@
     <video id="myVideo" controls>
         您的瀏覽器不支援 HTML5 video。
     </video>
-    <script>
-        const video = document.getElementById('myVideo');
-        function parseTimeString(timeStr) {
-            if (!timeStr) return 0;
-            if (timeStr.includes(':')) {
-                const [min, sec] = timeStr.split(':');
-                return parseInt(min, 10) * 60 + parseFloat(sec);
-            }
-            return parseFloat(timeStr);
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - 120;
-                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
-                });
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').replace('#','') === current) link.classList.add('active');
-                });
-            });
-            document.body.addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('play-btn')) {
-                    var button = e.target;
-                    if (button.textContent === "⏹️") {
-                        video.pause();
-                        button.textContent = "▶️";
-                        return;
-                    }
-                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
-                    button.textContent = "⏹️";
-                    var startTime = parseTimeString(button.dataset.start);
-                    var endTime = parseTimeString(button.dataset.end);
-                    if (isNaN(startTime) || isNaN(endTime)) return;
-                    video.pause();
-                    video.currentTime = startTime;
-                    video.play();
-                    let loopId;
-                    const checkLoop = () => {
-                        if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
-                        loopId = requestAnimationFrame(checkLoop);
-                    };
-                    loopId = requestAnimationFrame(checkLoop);
-                    video.addEventListener('pause', function clearLoop() {
-                        cancelAnimationFrame(loopId);
-                        video.removeEventListener('pause', clearLoop);
-                    }, { once: true });
-                }
-            });
-            const menuButton = document.getElementById('menu-button');
-            const nav = document.querySelector('header nav');
-            const menuOverlay = document.getElementById('menu-overlay');
-            if (menuButton && nav) {
-                menuButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    nav.classList.toggle('open');
-                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
-                });
-                document.body.addEventListener('click', (e) => {
-                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
-                        if (!nav.contains(e.target) && e.target !== menuButton) {
-                            nav.classList.remove('open');
-                            menuOverlay.style.display = 'none';
-                        }
-                    }
-                });
-                menuOverlay.addEventListener('click', () => {
-                    nav.classList.remove('open');
-                    menuOverlay.style.display = 'none';
-                });
-            }
-            const container = document.getElementById('video-button-container');
-            const urlParams = new URLSearchParams(window.location.search);
-            const url = urlParams.get('url');
-            if (url && video) video.src = url;
-            if (url) {
-                const btn = document.createElement('a');
-                btn.href = url;
-                btn.target = '_blank';
-                btn.innerHTML = `<button class='text-lg font-bold bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
-                container.appendChild(btn);
-            } else {
-                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
-            }
-        });
-    </script>
     <div id="contact-container"></div>
     <script src="loadContact.js"></script>
 </body>
