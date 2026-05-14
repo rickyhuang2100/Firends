@@ -79,8 +79,8 @@
                     <h3 class="font-bold text-xl mb-2 text-amber-800">場景一：之前情節重述——Ross 和 Rachel 的故事</h3>
                     <p class="text-gray-600 mb-4">故事從 Ross 愛上 Rachel 的情感歷程開始回顧，用了非常道地的敘述方式，帶出幾個超級實用的口語表達。</p>
                     <p class="text-gray-700 font-semibold">
-                        <span class="play-btn" data-start="0:01" data-end="0:33">▶️</span>
-                        <strong>Narrator:</strong> "Ross was in love with Rachel since forever. Every time he tried to tell her, something got in the way... And finally, Chandler was, like, 'Forget about her.' When Ross was in China, Chandler let it slip that Ross loved Rachel."
+                        <span class="play-btn" data-start="0:04" data-end="0:21">▶️</span>
+                        <strong>Phoebe:</strong> "Ross was in love with Rachel since forever. Every time he tried to tell her, something got in the way... And finally, Chandler was, like, 'Forget about her.' When Ross was in China, Chandler let it slip that Ross loved Rachel."
                     </p>
                     <p class="text-gray-500 mt-1 ml-6">羅斯從很久以前就愛上瑞秋。每次他試圖告訴她，總有什麼事阻礙他……最終錢德不小心說溜嘴，在中國時讓瑞秋知道羅斯愛她。</p>
                 </div>
@@ -421,6 +421,7 @@
     </video>
     <script>
         const video = document.getElementById('myVideo');
+        let currentLoopId = null;
         function parseTimeString(timeStr) {
             if (!timeStr) return 0;
             if (timeStr.includes(':')) {
@@ -449,6 +450,10 @@
                     if (button.textContent === "⏹️") {
                         video.pause();
                         button.textContent = "▶️";
+                        if (currentLoopId !== null) {
+                            cancelAnimationFrame(currentLoopId);
+                            currentLoopId = null;
+                        }
                         return;
                     }
                     document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
@@ -456,17 +461,28 @@
                     var startTime = parseTimeString(button.dataset.start);
                     var endTime = parseTimeString(button.dataset.end);
                     if (isNaN(startTime) || isNaN(endTime)) return;
+                    
+                    // 停止上一個循環
+                    if (currentLoopId !== null) {
+                        cancelAnimationFrame(currentLoopId);
+                        currentLoopId = null;
+                    }
+                    
                     video.pause();
                     video.currentTime = startTime;
                     video.play();
-                    let loopId;
+                    
                     const checkLoop = () => {
                         if (!video.paused && video.currentTime >= endTime) video.currentTime = startTime;
-                        loopId = requestAnimationFrame(checkLoop);
+                        currentLoopId = requestAnimationFrame(checkLoop);
                     };
-                    loopId = requestAnimationFrame(checkLoop);
+                    currentLoopId = requestAnimationFrame(checkLoop);
+                    
                     video.addEventListener('pause', function clearLoop() {
-                        cancelAnimationFrame(loopId);
+                        if (currentLoopId !== null) {
+                            cancelAnimationFrame(currentLoopId);
+                            currentLoopId = null;
+                        }
                         video.removeEventListener('pause', clearLoop);
                     }, { once: true });
                 }
