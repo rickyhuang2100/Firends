@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 第101集 學習指南 | The One With the Kips</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #111827; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #1d4ed8; border-bottom-color: #1d4ed8; }
+        .play-btn { cursor: pointer; font-size: 1.15rem; color: #1d4ed8; transition: all 0.2s ease; display: inline-block; background-color: #bfdbfe; padding: 4px 10px; border-radius: 9999px; border: 1px solid #93c5fd; }
+        .play-btn:hover { transform: scale(1.05); background-color: #dbeafe; }
+        .content-card { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 10px 24px rgba(15,23,42,0.08); }
+        .section-title { color: #1d4ed8; border-bottom: 2px solid #dbeafe; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #1d4ed8; border-radius: 0.5rem; box-shadow: 0 12px 24px rgba(29,78,216,0.18); }
+        video { display: block; margin-top: 20px; max-width: 28%; max-height: 28%; border-radius: 0.5rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #bfdbfe; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1rem 1.5rem; width: 100%; border-bottom: 1px solid #f3f4f6; font-size: 1.1rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#dbeafe 0%,#bfdbfe 100%); color: #1d4ed8; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.2); z-index: 900; }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-slate-700">Friends 第101集</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-slate-300 bg-slate-100 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">🎯 AB Loop 練句：短句練習最有效</h3>
+            <p>本頁特別挑選較短的 AB Loop 片段，讓你專注於單一句子或自然回應。每次按下 <span class="play-btn pb-0 pt-0 text-sm">▶️</span>，即可自動重複播放該段。</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第五季的一集：<strong>"The One With the Kips"</strong>（被當成 Kip 排擠的那一集）。這集包含劇中最大的轉折之一：Joey 終於發現 Monica 和 Chandler 的地下戀情！同時，Rachel 面臨可能因為 Ross 妻子的要求而被「排擠」出朋友圈的恐懼，就像 Chandler 以前室友 Kip 的下場一樣。</p>
+                <p>短句 AB Loop 特別適合練習「震驚反應」、「幽默的爭執」，以及「關係處理的對話」。</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 短句 AB Loop 片段</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-blue-300 bg-blue-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-blue-800">片段一：現在幾點了？</h3>
+                    <p class="text-gray-600 mb-4">最基本的詢問時間用語，注意 is it 的連音。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:24" data-end="0:26">▶️</button><br>
+                        <strong>Joey：</strong> "What time is it?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「is it」會連讀成 /ɪzɪt/，口語中幾乎不會分開念兩個字。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-red-300 bg-red-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-red-800">片段二：我們可以全裸！</h3>
+                    <p class="text-gray-600 mb-4">情侶間計畫出遊的親密對話，使用 could 表示可能性。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:55" data-end="0:57">▶️</button><br>
+                        <strong>Chandler：</strong> "We could be naked the entire time."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「the entire time」= 整段時間/整個週末，比 all the time 更有強調時間連續性的感覺。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">片段三：我不喜歡逃亡，我喜歡飛車追逐</h3>
+                    <p class="text-gray-600 mb-4">日常爭論電視節目的幽默對話。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="11:02" data-end="11:07">▶️</button><br>
+                        <strong>Chandler：</strong> "I don't like fast getaways, I like car chases."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「getaway」= 逃走/逃亡（或指短暫度假）。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">片段四：他們還漏換了什麼？</h3>
+                    <p class="text-gray-600 mb-4">在飯店抱怨房間不乾淨的懷疑句型。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:38" data-end="6:40">▶️</button><br>
+                        <strong>Monica：</strong> "Who knows what else they didn't change?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「Who knows...」= 誰知道（天曉得）⋯⋯，用來表達強烈的不信任感。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">片段五：我想要這週末很完美</h3>
+                    <p class="text-gray-600 mb-4">表達期盼的經典短句 + 附加問句爭取同意。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="6:47" data-end="6:52">▶️</button><br>
+                        <strong>Monica：</strong> "I want this weekend to be perfect. We can change rooms, can't we?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「I want + 名詞 + to be + 形容詞」= 我希望某事物呈現某狀態。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">片段六：誰在乎？妳是 Rachel 耶！</h3>
+                    <p class="text-gray-600 mb-4">強烈安撫朋友的語氣，「Who cares」展現霸氣。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="16:17" data-end="16:19">▶️</button><br>
+                        <strong>Ross：</strong> "Who cares? You're Rachel."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「Who cares?」= 誰在乎（那根本不重要）。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-pink-300 bg-pink-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-pink-800">片段七：不，沒關係的，真的</h3>
+                    <p class="text-gray-600 mb-4">明明很難過但故作堅強的退讓表達。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="19:19" data-end="19:22">▶️</button><br>
+                        <strong>Rachel：</strong> "No, no, it's okay. Really."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「Really.」在此處的作用是加強「我沒事」的說服力（但通常都相反）。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-indigo-300 bg-indigo-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-indigo-800">片段八：去面對它然後放下</h3>
+                    <p class="text-gray-600 mb-4">最道地、最有用的建議金句：「move on」。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="21:42" data-end="21:48">▶️</button><br>
+                        <strong>Monica：</strong> "You deal with it and you move on. It's nothing to freak out about."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「deal with it」= 去處理/面對；「move on」= 往前走/放下過去。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">片段九：在倫敦！</h3>
+                    <p class="text-gray-600 mb-4">Joey 發現真相後最經典的震驚重音！</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="23:01" data-end="23:04">▶️</button><br>
+                        <strong>Joey：</strong> "It happened in London. In London!"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「London」的重音放得非常強烈，用來表達極度驚訝與頓悟。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-orange-300 bg-orange-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-orange-800">片段十：規則讓遊戲變好玩！</h3>
+                    <p class="text-gray-600 mb-4">Monica 經典性格代表名言！</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="24:35" data-end="24:37">▶️</button><br>
+                        <strong>Monica：</strong> "Rules help control the fun."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">「help control」中間省略了 to。Monica 的控制狂性格表露無遺。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="p-4 font-semibold text-slate-700">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-slate-700">詞性</th>
+                                <th class="p-4 font-semibold text-slate-700">中文意思</th>
+                                <th class="p-4 font-semibold text-slate-700">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">naked</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">裸體的、光禿的</td>
+                                <td class="p-4">引申也能做沒有掩飾，如 the naked truth (赤裸的真相)。</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">entire</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">整個的、全部的</td>
+                                <td class="p-4">"the entire time" 比 "all the time" 更強調一個持續不斷的時段。</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">getaway</td>
+                                <td class="p-4">名詞</td>
+                                <td class="p-4">逃走、度假地</td>
+                                <td class="p-4">"fast getaways" 指電影裡快速逃離案發現場的橋段。</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">freak out</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">嚇壞、抓狂</td>
+                                <td class="p-4">"It's nothing to freak out about." (這沒什麼好大驚小怪的)。</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">deal with</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">處理、面對</td>
+                                <td class="p-4">遇到問題時，最常叫對方 "deal with it" (自己面對/處理它吧)。</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">move on</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">放下過去、往前看</td>
+                                <td class="p-4">感情生活、事業不順時最需要的態度。</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono text-blue-700">unbelievable</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">難以置信的</td>
+                                <td class="p-4">Joey 發現真相時說："This is unbelievable!"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音</h2>
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">📌 語法重點：「Who knows...」的間接問句</h3>
+                <p class="text-lg leading-relaxed mb-4"><strong>"Who knows what else they didn't change?"</strong> 這是一個典型的疑問詞與間接問句組合。</p>
+                <div class="bg-slate-100 border border-slate-200 rounded-lg p-4 text-lg">
+                    <ul class="list-disc list-inside space-y-2 ml-4 text-slate-700">
+                        <li><strong>主句：</strong>Who knows... (誰知道呢)</li>
+                        <li><strong>間接問句子句：</strong>what else they didn't change (他們還漏換了什麼其他東西)</li>
+                        <li><strong>規則：</strong>遇到 who/what/where 放在句中做間接問句時，後面的結構是「主詞 + 動詞」，不需要助動詞倒裝，所以是 <code>they didn't change</code> 而不是 <del>didn't they change</del>。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">📌 語感教學："move on" 有多萬用？</h3>
+                <div class="space-y-4 text-lg text-slate-700">
+                    <p>在所有美劇裡，<strong>move on</strong> 都是處理人際與情感問題的終極詞彙：</p>
+                    <div class="bg-slate-100 rounded-lg p-4">
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li><strong>分手後：</strong>"It's time to move on." (是時候放下了)</li>
+                            <li><strong>專案失敗：</strong>"We just have to move on." (我們只能往前看)</li>
+                            <li><strong>爭吵後：</strong>"You deal with it and move on." (處理完就不開心的事拋在一邊吧 - Monica)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📌 發音與語調："IN LONDON!"</h3>
+                <div class="space-y-3 text-lg text-slate-700">
+                    <p>Joey 發現真相時大喊這句話，這個音調起伏堪稱「頓悟」的標準範例：</p>
+                    <div class="bg-slate-100 rounded-lg p-4">
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li><strong>"It happened in London."</strong> 語氣起初只有半信半疑的呢喃。</li>
+                            <li><strong>"IN LONDON!"</strong> 突然語氣拉長、音量爆發。英文中當你突然想通某一件事，或是揭穿一個秘密，通常會把地點、時間或關鍵字的母音拉長重讀，表達你的震驚。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">這集充滿秘密被揭穿的刺激感！透過這些經典短句，你學到了道地的爭辯、妥協與表達震驚。尤其是 "move on" 與 "deal with it"，絕對是你一輩子受用的生活會話辭彙庫。</p>
+                <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-2">練習建議</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-slate-700">
+                        <li>試著用誇張的頓悟語調念出「In London!」。</li>
+                        <li>反覆練習「You deal with it and you move on」，把這個態度融入口語直覺。</li>
+                        <li>回味並練習 Monica 最愛的口頭禪：「Rules help control the fun!」</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
