@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S06E07 學習指南 | The One Where Phoebe Runs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第127集 (S06E07)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>只要看到 <strong>橘色背景的 <span class="play-btn pb-0 pt-0 text-sm">▶️ AB Loop 按鈕</span></strong>，點擊後右下角影片就會鎖定了該片段不斷反覆播放。在「發音與文法區段」也已全面支援此對位播放，請務必張開嘴巴跟著影片主角的節奏與連音一起模仿，培養道地的美式語感！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>Welcome! 這是《六人行》第六季第七集：<strong>"The One Where Phoebe Runs"</strong>（菲比跑步）。</p>
+                <p>這集堪稱六人行經典搞笑的巔峰之一。Rachel 發現新室友 Phoebe 跑步的姿勢荒唐到像一隻大嘴蛙，害得她完全不想跟她出門；而 Joey 有了一位名叫 Janine 的超辣新女室友，他為了避免「兔子吃窩邊草」引發的後患苦苦壓抑調情的慾望，甚至主動告訴她自己對她沒興趣，卻反向遭到女方發好人卡。一起透過這些有趣的互動來學習吧！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：深不可測的室友</h3>
+                    <p class="text-gray-600 mb-4">Rachel 跟 Phoebe 在錄製新同居家的答錄機留言。Phoebe 嫌自己分配到的字太少，結果 Rachel 敷衍她之後，Phoebe 直接流利地把所有人的台詞一人分飾兩角搞定。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:36" data-end="0:43">▶️</button><br>
+                        <strong>Phoebe:</strong> "Wait. How did you do that?"<br>
+                        <strong>Rachel:</strong> "What?"<br>
+                        <strong>Phoebe:</strong> "Oh, you're no ordinary roommate, are you?"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（慢著，妳是怎麼弄的？／什麼？／噢，看來妳不是個普通的室友對吧？）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> Phoebe 用自問自答的瘋狂邏輯指控 Rachel 的留言帶有心機，"You're no ordinary..." 是一個很好用的誇飾句型。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：無效放電</h3>
+                    <p class="text-gray-600 mb-4">Joey 鼓起勇氣跟新辣妹室友 Janine 說他們不該對彼此有非分之想。Janine 告訴他別擔心，因為她對他根本沒興趣。Joey 堅信那是因為自己還沒「發功」。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="19:11" data-end="19:28">▶️</button><br>
+                        <strong>Joey:</strong> "Believe me, you'd feel a lot different if I turned it on."<br>
+                        <strong>Janine:</strong> "I don't think so."<br>
+                        <strong>Joey:</strong> "Oh, I do. <em>(給出招牌曖昧眼神)</em> How you doing?"<br>
+                        <strong>Janine:</strong> "I'm okay."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（相信我，我要是一放電，你的感覺就不同了。／我不認為哦。／噢，絕對會。<br>『妳好嗎？』／我很好呀。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> Joey 的招牌把妹語 "How you doing?" 在這邊踢到了最大的鐵板，而且 "Turn it on" 這個片語被 Joey 形容得像是啟動某種開關一樣。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景三：釋放自由的真諦</h3>
+                    <p class="text-gray-600 mb-4">Rachel 原本覺得 Phoebe 誇張的跑步姿勢很丟臉，但在嘗試過後，她意外發現了這種狂放奔跑的美妙。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="19:58" data-end="20:09">▶️</button><br>
+                        <strong>Rachel:</strong> "This feels great! And you don't care if people stare. It's only a second. Then you're gone! It's amazing! I feel so free and so graceful!"
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（這感覺太棒了！不用在乎別人怎麼看，反正只有一秒鐘，妳一溜煙就不見了！真神奇！我覺得好自由、好優雅！）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 這是超級高頻的口語表現方式。注意 "don't care if people stare" 裡面順耳的押韻。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景四：分毫不差的恐懼</h3>
+                    <p class="text-gray-600 mb-4">Chandler 因為打掃把 Monica 的東西全都搬動了，而遭受到 Ross 的嚴正警告：惹火一個偏執狂是很可怕的。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="9:45" data-end="9:51">▶️</button><br>
+                        <strong>Ross:</strong> "Put it back exactly where you found it?"<br>
+                        <strong>Chandler:</strong> "Yes. I'm gonna put it back <em>exactly</em> where I found it."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（完全照你在原先哪裡發現的地方放回去？／沒錯。我要放回「正正好好」原先的那個位子。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 當外國人要強調一個事物分毫不差時，都會像 Chandler 一樣重讀並拉長 "exactly" 這個字。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-green-300 bg-green-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-green-800">場景五：科技的預言</h3>
+                    <p class="text-gray-600 mb-4">Ross 讀了一本書，迫不及待地跑來跟 Chandler 炫耀他得知的最新高科技未來發展。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="1:56" data-end="2:05">▶️</button><br>
+                        <strong>Ross:</strong> "By the year 2030, there'll be computers that can carry out the same amount of functions as an actual human brain."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（在 2030 年之前，將會出現能處理和人類大腦相同運作量的電腦！）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> Ross 的標準「科學書呆子」語氣，配上 Chandler 完全不在乎的翻白眼反應。聽聽 "carry out" 這個動詞片語的用法。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 實用語彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">get rid of</td>
+                                <td class="p-4">片語</td>
+                                <td class="p-4">擺脫 / 處理掉</td>
+                                <td class="p-4">"I don't know how to <strong>get rid of</strong> it." (我不知道怎麼擺脫這股慾望)。超級超級常在口語中聽到的用法。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">repel</td>
+                                <td class="p-4">動詞</td>
+                                <td class="p-4">擊退 / 使人反感</td>
+                                <td class="p-4">"It's because I was trying to <strong>repel</strong> you." 對抗地心引力的驅除力，或讓別人避之唯恐不及。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">turn on</td>
+                                <td class="p-4">片語動詞</td>
+                                <td class="p-4">啟動 / 發電(放電)</td>
+                                <td class="p-4">原本指的是開電器或發動機。這裡拿來形容男生「啟動他專門拿來迷死人的魅力開關」。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">graceful</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">優雅的</td>
+                                <td class="p-4">"I feel so free and so <strong>graceful</strong>!" 不論是舞者或是天鵝都會被用上的稱讚詞。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">👂 發音焦點 1：聽起來像一個單字的 "get rid of it"</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    當單字組成極短（都是單微母音）而且是以 <strong>子音+母音</strong> 相間的無縫排列時，連讀起來就會像一門全新的語言。這對外國人的聽力是一大挑戰，但如果學會了會非常有成就感！
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3 flex items-center gap-3">
+                        <button class="play-btn" data-start="7:39" data-end="7:42">▶️</button>
+                        "I don't know how to <span class="text-indigo-700 underline underline-offset-4 decoration-2 decoration-indigo-300">get rid of it</span>."
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>連讀拆解 (<span class="font-mono text-indigo-600">/gɛ-tɹɪ-dʌ-vɪt/</span> 或軟化為 <span class="font-mono text-indigo-600">/gɛ-rɪ-dʌ-vɪt/</span>) ：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4 mt-2">
+                            <li><strong>get + rid</strong>：前面的 T 很多時候會被美式軟體音軟化成像 D 的閃音（flap t）。</li>
+                            <li><strong>rid + of</strong>：微弱的 D 音直接黏上 O 的短母音。唸成 <em>/dov/</em> 或 <em>/ɾov/</em>。</li>
+                            <li><strong>of + it</strong>：of 結尾微弱的 V 音繼續相連到了 it 上面，變成了 <em>/vit/</em>。</li>
+                            <li>連讀起來變成：<strong>"ge-ri-do-vit"</strong>。請按 AB Loop 按鈕，聽 Joey 如何把這四個字滑順地一氣呵成！</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">📖 發音焦點 2："out in" —— 又一次被省略弱化的 t 音</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    有時候美國人甚至不會把 t 發出軟糖音 (flap t)，他們會用喉嚨頓住氣流（聲門塞音 / glottal stop），或是直接連讀到下一個字的狀態，讓句子聽起來更加平滑流暢。
+                </p>
+                <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-teal-900 mb-3 flex items-center gap-3">
+                        <button class="play-btn" data-start="18:07" data-end="18:10">▶️</button>
+                        "Let's just get this <span class="text-teal-700 underline underline-offset-4 decoration-2 decoration-teal-300">out in</span> the open, okay?"
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>發音變體解析：</strong></p>
+                        <ul class="list-disc list-inside space-y-2 ml-4 mt-2">
+                            <li>當要表達這句話「我們打開天窗說亮話吧」時，Joey 將 <strong>out in</strong> 相連了。</li>
+                            <li>在一般速度下，out 的字尾 t 在碰到 in 時，不會切斷重唸，而是化為 <strong>"au-tin" (凹聽)</strong> 又或者是被軟腭止住變成 <strong>"au-nin"</strong> 甚至更滑的聲音。</li>
+                            <li>聽這句時可以用 AB Loop 仔細抓 Joey 怎麼將舌頭彈過這個片語組合！</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集給我們帶來的是「如何打破包袱」。不論是 Phoebe 那種不在乎別人眼光（Who cares if they stare?）的極致狂奔，還是 Joey 把心裡的秘密「get this out in the open（攤開來說）」。即使這其中有些結果事與願違，但也創造了絕佳的效果。
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">課後練習建議：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>務必活用本次新加入的：<strong>▶️ 語法與發音實戰 AB Loop 按鈕</strong>，這是練習 <em>"get rid of it"</em> 節奏的最棒工具。</li>
+                        <li>下次當你覺得別人一直誇誇其談講些你想翻白眼的話時，你可以開玩笑說：「Wow, you're no ordinary <em>[填入身分,例如 co-worker]</em>, are you?」體驗最高級的美式挖苦。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
