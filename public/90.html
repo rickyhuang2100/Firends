@@ -201,113 +201,25 @@
             </div>
         </section>
     </main>
-
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
     <video id="myVideo" controls>
         您的瀏覽器不支援 HTML5 video。
     </video>
-    <script>
-        const video = document.getElementById('myVideo');
-        let currentLoopId = null;
-        const AB_LOOP_BUTTON_ACTIVE = '⏹️';
-        function parseTimeString(timeStr) {
-            if (!timeStr) return 0;
-            if (timeStr.includes(':')) {
-                const [min, sec] = timeStr.split(':');
-                return parseInt(min, 10) * 60 + parseFloat(sec);
-            }
-            return parseFloat(timeStr);
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const menuButton = document.getElementById('menu-button');
-            const nav = document.querySelector('header nav');
-            const menuOverlay = document.getElementById('menu-overlay');
-            const container = document.getElementById('video-button-container');
-            const urlParams = new URLSearchParams(window.location.search);
-            const url = urlParams.get('url');
-
-            if (url) {
-                video.src = url;
-                const btn = document.createElement('a');
-                btn.href = url;
-                btn.target = '_blank';
-                btn.innerHTML = `<button class='text-lg font-bold bg-violet-500 hover:bg-violet-600 text-white px-4 py-2 rounded shadow'>▶️ 開始播放影片</button>`;
-                container.appendChild(btn);
-            } else {
-                container.innerHTML = `<p class="text-red-500 text-3xl">找不到影片網址，請確認網址中包含 <code>?url=</code> 參數。</p>`;
-            }
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - 120;
-                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
-                });
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href').replace('#','') === current);
-                });
-            });
-
-            document.body.addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('play-btn')) {
-                    const button = e.target;
-                    if (button.textContent === AB_LOOP_BUTTON_ACTIVE) {
-                        button.textContent = '▶️';
-                        if (currentLoopId !== null) {
-                            cancelAnimationFrame(currentLoopId);
-                            currentLoopId = null;
-                        }
-                        video.pause();
-                        return;
-                    }
-
-                    document.querySelectorAll('.play-btn').forEach(btn => btn.textContent = '▶️');
-                    button.textContent = AB_LOOP_BUTTON_ACTIVE;
-
-                    const startTime = parseTimeString(button.dataset.start);
-                    const endTime = parseTimeString(button.dataset.end);
-                    if (isNaN(startTime) || isNaN(endTime) || endTime <= startTime) return;
-
-                    if (currentLoopId !== null) {
-                        cancelAnimationFrame(currentLoopId);
-                        currentLoopId = null;
-                    }
-
-                    video.currentTime = startTime;
-                    video.play();
-
-                    const loop = () => {
-                        if (!video.paused && video.currentTime >= endTime) {
-                            video.currentTime = startTime;
-                        }
-                        currentLoopId = requestAnimationFrame(loop);
-                    };
-                    currentLoopId = requestAnimationFrame(loop);
-                }
-            });
-
-            if (menuButton && nav) {
-                menuButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    nav.classList.toggle('open');
-                    menuOverlay.style.display = nav.classList.contains('open') ? 'block' : 'none';
-                });
-                document.body.addEventListener('click', (e) => {
-                    if (window.innerWidth < 768 && nav.classList.contains('open')) {
-                        if (!nav.contains(e.target) && e.target !== menuButton) {
-                            nav.classList.remove('open');
-                            menuOverlay.style.display = 'none';
-                        }
-                    }
-                });
-                menuOverlay.addEventListener('click', () => {
-                    nav.classList.remove('open');
-                    menuOverlay.style.display = 'none';
-                });
-            }
-        });
-    </script>
     <div id="contact-container"></div>
     <script src="loadContact.js"></script>
 </body>
