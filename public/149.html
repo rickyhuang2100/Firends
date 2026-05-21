@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S07E04 學習指南 | The One with Rachel's Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第149集 (S07E03)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，讓影片自動循環播放精選片段，反覆跟讀直到朗讀如母語者！這集看 Rachel 痛苦地面試超帥助理 Tag、Joey 要重返 Days of Our Lives 但還得試鏡，笑料十足！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第七季第四集，集名是 <strong>"The One with Rachel's Assistant"。</strong></p>
+                <p>喬伊的電視劇《麥克和奇思》首映。這時他接到試鏡通告，競爭瑞摩瑞醫生的孿生兄弟的角色。但他認為自己的身份已今非昔比，所以放棄了機會。不料《麥克和奇思》堪稱票房毒藥，被撤演，喬伊只得吃回頭草。瑞秋請助理，她見色起意，捨棄稱職的女性應徵者，卻錄取了美少年泰格。莫妮卡和錢德一致同意兩人之間應該不存秘密，結果鬧得兩人都不開心，還殃及羅斯。</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：眾人評論 Joey 的電視節目</h3>
+                    <p class="text-gray-600 mb-4">Joey 請大家看完他的肥皂劇後給評語，結果大家只能勉強找出優點來稱讚。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="0:49" data-end="0:56">▶️</button><br>
+                        <strong>Chandler:</strong> "That was one of the worst things ever."<br>
+                        <strong>Chandler:</strong> "And not just on TV."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（這是有史以來最糟糕的東西之一。／而且不只是電視上的。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>one of the worst things ever</em> — <em>ever</em> 在這裡是強調「有史以來」，語氣要拉長往下墜：「e-ver」。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：Rachel 在 Ralph Lauren 大升遷</h3>
+                    <p class="text-gray-600 mb-4">Ralph Lauren 本人走進 Rachel 的辦公室，宣佈要晉升她為 Polo Retail 採購部經理，Rachel 興奮地跟大家說這個消息。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="3:04" data-end="3:12">▶️</button><br>
+                        <strong>Rachel:</strong> "Ralph just came in to tell me that he's so happy with my work that he wants me to be the new merchandising manager for Polo Retail."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（拉爾夫剛進來告訴我，他對我的工作非常滿意，希望我成為 Polo Retail 的採購部經理。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>so happy with my work</em> — 注意 <em>so...that...</em> 表原因結果的句型，以及 <em>happy with</em> 的連音 /hæpi wɪð/。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景三：面試超帥但沒資歷的 Tag</h3>
+                    <p class="text-gray-600 mb-4">Tag Jones 來應徵 Rachel 的助理職位，他完全沒有辦公室經驗，但 Rachel 被他的外貌迷住，開始幫他腦補一份完美履歷。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="5:09" data-end="5:12">▶️</button><br>
+                        <strong>Tag:</strong> "I'm a goal-oriented person, very eager to learn."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我是一個有目標導向的人，非常渴望學習。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>goal-oriented</em>（目標導向的）和 <em>eager to learn</em>（渴望學習）是求職面試英文的超常用表達，必學！</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：理智線斷裂，想聘 Tag</h3>
+                    <p class="text-gray-600 mb-4">Rachel 私下把 Tag 的照片拿給 Chandler 和 Phoebe 看，承認自己快要做出不理智決定。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="7:46" data-end="7:49">▶️</button><br>
+                        <strong>Rachel:</strong> "He's so pretty, I want to cry."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（他漂亮到讓我想哭。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> 這是一句超誇張、用「想哭」來形容「太美了」的誇飾法（hyperbole）。美式口語裡非常常見！注意 <em>so...I want to...</em> 的句型。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-green-300 bg-green-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-green-800">場景五：Joey 被要求試鏡才能回歸</h3>
+                    <p class="text-gray-600 mb-4">Joey 以為製作人打算直接給他角色，卻發現還要試鏡，傲嬌受傷。</p>
+                    <p class="text-gray-700 font-semibold">
+                        <button class="play-btn" data-start="9:13" data-end="9:17">▶️</button><br>
+                        <strong>Joey:</strong> "I thought you were going to offer me the part."
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">（我以為你會直接給我這個角色。）<br>
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>offer sb. the part</em>（直接給某人這個角色）。<em>offer</em> 在這裡唸 /ˈɔːfər/，注意 <em>offer me</em> 的連音，r 會帶進 me：/ˈɔːfər mi/。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">劇中範例與解說</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">merchandising manager</td>
+                                <td class="p-4">名詞片語</td>
+                                <td class="p-4">採購（商品）部經理</td>
+                                <td class="p-4">Rachel 升遷的職位。<em>merchandising</em> 指商品規劃與採購，是時尚產業的核心職務。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">goal-oriented</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">目標導向的</td>
+                                <td class="p-4">Tag 在面試時的自我介紹。求職面試的超常用詞！表示一個人做事有明確目標。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">eager to learn</td>
+                                <td class="p-4">形容詞片語</td>
+                                <td class="p-4">渴望學習的 / 好學的</td>
+                                <td class="p-4">"I'm very <strong>eager to learn</strong>." 另一個面試金句！表達求知慾旺盛。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">offer sb. the part</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">直接把角色給某人</td>
+                                <td class="p-4">"I thought you were going to <strong>offer me the part</strong>." 演藝圈用語，<em>part</em> = 角色（role）。</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">narrow down to</td>
+                                <td class="p-4">動詞片語</td>
+                                <td class="p-4">縮小範圍到⋯</td>
+                                <td class="p-4">"I've got it <strong>narrowed down to</strong> two people." 表示從眾多選項中篩選到剩下幾個。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">👂 發音語調：面試金句的自信語氣</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    求職英文講究語氣的自信與清晰。注意 Tag 如何用平穩但堅定的語調說出面試關鍵句：
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="5:09" data-end="5:12">▶️</button>
+                        "But I'm a <span class="text-indigo-700">goal-oriented</span> person, very <span class="text-indigo-700">eager to learn</span>."
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>語調分析：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><em>goal-oriented</em> 的重音放在 <strong>GO</strong>-al 和 <strong>OR</strong>-ien-ted，要清晰分開唸。</li>
+                            <li><em>eager</em> 發音 /ˈiː.ɡər/，注意 <em>eager to</em> 的連音，實際上聽起來像 /ˈiːɡər tə/。</li>
+                            <li>整句用上升再下降的語調，表現沉穩自信。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">📖 文法焦點：so...that... 表結果的句型</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>so + 形容詞/副詞 + that + 子句</strong>，表示「如此⋯以至於⋯」，是描述強烈情緒或效果的利器。
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="7:46" data-end="7:49">▶️</button>
+                        "He's <span class="text-yellow-700">so pretty</span>, I want to cry."
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>說明：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li>口語中 "that" 常被省略：<strong>He's so pretty [that] I want to cry.</strong></li>
+                            <li>這種誇飾手法（hyperbole）在英美口語中非常常見，用來表示強烈感受：<em>"I'm so tired I could sleep for a week."</em>（我累到可以睡一個星期。）</li>
+                            <li>另一個用法：<em>"He's so happy with my work that he wants me to be manager."</em>（3:04）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-2xl font-semibold mb-4">🎭 文法焦點：I thought you were going to... 表示落空的期待</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>I thought + 過去式/過去進行式</strong>，用來表達「我原本以為（但實際上並非如此）」，是生活中常見的失落或意外表達。
+                </p>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-green-900 mb-3">
+                        <button class="play-btn" data-start="9:14" data-end="9:17">▶️</button>
+                        "I <span class="text-green-700">thought you were going to</span> offer me the part."
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <p><strong>句型解析：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><em>I thought + 過去進行式</em>（were going to...）表示「我以為你（本來）要做某事」。</li>
+                            <li>類似用法：<em>"I thought you were my friend."</em>（我以為你是我朋友。）</li>
+                            <li>這種句型隱含「結果出乎意料」，語氣帶有疑惑、失望或委屈。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集職場英文與面試英文相當豐富！我們學到了面試時必備的自我介紹用語：<em>goal-oriented</em>（目標導向）和 <em>eager to learn</em>（渴望學習）；也學到如何用 <em>so...that...</em> 和誇飾法來表達超強烈的情感反應；更重要的是 <em>I thought you were going to...</em> 這個表達失落期待的實用句型，生活中到處用得到！
+                </p>
+                <div class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2">課後建議：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>試著用 <strong>so...that...</strong> 造一個誇飾句形容你的日常：例如「我餓到可以吞下一頭牛」。</li>
+                        <li>再聽一次 Tag 的面試場景（5:00），模仿他平穩自信的語調，特別注意 <em>goal-oriented</em> 和 <em>eager to learn</em> 的連音與語調。</li>
+                        <li>Rachel 在理性與心動之間苦苦掙扎的心情，你能用英文說出來嗎？試著說說 <em>"I know I should hire Hilda, but he's so pretty!"</em> 的那種感覺！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
