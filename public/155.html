@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S07E10 學習指南 | The One with the Holiday Armadillo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer; font-size: 1.3rem; color: #ea580c; transition: all 0.2s ease;
+            display: inline-block; background-color: #fff7ed; padding: 2px 8px;
+            border-radius: 8px; border: 1px solid #ffedd5; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第155集 (S07E10)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，讓影片自動循環播放精選短句，反覆練習到滾瓜爛熟！本集句型實用且幽默，快學起來用在生活中吧！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第七季第10集，集名是 <strong>"The One with the Holiday Armadillo"。</strong></p>
+                <p>這一集是超級經典的聖誕特輯！Ross 為了要教兒子 Ben 認識猶太教的「光明節 (Hanukkah)」，到處去租聖誕老人服裝，結果實在太晚了全被租光，他只好裝扮成德州來的「假日犰狳」(Holiday Armadillo)。另一方面，Chandler 想在高級餐廳塞小費給帶位員來換取空桌，卻弄巧成拙；還有 Phoebe 的舊公寓終於整修好，但她發現 Rachel 很喜歡和 Joey 住在一起，因此使出各種怪招想逼 Rachel 搬家。</p>
+            </div>
+        </section>
+
+        <!-- II. 場景 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景與聽力訓練 (短句特訓)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：你怎麼知道我在裡面？</h3>
+                    <p class="text-gray-600 mb-4">Chandler 和 Monica 回到公寓，Chandler 一直在門外發呆，直到 Monica 開門發現他。這是情侶間超尷尬的一短對話。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="1:25" data-end="1:27">▶️</button><br>
+                        Rachel: "Did you know I was in there?"<br>
+                        <span class="text-gray-500 font-normal">（妳知道我待在裡面嗎？）</span>
+                    </p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="1:29" data-end="1:31">▶️</button><br>
+                        Chandler: "How long have we been home?"<br>
+                        <span class="text-gray-500 font-normal">（我們回家多久了？）</span>
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">
+                    <strong>💪 AB Loop 聽力焦點：</strong> 注意 Chandler 講話的停頓與語調，這裡的 <em>How long have we been</em> 發音非常有節奏感。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景二：你需要給他塞小費</h3>
+                    <p class="text-gray-600 mb-4">Chandler 和 Monica 去了高級餐廳，被告知要等 45 分鐘，Monica 建議 Chandler 「塞小費 (slip money)」給帶位員以換取桌位。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="5:02" data-end="5:04">▶️</button><br>
+                        Chandler: "I'll slip him some money."<br>
+                        <span class="text-gray-500 font-normal">（我會偷偷塞錢給他。）</span>
+                    </p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="5:04" data-end="5:06">▶️</button><br>
+                        Monica: "You've got to be smooth about it."<br>
+                        <span class="text-gray-500 font-normal">（你的動作要自然/圓滑一點。）</span>
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>slip someone money</em> 是暗中給錢、塞小費的意思。<em>smooth</em> 用來形容動作熟練、不著痕跡。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景三：錢握錯隻手了</h3>
+                    <p class="text-gray-600 mb-4">Chandler 試圖耍帥塞小費給帶位員，結果失敗了回來。Monica 問他情況怎麼樣。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="5:21" data-end="5:22">▶️</button><br>
+                        Monica: "How'd it go?"<br>
+                        <span class="text-gray-500 font-normal">（進行得怎麼樣？）</span>
+                    </p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="5:22" data-end="5:24">▶️</button><br>
+                        Chandler: "Had the money in the wrong hand."<br>
+                        <span class="text-gray-500 font-normal">（把錢握在錯的那隻手裡了。）</span>
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>How'd it go?</em> 是口語中常聽到的問候「事情進展如何？」。發音：/haʊ_dɪ(t)_goʊ/。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-violet-300 bg-violet-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-violet-800">場景四：我是假日犰狳！</h3>
+                    <p class="text-gray-600 mb-4">Ross 買不到聖誕老人裝，只好扮成犰狳，想要跟 Ben 講光明節的故事。這絕對是全劇最經典的造型之一！</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="13:32" data-end="13:35">▶️</button><br>
+                        Ross: "I'm the Holiday Armadillo!"<br>
+                        <span class="text-gray-500 font-normal">（我是假日犰狳！）</span>
+                    </p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="13:37" data-end="13:40">▶️</button><br>
+                        Ross: "I'm a friend of Santa's."<br>
+                        <span class="text-gray-500 font-normal">（我是聖誕老人的朋友。）</span>
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>Armadillo</em> (犰狳) 發音為 /ˌɑrməˈdɪloʊ/，Ross 喊出來時相當有喜感。</p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景五：聖誕老人的檔期</h3>
+                    <p class="text-gray-600 mb-4">就在「假日犰狳」快要成功吸引 Ben 的時候，Chandler 穿著完美的聖誕老人裝走進來，讓 Ross 非常尷尬。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="13:46" data-end="13:50">▶️</button><br>
+                        Monica: "What happened to Santa, Holiday Armadillo?"<br>
+                        <span class="text-gray-500 font-normal">（聖誕老人怎麼了，假日犰狳？）</span>
+                    </p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="13:51" data-end="13:57">▶️</button><br>
+                        Ross: "Santa was unavailable so close to Christmas."<br>
+                        <span class="text-gray-500 font-normal">（臨近聖誕節，聖誕老人的檔期喬不攏了。）</span>
+                    </p>
+                    <p class="text-gray-500 mt-2 ml-6">
+                    <strong>💪 AB Loop 聽力焦點：</strong> <em>unavailable</em> (沒空/無法出席) + <em>so close to</em> (這麼接近...) ，是非常好用的推託藉口句型。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600">詞性</th>
+                                <th class="p-4 font-semibold text-gray-600">中文意思</th>
+                                <th class="p-4 font-semibold text-gray-600">例句/用法</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">slip (someone) money</td>
+                                <td class="p-4">片語</td>
+                                <td class="p-4">偷偷塞錢給某人</td>
+                                <td class="p-4">He tried to <strong>slip the waiter some money</strong> for a better table. (他試圖塞錢給服務生換好位子。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">smooth</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">圓滑的 / 順利的</td>
+                                <td class="p-4">You have to be <strong>smooth</strong> about it. (你做這件事要圓滑一點。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">unbearable</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">難以忍受的</td>
+                                <td class="p-4">The heat outside is <strong>unbearable</strong>. (外面的高溫讓人難以忍受。)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold">unavailable</td>
+                                <td class="p-4">形容詞</td>
+                                <td class="p-4">沒空的 / 無法取得的</td>
+                                <td class="p-4">The doctor is <strong>unavailable</strong> at the moment. (醫生現在沒空。)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音重點</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">👂 文法焦點 1：How'd it go? (事情進展如何？)</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    非常精簡卻超級實用的口語問句。當別人去面試、去搭訕、或去執行某項任務回來時，你都可以用這句話來問他。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="5:21" data-end="5:22">▶️</button>
+                        "How'd it go?"
+                    </p>
+                    <div class="space-y-3 text-gray-700">
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><strong>How'd</strong> = How did 的縮寫。</li>
+                            <li>連讀時，/d/ 的音會輕輕連到後面的 /ɪt/，然後最後的 t 通常不發聲 (Stop T)。</li>
+                            <li>聽起來會像：/haʊ_dɪ(t)_goʊ/。非常俐落。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4">👂 文法焦點 2：So close to... (非常接近...)</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    形容時間或距離非常接近某個狀態，常常拿來當作遲到或沒空的原因。
+                </p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="text-xl font-bold text-yellow-900 mb-3">
+                        <button class="play-btn" data-start="13:51" data-end="13:57">▶️</button>
+                        "Santa was unavailable <span class="text-yellow-700">so close to</span> Christmas."
+                    </p>
+                    <div class="space-y-2 text-gray-700">
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li>這句話表面上意思是：因為離聖誕節太近了，所以聖誕老人的檔期很滿（請不到他）。</li>
+                            <li>造句：<em>We can't change the plan so close to the deadline.</em> (離死線這麼近了，我們不能更改計畫。)</li>
+                            <li>聽力時可以注意 <em>close to</em> 的發音會自動連成類似一個字的發音。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- V. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="section-title">V. 結論</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集最經典的角色「假日犰狳」(Holiday Armadillo) 是老粉絲們最愛的回憶之一！除此之外，我們也學到了幾個簡單好用的句子：
+                    <br>🔹 "I'll slip him some money." — 暗中塞小費的意思。
+                    <br>🔹 "How'd it go?" — 詢問別人任務執行的結果。
+                    <br>🔹 "Had the money in the wrong hand." — 笑料百出的耍帥失敗。
+                    <br>🔹 "Santa was unavailable so close to Christmas." — 用非常正式的語氣掩飾自己的尷尬。
+                    <br><br>請多多利用 <strong>AB Loop</strong> 功能，把這些實用簡短的句子記在腦海裡，練習到能本能脫口而出為止！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
