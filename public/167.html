@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 第167集 學習指南 | Friends Episode 167</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第167集 學習指南</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動把這句重複播放。跟著角色一起碎碎念，語感就會自然形成！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">一、引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>歡迎來到《六人行》的經典集數教學指南！本集聚焦在兩條充滿趣味的故事線：Monica 極力阻止大家都來開爸爸送她的保時捷 (Porsche)，以及 Chandler 對於是否邀請遠在拉斯維加斯的變裝皇后父親參加婚禮的掙扎。</p>
+                <p>透過這些輕鬆幽默的情境，我們將學習如何用英文形容開車出去兜風、抱怨別人駕駛技術差，以及解釋複雜的家庭關係。</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">二、場景 (Scene)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：我也想開保時捷去兜風</h3>
+                    <p class="text-gray-600 mb-4">Ross 看到門口停著 Monica 的保時捷，決定試圖要借鑰匙出去耍帥，用了一個非常道地的美式片語。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <span class="play-btn" data-start="0:19" data-end="0:23">▶️</span><br>
+                        Ross: "Can I get the keys? Thought I'd take that bad boy out for a little spin."<br>
+                        <span class="text-gray-500 font-normal">（能把鑰匙給我嗎？我想開那輛帥氣的車出去兜個風。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：妳的駕駛技術太差</h3>
+                    <p class="text-gray-600 mb-4">大家都想開車，Monica 最後受不了，直接明說為什麼偏偏就是不讓 Rachel 開車。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <span class="play-btn" data-start="1:22" data-end="1:25">▶️</span><br>
+                        Monica: "Well, Rachel, the reason why I won't let you drive the Porsche is because you're a terrible driver."<br>
+                        <span class="text-gray-500 font-normal">（瑞秋，我不讓妳開保時捷的原因是因為妳是個糟糕的駕駛。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：我們不是同個圈子的人</h3>
+                    <p class="text-gray-600 mb-4">Monica 勸說 Chandler 邀請爸爸來參加婚禮，Chandler 卻想藉口推託，說明他們的世界完全不同。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <span class="play-btn" data-start="4:13" data-end="4:18">▶️</span><br>
+                        Chandler: "It's not like we run in the same circles. I hang out with you guys, and he... stars in a drag show in Vegas."<br>
+                        <span class="text-gray-500 font-normal">（我們又不是在同一個圈子混。我跟你們混在一起，而他...在拉斯維加斯當變裝秀的主角。）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">三、詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">take (it) for a spin</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>開車出去兜風 (片語)</strong><br>
+                                    口語中表達開車出去轉一圈、試駕的意思。<br>
+                                    <em>例句：He bought a new car and took it for a little spin. (他買了一輛新車，開著出去兜風了。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">irresponsible</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>不負責任的 (形容詞)</strong><br>
+                                    Monica 抱怨 Rachel 開車時很草率不負責任。<br>
+                                    <em>例句：It is irresponsible to drive so fast. (開這麼快太不負責任了。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">run in the same circles</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>屬於同一個交際圈 (片語)</strong><br>
+                                    用來強調跟某人是（或不是）同一個生活範疇的人。<br>
+                                    <em>例句：We don't run in the same circles. (我們的交友圈不同。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">四、語法與發音 (Grammar & Pronunciation)</h2>
+            
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">連讀 (Linking)：out of / out again</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    當前面單字的結尾是 t，後面的單字開頭是母音時，美式發音會把 t 發得像個輕輕的 d，並且連在一起。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <span class="play-btn" data-start="0:45" data-end="0:47">▶️</span>
+                        "When do I get to take that baby <span class="text-indigo-600 underline">out again</span>?"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>發音變化：</strong> <em>out again</em> 的連讀聽起來像 "ou-da-gen" 或 "ou-ta-gen"。</li>
+                        <li><strong>語調重點：</strong> 把重心放在 <em>out</em>，這樣發音會更道地！</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">弱讀 (Weak Forms)：because you're a...</h3>
+                <p class="text-lg leading-relaxed mb-4">ใน一般的口語對話中，代名詞與連接詞如 <em>because</em> 常常會被簡化與弱讀，為了盡快把重點詞彙講出來。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <span class="play-btn" data-start="1:22" data-end="1:25">▶️</span>
+                        "...<span class="text-yellow-700 underline">because you're a</span> terrible driver."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>發音變化：</strong> <em>because you're a</em> 通常會說成快速的 /cuz yura/，幾乎聽不到完整的 because。</li>
+                        <li><strong>為什麼：</strong> 因為真正的語氣爆發點在 <em>terrible</em>，所以前面的字眼就會很順地溜過去。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">五、文化 (Culture)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>Drag Show (變裝皇后秀) 與 RSVPs：</strong><br>
+                在對話中 Chandler 的爸爸是一位在拉斯維加斯演出的變裝皇后 (drag queen)，對於 90 年代及早期的美劇來說，這是 Chandler 長期逃避及覺得難以向人啟齒的原因。<br>而前面提到的 <strong>RSVP</strong> 則是法文 <em>répondez s'il vous plaît</em>（請回覆）的縮寫，在英文社會中寄發喜帖時，要求賓客務必告知是否會出席。</p>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">六、練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>活用今天學到的句型！</strong></p>
+                <p class="mt-4">1. 填空練習：如何表達「我們交友圈不一樣」？</p>
+                <p class="text-indigo-700 font-medium">It's not like we run in the same _____.</p>
+                
+                <p class="mt-6">2. 試著練習邀請別人一起去兜風：</p>
+                <p class="text-indigo-700 font-medium">Let's take the car for a little _____.</p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">七、結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    在這集的對話中，我們學會了許多美系日常的道地單字如 "spin"、"bad boy (代稱酷炫的物品)" 等用法。多利用橘色的 <strong>▶️ 播放</strong> 按鈕，跟著角色的連音和語氣不斷重複練習，你的斷句跟重音肯定會變得更自然流暢！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Giscus 評論系統 -->
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <!-- 影片播放器 (在載入 loadContact.js 內進行綁定) -->
+    <video id="myVideo" controls>
+        <!-- 請將此處影片路徑設定正確，例如使用 167.mp4 等 -->
+        <source src="167.mp4" type="video/mp4">
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <!-- 載入通用的 Javascript，自動處理 play-btn -->
+    <script src="loadContact.js"></script>
+</body>
+</html>
