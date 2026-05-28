@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S08E04 學習指南 | The One With The Videotape</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第173集 (S08E04)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，影片就會自動把這句重複播放。跟著角色一起碎碎念，語感就會自然形成！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第八季第四集：<strong>"The One With The Videotape" (錄影帶風波)</strong>。</p>
+                <p>六個人聚在一起釐清「到底是誰先勾引誰」這件懸案。Rachel 堅稱是 Ross，而 Ross 則保證是 Rachel。眼看兩人爭論不休，Ross 脫口而出說自己有「錄影帶」可以作證！這集揭曉了非常有趣且經典的「背包客遊歐洲」搭訕招數故事。</p>
+            </div>
+        </section>
+
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 場景 (Scene)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：誰主動的？</h3>
+                    <p class="text-gray-600 mb-4">Rachel 覺得爭論這個很幼稚，但當聽到 Ross 的文法糾正時，又忍不住反駁是對方先親她的。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="3:50" data-end="3:57">▶️</button><br>
+                        Rachel & Ross: "What's important is, we're having a baby, not who came on to who. -Whom."<br>
+                        <span class="text-gray-500 font-normal">（-重要的是我們要生孩子了，誰先勾引誰並不重要。 -是用「受格」的誰 (Whom) 才對。）</span>
+                    </p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="4:03" data-end="4:07">▶️</button><br>
+                        Rachel & Ross: "You kissed me first. You were begging for it!"<br>
+                        <span class="text-gray-500 font-normal">（-你先吻我的。 -是你求我的！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：錄影存證！</h3>
+                    <p class="text-gray-600 mb-4">Ross 為了證明自己沒說謊，不小心說溜嘴有把過程拍下來。</p>
+                    <p class="text-gray-700 font-semibold mb-2">
+                        <button class="play-btn" data-start="4:35" data-end="4:38">▶️</button><br>
+                        Ross: "I can show you! I have it on videotape."<br>
+                        <span class="text-gray-500 font-normal">（我可以證明，我都錄在錄影帶裡了！）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">come on to</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>對...獻殷勤、主動勾引 (動詞片語)</strong><br>
+                                    常用於形容帶有性暗示或追求意圖的搭訕與主動。<br>
+                                    <em>例句：Next thing you know, Ross comes on to me. (接下來，羅斯對我採取主動。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">out of wedlock</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>非婚生、未婚 (片語)</strong><br>
+                                    結婚之前的狀態，wedlock 代表婚姻狀態。<br>
+                                    <em>例句：I always knew you two would have a child out of wedlock. (我就知道你們會未婚生子。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar & Pronunciation)</h2>
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">語法：Who vs. Whom</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    即使在吵架，Joey 這位學者還是受不了文法錯誤！
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="3:52" data-end="3:56">▶️</button>
+                        "not who came on to <span class="text-indigo-600 underline">who</span>... <span class="text-indigo-600 underline">Whom</span>."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>文法解析：</strong> 介系詞 (像是 to, for, with) 後方若接受詞，文法上必須使用 "whom"。但在當今美國口語中，大家幾乎都說 who，只有 Joey 這種嚴肅的學者會刻意糾正成 whom，這也是他這角色獨特的書呆子幽默。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">連讀技巧 (Linking)：came on to</h3>
+                <p class="text-lg leading-relaxed mb-4">母語人士講話時往往會把字尾和字首的母子音拼在一起念。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="3:34" data-end="3:35">▶️</button>
+                        "That you <span class="text-yellow-700 underline">came on to</span> me?"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>發音變化：</strong> "came" 結尾的 m 音會接上下一個字 "on" 開頭的母音 o，整句聽起來像是 "cay-mon-to"。利用聽得懂這類的連音，理解對話速度就能大幅提升。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>實際來用用這些道地說法！</strong></p>
+                <p class="mt-4">1. 如果你認為某人在派對上試著追求並勾引你，你可以對朋友抱怨說：</p>
+                <p class="text-indigo-700 font-medium">He was totally _________ _________ to me at the party.</p>
+                
+                <p class="mt-6">2. 試著和 Ross 一樣糾正別人！"To who do you want to give it?" 這句嚴謹的文法應該改成？：</p>
+                <p class="text-indigo-700 font-medium">To _________ do you want to give it?</p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    "The One With The Videotape" 是許多影迷最愛的一集，大家爭論誰勾引誰的神來一筆引爆了全劇高潮。學習分辨 who / whom 的時機不僅提升文法實力，還能順便體會劇中的笑點。這集的吵架台詞語速偏快，正適合多按幾次 AB Loop 練習聽感！
+                </p>
+            </div>
+        </section>
+    </main>
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
