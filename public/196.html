@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S09E03 學習指南 | The One With The Pediatrician</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第196集 (S09E03)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第九季第三集：<strong>"The One With The Pediatrician"（兒科醫生那集）</strong>。</p>
+                <p>Rachel 因為神經質，半夜三點打給兒科醫生只為了 Emma 「打嗝」，結果慘遭無限期拒診，被迫尋找新醫生的過程中，發現了 Ross 居然到現在還在看他小時候的兒科醫生（而且醫生還會給他棒棒糖）！</p>
+                <p>同時，Chandler 確定必須前往 Tulsa，而 Monica 卻意外獲得了紐約頂級餐廳 Javu 的主廚挖角。最終，兩人決定為了彼此的職涯接受「週末夫妻」的遠距離模式。而 Joey 因為忘了替 Phoebe 介紹對象，竟然在咖啡廳裡大吼「Mike!」隨機抓了一個完全不認識的男子來盲目約會，卻意外撮合了 Phoebe 未來的老公：Mike Hannigan (保羅路德 飾)。</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：朋友圈的靈魂人物</h3>
+                    <p class="text-gray-600 mb-4">當大家聽到 Chandler 被調走，Joey 和 Monica 表達了強烈的不捨（以及對某些人的針對性玩笑）。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="1:03" data-end="1:10">▶️</button><br>
+                        Ross: "You can't go. I mean, you're the glue that holds this group together."<br>
+                        Chandler: "Really?"<br>
+                        Ross: "Not you."<br>
+                        <span class="text-gray-500 font-normal">（你不能離開，我是說，你就像是維繫這個圈子的靈魂人物！—真的嗎？—不是說你。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：打嗝看急診</h3>
+                    <p class="text-gray-600 mb-4">Rachel 被醫生開除的真正原因：只因為 Emma 打嗝就把人家吵醒。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="5:24" data-end="5:40">▶️</button><br>
+                        Ross: "Was there anything even wrong with Emma?"<br>
+                        Rachel: "Yes, of course there is! ... Hiccups."<br>
+                        Ross: "I told you, you can't call him every time any little thing comes up."<br>
+                        <span class="text-gray-500 font-normal">（Emma 有任何不適嗎？—當然有！… 打嗝。—我告訴過你了，不能每次有雞毛蒜皮小事都打電話給他。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：盲目約會被拆穿</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 發現了 Joey 根本不認識這個叫 Mike 的男人，氣憤質問。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="15:15" data-end="15:28">▶️</button><br>
+                        Phoebe: "Joey, why did you set me up with a stranger?"<br>
+                        Joey: "Because I forgot about our date. I'm so sorry."<br>
+                        Mike: "I'm sorry too. And just to be clear, I didn't hit his mother with a car."<br>
+                        <span class="text-gray-500 font-normal">（喬伊，為什麼你要介紹陌生人給我？—因為我忘記了嘛，對不起。—我也很抱歉，還有一點我要澄清，我沒有開車撞他媽。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：我也要這份工作！</h3>
+                    <p class="text-gray-600 mb-4">Monica 剛說為了愛情可以放棄不去找工作，得知是 Javu 點名要她後，光速變臉。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="13:17" data-end="13:32">▶️</button><br>
+                        Monica: "He asked for me personally? Oh, my God!... But I'm moving to Tulsa. So, just, if you would tell Javu... I'll take it!"<br>
+                        <span class="text-gray-500 font-normal">（他特別指名要我？喔我的天！…可是我要搬去土爾沙了。所以，如果可以的話請告訴傑屋… 我接受這份工作！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：診斷專家？</h3>
+                    <p class="text-gray-600 mb-4">Rachel 當面拆穿 Ross 還在看小兒科醫生的秘密，完全不在乎留面子。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="18:29" data-end="18:37">▶️</button><br>
+                        Rachel: "You still see Dr. Gettleman?"<br>
+                        Ross: "He is a brilliant diagnostician!"<br>
+                        Rachel: "Diagnostician or boo-boo fixer?"<br>
+                        <span class="text-gray-500 font-normal">（你還在看葛曼醫師？—他是醫術高明的診斷專家！—診斷專家還是專哄痛痛的醫生叔叔呢？）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：工作與愛情的排序</h3>
+                    <p class="text-gray-600 mb-4">在準備登機前，Chandler 對 Monica 深情告白，釐清了在職涯發展下，愛情永遠在第一順位。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="25:04" data-end="25:11">▶️</button><br>
+                        Chandler: "It goes old job.. new job.. and you."<br>
+                        <span class="text-gray-500 font-normal">（順序應該是：舊工作… 新工作… 然後才是你。）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">pediatrician</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>小兒科醫師 (名詞)</strong><br>
+                                    這集的主題核心，Emma 還有 Ross (!!) 的主治醫師。\n <br>
+                                    <em>例句：We have to find a new pediatrician. (我們得找一個新的小兒科醫師。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">relocate</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>調職、重新安置 (動詞)</strong><br>
+                                    指因為公司政策或工作需求，被安排搬到另一個城市或國家。<br>
+                                    <em>例句：As of Monday, I'm being officially relocated. (從星期一開始，我已經正式被調職了。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">head up</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>主管、帶領 (片語)</strong><br>
+                                    形容帶領一個團隊或領導一間分公司。<br>
+                                    <em>例句：My company has asked me to head up our office in Tulsa. (公司要我去帶領土爾沙的分公司。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">catch (someone) off guard</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>讓人猝不及防、趁人不備 (片語)</strong><br>
+                                    對方突然行動，讓你毫無心理準備。Mike 突然要約 Phoebe 時，她的經典反應。<br>
+                                    <em>例句：You just caught me off guard. (你真是讓我一點心理準備都沒有。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">diagnostician</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>診斷專家 (名詞)</strong><br>
+                                    指非常擅長判斷病情的醫生（diagnostic 是「診斷的」形容詞）。Ross 用這麼厲害的字眼包裝他的「兒科醫生」。<br>
+                                    <em>例句：He is a brilliant diagnostician! (他是醫術高明的診斷專家！)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">語法：Is there no [名詞] left in [名詞] anymore?</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    這是喜劇或戲劇中很愛用的誇飾抱怨句型，用來表達「現在難道連一點ＯＯ都沒有了嗎？」
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="8:08" data-end="8:12">▶️</button>
+                        Joey: "Damn it! <span class="text-indigo-600 underline">Is there no mystery left in romance anymore?!</span>"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>解析：</strong> 「難道這世上浪漫的愛情都不存在神秘感了嗎？！」</li>
+                        <li><strong>應用：</strong> 發牢騷萬用句。例如 Is there no justice left in this world anymore? (這世界沒王法了嗎？)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">實用片語：go along with (跟著瞎起鬨、順從)</h3>
+                <p class="text-lg leading-relaxed mb-4">當別人做了一件蠢事，你沒有阻止反而跟隨他們的腳步，這在英文裡就是 go along with it。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="20:06" data-end="20:10">▶️</button>
+                        Phoebe: "Well, why did you <span class="text-yellow-700 underline">go along with</span> that?"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>由來：</strong> Phoebe 知道是一場鬧劇後，不解為什麼 Mike 這麼正常的男生要跟著 Joey 一起騙人。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-green-900">俚語與文化：Boo-boo fixer</h3>
+                <p class="text-lg leading-relaxed mb-4">Boo-boo (疊字) 在英文裡是幼兒對「小傷口、痛痛」的稱呼，Rachel 用來嘲諷 Ross。</p>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-green-900 text-xl mb-3">
+                        <button class="play-btn" data-start="18:33" data-end="18:37">▶️</button>
+                        Rachel: "Diagnostician or <span class="text-green-700 underline">boo-boo fixer</span>?"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>成年人講出 boo-boo 時通常是開玩笑，把成年人當小孩哄（例如：Oh, did you get a boo-boo? 你受傷痛痛了嗎？）</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，運用本集學到的句型回答以下情境：</strong></p>
+
+                <p class="mt-4">1. （職涯單字）老闆要把你調到其他城市：</p>
+                <p class="text-indigo-700 font-medium">As of Monday, I'm being officially _________.</p>
+
+                <p class="mt-6">2. （片語選擇）你想問朋友為什麼當時要「跟著他們瞎起鬨一起騙你」：</p>
+                <p class="text-indigo-700 font-medium">Why did you _________ with that?</p>
+                <p class="text-indigo-700 font-medium">（A）go along　（B）go away　（C）head up</p>
+
+                <p class="mt-6">3. （俚語理解）當幼童跌倒擦傷時，外國父母可能會問：</p>
+                <p class="text-indigo-700 font-medium">Did you get a _________?</p>
+                <p class="text-indigo-700 font-medium">（A）diagnostician　（B）boo-boo　（C）pediatrician</p>
+
+                <p class="mt-6">4. （填空）對方突如其來的邀約讓你毫無防備："You just _________ me off guard."</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    第九季隨著 Emma 出生，主角們的人生也迎來各種巨大的職涯與人生轉變：Chandler 搬遷、Monica 找到夢想工作，這些生活衝突在 <strong>The One With The Pediatrician</strong> 達到了有趣的平衡，留下了「Old job, new job, and you」這句完美的金句。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    此外，全劇最受歡迎的男配角之一：由年輕保羅路德 (Paul Rudd) 飾演的 Mike Hannigan 在這集荒誕地登場。他的出現帶出了許多道地美式對白，像是 <strong>caught me off guard</strong> 與 <strong>go along with</strong>，請透過 AB Loop 感受他們講出這些句子的語氣，對習慣影集的語速有非常大的幫助！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

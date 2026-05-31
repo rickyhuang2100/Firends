@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S08E23+E24 學習指南 | The One Where Rachel Has A Baby</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第192+193集 (S09E01+02)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay" onclick="document.querySelector('header nav').classList.remove('open')"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，直到你再點一次為止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第八季第23、24集：<strong>"The One Where Rachel Has A Baby" (瑞秋生產記)</strong>。</p>
+                <p>Rachel 的預產期到了！Ross 帶她衝往醫院，卻發現只剩下「雙人待產室」——Rachel 的室友先是一對衝突不斷的夫妻（Evil Bitch / Sick Bastard），然後居然是 Chandler 的前女友 Janice！與此同時，Monica 和 Chandler 決定要努力懷孕、Joey 在電梯間認識跛腳帥哥 Cliff 並假扮醫生為 Phoebe 打聽情報、Ross 的媽媽帶來了傳家鑽戒……</p>
+                <p>21 個小時後，Emma Geller-Greene 終於誕生了！但就在 Ross 準備求婚的戒指卻消失了，因為 Joey 一不小心……吃掉了它。</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：我要去生孩子了</h3>
+                    <p class="text-gray-600 mb-4">Ross 在護士站絮絮叨叨談著如何快速趕到醫院，Rachel 不耐煩地說了一句話，直接離開他。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="0:40" data-end="0:43">▶️</button><br>
+                        Rachel: "Ross, you stay here and talk."<br>
+                        Rachel: "I'm gonna go have a baby."<br>
+                        <span class="text-gray-500 font-normal">（羅斯，你留在這裡繼續聊吧，我要去生孩子了。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：陣痛了！</h3>
+                    <p class="text-gray-600 mb-4">Ross 正在跟護士投訴服務態度，Rachel 這時突然陣痛，整場爭論立刻煙消雲散。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="2:04" data-end="2:11">▶️</button><br>
+                        Rachel: "—and we have no problem.."<br>
+                        Rachel: "Contraction!"<br>
+                        <span class="text-gray-500 font-normal">（陣痛！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：她太完美了</h3>
+                    <p class="text-gray-600 mb-4">奮鬥了 21 個小時，Emma 終於誕生，Ross 說出了三個字，道盡一切。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="35:54" data-end="35:56">▶️</button><br>
+                        Ross: "Oh, she's perfect."<br>
+                        <span class="text-gray-500 font-normal">（她太完美了。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：Emma 的名字</h3>
+                    <p class="text-gray-600 mb-4">Monica 說出了她從 14 歲就想好的名字 "Emma"，原以為自己的孩子才能用，但她決定把這個名字送給 Rachel。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="41:01" data-end="41:07">▶️</button><br>
+                        Monica: "Take it."<br>
+                        Monica: "She's clearly an Emma."<br>
+                        <span class="text-gray-500 font-normal">（拿去吧，她顯然就是個 Emma。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：我更愛你</h3>
+                    <p class="text-gray-600 mb-4">Monica 將從 14 歲就珍藏的名字讓給了 Rachel，Chandler 感動地確認她不後悔嗎—</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="41:07" data-end="41:13">▶️</button><br>
+                        Rachel: "Oh, honey, but you love that name."<br>
+                        Monica: "Yeah, but I love you more."<br>
+                        <span class="text-gray-500 font-normal">（對，但我更愛你。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：你永遠不會孤單</h3>
+                    <p class="text-gray-600 mb-4">Rachel 擔心自己和 Emma 未來要孤獨面對一切，Joey 給了她最暖心的承諾。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="49:11" data-end="49:15">▶️</button><br>
+                        Joey: "You are never, ever gonna be alone."<br>
+                        <span class="text-gray-500 font-normal">（你永遠、永遠都不會是孤單一個人。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-red-400 bg-red-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-red-800">場景七：Joey 吞了戒指！😱</h3>
+                    <p class="text-gray-600 mb-4">Joey 幫 Rachel 拿面紙，無意間在 Ross 的外套裡摸到了一個巧克力糖（其實是鑽戒！），下意識就吃了下去…</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="49:50" data-end="49:55">▶️</button><br>
+                        Rachel: "Oh, my God!"<br>
+                        Ross: "Joey?"<br>
+                        <span class="text-gray-500 font-normal">（我的天啊！—喬伊？）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">contraction</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>子宮收縮、陣痛 (名詞)</strong><br>
+                                    生產時子宮週期性收縮造成的疼痛，俗稱「宮縮」。在對話中 Rachel 只說一個字 "Contraction!" 就讓 Ross 立刻閉嘴。<br>
+                                    <em>例句：Her contractions are coming every two minutes. (她的宮縮每兩分鐘來一次。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">dilated</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>（子宮頸）張開的 (形容詞)</strong><br>
+                                    dilate 是「擴張」。生產時護士會說 "You're X centimeters dilated"，從 0 到 10 公分才能生。<br>
+                                    <em>例句：She's only three centimeters dilated. (她只開了三公分。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">semi-private room</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>雙人病房 / 雙人待產室 (名詞)</strong><br>
+                                    semi- = 半、共享。private room（單人房）是獨立空間，semi-private 就是要跟陌生人共用的房間。<br>
+                                    <em>例句：All the private rooms are taken. We only have semi-private rooms. (單人房全滿了，只剩雙人房。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">breech</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>胎位不正的 (形容詞)</strong><br>
+                                    正常胎位是頭先出來（head first），breech 是屁股或腳先出來，生產難度倍增。<br>
+                                    <em>例句：The baby is breech; we'll need to push harder. (寶寶胎位不正，我們得更用力推。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">widow / widower</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>寡婦 / 鰥夫 (名詞)</strong><br>
+                                    配偶去世的女性是 widow，男性是 widower。Joey 在假扮醫生問病人感情狀況時，Cliff 說自己是 widower。<br>
+                                    <em>例句：He's been a widower for five years. (他守寡了五年。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">語法：never, ever（雙重加強否定）</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    英文裡疊用同義詞是一種非常口語的情感加強手法，<strong>never ever</strong> 就是「絕對絕對不會、永遠永遠不會」，比單獨說 never 強烈得多。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="49:11" data-end="49:15">▶️</button>
+                        Joey: "You are <span class="text-indigo-600 underline">never, ever</span> gonna be alone."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>文法解析：</strong> never ever 是強調句型，語氣近似 absolutely never 或 not even once。後面接 gonna（going to）表示接近肯定的未來，表達「這件事一定不會發生」的誓言。</li>
+                        <li><strong>延伸：</strong> 類似用法還有 "now and forever"（現在和永遠）、"always and forever"（始終如一）皆是疊加強調的修辭。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">連讀與弱讀：gonna / wanna / gotta</h3>
+                <p class="text-lg leading-relaxed mb-4">這集充滿了美式口語縮讀，這是英語學習者必須掌握的聽力關卡。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg space-y-4">
+                    <div>
+                        <p class="font-bold text-yellow-900 text-xl mb-2">
+                            <button class="play-btn" data-start="0:41" data-end="0:43">▶️</button>
+                            Rachel: "I'm <span class="text-yellow-700 underline">gonna</span> go have a baby."
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 mt-2 text-gray-700">
+                            <li><strong>gonna</strong> = going to → 弱讀成 /ˈɡɑnə/，聽起來像「乾那」</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-bold text-yellow-900 text-xl mb-2">
+                            <button class="play-btn" data-start="20:36" data-end="20:39">▶️</button>
+                            Rachel: "I'm not waiting. I'm <span class="text-yellow-700 underline">gonna</span> push this baby out."
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 mt-2 text-gray-700">
+                            <li><strong>連讀：</strong> "I'm gonna push" → 整串唸成 /aɪm ˈɡɑnə pʊʃ/，幾乎是一口氣</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-bold text-yellow-900 text-xl mb-2">
+                            <button class="play-btn" data-start="30:40" data-end="30:46">▶️</button>
+                            Doctor: "Ten centimeters. You're about <span class="text-yellow-700 underline">to</span> become a mom."
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 mt-2 text-gray-700">
+                            <li><strong>弱讀：</strong> about to 中的 "to" 弱化成 /tə/，正式念法 /tuː/ 幾乎消失</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-green-900">發音特寫：one + word 的連讀</h3>
+                <p class="text-lg leading-relaxed mb-4">子音結尾 + 母音開頭的單字，英文會自然連讀（Linking），聽起來像一個字。</p>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-green-900 text-xl mb-3">
+                        <button class="play-btn" data-start="35:48" data-end="35:51">▶️</button>
+                        "Oh, my God, she's here."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>"my-God" → 子音 /y/ + 母音 /ɡ/，唸成像 "my-Gad"（美式 God 的短母音）</li>
+                        <li>"she's-here" → 完全連讀，聽起來像 "she-zia"</li>
+                        <li>整句飛快脫口而出，帶著激動不已的語氣，是練習情緒語調的好素材！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，大聲把剛剛學過的句型用在生活情境中：</strong></p>
+
+                <p class="mt-4">1. （承諾加強）你跟朋友保證你絕對不會說出他的秘密，你會說：</p>
+                <p class="text-indigo-700 font-medium">I am _________, _________ gonna tell anyone. I promise.</p>
+
+                <p class="mt-6">2. （口語縮讀）你說：「我要去吃東西。」用 gonna 的口語方式說：</p>
+                <p class="text-indigo-700 font-medium">I'm _________ go get something to eat.</p>
+
+                <p class="mt-6">3. （文化理解）醫生說 "She's breech"，意思是：</p>
+                <p class="text-indigo-700 font-medium">（A）寶寶胎位不正　（B）寶寶提前出生　（C）寶寶很健康</p>
+
+                <p class="mt-6">4. （填空）Monica 把名字讓給 Rachel，Chandler 說你不是很愛那個名字嗎？Monica 回答：</p>
+                <p class="text-indigo-700 font-medium">"Yeah, but I _________ you more."</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這兩集是《六人行》歷史上最重要的里程碑之一——Emma 的誕生！21 個漫長小時裡，劇本裝滿了超實用的生活英語：從醫院裡的 <strong>contraction、dilated、breech</strong>，到美式口語的 <strong>gonna / never ever</strong>，每一句都是值得用 AB Loop 單句循環練到滾瓜爛熟的素材。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    最後 Joey 吞了鑽戒這一幕，既搞笑又讓人心疼 Ross，完美詮釋了 Friends 喜劇的精髓。下次你看到感人場景時，不妨試著說出 "She's perfect." 或 "You are never, ever gonna be alone."——那種自然脫口而出的感覺，才是真正學好英文的証明！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

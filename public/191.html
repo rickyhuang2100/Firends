@@ -91,7 +91,7 @@
                     <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：我才是主角</h3>
                     <p class="text-gray-600 mb-4">當大家在爭著要跟 Joey 去看首映時，非常不舒服的 Rachel 用一句話提醒了大家什麼才是最重要的事。</p>
                     <p class="text-gray-700 font-semibold text-xl">
-                        <button class="play-btn" data-start="0:42" data-end="0:46">▶️</button><br>
+                        <button class="play-btn" data-start="0:42" data-end="0:47">▶️</button><br>
                         Rachel: "For those who haven't checked their calendars, today's my due date."<br>
                         <span class="text-gray-500 font-normal">（那些還沒查過日曆的人聽好了，今天是我的預產期！）</span>
                     </p>
@@ -109,10 +109,10 @@
 
                 <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
                     <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：沒搶到怪誰</h3>
-                    <p class="text-gray-600 mb-4">Joey 決定不帶缺席的 Ross 去首映會，他說了一句超經典的押韻口語俚語。</p>
+                    <p class="text-gray-600 mb-4">Joey 決定不帶缺席的 Ross 去首映會，Monica 說了一句超經典的押韻口語俚語。</p>
                     <p class="text-gray-700 font-semibold text-xl">
-                        <button class="play-btn" data-start="4:48" data-end="4:52">▶️</button><br>
-                        Joey: "You snooze, you lose."<br>
+                        <button class="play-btn" data-start="4:49" data-end="4:51">▶️</button><br>
+                        Monica: "You snooze, you lose."<br>
                         <span class="text-gray-500 font-normal">（誰叫你沒跟上，你輸了！/ 稍不留神就會錯失良機。）</span>
                     </p>
                 </div>
@@ -171,7 +171,7 @@
                 </p>
                 <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
                     <p class="font-bold text-indigo-900 text-xl mb-3">
-                        <button class="play-btn" data-start="1:45" data-end="1:49">▶️</button>
+                        <button class="play-btn" data-start="1:46" data-end="1:49">▶️</button>
                         "I wish I <span class="text-indigo-600 underline">were</span> a sea horse."
                     </p>
                     <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
@@ -238,103 +238,6 @@
         您的瀏覽器不支援 HTML5 video。
     </video>
     <div id="contact-container"></div>
-
-    <script>
-        // 設定影片路徑
-        const video = document.getElementById('myVideo');
-        const urlParams = new URLSearchParams(window.location.search);
-        let srcPath = urlParams.get('url');
-
-        if (srcPath) {
-            const source = document.createElement('source');
-            source.src = srcPath;
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            video.load();
-        }
-
-        // AB Loop 控制邏輯
-        let startTime = 0;
-        let endTime = 0;
-        let isLooping = false;
-        let loopTimeout;
-        let currentBtn = null;
-
-        function timeToSeconds(timeStr) {
-            const parts = timeStr.split(':');
-            return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
-        }
-
-        const buttons = document.querySelectorAll('.play-btn');
-
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (currentBtn === this && isLooping) {
-                    isLooping = false;
-                    this.classList.remove('looping');
-                    video.pause();
-                    clearTimeout(loopTimeout);
-                    currentBtn = null;
-                    return;
-                }
-
-                if (currentBtn) {
-                    currentBtn.classList.remove('looping');
-                    clearTimeout(loopTimeout);
-                }
-
-                startTime = timeToSeconds(this.dataset.start);
-                endTime = timeToSeconds(this.dataset.end);
-                isLooping = true;
-                currentBtn = this;
-                this.classList.add('looping');
-
-                video.currentTime = startTime;
-                video.play();
-                checkLoop();
-            });
-        });
-
-        function checkLoop() {
-            if (!isLooping) return;
-            
-            if (video.currentTime >= endTime) {
-                video.pause();
-                setTimeout(() => {
-                    if (isLooping) {
-                        video.currentTime = startTime;
-                        video.play();
-                    }
-                }, 1000); 
-            }
-            
-            loopTimeout = setTimeout(checkLoop, 100);
-        }
-
-        video.addEventListener('play', () => {
-            if (isLooping) checkLoop();
-        });
-
-        const menuButton = document.getElementById('menu-button');
-        const nav = document.querySelector('header nav');
-        const overlay = document.getElementById('menu-overlay');
-
-        function toggleMenu() {
-            nav.classList.toggle('open');
-        }
-
-        menuButton.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    nav.classList.remove('open');
-                }
-            });
-        });
-    </script>
     <script src="loadContact.js"></script>
 </body>
 </html>

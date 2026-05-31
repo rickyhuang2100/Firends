@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S09E07 學習指南 | The One With Ross's Inappropriate Song</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 這集 SRT 檔名是 200.srt，但劇情為 S09E07 -->
+                <div class="text-xl font-bold text-stone-700">Friends 第200集 (S09E07)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第九季第七集：<strong>"The One With Ross's Inappropriate Song"（羅斯唱了不恰當的歌）</strong>。</p>
+                <p>Ross 無意間發現 2 個月的寶寶 Emma 聽到一首老饒舌歌 "Baby Got Back"（歌詞全是在講喜歡女人的大屁股）時居然會發出笑聲！他很不好意思地向 Rachel 坦承，但最後這首歌反而成了哄笑 Emma 的絕佳法寶，連 Rachel 也跟著唱下去了！</p>
+                <p>而 Phoebe 即將去見 Mike 的富裕父母親。深怕自己街頭出身被瞧不起，在大家建議下，她試著用造作的咬字與上流社會的禮儀應對，結果反而弄巧成拙講出一堆駭人的窮途末路黑歷史。幸好 Mike 夠帶種，直接在父母面前表白！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：推廣健康體態概念</h3>
+                    <p class="text-gray-600 mb-4">Ross 向 Rachel 坦承是他唱了一首非常色情的饒舌歌才逗笑女兒，但他極力想把這首歌圓成有教育意義。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="6:15" data-end="6:31">▶️</button><br>
+                        Rachel: "You sang to our baby daughter.. a song about a guy who likes to have sex.. with women with giant asses?"<br>
+                        Ross: "You know what, if you think about it.. it actually promotes a healthy body image.."<br>
+                        <span class="text-gray-500 font-normal">（你在我們的小女嬰面前，唱一首關於男人想要跟大屁股女人上床的歌？—妳聽我說，如果你仔細想想，這首歌其實是在推廣健康正面的身體觀念…）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：懂投資的 Monica</h3>
+                    <p class="text-gray-600 mb-4">Monica 試著建議有錢的 Chandler 如何投資。這次 Monica 罕見地說出了一口非常專業的財經術語，讓 Chandler 刮目相看。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="3:07" data-end="3:16">▶️</button><br>
+                        "The Fed just lowered the rates, and the interest on your mortgage is deductible."<br>
+                        "That's right. I know some stuff."<br>
+                        <span class="text-gray-500 font-normal">（聯邦儲備局才剛調降利率，而且你的房屋貸款利息是可以拿來抵稅的。—沒錯！看吧我是懂一點東西的。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：這招對她沒用</h3>
+                    <p class="text-gray-600 mb-4">Monica 在給 Phoebe 提供去見公婆的建議：只要做自己就好。但這對怪人 Phoebe 來說不是什麼好選擇。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="4:08" data-end="4:17">▶️</button><br>
+                        Rachel: "They'll love you. Just be yourself."<br>
+                        Monica: "They live on the Upper East Side on Park Avenue."<br>
+                        Rachel: "Yeah, she can't be herself."<br>
+                        <span class="text-gray-500 font-normal">（他們會喜歡妳的，做妳自己就好。—他們住在上東區的公園大道耶。—喔這樣啊，那她絕對不能做自己。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：裝出來的高雅</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 去了 Mike 家，甚至故意用非常做作的英國腔和「高級」人設跟 Mike 的父母講話，試圖討他們歡心。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="10:05" data-end="10:14">▶️</button><br>
+                        Mike: "I'm sure they will (like you), but you don't have to do this. I want them to get to know Phoebe, not 'Phoebe'."<br>
+                        Phoebe: "It is fun, though, isn't it?"<br>
+                        <span class="text-gray-500 font-normal">（我相信他們會喜歡妳的，但妳真的不用這樣裝。我希望他們認識真正的菲比，而不是這種「妃妣」。—不過這裝起來滿好玩的，不是嗎？）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：你真的跟人相處過嗎？</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 想對 Mike 的爸爸耍點風趣，結果一勾拳打中了剛開完刀的肚子，場面尷尬到極點。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="13:42" data-end="14:11">▶️</button><br>
+                        Phoebe: "Look out! Oh, my God. Are you okay?"<br>
+                        Theodore: "I recently had surgery. How could you know? Why wouldn't you punch me in the stomach?"<br>
+                        Mike: "Did you just hit my dad?"<br>
+                        Phoebe: "Yes. I'm sorry. I've never met a boyfriend's parents before."<br>
+                        Mike: "But, I mean, you have met humans before, right?"<br>
+                        <span class="text-gray-500 font-normal">（看招！喔我的天，你還好嗎？—我最近剛動完手術，不過妳怎麼會知道呢？有誰會沒事在人肚子上揍一拳？—妳剛剛揍了我爸？—對不起，這是我第一次見到男友的家長。—但，妳是有見過其他「人類」的吧對吧？）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：我愛的女人</h3>
+                    <p class="text-gray-600 mb-4">儘管父母百般鄙視 Phoebe 的窮酸家世和怪異行徑，Mike 還是挺身而出為 Phoebe 辯護。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="21:59" data-end="22:14">▶️</button><br>
+                        Mike: "You don't have to like her. Just accept the fact that I do. If you can't even be civil to the woman I love.."<br>
+                        Theodore: "The woman you what?"<br>
+                        Bitsy: "Yeah, the woman you what?"<br>
+                        Mike: "The woman I love."<br>
+                        <span class="text-gray-500 font-normal">（你們不需要喜歡她。只要接受「我喜歡她」這個事實就好。如果你們甚至不能對「我愛的女人」客氣一點的話… —你什麼的女人？—對，你什麼的女人？—我愛的女人。）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">deductible</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>可扣除的、可抵稅的 (形容詞)</strong><br>
+                                    常在財經與報稅時講到，指這筆花費可以不需要計算在繳稅額度之中。<br>
+                                    <em>例句：The interest on your mortgage is deductible. (你的房屋貸款利息是可以拿來抵稅的。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">occur to someone</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>(某想法)突然浮現、想到 (片語)</strong><br>
+                                    跟 think 不同，occur to 是講想法自己跑出來找你、意識到這件事。<br>
+                                    <em>例句：That hadn't occurred to me. (我倒是沒想到這點 / 我沒意識到。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">pretentious</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>矯揉造作的、假裝高級的 (形容詞)</strong><br>
+                                    Chandler 去看那棟房子的時候，批評 Richard 的生活裝高雅。<br>
+                                    <em>例句：I don't like pretentious art. (我不喜歡那種自命不凡的藝術品。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">intimidated</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>感到膽怯的、被威嚇的 (形容詞)</strong><br>
+                                    指因為對方很有氣勢或很有能力而感到懼怕或自卑。<br>
+                                    <em>例句：Why am I so intimidated by this guy? (我為什麼要對這傢伙有懼怕的心態呢？)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">civil</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>彬彬有禮的、客氣的 (形容詞)</strong><br>
+                                    有時指最基本的禮貌。Mike 對父母不滿，認為他們連做人最基本的客氣都沒有。<br>
+                                    <em>例句：If you can't even be civil to the woman I love.. (如果你們甚至不能對我愛的女人有底線的客氣與禮貌…)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">交給對的人：be in good hands</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    字面上是「在好的手裡」，意思是「受到妥善的照顧、有這方面的高手罩你」。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="4:33" data-end="4:36">▶️</button>
+                        Rachel: "You are <span class="text-indigo-600 underline">in such good hands</span>, and I am so good with meeting parents."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>Rachel 安慰 Phoebe 叫她別擔心見公婆的事，因為現在是有 Rachel 這個超會巴結長輩的高手在指導 (罩著) 她。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">認識的過程：get to know someone</h3>
+                <p class="text-lg leading-relaxed mb-4">不是指 "知道" 你，而是指藉由交流互動「有機會漸漸熟識、瞭解」。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="10:08" data-end="10:11">▶️</button>
+                        Mike: "I want them to <span class="text-yellow-700 underline">get to know</span> Phoebe, not 'Phoebe'."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>Mike 會這麼喜歡 Phoebe 是因為她古靈精怪的天性。他不希望 Phoebe 在父母面前裝成貴族，他希望父母能藉由這頓晚餐瞭解「真正的 Phoebe」。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-green-900">強力證據：a testament to...</h3>
+                <p class="text-lg leading-relaxed mb-4">testament 是「證據、見證、遺囑」的意思。A is a testament to B. 就是指 A 的美好，是見證/證明了 B 有多厲害。</p>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-green-900 text-xl mb-3">
+                        <button class="play-btn" data-start="14:30" data-end="14:38">▶️</button>
+                        Phoebe: "I just want you to know what a wonderful man your son is."<br>
+                        Bitsy: "Thank you. I think so too."<br>
+                        Phoebe: "It's <span class="text-green-700 underline">a testament to</span> how he was raised."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>Phoebe 巴結未來的婆婆；妳兒子之所以這麼棒，這一切都是見證了妳對他的優良家庭教育結果。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，運用本集學到的句型回答以下情境：</strong></p>
+
+                <p class="mt-4">1. （情境造句）把企劃案交給我們團隊，你就已經受到妥善的高手照顧了：</p>
+                <p class="text-indigo-700 font-medium">You are in good _________ with our team.</p>
+
+                <p class="mt-6">2. （生活片語）去新的國家需要花點時間去逐漸認識當地文化：</p>
+                <p class="text-indigo-700 font-medium">It takes time to _________ to know the local culture.</p>
+                <p class="text-indigo-700 font-medium">（A）got　（B）gets　（C）get</p>
+
+                <p class="mt-6">3. （單字認知）聽到這件事你很驚訝，因為你從沒想到這個可能：</p>
+                <p class="text-indigo-700 font-medium">That hadn't _________ to me.</p>
+
+                <p class="mt-6">4. （單字認知）你希望鄰居至少能在相處時表現出基本的客氣與禮貌："I wish they could be more _________ to us."</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>The One With Ross's Inappropriate Song</strong> 將這兩個對比極大的情境處理得很巧妙。Ross 身為一個書呆子學者，最後居然在房間大跳饒舌歌只為博女兒一笑。而 Phoebe 的街頭隨性，對上 Park Avenue 上東區的勢利長輩，形成了強烈的反差搞笑。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    Mike 在餐桌上的堅定，讓他穩穩坐當 Phoebe 真命天子的寶座！在日常口語中，大家可以多加熟悉 <strong>get to know</strong> 和好用的短語 <strong>occur to me</strong>（突然想到）。多跟著 AB Loop 功能發音幾遍，你也會說出流利的日常英語！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

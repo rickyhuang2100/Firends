@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S09E13 學習指南 | The One Where Monica Sings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- S09E13 摩妮卡唱歌特輯 -->
+                <div class="text-xl font-bold text-stone-700">Friends 第206集 (S09E13)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第九季第十三集：<strong>"The One Where Monica Sings"（摩妮卡唱歌）</strong>。</p>
+                <p>前一集結尾 Rachel 和 Gavin 在陽台上接吻被 Ross 撞見。大受打擊的 Ross 決定「重新開始」，開始亂帶毫不認識的女人回家示威，這讓兩人爆發了巨大的爭吵。</p>
+                <p>在其他支線，Monica 被說服去 Mike 駐唱的鋼琴酒吧唱歌，這段表演贏得滿堂彩！但她不知道的是，因為舞臺燈光關係，大家都在看她那件「完全透視」的衣服。此外，Joey 被攝影師建議去修眉毛以因應大頭照，結果痛到受不了，半途而廢變成長短眉，只能靠 Chandler 這個神隊友用麥克筆畫眉補救了！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：我把生活停滯了下來</h3>
+                    <p class="text-gray-600 mb-4">Ross 向 Chandler 抱怨，他為了 Emma 把人生計畫都暫停了，但 Rachel 卻背著他重新找人約會。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="1:07" data-end="1:18">▶️</button><br>
+                        Ross: "But at least she could have told me. You know, I've been putting my life on hold and concentrating on Emma. But if she wants to go out there kissing guys she barely knows, then so will I."<br>
+                        <span class="text-gray-500 font-normal">（但是起碼她可以跟我說。你知道的，我把我的生活完全停擺下來，只專注在艾□身上。但是如果她想出去親那些她甚至不熟的傢伙，那我也要。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：你有雙重標準！</h3>
+                    <p class="text-gray-600 mb-4">大家笑 Joey 去蜜蠟除毛真是個「超難保養照顧」的行徑，不甘心的 Joey 馬上拿 Monica 染髮反擊。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="3:24" data-end="3:34">▶️</button><br>
+                        Joey: "Oh, man, now I have to get those done too?"<br>
+                        Phoebe: "Wow, talk about high maintenance."<br>
+                        Joey: "You dye your hair."<br>
+                        Phoebe: "I'm a woman."<br>
+                        Joey: "Double standards!"<br>
+                        <span class="text-gray-500 font-normal">（什麼？現在我連這裡也要除毛嗎？—哇，還真是超難保養的。—妳自己也染頭髮啊。—我是女人耶！—雙重標準！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：你破冰，我搶攻</h3>
+                    <p class="text-gray-600 mb-4">Ross 找好搭檔 Chandler 一起去酒吧搭訕，並講述他那「天衣無縫」的戰鬥策略。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="9:36" data-end="9:54">▶️</button><br>
+                        Ross: "Like college, remember? First, you break the ice with some kind of a joke.. so they know you're the funny one. I swoop in with interesting conversation.. so they'll see that I'm the brilliant, brooding, sexy one."<br>
+                        Chandler: "I thought I got to make the jokes."<br>
+                        <span class="text-gray-500 font-normal">（就像大學時期一樣記得嗎？首先，你去講個笑話破冰…讓她們知道你是負責好笑的。然後我順勢切入帶來有趣的對話…這樣她們就會覺得我是聰明、深沉又性感的那一個。—我還以為是我可以講笑話咧。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：只能我挖苦你，不能你挖苦我</h3>
+                    <p class="text-gray-600 mb-4">Ross 連續狂酸 Chandler 的失業爛事，Chandler 受不了叫他停止，並用一句經典俚語承認自己的雙標。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="8:47" data-end="8:56">▶️</button><br>
+                        Ross: "You know, that's funny. Yeah. So do you think you'll ever work again?"<br>
+                        Chandler: "What are you doing? You know I can only dish it out."<br>
+                        <span class="text-gray-500 font-normal">（你知道嗎？真好笑。所以你覺得你這輩子還找得到工作嗎？—你在幹嘛呀？你知道只有我可以拼命挖苦別人的。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：忘掉穿胸罩的壞日子</h3>
+                    <p class="text-gray-600 mb-4">Monica 在臺上高歌，沒想到臺下的焦點完全不在她的歌喉，而在她的激凸上。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="18:10" data-end="18:18">▶️</button><br>
+                        "Can you totally see through her shirt?"<br>
+                        "Like an x-ray."<br>
+                        "Bad day not to wear a bra."<br>
+                        <span class="text-gray-500 font-normal">（你能完全看穿她的襯衫嗎？—簡直像 X光一樣。—這可不是忘記穿胸罩的好日子。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：翻篇沒有告訴任何人</h3>
+                    <p class="text-gray-600 mb-4">Ross 氣炸了，質問 Rachel 為什麼不跟他打聲招呼就在陽台跟別的男人親吻。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="29:09" data-end="29:26">▶️</button><br>
+                        Ross: "you are the one who moved on and didn't tell anyone."<br>
+                        Rachel: "Oh, God, Ross, this is just so messed up. What is wrong with us? When people hear about our situation, they ask: 'You live together, but you're not a couple, yet you have a baby?'"<br>
+                        <span class="text-gray-500 font-normal">（妳才是那個早就翻篇開始新生活，卻沒有告訴任何人的人！—天啊，羅斯，這真是太爛了。我們怎麼了？當大家聽到我們的狀況，他們總是問：「你們住在一起，但不是情侶，卻有了一個小寶寶？」）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">put (smth) on hold</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>將某事擱置、暫緩 (動詞片語)</strong><br>
+                                    電話客服常說的 Please hold，引申為把事情按下暫停鍵。 <br>
+                                    <em>例句：I've been putting my life on hold. (我已經把我的生活擱置下來了。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">double standard</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>雙重標準 (名詞)</strong><br>
+                                    對不同的人或事採取不同的衡量標準。這是超好用的職場或吵架詞彙。<br>
+                                    <em>例句：It's a double standard! (這是雙重標準！)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">break the ice</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>破冰、打破僵局 (動詞片語)</strong><br>
+                                    用笑話或開場白化解尷尬氣氛。<br>
+                                    <em>例句：First, you break the ice with a joke. (首先，你去講個笑話破冰。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">swoop in</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>突然切入、趁機殺出、搶佔先機 (動詞片語)</strong><br>
+                                    老鷹俯衝下來獵食的動作，引申為看準時機半路殺出攔截。<br>
+                                    <em>例句：I swoop in with interesting conversation. (我會順勢帶著有趣的對話切入。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">dish it out</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>狂挖苦人、批評別人 (口語片語)</strong><br>
+                                    通常伴隨著 "but can't take it" (但自己被批評時卻受不了)。<br>
+                                    <em>例句：You know I can only dish it out. (你知道我只能當狂酸別人的那一方 / 我承受不了被酸啦。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">重新開始/翻篇：move on</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    字面是繼續前進，在感情中它完美詮釋了「走出舊戀情、放下過去並翻篇、準備重新接受新感情」的狀態。在本集中這個詞頻繁出現了 4-5 次。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="29:09" data-end="29:14">▶️</button>
+                        Ross: "You are the one who <span class="text-indigo-600 underline">moved on</span> and didn't tell anyone."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>當有人沉溺在失戀痛苦中，外國人最常給的建議就是 "You need to move on." (你得放下往前走)。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">難搞／很難伺候的：high maintenance</h3>
+                <p class="text-lg leading-relaxed mb-4">原指交通工具或機器設備的維修保養成本極高，現在普遍用來形容「很難搞、要求很多、花錢如流水、很難伺候」的人（尤指戀愛對象）。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="3:27" data-end="3:29">▶️</button>
+                        Phoebe: "Wow, talk about <span class="text-yellow-700 underline">high maintenance</span>."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>這句話的意思是：「哇，這講的就是很難伺候啊。」Monica 用這個字眼取笑 Joey 身為男生竟然也要去做蜜蠟柔膚。</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，運用本集學到的對話情境：</strong></p>
+
+                <p class="mt-4">1. （情境造句）你的朋友說對他要求很高，可是對自己卻很寬鬆，你想嗆他是雙重標準：</p>
+                <p class="text-indigo-700 font-medium">Hey! That is a _________ _________ !</p>
+
+                <p class="mt-6">2. （生活對話）我跟艾瑞克已經結束了，我早就已經放下了：</p>
+                <p class="text-indigo-700 font-medium">Eric and I are over, I have _________ on.</p>
+
+                <p class="mt-6">3. （單字認知）那個女生每次出門光是化妝做指甲就要五個小時，而且超挑剔食物，真的是：</p>
+                <p class="text-indigo-700 font-medium">She is very high _________ .</p>
+                <p class="text-indigo-700 font-medium">（A）standard　（B）maintenance　（C）ice</p>
+
+                <p class="mt-6">4. （會議）在一群人都尷尬不說話的辦公室聯誼中，你鼓起勇氣講了個笑話，這叫做 "________ the ice"。</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>The One Where Monica Sings</strong> 從非常搞笑的 Joey 修眉毛鬧劇，到 Monica 在不知情的狀態下成為全場性幻想對象，氣氛原本十分輕鬆有趣。但另一半的重點則是 Ross 和 Rachel 無可避免的情感攤牌，最終他們認知到「有小孩同居卻不是情侶」是不可能的，兩人終於決定正式分開住。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    請把 <strong>move on</strong> (往前看放下過去)、<strong>double standard</strong> (雙重標準)、<strong>high maintenance</strong> (難伺候的) 這三個必考字彙背起來，它們不論在影集或外商會議中出現的機率都高達百分之百。這份包含許多重要語用字彙的教材肯定對你有幫助！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

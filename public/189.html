@@ -89,10 +89,10 @@
 
                 <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
                     <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：超級大巧合</h3>
-                    <p class="text-gray-600 mb-4">發現忘了邀 Rachel 的媽媽，Chandler 中肯又諷刺地說她根本不可能現身。</p>
+                    <p class="text-gray-600 mb-4">發現忘了邀 Rachel 的媽媽，Monica 中肯又諷刺地說她根本不可能現身。</p>
                     <p class="text-gray-700 font-semibold text-xl">
-                        <button class="play-btn" data-start="0:28" data-end="0:33">▶️</button><br>
-                        Chandler: "Given that we forgot to invite her, it would be a big coincidence if she was."<br>
+                        <button class="play-btn" data-start="0:29" data-end="0:33">▶️</button><br>
+                        Monica: "Given that we forgot to invite her, it would be a big coincidence if she was."<br>
                         <span class="text-gray-500 font-normal">（考慮到我們忘了邀她她還會來的話，那真是太巧合了。）</span>
                     </p>
                 </div>
@@ -111,7 +111,7 @@
                     <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：順帶一提</h3>
                     <p class="text-gray-600 mb-4">Ross 找 Joey 去打籃球，同時順便抱怨了他上一次打球防守的慘痛經驗。</p>
                     <p class="text-gray-700 font-semibold text-xl">
-                        <button class="play-btn" data-start="2:59" data-end="3:02">▶️</button><br>
+                        <button class="play-btn" data-start="2:59" data-end="3:03">▶️</button><br>
                         Ross: "And for the record, I am not covering the tall one this time."<br>
                         <span class="text-gray-500 font-normal">（順帶一提，我這次可不防守那個高個子。）</span>
                     </p>
@@ -171,7 +171,7 @@
                 </p>
                 <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
                     <p class="font-bold text-indigo-900 text-xl mb-3">
-                        <button class="play-btn" data-start="0:28" data-end="0:33">▶️</button>
+                        <button class="play-btn" data-start="0:29" data-end="0:34">▶️</button>
                         "<span class="text-indigo-600 underline">Given that</span> we forgot to invite her, it would be a big coincidence if she was."
                     </p>
                     <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
@@ -185,7 +185,7 @@
                 <p class="text-lg leading-relaxed mb-4">介系詞 "about" 後接母音時常快速滑過。</p>
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
                     <p class="font-bold text-yellow-900 text-xl mb-3">
-                        <button class="play-btn" data-start="1:38" data-end="1:41">▶️</button>
+                        <button class="play-btn" data-start="1:40" data-end="1:41">▶️</button>
                         "...or for lying <span class="text-yellow-700 underline">about it</span>?"
                     </p>
                     <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
@@ -238,103 +238,6 @@
         您的瀏覽器不支援 HTML5 video。
     </video>
     <div id="contact-container"></div>
-
-    <script>
-        // 設定影片路徑
-        const video = document.getElementById('myVideo');
-        const urlParams = new URLSearchParams(window.location.search);
-        let srcPath = urlParams.get('url');
-
-        if (srcPath) {
-            const source = document.createElement('source');
-            source.src = srcPath;
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            video.load();
-        }
-
-        // AB Loop 控制邏輯
-        let startTime = 0;
-        let endTime = 0;
-        let isLooping = false;
-        let loopTimeout;
-        let currentBtn = null;
-
-        function timeToSeconds(timeStr) {
-            const parts = timeStr.split(':');
-            return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
-        }
-
-        const buttons = document.querySelectorAll('.play-btn');
-
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (currentBtn === this && isLooping) {
-                    isLooping = false;
-                    this.classList.remove('looping');
-                    video.pause();
-                    clearTimeout(loopTimeout);
-                    currentBtn = null;
-                    return;
-                }
-
-                if (currentBtn) {
-                    currentBtn.classList.remove('looping');
-                    clearTimeout(loopTimeout);
-                }
-
-                startTime = timeToSeconds(this.dataset.start);
-                endTime = timeToSeconds(this.dataset.end);
-                isLooping = true;
-                currentBtn = this;
-                this.classList.add('looping');
-
-                video.currentTime = startTime;
-                video.play();
-                checkLoop();
-            });
-        });
-
-        function checkLoop() {
-            if (!isLooping) return;
-            
-            if (video.currentTime >= endTime) {
-                video.pause();
-                setTimeout(() => {
-                    if (isLooping) {
-                        video.currentTime = startTime;
-                        video.play();
-                    }
-                }, 1000); 
-            }
-            
-            loopTimeout = setTimeout(checkLoop, 100);
-        }
-
-        video.addEventListener('play', () => {
-            if (isLooping) checkLoop();
-        });
-
-        const menuButton = document.getElementById('menu-button');
-        const nav = document.querySelector('header nav');
-        const overlay = document.getElementById('menu-overlay');
-
-        function toggleMenu() {
-            nav.classList.toggle('open');
-        }
-
-        menuButton.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    nav.classList.remove('open');
-                }
-            });
-        });
-    </script>
     <script src="loadContact.js"></script>
 </body>
 </html>

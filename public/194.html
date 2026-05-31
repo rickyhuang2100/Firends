@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S09E01 學習指南 | The One Where No One Proposes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第194集 (S09E01)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>這是《六人行》第九季第三集：<strong>"The One Where No One Proposes"（沒有人求婚那集）</strong>。</p>
+                <p>Emma 才剛出生，醫院裡就爆發了一場「求婚大誤會」！Joey 蹲下來撿掉落的戒指，Rachel 誤以為他在求婚，興奮地說了「Yes！」。Phoebe 也誤以為 Ross 求了婚，開心地替大家保密。就在 Ross 準備跟 Rachel 談重新開始的關係時，才發現 Rachel 竟然「被求婚兩次但都不是他」。與此同時，Monica 的爸爸還闖進更衣室目睹了兒女偷情現場，急著要幫他們優化受孕姿勢……</p>
+                <p>整集就在大家的誤解、各自的尷尬中收場，而 Ross 與 Rachel 在感情上終於踏出了「也許可以再試試」的第一步。</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：她說了「Yes」</h3>
+                    <p class="text-gray-600 mb-4">Joey 驚慌地跟 Chandler 坦承大事不妙——他誤打誤撞讓 Rachel 以為他求婚了，而且她還答應了。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="4:58" data-end="5:08">▶️</button><br>
+                        Chandler: "Well, what did she say?"<br>
+                        Joey: "She said, 'Yes.'"<br>
+                        Chandler: "You're smiling."<br>
+                        Joey: "No, I'm not."<br>
+                        <span class="text-gray-500 font-normal">（她說什麼？—她說「好」。—你在笑。—我沒有。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：你知道他有多愛求婚嗎！</h3>
+                    <p class="text-gray-600 mb-4">Chandler 提醒 Joey，Ross 對「求婚」這件事有多執著（他確實求婚過好幾次…）。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="4:52" data-end="4:56">▶️</button><br>
+                        Chandler: "This is gonna kill him. You know how much he loves to propose."<br>
+                        <span class="text-gray-500 font-normal">（他會很不爽的。你明知道他有多愛求婚這檔事。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：沒有人沒有人沒有人求婚</h3>
+                    <p class="text-gray-600 mb-4">Ross 正式向 Rachel 說清楚，一句接一句，越說越混亂，但其實邏輯完全清晰。這段是練習否定句的絕佳素材！</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="18:43" data-end="18:57">▶️</button><br>
+                        Ross: "Rach, I didn't propose to you."<br>
+                        Ross: "Joey didn't propose to you."<br>
+                        Ross: "And Chandler didn't propose to you."<br>
+                        <span class="text-gray-500 font-normal">（瑞秋，我沒有向你求婚。喬伊沒有向你求婚。錢德也沒有向你求婚。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：被拋棄兩次</h3>
+                    <p class="text-gray-600 mb-4">Rachel 把整件事理清楚之後，說出了最心酸的一句話。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="21:38" data-end="21:44">▶️</button><br>
+                        Rachel: "So this morning, I didn't have a boyfriend.."<br>
+                        Rachel: "and somehow I got dumped twice today."<br>
+                        <span class="text-gray-500 font-normal">（所以今天早上我沒有男朋友，然而今天卻被拋棄了兩次。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：通常在生了孩子之後要放慢腳步</h3>
+                    <p class="text-gray-600 mb-4">Joey 用超浮誇的語氣嗆 Ross，完全是《六人行》式的黑色幽默。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="22:05" data-end="22:09">▶️</button><br>
+                        Joey: "Usually after I have a baby with a woman, I like to slow things down!"<br>
+                        <span class="text-gray-500 font-normal">（通常在我跟一個女人生了小孩之後，我也喜歡放慢腳步的！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：或許我們可以再試試</h3>
+                    <p class="text-gray-600 mb-4">混亂收場後，Ross 和 Rachel 終於有機會靜下來，說出了各自內心的感受。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="23:33" data-end="23:41">▶️</button><br>
+                        Ross: "Then maybe at least we can talk about us again?"<br>
+                        Rachel: "Yeah. Maybe."<br>
+                        <span class="text-gray-500 font-normal">（那麼或許我們至少可以再談論我們的事？—是啊，或許。）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">propose (to sb.)</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>（向某人）求婚 (動詞)</strong><br>
+                                    propose 單獨用可以是「提議、建議」，但 propose to someone 就專指求婚。本集標題 "No One Proposes" 是雙關：沒有人真的求婚了。<br>
+                                    <em>例句：He got down on one knee and proposed to her. (他單膝跪下向她求婚。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">get carried away</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>衝動行事、失去控制 (片語)</strong><br>
+                                    字面上是「被帶走了」，引申為被情緒或事情沖昏頭，做過頭了。<br>
+                                    <em>例句：All right, let's not get carried away. (好吧，我們不要分心了。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">get dumped</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>被甩、被拋棄 (片語)</strong><br>
+                                    dump 是「丟掉」，get dumped 就是「被丟掉」，口語中指被男女友分手拋棄。<br>
+                                    <em>例句：She got dumped twice in one day. (她在一天之內被甩了兩次。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">ovulate</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>排卵 (動詞)</strong><br>
+                                    ovulation（排卵期）是備孕重要概念。Jack 闖入後立刻詢問 Monica 是否在排卵，完全不顧場合的尷尬！<br>
+                                    <em>例句：Aren't you ovulating? (你不是正在排卵嗎？)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">slow things down</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>放慢腳步、不急於進展 (片語)</strong><br>
+                                    指感情或事情發展上「先別急，讓我們慢慢來」。Joey 用這個片語諷刺 Ross 優柔寡斷。<br>
+                                    <em>例句：I just want to slow things down a little. (我只是想放慢一點腳步。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">語法：連續否定句（Anaphora）</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Ross 那三連擊的否定句，是英文演講和對話中的「排比否定（anaphora）」修辭法，每句開頭重複相同結構，強調力道倍增。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="18:43" data-end="18:56">▶️</button>
+                    </p>
+                    <p class="text-indigo-900 font-semibold mb-2">"Rach, I <span class="underline text-indigo-600">didn't</span> propose to you."</p>
+                    <p class="text-indigo-900 font-semibold mb-2">"Joey <span class="underline text-indigo-600">didn't</span> propose to you."</p>
+                    <p class="text-indigo-900 font-semibold mb-4">"And Chandler <span class="underline text-indigo-600">didn't</span> propose to you."</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>結構：</strong> [主詞] + didn't + propose to you，三句均以 "didn't propose to you" 結尾，形成排比。</li>
+                        <li><strong>效果：</strong> 說的人越說越急，聽的人卻越聽越傻眼——這就是喜劇節奏的精華。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">連讀：kind of / sort of 的弱化</h3>
+                <p class="text-lg leading-relaxed mb-4">口語中 "kind of" 和 "sort of" 常弱讀成 "kinda" /ˈkaɪndə/ 和 "sorta"，語氣變得更加不確定、委婉。這在 Ross 表達情感時非常明顯。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="12:10" data-end="12:15">▶️</button>
+                        Ross: "if she maybe, <span class="text-yellow-700 underline">kind of</span> wanted to start things up again."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>"kind of" → 弱讀成 /ˈkaɪndə/，聽起來像 "kinda"</li>
+                        <li>整句的意思是「她是否有那麼一點點想重新開始」——"maybe, kind of" 雙重弱化，把 Ross 的猶豫不決表現得淋漓盡致。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-green-900">文化：Down on one knee（單膝跪地）</h3>
+                <p class="text-lg leading-relaxed mb-4">在歐美文化中，求婚的標準動作就是 <strong>get down on one knee</strong>（單膝跪地），同時拿出戒指說 <strong>"Will you marry me?"</strong>。Joey 因為蹲下撿戒指，完美複製了這個動作，難怪 Rachel 會誤會！</p>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-green-900 text-xl mb-3">
+                        <button class="play-btn" data-start="4:33" data-end="4:37">▶️</button>
+                        Joey: "Okay, I was <span class="text-green-700 underline">down on one knee</span> with the ring in my hand.."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>down on one knee</strong>（單膝跪地）= 求婚姿勢的代名詞</li>
+                        <li><strong>Chandler：</strong> "As we all are at some point during the day."（就像每天的某個時候大家都會做的動作。）完美嘲諷。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，運用本集學到的句型回答以下情境：</strong></p>
+
+                <p class="mt-4">1. （否定片語）你的朋友問你昨晚有沒有去派對，你說沒有，你沒去，你一直在家：</p>
+                <p class="text-indigo-700 font-medium">I _________ go to the party. I was home all night.</p>
+
+                <p class="mt-6">2. （口語縮讀）你描述某人的感覺可能「有那麼一點點」不對勁：</p>
+                <p class="text-indigo-700 font-medium">She seems _________ upset about something.</p>
+
+                <p class="mt-6">3. （文化理解）當美劇裡男主角說 "I got down on one knee"，他接下來要做什麼？</p>
+                <p class="text-indigo-700 font-medium">（A）跌倒受傷　（B）求婚　（C）撿東西</p>
+
+                <p class="mt-6">4. （翻譯）用 "get dumped" 造句：「他今天被甩了三次。」</p>
+                <p class="text-indigo-700 font-medium">He _________ three times today.</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集的標題 "The One Where No One Proposes" 本身就是一個完美的文法示範——<strong>where 子句</strong>定義場景，是 Friends 每集命名慣例。整集充滿了口語否定 <strong>didn't</strong>、委婉弱讀 <strong>kind of / maybe</strong>、以及文化符號 <strong>down on one knee</strong>，每一個場景都是真實美語的縮影。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    "Maybe at least we can talk about us again?" 這句話是 Ross 的招牌：永遠在最後一刻踩剎車，也永遠讓人看到一絲希望。多利用 AB Loop 把這些對話練到滾瓜爛熟，下次遇到這種狀況你也能說！
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

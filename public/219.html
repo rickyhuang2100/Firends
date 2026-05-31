@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S10E02 學習指南 | The One Where Ross Is Fine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第219集 (S10E02)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>歡迎來到《六人行》第十季第二集：<strong>"The One Where Ross Is Fine"（羅斯說他很好）</strong>。這集絕對是 David Schwimmer (飾演 Ross) 最經典的喜劇表演之一。</p>
+                <p>當 Ross 發現 Joey 和 Rachel 接吻後，他不斷用尖慘的聲音堅稱自己「我很好！完全沒事！(I'm FINE!)」。為了解決這個尷尬情況，他決定舉辦一場雙人約會（Ross & Charlie 邀請 Joey & Rachel），殊不知在整晚喝翻瑪格麗塔酒、吃著燙手「法加它 (Fajitas)」的過程中，徹底展現了自己有多麼的「不好」。</p>
+                <p>另一方面，Monica 和 Chandler 拜訪了一對有領養經驗的夫妻，希望能了解領養手續；但心直口快的 Monica 不小心向別人的孩子走漏了他「其實是被領養的」重大秘密；而 Phoebe 則遇到了久未謀面，被三胞胎搞到快發瘋的老弟 Frank Jr.。這集名場面多到數不完！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：我得冷靜點</h3>
+                    <p class="text-gray-600 mb-4">Ross 剛撞見 Joey 星星之火般接吻 Rachel，Rachel 緊張地試圖辯解一切都是「因為你先親了 Charlie」，而 Joey 只不過想著「天啊，我得冷靜」。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="0:38" data-end="0:50">▶️</button><br>
+                        Joey: "Okay, we also kissed in Barbados.. but we didn't plan it. The only reason that that happened.. was because I saw you kiss Charlie."<br>
+                        Rachel: "Yeah, you started it! I have got to chill."<br>
+                        <span class="text-gray-500 font-normal">（好啦，我們在巴貝多也吻過…但那是突發狀況，唯一會發生的原因…是因為我看到你親了查莉！—對！是你先開始的！天啊我得冷靜下來了（自責亂回話）。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：史上最刺耳的 "I'm Fine"</h3>
+                    <p class="text-gray-600 mb-4">這絕對是經典對白！Ross 假裝自己很大度，但聲音飆高到連自己都覺得莫名其妙。這段成了這集的點睛之筆。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="2:54" data-end="3:05">▶️</button><br>
+                        Ross: "I'm fine. Totally fine. I don't know why it's coming out all loud and squeaky.. because, really, I'm fine."<br>
+                        <span class="text-gray-500 font-normal">（我很好。超級沒事。我不知道為什麼這聲音聽起來又尖又大聲…因為說實在的，我很好。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：令人喘不過氣的領養功課</h3>
+                    <p class="text-gray-600 mb-4">領養是條漫漫長路，對 Monica 這種有看文字障礙的人來說，更是難上加難。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="4:08" data-end="4:19">▶️</button><br>
+                        Monica: "God, this adoption stuff is so overwhelming. There's inter-country adoption, dependency adoption. There's so many ways to go, and this is, like, the biggest decision of our lives."<br>
+                        <span class="text-gray-500 font-normal">（天啊，這領養的事讓人頭好痛。有跨國領養、從屬領養…有那麼多方案可選，這簡直是我們人生中最重大的決定了。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：我也會算數學好嗎</h3>
+                    <p class="text-gray-600 mb-4">快被三胞胎逼瘋的 Frank Jr. 見到 Phoebe 第一件事就是抱怨孩子太多。Phoebe 還想提醒他就是「三個啊」，結果換來最地獄的冷面回覆。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="9:36" data-end="9:42">▶️</button><br>
+                        "There's three of them, Phoebe. Three."<br>
+                        Phoebe: "Yeah, I know, Frank."<br>
+                        "I counted them when they were coming out of my area."<br>
+                        <span class="text-gray-500 font-normal">（（弗蘭克對自己說）他們有三個耶，菲比，三個！—對，我知道，弗蘭克。—（菲比說）他們從我的私密部位出來的時候我有數過好嗎。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：你剛跟他說他是領養的？</h3>
+                    <p class="text-gray-600 mb-4">Chandler 不小心在偷上廁所前告訴 8 歲的男孩 Owen 他是領養來的。夫妻倆傻眼，而 Chandler 只講出世界上最爛的藉口。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="17:49" data-end="17:59">▶️</button><br>
+                        Bill: "You told him he's adopted?"<br>
+                        Chandler: "I'm sorry. You should have a sign out there or something. Or at least whisper it to people when they come in the door."<br>
+                        <span class="text-gray-500 font-normal">（你告訴他他是領養的？—抱歉。你們應該在門外掛個告示牌之類的。或者大家進門的時候至少小聲提醒一下啊。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：喝醉的 LOVE 之歌</h3>
+                    <p class="text-gray-600 mb-4">這絕對是整集（或整季！）最好笑的單口喜劇段落。Ross 爛醉如泥，用最諷刺的方式把 L-O-V-E 四個字母拆解祝賀 Joey 和 Rachel！</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="18:44" data-end="18:57">▶️</button><br>
+                        Ross: "L-O-V-E. Love. L is for 'life'. And what is life without love?"<br>
+                        Rachel: "Oh, my God, are we supposed to answer?"<br>
+                        <span class="text-gray-500 font-normal">（L-O-V-E，愛！ L 代表「生活 (Life)」。而沒有愛的生活到底算什麼呢？—天啊，那現在輪到我們回答嗎？）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">squeaky</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>吱吱響的、尖銳刺耳的 (形容詞)</strong><br>
+                                    形容聲音因為緊張或摩擦發出尖細的聲音。<br>
+                                    <em>例句：I don't know why my voice is coming out all loud and squeaky. (我不知道為何我的聲音會這麼大聲又刺耳。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">overwhelming</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>壓倒性的、令人難以承受的 (形容詞)</strong><br>
+                                    通常用來形容資訊量太多，或情感太強烈而無法負荷。<br>
+                                    <em>例句：This adoption stuff is so overwhelming. (領養的這些事讓人感覺好喘不過氣。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">chill</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>冷靜點、放輕鬆 (動詞口語)</strong><br>
+                                    常作為命令句使用，或像 Joey 一樣發現自己太過頭時自言自語。<br>
+                                    <em>例句：Yeah, you started it! I have got to chill. (對，是你先的！天啊我必須冷靜下來。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">give up</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>放棄、送人 (片語)</strong><br>
+                                    Frank 瘋狂到想把其中一個三胞胎送給 Phoebe 養，就用了這個詞。<br>
+                                    <em>例句：Which one would you be willing to give up? (你願意把哪一個送養？)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">intuitive</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>直覺很強的、敏銳的 (形容詞)</strong><br>
+                                    他們本來以為小男孩是自己「感覺到」被領養，直誇他很 intuitive。<br>
+                                    <em>例句：Kids are so intuitive. Don't you think he already knows? (小孩子的直覺很強。你不覺得他可能早就知道了？)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">連讀與弱讀：I have got to chill</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    Rachel 因為激動說出的這句話，在自然語速下幾乎把所有子音母音都連在一起了。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="0:48" data-end="0:50">▶️</button>
+                        Rachel: "I <span class="text-indigo-600 underline">have got to chill</span>."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>have got to</strong>：非常常見的美式口語，意思是 "need to" (必須)。</li>
+                        <li><strong>got to</strong>：在口語中常常會弱化成 "gotta" (發音似: <em>gah-da</em> 或 <em>goh-da</em>)。如果你仔細聽 Joey 的發音，他聽起來就像 <em>"I've gotta chill."</em></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">實用語氣：I'm fine</h3>
+                <p class="text-lg leading-relaxed mb-4">雖然 "I'm fine" (我很好) 是一句最簡單不過的話，但當你透過不同的語氣說出時，其實可以代表「我非常不好」。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="2:54" data-end="2:59">▶️</button>
+                        Ross: "<span class="text-yellow-700 underline">I'm fine. Totally fine.</span>" 
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li>英文中這種把高亢情緒壓抑下來，甚至聲音扭曲變形 (squeaky) 的表現方法，常常用來製造喜劇效果。</li>
+                        <li>當有人跟你說這句話，但語速極快、音調過高，這其實是一個強烈的反諷 (Irony)。</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，用本集的單字與短語挑戰這些填空：</strong></p>
+
+                <p class="mt-4">1. 資訊量太大了，這一切讓我感到________。</p>
+                <p class="text-indigo-700 font-medium">There's so much information. It feels so ____________.</p>
+
+                <p class="mt-6">2. 兄弟，你最好________！別再發火了。</p>
+                <p class="text-indigo-700 font-medium">Dude, you'd better ____________! Stop being so angry.</p>
+
+                <p class="mt-6">3. 你說他為什麼可以自己發現？因為小孩子都很________。</p>
+                <p class="text-indigo-700 font-medium">Why did he find out? Because kids are ____________.</p>
+
+                <p class="mt-6">4. 不用擔心我被開除這件事。我！很！好！(超高音)</p>
+                <p class="text-indigo-700 font-medium">Don't worry about me getting fired. ________ ________! (Totally!)</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集 <strong>The One Where Ross Is Fine</strong> 貢獻了太多經典梗，Ross 面對前女友和死黨交往時，努力表現出「我很大度，我是現代男性！」的崩潰樣貌堪稱一絕；連法式薄餅 (Margarita) 加上烤熱的墨西哥烤肉卷 (Fajitas) 也因為這集有了截然不同的喜劇地位。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    從語言學的角度來說，這集完美展示了什麼叫「言不由衷 (Sarcasm/Irony)」。下次當你遇到壓力太大快要爆發的情況，不妨學學 Ross 講出一句聲音又高又尖的 "I'm FINE!" 或對朋友大喊 "I've gotta chill!" 吧😁 準備好我們就往下集前進囉！
+                </p>
+            </div>
+        </section>    
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

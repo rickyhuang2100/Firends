@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S10E03 學習指南 | The One With Ross's Tan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #ea580c;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #fff7ed;
+            padding: 2px 8px;
+            border-radius: 8px;
+            border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第220集 (S10E03)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。靠著重複洗腦培養開口的直覺！</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>本集 <strong>"The One With Ross's Tan"（羅斯的噴霧日曬）</strong>，名列六人行歷史上最搞笑的劇集之一。</p>
+                <p>看到 Monica 曬出漂亮均勻的膚色，Ross 決定也去「噴霧日曬店」嘗試一下。然而，因為自作聰明的「密西西比綿羊計時法」，導致機器從頭到尾都只狂噴他的正面，將他變成了一個「前面黑胡桃，背面卻白皙」的八級怪物。同時，Monica 和 Phoebe 的共同死對頭 Amanda 帶著她假文青的「英國口音」回來紐約了，她那句 "feel like a perfect arse" (覺得自己像個大傻瓜) 更是惹人生厭；Joey 與 Rachel 放棄了發展戀情，最終決定退回最好朋友的舒適圈。來看看這集精選的喜劇台詞！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：喬伊的六步把妹公式</h3>
+                    <p class="text-gray-600 mb-4">Joey 和 Rachel 準備進行他們的第一個正式約會。Joey 自信滿滿地解釋他不需要準備什麼，因為他早有一套無往不利的「把妹六大招式」。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="0:57" data-end="1:10">▶️</button><br>
+                        Joey: "No, I do six things. First, I look deep into her eyes, then I kiss her. Next, I take my hand and I softly graze her thigh."<br>
+                        <span class="text-gray-500 font-normal">（沒有，我會做六件事！首先，我深情地望著她的眼睛，然後，我吻她。隨後我用手，輕輕地撫過她的大腿。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：做過美甲的男人</h3>
+                    <p class="text-gray-600 mb-4">Monica 為了把大家轉移自己去噴漆曬黑的焦點，竟然在無意間出賣了 Chandler 去做腳部美甲的超大秘密。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="3:03" data-end="3:10">▶️</button><br>
+                        Monica: "Chandler gets pedicures!"<br>
+                        Ross: "What? You do? Like, with the toe separators?"<br>
+                        <span class="text-gray-500 font-normal">（錢德跑去做了腳部美甲！—什麼？你做了？還夾了那種把腳趾頭全部分開的夾子？）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：因為我有博士學位啊！</h3>
+                    <p class="text-gray-600 mb-4">來到日曬俱樂部的 Ross 覺得店員教的噴霧四個步驟（噴、數、吸水、轉身）太簡單了，畢竟他可是堂堂擁有高學歷的人。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="5:44" data-end="5:54">▶️</button><br>
+                        "Spray, count, pat and turn. Spray, count and pat. You catch on quick."<br>
+                        "Well, I have a Ph.D., so.."<br>
+                        <span class="text-gray-500 font-normal">（噴，數數，輕拍吸水，轉身。噴，數數，輕拍吸水。你學得很快嘛！—那是當然，我是博士嘛，所以拉……）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：什麼是正常數數？</h3>
+                    <p class="text-gray-600 mb-4">但博士連「五」都數不好。Ross 習慣用外國人喜歡用的「密西西比計數法」來算時間（一密西西比等於一秒），導致時間拖太長根本沒空轉身。店員整個傻眼。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="6:32" data-end="6:43">▶️</button><br>
+                        Staff: "You never turned?"<br>
+                        Ross: "No! I barely got to 'three Mississippi'!"<br>
+                        Staff: "Mississippi? I said count to five."<br>
+                        Ross: "Mississippi-less-ly?"<br>
+                        <span class="text-gray-500 font-normal">（你沒有轉身？—沒有！我才剛數到『三密西西比』！—密西西比？我是說數到五。—不用加密西西比的數法？）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：我的天然體脂香</h3>
+                    <p class="text-gray-600 mb-4">做作的英國腔 Amanda 來訪，硬要大家聞她的脖子說那是她的天然體香。Phoebe 靠近一聞，只給出一個字的最狠評價。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="16:20" data-end="16:34">▶️</button><br>
+                        Amanda: "Oh, smell my neck. It's not perfume. It's me. It's my natural scent."<br>
+                        Phoebe: "Musty."<br>
+                        <span class="text-gray-500 font-normal">（喔，來聞聞我的脖子。這不是香水。這就是我的味道，是我的天然體香。—（菲比聞了一下）有股霉味。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：假裝有急難救助的朋友</h3>
+                    <p class="text-gray-600 mb-4">被噴得正面全黑的 Ross 回到家死不開門。結果遇到了來找砸的壞朋友 Chandler，只為了用這輩子都忘記不了的笑柄拍張紀念照！</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="25:27" data-end="25:39">▶️</button><br>
+                        Chandler: "Did you count Mississippi-ly?"<br>
+                        Ross: "You're not tan."<br>
+                        Chandler: "No. I just had to get a picture of this. I'll see you later."<br>
+                        <span class="text-gray-500 font-normal">（你是不是用「密西西比計數法」數秒？—（羅斯開門一看）你根本沒曬黑啊！—沒錯。我只是必須要把這荒謬的畫面拍下來。晚點見啦！）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">graze</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>輕輕擦拭、掠過 (動詞)</strong><br>
+                                    除了牛吃草的意思，也可以形容手指「輕輕滑過」某處。<br>
+                                    <em>例句：I softly graze her thigh. (我溫柔地滑過她的大腿。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">pedicure</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>足部護理/腳部美甲 (名詞)</strong><br>
+                                    對應手指的美甲 (manicure)。<br>
+                                    <em>例句：Chandler gets pedicures! (錢德偷偷跑去做腳部美甲了！)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">spray-on tan</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>噴霧日曬 (名詞)</strong><br>
+                                    比起直接曬太陽，西方也流行透過機器在身上噴灑顏色劑，讓皮膚瞬間變古銅色。<br>
+                                    <em>例句：I went to that spray-on tanning place your wife suggested. (我去了你老婆推薦的那家噴霧日曬店。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">catch on</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>明白、領悟、上手 (片語)</strong><br>
+                                    店員一講完規則，Ross 就覺得自己懂了。<br>
+                                    <em>例句：You catch on quick. (你學/領悟得真快。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">musty</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>發霉發酸的、有霉味的 (形容詞)</strong><br>
+                                    用來反諷原本以為有多好多香的"自然體味"。<br>
+                                    <em>例句：You smell... musty. (你聞起來...有點發霉了。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">美國人的文化習慣：One Mississippi...</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    這集最大的語言與文化笑點就在於「算時間」。
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="6:34" data-end="6:36">▶️</button>
+                        Ross: "I barely got to '<span class="text-indigo-600 underline">three Mississippi</span>'!"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>Mississippi 計時法</strong>：因為直接念 1, 2, 3 的語速太快，可能不到一秒鐘就數完了。美國小孩子非常習慣在數數字中間插入 "Mississippi" 這個字 (因為音節多)，來確保數一個數字剛好吻合「一秒鐘」。</li>
+                        <li>因此這集裡，死板的 Ross 在噴漆室內一秒一秒慢吞吞地屬「一頭綿羊、兩頭綿羊... (One Mississippi, two...)」，結果噴霧早就噴完好幾輪，他連轉背的時間都沒有！</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">實用語氣：You bet!</h3>
+                <p class="text-lg leading-relaxed mb-4">口語中非常常見的同意詞，強烈度勝過單純的 "yes" 或是 "sure"。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="0:15" data-end="0:17">▶️</button>
+                        Joey: "Oh, <span class="text-yellow-700 underline">you bet</span>. Yeah." 
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>You bet! (你包在我身上吧 / 那當然 / 沒錯)</strong>：字面意思是「你可以跟我賭一把這絕對是對的」。如果你聽起來不想太無聊，又想表示對某件事非常確定或強烈同意時，這句話非常實用。</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，用本集的單字與短語挑戰這些填空：</strong></p>
+
+                <p class="mt-4">1. 他這傢伙可是很聰明的，他很快就可以「弄懂」了。</p>
+                <p class="text-indigo-700 font-medium">He's a smart guy, he'll _________ _________ very quickly.</p>
+
+                <p class="mt-6">2. 哇，你說要做「腳部的指甲護理」嗎？</p>
+                <p class="text-indigo-700 font-medium">Wow, did you just say you want to get ______________?</p>
+
+                <p class="mt-6">3. 那當然！(沒問題！)</p>
+                <p class="text-indigo-700 font-medium">________ ________!</p>
+
+                <p class="mt-6">4. 我一點也不喜歡這間房間裡這股「發霉的味道」。</p>
+                <p class="text-indigo-700 font-medium">I really don't like the ____________ smell in this room.</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>The One With Ross's Tan</strong> 是這部影集喜劇精華的縮影。不管是 Ross 與噴漆機器的無解大戰、Chandler 那句為了拍下糗樣的幽默補槍，還是阿蔓達自帶的惹人厭體質都讓這一集充滿著無法不笑的亮點。如果哪天你也去到了倒數計時的場合，請記得千萬別自己在那邊數密西西比！
+                </p>
+                <p class="text-lg leading-relaxed">
+                    語言學習方面，學習 Joey 使用 <strong>"You bet."</strong> 來強化自己肯定句的自然度；以及了解到像 <strong>pedicure</strong> 等名詞在西方生活文化的常用場合。我們繼續往下！
+                </p>
+            </div>
+        </section>    
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>

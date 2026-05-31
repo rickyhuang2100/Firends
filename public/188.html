@@ -99,10 +99,10 @@
 
                 <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
                     <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：我們還要上班耶</h3>
-                    <p class="text-gray-600 mb-4">承上句，Chandler 馬上展現了極致的酸言酸語天分。</p>
+                    <p class="text-gray-600 mb-4">承上句，Ross 馬上展現了極致的酸言酸語天分。</p>
                     <p class="text-gray-700 font-semibold text-xl">
                         <button class="play-btn" data-start="1:21" data-end="1:26">▶️</button><br>
-                        Chandler: "Just then, or all the time? Because we have jobs, you know?"<br>
+                        Ross: "Just then, or all the time? Because we have jobs, you know?"<br>
                         <span class="text-gray-500 font-normal">（你是指專訪時，還是說一輩子？因為我們還得去上班你知道嗎？）</span>
                     </p>
                 </div>
@@ -111,7 +111,7 @@
                     <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：虛偽的官腔</h3>
                     <p class="text-gray-600 mb-4">受訪時，記者問為什麼選這間普通的咖啡廳？Joey 打腫臉充胖子表示他不在乎被請客。</p>
                     <p class="text-gray-700 font-semibold text-xl">
-                        <button class="play-btn" data-start="2:49" data-end="2:53">▶️</button><br>
+                        <button class="play-btn" data-start="2:50" data-end="2:53">▶️</button><br>
                         Joey: "I do this for the fans, not the free food."<br>
                         <span class="text-gray-500 font-normal">（我這麼做是為了影迷，不是為了白吃飯。）</span>
                     </p>
@@ -163,7 +163,7 @@
                 </p>
                 <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
                     <p class="font-bold text-indigo-900 text-xl mb-3">
-                        <button class="play-btn" data-start="0:48" data-end="0:52">▶️</button>
+                        <button class="play-btn" data-start="0:47" data-end="0:53">▶️</button>
                         "<span class="text-indigo-600 underline">If only</span> there <span class="text-indigo-600 underline">was</span> something in your head to control what you say."
                     </p>
                     <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
@@ -177,7 +177,7 @@
                 <p class="text-lg leading-relaxed mb-4">當 "for" 在美語口語快速念過時，往往會弱化成 /fər/ 重音消滅。</p>
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
                     <p class="font-bold text-yellow-900 text-xl mb-3">
-                        <button class="play-btn" data-start="2:49" data-end="2:51">▶️</button>
+                        <button class="play-btn" data-start="2:50" data-end="2:52">▶️</button>
                         "I do this <span class="text-yellow-700 underline">for the</span> fans..."
                     </p>
                     <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
@@ -230,103 +230,6 @@
         您的瀏覽器不支援 HTML5 video。
     </video>
     <div id="contact-container"></div>
-
-    <script>
-        // 設定影片路徑
-        const video = document.getElementById('myVideo');
-        const urlParams = new URLSearchParams(window.location.search);
-        let srcPath = urlParams.get('url');
-
-        if (srcPath) {
-            const source = document.createElement('source');
-            source.src = srcPath;
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            video.load();
-        }
-
-        // AB Loop 控制邏輯
-        let startTime = 0;
-        let endTime = 0;
-        let isLooping = false;
-        let loopTimeout;
-        let currentBtn = null;
-
-        function timeToSeconds(timeStr) {
-            const parts = timeStr.split(':');
-            return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
-        }
-
-        const buttons = document.querySelectorAll('.play-btn');
-
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (currentBtn === this && isLooping) {
-                    isLooping = false;
-                    this.classList.remove('looping');
-                    video.pause();
-                    clearTimeout(loopTimeout);
-                    currentBtn = null;
-                    return;
-                }
-
-                if (currentBtn) {
-                    currentBtn.classList.remove('looping');
-                    clearTimeout(loopTimeout);
-                }
-
-                startTime = timeToSeconds(this.dataset.start);
-                endTime = timeToSeconds(this.dataset.end);
-                isLooping = true;
-                currentBtn = this;
-                this.classList.add('looping');
-
-                video.currentTime = startTime;
-                video.play();
-                checkLoop();
-            });
-        });
-
-        function checkLoop() {
-            if (!isLooping) return;
-            
-            if (video.currentTime >= endTime) {
-                video.pause();
-                setTimeout(() => {
-                    if (isLooping) {
-                        video.currentTime = startTime;
-                        video.play();
-                    }
-                }, 1000); 
-            }
-            
-            loopTimeout = setTimeout(checkLoop, 100);
-        }
-
-        video.addEventListener('play', () => {
-            if (isLooping) checkLoop();
-        });
-
-        const menuButton = document.getElementById('menu-button');
-        const nav = document.querySelector('header nav');
-        const overlay = document.getElementById('menu-overlay');
-
-        function toggleMenu() {
-            nav.classList.toggle('open');
-        }
-
-        menuButton.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    nav.classList.remove('open');
-                }
-            });
-        });
-    </script>
     <script src="loadContact.js"></script>
 </body>
 </html>
