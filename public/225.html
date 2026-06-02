@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六人行 S10E08 學習指南 | The One With The Late Thanksgiving</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfdfc; color: #333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #cc8a70; border-bottom-color: #cc8a70; }
+        .play-btn {
+            cursor: pointer; font-size: 1.3rem; color: #ea580c; transition: all 0.2s ease; display: inline-block;
+            background-color: #fff7ed; padding: 2px 8px; border-radius: 8px; border: 1px solid #ffedd5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .play-btn:hover { transform: scale(1.1); background-color: #ffedd5; }
+        .play-btn.looping { background-color: #fde68a; border-color: #f59e0b; color: #b45309; }
+        .content-card { background-color: #fff; border: 1px solid #f0e9e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .section-title { color: #9c6853; border-bottom: 2px solid #e0d5c8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #myVideo { position: fixed; bottom: 20px; right: 20px; z-index: 100; border: 2px solid #ea580c; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        video { display: block; margin-top: 20px; max-width: 25%; max-height: 25%; border-radius: 0.25rem; }
+        @media (max-width: 768px) {
+            #myVideo { max-width: 80%; max-height: 30%; bottom: 10px; right: 10px; }
+            video { max-width: 100%; max-height: 100%; }
+            header nav { position: fixed; top: 0; left: 0; width: 80vw; max-width: 340px; height: 100vh; background: rgba(255,255,255,0.98); box-shadow: 4px 0 24px rgba(0,0,0,0.12); transform: translateX(-110%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 1000; display: flex; flex-direction: column; padding-top: 5rem; border-top-right-radius: 1.5rem; border-bottom-right-radius: 1.5rem; border-right: 2px solid #f3e9d7; backdrop-filter: blur(6px); }
+            header nav.open { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,0.18); }
+            header nav .hidden.md\:flex { display: flex !important; flex-direction: column; width: 100%; margin-top: 2rem; gap: 0.5rem; }
+            header nav .nav-link { padding: 1.1rem 2.2rem; width: 100%; border-bottom: 1px solid #f3f3f3; font-size: 1.25rem; border-radius: 0.75rem; margin: 0.2rem 0; }
+            header nav .nav-link.active, header nav .nav-link:hover { background: linear-gradient(90deg,#fcf2ec 0%,#f5d8cd 100%); color: #b16142; }
+            #menu-overlay { display: none; }
+            header nav.open ~ #menu-overlay { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.18); z-index: 900; animation: fadeIn 0.3s; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
+        @media (min-width: 769px) { header nav { position: static !important; transform: none !important; height: auto !important; box-shadow: none !important; background: transparent !important; padding-top: 0 !important; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <button id="menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-xl font-bold text-stone-700">Friends 第225集 (S10E08)</div>
+                <div class="hidden md:flex items-center space-x-8 text-lg">
+                    <a href="#intro" class="nav-link">引言</a>
+                    <a href="#scenes" class="nav-link">場景與聽力</a>
+                    <a href="#vocab" class="nav-link">詞彙</a>
+                    <a href="#grammar" class="nav-link">語法與發音</a>
+                    <a href="#practice" class="nav-link">練習</a>
+                    <a href="#conclusion" class="nav-link">結論</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="menu-overlay"></div>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="content-card border-orange-200 bg-orange-50 mb-8">
+            <h3 class="text-xl font-bold text-orange-800 mb-2">🎯 學習小提醒：活用 AB Loop 無限循環播放器</h3>
+            <p>點擊橘底的 <span class="play-btn pb-0 pt-0 text-sm">▶️ 播放</span> 按鈕，AB Loop 會自動循環播放選定片段，再點一次（⏹️）即可停止。</p>
+            <div id="video-button-container" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- I. 引言 -->
+        <section id="intro" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">I. 引言 (Introduction)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p>本集 <strong>"The One With The Late Thanksgiving"（遲到的感恩節）</strong>，是整部劇裡感恩節特輯的最終章——也公認是系列中最好笑的一集。</p>
+                <p>Monica 被 Phoebe 激將法激到說要辦感恩節大餐，誰知道 Ross 和 Joey 跑去看冰球比賽、Rachel 和 Phoebe 跑去參加嬰兒選美比賽，四個人全部遲到一小時。憤怒的 Monica 把門鎖死不讓他們進來。Joey 試圖從門縫鑽進去，結果頭被夾住動彈不得。絕望的一行人先用石頭剪子布（Joey 出了一個「火焰」）決定誰先進去道歉，最後只能全員一起進去。就在最崩潰的關頭，電話響起——領養機構說有一位俄亥俄州的準媽媽選上了 Monica 和 Chandler！</p>
+            </div>
+        </section>
+
+        <!-- II. 場景與聽力 -->
+        <section id="scenes" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">II. 經典短句場景 (Classic Short Scenes)</h2>
+            <div class="content-card space-y-6">
+
+                <div class="p-4 border-l-4 border-rose-300 bg-rose-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-rose-800">場景一：你不該把話塞進人嘴裡，你該把火雞塞進去</h3>
+                    <p class="text-gray-600 mb-4">Monica 本已決定不辦感恩節，卻被 Phoebe 說「去年你廚藝退步了」激到親口說要辦，Chandler 試圖插嘴。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="0:35" data-end="0:40">▶️</button><br>
+                        Joey: "Don't you put words in people's mouths. You put turkey in people's mouths."<br>
+                        <span class="text-gray-500 font-normal">（你不應該把話塞進別人嘴裡！你該把火雞塞到別人嘴裡才對！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-sky-300 bg-sky-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-sky-800">場景二：自我競爭模式啟動</h3>
+                    <p class="text-gray-600 mb-4">Phoebe 踩了 Monica 的痛腳，說她去年廚藝下滑——而 Monica 最想超越的對手就是她自己。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="1:13" data-end="1:28">▶️</button><br>
+                        Phoebe: "You'd be in competition with yourself."<br>
+                        Monica: "That's my favorite kind."<br>
+                        ...<br>
+                        Chandler: "Stay out of this. This is between me and me."<br>
+                        <span class="text-gray-500 font-normal">（你是在跟你自己競爭！—那才是我最愛的競爭！—不關你的事，錢德，這是我和…我之間的事！[Monica 對自己說]）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-emerald-300 bg-emerald-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-emerald-800">場景三：石頭剪子布，然後「火焰」</h3>
+                    <p class="text-gray-600 mb-4">大家要決定誰先進去面對憤怒的 Monica，Phoebe 出了一個從沒聽說過的手勢——「火焰」。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="13:42" data-end="13:57">▶️</button><br>
+                        Joey: "I win!"<br>
+                        Ross: "What is that?"<br>
+                        Joey: "That's fire. It beats everything."<br>
+                        Phoebe: "Oh, really? Does it beat water balloon?"<br>
+                        Joey: "Well-played, Phoebe Buffay. Well-played."<br>
+                        <span class="text-gray-500 font-normal">（我贏了！—那是什麼？—那是火焰，打遍天下無敵手！—哦是嗎？那能贏過水球嗎？—玩得好啊，菲比·布費，玩得漂亮！）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-purple-300 bg-purple-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-purple-800">場景四：頭被卡在門縫裡的 Joey</h3>
+                    <p class="text-gray-600 mb-4">被鎖在門外的 Joey 試圖從門縫鑽進去，完全出乎意料地把自己的頭給卡住了。大家竟然開始往他褲子裡塞甘藍菜。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="19:10" data-end="19:15">▶️</button><br>
+                        Joey: "Stop, stop, I'm worried about damaging my head."<br>
+                        Chandler: "It's a little late for that."<br>
+                        <span class="text-gray-500 font-normal">（停、停，我擔心會傷到我的頭。—（Chandler 冷冷地）擔心這個有點太晚了。）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-amber-300 bg-amber-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-amber-800">場景五：派 (Pie) 和獎 (Prize) 同音的鬧劇</h3>
+                    <p class="text-gray-600 mb-4">Monica 要 Rachel 和 Phoebe 去取她訂的「派 (pies)」回來，才讓她們進門吃飯。兩個人帶回來的卻是嬰兒選美的大獎盃。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="17:29" data-end="17:47">▶️</button><br>
+                        Monica: "Yeah, I asked you and Phoebe to pick up the pies. You did remember, right?"<br>
+                        Phoebe: "Pies. Oh, we thought you said 'prize.'"<br>
+                        Phoebe: "Here!"<br>
+                        Monica: "Grand Supreme Little Darling?"<br>
+                        <span class="text-gray-500 font-normal">（我讓你和菲比去取「派」，你記得的，對吧？—派？啊……我們以為你說的是「獎」。—這！—（一臉茫然）「超級小可愛大獎」？）</span>
+                    </p>
+                </div>
+
+                <div class="p-4 border-l-4 border-teal-300 bg-teal-50 rounded-r-lg">
+                    <h3 class="font-bold text-xl mb-2 text-teal-800">場景六：電話響了！我們要有孩子了！</h3>
+                    <p class="text-gray-600 mb-4">在最混亂的時刻——Joey 的頭用火雞油潤滑衝出門後，酸梅醬灑滿全身——Monica 接起了電話，全場瞬間安靜。</p>
+                    <p class="text-gray-700 font-semibold text-xl">
+                        <button class="play-btn" data-start="21:34" data-end="21:48">▶️</button><br>
+                        Monica: "We're getting a baby!"<br>
+                        Chandler: "Are you serious?!"<br>
+                        Monica: "There's a pregnant woman in Ohio, and she picked us."<br>
+                        <span class="text-gray-500 font-normal">（我們要領養到孩子了！—你說真的嗎？！—俄亥俄州有個準媽媽，她選了我們！）</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- III. 詞彙 -->
+        <section id="vocab" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">III. 詞彙 (Vocabulary)</h2>
+            <div class="content-card">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600 w-1/4">英文詞彙/片語</th>
+                                <th class="p-4 font-semibold text-gray-600 w-3/4">中文意思與例句</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">put words in one's mouth</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>把話強加給別人、替人說話 (慣用語)</strong><br>
+                                    意指說對方說了他其實沒說過（或不想說）的話。<br>
+                                    <em>例句：Don't put words in my mouth. I never agreed to that. (別把話硬塞進我嘴裡，我從沒答應過。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">get mugged</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>被搶劫 (片語)</strong><br>
+                                    Ross 撕破自己衣服，然後用「被搶劫了」當藉口解釋遲到原因與衣服破損。<br>
+                                    <em>例句：I got mugged, and they stole my pocket. (我被搶了，他們還偷走了我的口袋。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">drooling</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>流口水 (動詞/形容詞)</strong><br>
+                                    Monica 看到門外的他們說「這樣威脅更可信，如果你們沒在流口水的話。」<br>
+                                    <em>例句：That would be a lot more convincing if you weren't drooling. (如果你沒在流口水的話，那樣的威脅可能更有說服力。)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">for Pete's sake</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>看在 Pete（上帝/名義）的份上！（感嘆語）</strong><br>
+                                    是 "for God's sake" 的替代說法，用來表達強烈的不滿或驚訝，語氣更溫和一些。<br>
+                                    <em>例句：It's Thanksgiving, for Pete's sake! A day of forgiveness! (現在是感恩節耶！一個原諒的日子！)</em>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-4 font-mono text-purple-600 font-semibold text-lg">well-played</td>
+                                <td class="p-4 leading-relaxed">
+                                    <strong>玩得漂亮、下得好棋 (感嘆語)</strong><br>
+                                    原本是棋盤遊戲中稱讚對手的說法，現在廣泛用於稱讚別人機智的應對或策略。<br>
+                                    <em>例句：Well-played, Phoebe Buffay. Well-played. (玩得漂亮啊，菲比布費。玩得真漂亮。)</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- IV. 語法與發音 -->
+        <section id="grammar" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">IV. 語法與發音 (Grammar &amp; Pronunciation)</h2>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-900">同音異義詞：Pie vs Prize</h3>
+                <p class="text-lg leading-relaxed mb-4">
+                    本集最爆笑的誤會來自一個同音词的混淆——其實 "pie" 和 "prize" 並不真的同音，但在快速口語中因語調和環境影響，Rachel 和 Phoebe 誤聽了！
+                </p>
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-indigo-900 text-xl mb-3">
+                        <button class="play-btn" data-start="17:30" data-end="17:38">▶️</button>
+                        Monica: "I asked you to pick up the <span class="text-indigo-600 underline">pies</span>."<br>
+                        Phoebe: "Oh, we thought you said '<span class="text-indigo-600 underline">prize</span>.'"
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>Pie /paɪ/</strong> vs <strong>Prize /praɪz/</strong>：兩個字的母音都是 /aɪ/，在快速口語裡難以分辨，尤其 "prize" 的 'r' 和 'z' 在非刻意的說話中可能弱化。</li>
+                        <li>類似的同音/近音誤解在英語中超級常見，也是聽力測驗的大陷阱！例如 <strong>weather/whether</strong>（天氣/是否）、<strong>flour/flower</strong>（麵粉/花）。</li>
+                        <li>碰到這種情況時，可以用 <em>"Did you mean...?"</em> 或 <em>"As in...?"</em> 反問來確認。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card mb-6">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-900">感嘆語：For Pete's sake！</h3>
+                <p class="text-lg leading-relaxed mb-4">Chandler 抗議大家不給機會道歉，說出了英語中常用的道德訴求語。</p>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-lg">
+                    <p class="font-bold text-yellow-900 text-xl mb-3">
+                        <button class="play-btn" data-start="18:14" data-end="18:18">▶️</button>
+                        Joey: "It's Thanksgiving, <span class="text-yellow-700 underline">for Pete's sake</span>! A day of forgiveness."
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                        <li><strong>"For Pete's sake"</strong> 等同於 "For God's sake"，是一種「看在某某份上」的語氣，用來強調某件事非常重要或你非常挫折。適用於各年齡層，語氣比 "For God's sake" 更家常親切，較少冒犯宗教感情。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- V. 練習 -->
+        <section id="practice" class="mb-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold section-title">V. 練習 (Practice)</h2>
+            <div class="content-card space-y-4 text-lg leading-relaxed">
+                <p><strong>挑戰自己，用本集的單字與短語完成以下句子：</strong></p>
+
+                <p class="mt-4">1. 我說過的話就是我的意思，別「把話硬塞進我嘴裡」！</p>
+                <p class="text-indigo-700 font-medium">I mean exactly what I said! Don't __________ __________ __________ __________ __________!</p>
+
+                <p class="mt-6">2. 拜託了，「看在老天份上」！我們等這個消息等了幾個月了！</p>
+                <p class="text-indigo-700 font-medium">Please, ________ __________ __________! We've been waiting for this news for months!</p>
+
+                <p class="mt-6">3. 你這步棋「走得漂亮」，我沒預料到。（請用本集的讚美語）</p>
+                <p class="text-indigo-700 font-medium">______________, my friend. I did not see that coming.</p>
+
+                <p class="mt-6">4. 昨晚他在街上「被搶劫了」，錢包跟手機都不見了。</p>
+                <p class="text-indigo-700 font-medium">He ________ __________ on the street last night. His wallet and phone are both gone.</p>
+            </div>
+        </section>
+
+        <!-- VI. 結論 -->
+        <section id="conclusion" class="scroll-mt-24">
+            <div class="content-card">
+                <h2 class="text-4xl font-bold section-title">VI. 結論 (Conclusion)</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    <strong>The One With The Late Thanksgiving</strong> 是感恩節特輯的完美句點。這集教會了我們：感恩節不是完美的菜餚、是否準時到，而是你和誰一起在場——就算那個人頭被卡在門縫裡滿身火雞油。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    本集最珍貴的詞彙記得帶走：<em>"Put words in someone's mouth"</em>（把話強加給別人）、<em>"For Pete's sake"</em>（看在老天份上！）以及 <em>"Well-played"</em>（玩得漂亮）。下一集見！🦃
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://giscus.app/client.js"
+            data-repo="rickyhuang2100/Firends"
+            data-repo-id="R_kgDOOwwmoA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOOwwmoM4C9Ocb"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="zh-TW"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    <video id="myVideo" controls>
+        您的瀏覽器不支援 HTML5 video。
+    </video>
+    <div id="contact-container"></div>
+    <script src="loadContact.js"></script>
+</body>
+</html>
