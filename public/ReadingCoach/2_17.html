@@ -8,41 +8,29 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
         .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; }
-        h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; }
-        h3 { color: #555; margin-top: 20px; }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
         .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
         .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; }
-        .word.completed { color: #999; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
         .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; }
-        .btn:hover { background-color: #45a049; }
-        .btn-stop { background-color: #f44336; }
-        .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; }
-        .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; }
-        select, input[type="range"] { width: 200px; padding: 5px; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
         .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
         .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
         .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; }
-        .vocab-type { color: #666; font-style: italic; font-size: 14px; }
-        .vocab-meaning { margin-top: 8px; color: #333; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
         .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
         .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
         .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
         .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
         .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
         .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul { line-height: 1.8; }
+        ul, ol { line-height: 1.8; }
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; }
-        .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -61,7 +49,6 @@
             <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
         </div>
         <div class="text-content" id="storyContainer"></div>
-
         <div class="learning-section">
             <h2>📚 英文學習資訊</h2>
             <div class="tabs">
@@ -76,25 +63,49 @@
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
                 <div class="info-box">
-                    <h4 style="color: #2196F3; margin-bottom: 15px;">墨西哥獨立日</h4>
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">墨西哥的獨立紀念日</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        墨西哥每年 9 月 16 日慶祝獨立日。很久以前，西班牙統治了墨西哥很多年。人民想要自由。1810 年，一位名叫 Miguel Hidalgo 的神父發表了一場著名的演說。他告訴人民要為自由而戰。這場演說開啟了一場漫長的戰爭。經過多年，墨西哥終於從西班牙獨立。今天，人們用遊行、音樂和煙火慶祝這一天。他們吃特別的食物和跳舞。這是全墨西哥的快樂日子！
+                        在美國，人們在7月4日慶祝獨立紀念日。墨西哥也有獨立紀念日！墨西哥在9月16日慶祝他們的獨立。墨西哥被西班牙統治了大約三百年。接著，在1810年的9月16日，墨西哥的一位神父站出來發聲。他呼籲人們起身反抗西班牙人。他希望他們能為自由而戰！墨西哥在接下來的好幾年裡並沒有真正從西班牙獲得自由。但墨西哥人依然慶祝這位神父呼籲自由的這一天。大樂隊在街上演奏著。人們施放煙火。而且人們會品嚐美食！
                     </p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Mexico celebrates Independence Day on September 16 every year. Long ago, Spain ruled Mexico for many years. The people wanted to be free.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>墨西哥每年 9 月 16 日慶祝獨立日。很久以前，西班牙統治了墨西哥很多年。人民想要自由。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In the United States, people celebrate Independence Day on July 4.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在美國，人們在7月4日慶祝獨立紀念日。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">In 1810, a priest named Miguel Hidalgo gave a famous speech. He told the people to fight for their freedom. This speech started a long war.</td>
-                            <td style="padding: 10px; vertical-align: top;">1810 年，一位名叫 Miguel Hidalgo 的神父發表了一場著名的演說。他告訴人民要為自由而戰。這場演說開啟了一場漫長的戰爭。</td>
+                            <td style="padding: 10px; vertical-align: top;">Mexico has an Independence Day, too! Mexico celebrates its independence on September 16.</td>
+                            <td style="padding: 10px; vertical-align: top;">墨西哥也有獨立紀念日！墨西哥在9月16日慶祝他們的獨立。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Mexico was ruled by Spain for around three hundred years.</td>
+                            <td style="padding: 10px; vertical-align: top;">墨西哥被西班牙統治了大約三百年。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Then, on September 16, 1810, a priest in Mexico spoke up.</td>
+                            <td style="padding: 10px; vertical-align: top;">接著，在1810年的9月16日，墨西哥的一位神父站出來發聲。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">He called for people to go against the Spanish.</td>
+                            <td style="padding: 10px; vertical-align: top;">他呼籲人們起身反抗西班牙人。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">He wanted them to fight for freedom!</td>
+                            <td style="padding: 10px; vertical-align: top;">他希望他們能為自由而戰！</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">Mexico didn’t become free from Spain for years.</td>
+                            <td style="padding: 10px; vertical-align: top;">墨西哥在接下來的好幾年裡並沒有真正從西班牙獲得自由。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; vertical-align: top;">But Mexicans celebrate the day the priest called for freedom.</td>
+                            <td style="padding: 10px; vertical-align: top;">但墨西哥人依然慶祝這位神父呼籲自由的這一天。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">After many years, Mexico became free from Spain. Today, people celebrate this day with parades, music, and fireworks. They eat special foods and dance. It is a happy day for all of Mexico!</td>
-                            <td style="padding: 10px; vertical-align: top;">經過多年，墨西哥終於從西班牙獨立。今天，人們用遊行、音樂和煙火慶祝這一天。他們吃特別的食物和跳舞。這是全墨西哥的快樂日子！</td>
+                            <td style="padding: 10px; vertical-align: top;">Big bands play in the streets. People set off fireworks. And people eat great food!</td>
+                            <td style="padding: 10px; vertical-align: top;">大樂隊在街上演奏著。人們施放煙火。而且人們會品嚐美食！</td>
                         </tr>
                     </table>
                 </div>
@@ -103,245 +114,49 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-word">independence</div>
-                        <div class="vocab-type">[名詞]</div>
-                        <div class="vocab-meaning">獨立</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">celebrate</div>
-                        <div class="vocab-type">[動詞]</div>
-                        <div class="vocab-meaning">慶祝</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">ruled</div>
-                        <div class="vocab-type">[動詞]</div>
-                        <div class="vocab-meaning">統治（rule 的過去式）</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">priest</div>
-                        <div class="vocab-type">[名詞]</div>
-                        <div class="vocab-meaning">牧師、神父</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">speech</div>
-                        <div class="vocab-type">[名詞]</div>
-                        <div class="vocab-meaning">演講</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">fireworks</div>
-                        <div class="vocab-type">[名詞]</div>
-                        <div class="vocab-meaning">煙火</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">parade</div>
-                        <div class="vocab-type">[名詞]</div>
-                        <div class="vocab-meaning">遊行</div>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-word">free</div>
-                        <div class="vocab-type">[形容詞]</div>
-                        <div class="vocab-meaning">自由的</div>
-                    </div>
+                    <div class="vocab-item"><div class="vocab-word">celebrate</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">慶祝</div></div>
+                    <div class="vocab-item"><div class="vocab-word">independence</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">獨立（Independence Day 指獨立紀念日）</div></div>
+                    <div class="vocab-item"><div class="vocab-word">rule</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">統治</div></div>
+                    <div class="vocab-item"><div class="vocab-word">priest</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">神父，牧師</div></div>
+                    <div class="vocab-item"><div class="vocab-word">fight</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">戰鬥，爭取</div></div>
+                    <div class="vocab-item"><div class="vocab-word">fireworks</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">煙火（複數）</div></div>
                 </div>
             </div>
-
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box">
-                    <div class="grammar-title">1. 過去簡單式 - 描述歷史</div>
-                    <p>用過去式來述說歷史事件：</p>
-                    <div class="example">
-                        ✓ Spain <span class="highlight">ruled</span> Mexico for many years.<br>
-                        ✓ A priest <span class="highlight">gave</span> a famous speech.<br>
-                        ✓ He <span class="highlight">told</span> people to fight for freedom.
-                    </div>
-                </div>
-                <div class="grammar-box">
-                    <div class="grammar-title">2. 現在式 - 描述現在的慶祝方式</div>
-                    <p>用現在式描述每年的慶祝活動：</p>
-                    <div class="example">
-                        ✓ People <span class="highlight">celebrate</span> with parades and fireworks.<br>
-                        ✓ They <span class="highlight">eat</span> special foods and <span class="highlight">dance</span>.
-                    </div>
-                </div>
-                <div class="grammar-box">
-                    <div class="grammar-title">3. "wanted to" 的用法</div>
-                    <p>表示「想要做某事」：</p>
-                    <div class="example">
-                        The people <span class="highlight">wanted to</span> be free.<br>
-                        → 人民想要自由
-                    </div>
-                </div>
+                <div class="grammar-box"><div class="grammar-title">1. 時間介系詞 in / on</div><div class="example"><span class="highlight">In</span> the United States, people celebrate... <span class="highlight">on</span> July 4.</div><p>在國家或大地方前用 in，而在「特定的日期」（如7月4日、9月16日）前面必須用 on。</p></div>
+                <div class="grammar-box"><div class="grammar-title">2. 被動語態 (be ruled by)</div><div class="example">Mexico <span class="highlight">was ruled by</span> Spain...</div><p>表示某個國家被另一個國家統治。過去的事實加上過去式的 be 動詞 was 和 rule 的過去分詞。</p></div>
+                <div class="grammar-box"><div class="grammar-title">3. want + 受詞 + to V</div><div class="example">He <span class="highlight">wanted</span> them <span class="highlight">to fight</span> for freedom!</div><p>表示「希望」某個人「去」做某件事情。</p></div>
             </div>
-
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern">
-                    <strong>句型 1: 主詞 + celebrate + 名詞 + on + 日期</strong>
-                    <div class="example">
-                        Mexico <span class="highlight">celebrates</span> Independence Day <span class="highlight">on</span> September 16.<br>
-                        → 在某日期慶祝某節日
-                    </div>
-                </div>
-                <div class="sentence-pattern">
-                    <strong>句型 2: 主詞 + told + 受詞 + to + 動詞原形</strong>
-                    <div class="example">
-                        He <span class="highlight">told</span> people <span class="highlight">to</span> fight for freedom.<br>
-                        → 告訴某人去做某事
-                    </div>
-                </div>
-                <div class="sentence-pattern">
-                    <strong>句型 3: 介系詞 + 動名詞 (-ing)</strong>
-                    <div class="example">
-                        They celebrate <span class="highlight">by eating</span> special foods and <span class="highlight">dancing</span>.<br>
-                        → 用「by + V-ing」表示方式
-                    </div>
-                </div>
+                <div class="sentence-pattern"><strong>句型 1: spoke up 發聲</strong><div class="example">Then,... a priest in Mexico <span class="highlight">spoke up</span>.</div><p>意思是挺身而出，勇敢說出自己想法來號召大家。</p></div>
+                <div class="sentence-pattern"><strong>句型 2: call for 呼籲</strong><div class="example">He <span class="highlight">called for</span> people to go against the Spanish.</div><p>用來表示大聲號召或要求群眾一起做某件事情。</p></div>
+                <div class="sentence-pattern"><strong>句型 3: fight for 為...爭取/戰鬥</strong><div class="example">He wanted them to <span class="highlight">fight for</span> freedom!</div><p>為了某個目標（如 freedom 自由）而奮鬥。</p></div>
+                <div class="sentence-pattern"><strong>句型 4: set off 施放</strong><div class="example">People <span class="highlight">set off</span> fireworks.</div><p>點燃或是引爆煙火與爆竹的專用片語。</p></div>
             </div>
-
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box">
-                    <strong>文章結構分析（歷史說明文）</strong>
-                    <p><strong>背景：</strong> 西班牙統治墨西哥多年</p>
-                    <p><strong>轉折：</strong> 一位牧師發表演說號召爭取自由</p>
-                    <p><strong>結果：</strong> 墨西哥獨立</p>
-                    <p><strong>現在：</strong> 每年 9 月 16 日慶祝獨立日</p>
-                </div>
-                <div class="info-box">
-                    <strong>文化知識</strong>
-                    <ul>
-                        <li><strong>墨西哥獨立日：</strong>9 月 16 日（不是 Cinco de Mayo！）</li>
-                        <li><strong>Miguel Hidalgo：</strong>被稱為「墨西哥獨立之父」</li>
-                        <li><strong>El Grito：</strong>獨立宣言的吶喊，至今仍在慶祝活動中重演</li>
-                    </ul>
-                </div>
-                <div class="grammar-box">
-                    <div class="grammar-title">理解測驗問題</div>
-                    <ol>
-                        <li>When is Mexico's Independence Day? (墨西哥獨立日是什麼時候？)</li>
-                        <li>Which country ruled Mexico? (哪個國家統治墨西哥？)</li>
-                        <li>Who gave the famous speech? (誰發表了著名的演說？)</li>
-                        <li>How do people celebrate? (人們如何慶祝？)</li>
-                    </ol>
-                </div>
+                <div class="info-box"><strong>文章結構：歷史文化說明文</strong><p>這篇文章先用美國的國慶日來引起共鳴。接著點出墨西哥的國慶日以及由來（1810年神父的呼籲）。文章轉折這不是他們真正獨立的日子，但卻也是值得紀念的起點，並分享了現在墨西哥人的慶祝方式。</p></div>
+                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What day is Independence Day in the United States?</li><li>How long was Mexico ruled by Spain?</li><li>Name two things Mexicans do to celebrate their Independence Day.</li></ol></div>
             </div>
         </div>
     </div>
 <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
-        const synth = window.speechSynthesis;
-        let voices = [];
-        let wordElements = [];
-        let currentIndex = 0;
-        let highlightTimer = null;
-        let timingAdjustment = 1.5;
-        
-        const storyText = `Mexico's Independence Day
-
-Mexico celebrates Independence Day on September 16 every year. Long ago, Spain ruled Mexico for many years. The people wanted to be free.
-
-In 1810, a priest named Miguel Hidalgo gave a famous speech. He told the people to fight for their freedom. This speech started a long war.
-
-After many years, Mexico became free from Spain. Today, people celebrate this day with parades, music, and fireworks. They eat special foods and dance. It is a happy day for all of Mexico!`;
-
-        function initText() {
-            const container = document.getElementById('storyContainer');
-            const lines = storyText.split('\n');
-            lines.forEach((line, lineIndex) => {
-                if (line.trim() === '') { container.appendChild(document.createElement('br')); return; }
-                const words = line.split(' ');
-                words.forEach((word, wordIndex) => {
-                    if (word.trim()) {
-                        const span = document.createElement('span');
-                        span.className = 'word';
-                        span.textContent = word;
-                        container.appendChild(span);
-                        wordElements.push(span);
-                        if (wordIndex < words.length - 1) container.appendChild(document.createTextNode(' '));
-                    }
-                });
-                if (lineIndex < lines.length - 1) container.appendChild(document.createElement('br'));
-            });
-        }
-
-        function loadVoices() {
-            voices = synth.getVoices();
-            const select = document.getElementById('voiceSelect');
-            select.innerHTML = '';
-            voices.forEach((voice, i) => {
-                const option = document.createElement('option');
-                option.textContent = `${voice.name} (${voice.lang})`;
-                option.value = i;
-                select.appendChild(option);
-                if (voice.lang.startsWith('zh-TW')) select.selectedIndex = i;
-            });
-        }
-        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
-        loadVoices();
-
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Mexico's Independence Day\n\nIn the United States, people celebrate Independence Day on July 4. Mexico has an Independence Day, too! Mexico celebrates its independence on September 16.\n\nMexico was ruled by Spain for around three hundred years. Then, on September 16, 1810, a priest in Mexico spoke up. He called for people to go against the Spanish. He wanted them to fight for freedom!\n\nMexico didn’t become free from Spain for years. But Mexicans celebrate the day the priest called for freedom. Big bands play in the streets. People set off fireworks. And people eat great food!`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
         document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
         document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
         document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
         document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
-
-        function highlightWord(index) {
-            if (index < currentIndex) return;
-            currentIndex = index;
-            wordElements.forEach((word, i) => { word.classList.remove('active', 'completed'); if (i < index) word.classList.add('completed'); });
-            if (index < wordElements.length) wordElements[index].classList.add('active');
-        }
-
-        function speakText() {
-            if (synth.speaking) synth.cancel();
-            if (highlightTimer) clearInterval(highlightTimer);
-            currentIndex = 0;
-            wordElements.forEach(w => w.classList.remove('active', 'completed'));
-            const utterance = new SpeechSynthesisUtterance(storyText);
-            const voiceIndex = document.getElementById('voiceSelect').value;
-            if (voices[voiceIndex]) utterance.voice = voices[voiceIndex];
-            utterance.rate = parseFloat(document.getElementById('rateSlider').value);
-            utterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
-            utterance.volume = parseFloat(document.getElementById('volumeSlider').value);
-            let boundarySupported = false;
-            utterance.addEventListener('boundary', (event) => {
-                if (event.name === 'word') {
-                    boundarySupported = true;
-                    const textBeforeWord = storyText.substring(0, event.charIndex);
-                    const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0);
-                    if (wordsBefore.length < wordElements.length) highlightWord(wordsBefore.length);
-                }
-            });
-            utterance.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); };
-            synth.speak(utterance);
-            setTimeout(() => {
-                if (!boundarySupported) {
-                    const rate = utterance.rate;
-                    const msPerWord = (60000 / (150 * rate)) * timingAdjustment;
-                    currentIndex = 0; highlightWord(0);
-                    let nextWordIndex = 1;
-                    highlightTimer = setInterval(() => {
-                        if (nextWordIndex < wordElements.length && synth.speaking) { if (nextWordIndex >= currentIndex) highlightWord(nextWordIndex); nextWordIndex++; }
-                        else clearInterval(highlightTimer);
-                    }, msPerWord);
-                }
-            }, 300);
-        }
-
-        function stopSpeaking() {
-            if (synth.speaking) synth.cancel();
-            if (highlightTimer) clearInterval(highlightTimer);
-            wordElements.forEach(w => w.classList.remove('active', 'completed'));
-        }
-
-        function showTab(event, tabName) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>

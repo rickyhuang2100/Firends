@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Volleyball Star, Cecilia Tait</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
+        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
+        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
+        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
+        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
+        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
+        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
+        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
+        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
+        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
+        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
+        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
+        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
+        ul, ol { line-height: 1.8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 The Volleyball Star, Cecilia Tait</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+            <div id="translation" class="tab-content active">
+        <h3>🌏 中文翻譯</h3>
+        <div class="info-box"><p style="line-height: 2; font-size: 16px;">有些人生活中有多種熱情。塞西莉亞·泰特有兩個熱情：排球和幫助他人。她利用自己的熱情創造了成功而有趣的職業生涯。泰特於 1962 年 3 月 5 日出生在秘魯利馬。她的家人來自貧困地區，住在利馬的街道上。她從小就開始打排球，並熱愛這項運動！她對排球也很有天賦。14 歲時，秘魯一支排球隊的主席發現了她。到了 16 歲，她已經開始打職業比賽了。人們稱她為「La Zurda del Oro」，意思是黃金左手女。她證明了自己是秘魯奧運排球隊的重要成員。<br><br>泰特為世界各地的許多排球隊效力。她代表秘魯隊參加了三屆奧運會。在 1988 年的第三次奧運會期間，她的球隊贏得了第二名銀牌！<br><br>排球生涯結束後，她回到了秘魯。她的目標是為那些負擔不起體育課程的女孩建立一個排球訓練營。她相信體育可以建立品格和尊嚴。在政府拒絕為這些項目提供資金後，她決定自己動手。塞西莉亞·泰特競選秘魯國會議員！她以高票當選。她是第一位當選秘魯國會議員的非裔秘魯人。非裔秘魯人是指有非洲血統的秘魯公民。她的第一個目標是讓更多的孩子有機會參加體育項目。她實現了這個目標，並幫助了許多秘魯的幼兒。她從未忘記自己的根。她繼續利用自己在秘魯的名人地位來幫助他人。</p></div>
+    </div>
+            <div id="vocabulary" class="tab-content">
+        <h3>📖 重點單字與片語</h3>
+        <div class="vocab-grid">
+            
+            <div class="vocab-item">
+                <div class="vocab-word">passion</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">熱情</div>
+                <div class="example">She has a passion for music.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">talent</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">天賦</div>
+                <div class="example">She has a natural talent for sports.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">professionally</div>
+                <div class="vocab-type">adv. (adverb)</div>
+                <div class="vocab-meaning">職業地</div>
+                <div class="example">He plays soccer professionally.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">dignity</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">尊嚴</div>
+                <div class="example">Everyone deserves to be treated with dignity.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-word">funding</div>
+                <div class="vocab-type">n. (noun)</div>
+                <div class="vocab-meaning">資金</div>
+                <div class="example">The project needs more funding.</div>
+            </div>
+        </div>
+    </div><div class="vocab-meaning"></div></div>
+                </div>
+            </div>
+            <div id="grammar" class="tab-content">
+        <h3>✏️ 文法重點解析</h3>
+        
+      <div class="grammar-box">
+        <div class="grammar-title">Relative Clauses (關係子句)</div>
+        <p>用於補充說明名詞。例如："girls who could not afford to go to sports programs" (那些負擔不起體育課程的女孩)，"who" 引導的子句修飾 "girls"。</p>
+      </div>
+    
+    </div>
+            </div>
+            <div id="sentences" class="tab-content">
+         <h3>💬 重要句型分析</h3>
+         
+      <div class="sentence-pattern">
+        <strong>take matters into one's own hands</strong>
+        <div class="example">she decided to take matters into her own hands</div>
+        <p>這是一個慣用語，意指「在沒有人幫助或情況不如意時，決定自己採取行動解決問題」。</p>
+      </div>
+    
+    </div>
+            </div>
+            <div id="reading" class="tab-content">
+        <h3>🎯 閱讀理解</h3>
+        <div class="grammar-box">
+            <div class="grammar-title">理解測驗</div>
+            
+      <ol>
+        <li>Where was Cecilia Tait born?<br>
+          <span class="highlight">Answer: Lima, Peru</span>
+        </li>
+        <li>What special nickname did people give her?<br>
+          <span class="highlight">Answer: The Golden Left-Handed Woman (La Zurda del Oro)</span>
+        </li>
+        <li>What did she do after her volleyball career ended?<br>
+          <span class="highlight">Answer: She returned to Peru to help children and ran for Congress.</span>
+        </li>
+      </ol>
+    
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `Some people have multiple passions in life. Cecilia Tait has two passions: volleyball and helping others. She has used her passions to create a successful and interesting career. Tait was born in Lima, Peru, on March 5, 1962. Her family came from a poor area and lived on the streets of Lima. She began playing volleyball as a young child and loved the sport! She also had a natural talent for volleyball. When she was 14, the president of one of Peru’s volleyball teams discovered her. By age 16, she was playing professionally. People called her “La Zurda del Oro,” which means The Golden Left-Handed Woman. She would prove to be an important member of Peru’s Olympic Volleyball Team.\\n\\nTait played for many volleyball teams all across the world. She participated in three Olympic Games for the Peruvian team. During her 3rd Olympics in 1988, her team won a second-place silver medal!\\n\\nAfter her volleyball career ended, she went back to Peru. Her goal was to set up a volleyball training camp for girls who could not afford to go to sports programs. She believes that sports build character and dignity. After the government refused to give her funding for these programs, she decided to take matters into her own hands. Cecilia Tait ran for Congress in Peru! She won by a large amount of votes. She was the first Afro-Peruvian elected to Peru’s Congress. Afro-Peruvians are citizens of Peru who are of African descent. Her first goal was to give more children access to sports programs. She achieved this goal, and she has helped many young children in Peru. She has never forgotten her roots. She continues to use her celebrity status in Peru to help others.`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+</html>
