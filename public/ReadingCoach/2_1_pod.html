@@ -1,331 +1,1731 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - What Is a Bird?</title>
+    <title>2-1 Podcast 逐字稿：解剖英文的骨架</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient-start: #f8fafc;
+            --bg-gradient-end: #f1f5f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --speaker-host-bg: #e0e7ff;
+            --speaker-host-text: #4338ca;
+            --speaker-guest-bg: #f0fdf4;
+            --speaker-guest-text: #166534;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-main);
             line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
 
-        .podcast-container {
-            max-width: 900px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 40px;
+            padding: 40px 20px;
         }
 
-        .podcast-header {
+        header {
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
             margin-bottom: 40px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
         }
 
-        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
-        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
-        .podcast-meta {
-            margin-top: 15px;
+        .ep-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #0f172a;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+        }
+
+        .meta-info {
             display: flex;
             justify-content: center;
             gap: 20px;
+            color: var(--text-muted);
             font-size: 14px;
-            color: #888;
-            flex-wrap: wrap;
         }
 
-        .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
-            border-radius: 0 8px 8px 0;
+        .audio-player-mock {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
-
-        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
-
-        .speaker-avatar {
-            width: 45px; height: 45px;
+        .play-btn {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; flex-shrink: 0;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
 
-        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
-        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
-
-        .speech-bubble { padding: 15px 20px; border-radius: 12px; font-size: 16px; }
-        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
-        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
-
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
-            font-weight: bold;
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            position: relative;
         }
 
-        .highlight-phonics {
-            color: #e74c3c; font-weight: bold;
-            background: #fdeaea; padding: 0 4px; border-radius: 3px;
+        .progress-current {
+            width: 0%;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 3px;
         }
 
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        .time-display {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
         }
 
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
+        .transcript-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
         }
 
-        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
-        li { margin-bottom: 6px; }
-
-        .inspiration-box {
-            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-            border: 2px solid #a5d6a7;
-            border-radius: 10px;
-            padding: 20px 25px;
-            margin: 30px 0;
+        .transcript-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 28px;
+            align-items: flex-start;
         }
-        .inspiration-box h4 { color: #388e3c; margin-bottom: 10px; }
+
+        .transcript-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .timestamp {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            padding-top: 4px;
+            white-space: nowrap;
+            min-width: 45px;
+        }
+
+        .speaker-tag {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .speaker-host {
+            background-color: var(--speaker-host-bg);
+            color: var(--speaker-host-text);
+        }
+
+        .speaker-guest {
+            background-color: var(--speaker-guest-bg);
+            color: var(--speaker-guest-text);
+        }
+
+        .content-text {
+            font-size: 16px;
+            color: #334155;
+            text-align: justify;
+            margin: 0;
+        }
+
+        @media (max-width: 640px) {
+            .transcript-row {
+                flex-direction: column;
+                gap: 6px;
+                border-bottom: 1px solid #f1f5f9;
+                padding-bottom: 16px;
+            }
+            .transcript-row:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .timestamp {
+                padding-top: 0;
+            }
+            .transcript-container {
+                padding: 24px 16px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：What Is a Bird?</h1>
-            <p class="podcast-subtitle">從鳥類的構造，解剖英文的強制性數量、裝備邏輯與瑞士刀片語</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：20 分鐘</span>
-                <span>🎯 重點：下載新作業系統、S 的微型數學、with 的 RPG 裝備感、打死不省略主詞的橋樑</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_1.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
+
+<div class="container">
+    <header>
+        <span class="ep-badge">Episode 2-1</span>
+        <h1>語感重建：解剖英文的骨架，下載全新的作業系統</h1>
+        <div class="meta-info">
+            <span>📅 發布日期：2026-06-18</span>
+            <span>⏱️ 總時長：25 分鐘</span>
+        </div>
+        
+        <audio controls style="width: 100%;">
+            <source src="2_1.m4a" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+    </header>
+
+    <main class="transcript-container">
+        
+        <div class="transcript-row">
+            <div class="timestamp">00:00</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">想像一下，當你抬頭看到天空中有一群鳥飛過。嗯嗯，很常見的畫面。</p>
             </div>
         </div>
 
-        <div class="dialogue-flow">
-
-            <!-- 開場 -->
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    想像一下天空中一群鳥飛過。中文母語者可能只會單純想到「鳥在飛」。但對英文母語者來說，大腦在開口前被迫進行了一場<span class="highlight-lego">微型的數學計算</span>與空間定位（幾隻鳥？什麼時候飛？）。
-                    這不是因為他們數學好，而是語言的底層邏輯強迫他們戴上「精確」的眼鏡。
-                </div>
+        <div class="transcript-row">
+            <div class="timestamp">00:06</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，身為中文母語者的我們，腦袋裡浮現的第一個念頭非常單純，就是「鳥在飛」。</p>
             </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    所以學英文其實是在「下載另一套觀看世界的作業系統」！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯！今天我們不用厚重的文法書，我們要用一篇極度精簡的生物學小短文 <i>What Is a Bird?</i>，帶你直接看透英文的骨架。
-                </div>
-            </div>
-
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：發音細節 與 RPG 裝備學的 with</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    讓我們先注意 <span class="highlight-phonics">feathers</span> (羽毛) 的發音。
-                    開頭的 F，要用上排牙齒輕咬下嘴唇送氣；中間的 TH 是有聲子音，要把舌尖微微伸出在牙齒間，並讓聲帶震動出蜜蜂的嗡嗡聲。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    發音可以多練，但我一直覺得句子裡有個地方超有趣：
-                    <span class="english-quote">A bird is an animal with feathers and wings.</span>
-                    中文我們會說「鳥是<span class="highlight-lego">有</span>羽毛的動物」，但英文不用 have，偏偏用了 <span class="highlight-phonics">with</span>。這感覺很像我在玩 RPG 角色扮演遊戲時，「給角色裝備上特殊道具」的感覺！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    RPG 裝備的比喻太精準了！
-                    中文習慣用「有」概括所有擁有權（有錢、有羽毛、有時間）。但在英文邏輯裡，<span class="highlight-lego">with 是用來表示一種附著、伴隨或配備的狀態</span>。把羽毛和翅膀當作外掛配件「裝備」在動物身上，這比單純的動詞 have 更有強烈的空間感！
-                </div>
-            </div>
-
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：強制的複數數學 與 「能力」的抽離 (Can)</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    不過，有個讓我痛苦的大魔王——短短幾句話我不斷聽到 <span class="highlight-phonics">-s</span> 的尾音蚊子叫：father<b>s</b>, wing<b>s</b>, bird<b>s</b>, leg<b>s</b>。中文絕不會說「我看到一隻鳥們，牠有兩條腿們」，英文這樣強迫我們數數，不會很沒效率嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這絕對不是沒效率，這是「精確」。在他們的文化演算法裡，只要數量超過一個，你就必須加上 s。當你發出 s 音，<span class="highlight-lego">大腦其實已在虛擬空間建構出一個群體的畫面</span>。不加 s 就像看照片失焦一樣讓他們難受。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    那動作呢？<span class="english-quote">They can walk, run or hop.</span> 為什麼不直接說 they walk？這個 <span class="highlight-phonics">can</span> 扮演什麼角色？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    加上 can 時，我們是在將「能力」這個概念從動作裡抽離出來獨立強調。<br>
-                    而且助動詞有個鐵律：後面一定要接<span class="highlight-lego">原形動詞</span> (不加 s，不加時態)。這就像把動作還原到未經加工的最純粹形式 (物料)。尤其是短促有力的 <span class="highlight-phonics">hop</span> (跳)，簡直是一場生動完美展現律動的口說表演。
-                </div>
-            </div>
-
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：同義詞的優雅階級 與 上下文的神救援</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我要抱怨一下！ <span class="english-quote">All birds have a backbone. It is also called a spine.</span>
-                    <span class="highlight-phonics">backbone</span> 和 <span class="highlight-phonics">spine</span> 明明是同一個東西，為什麼要兩個字折磨初學者？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    英文非常有一種「神經質」的習慣：<span class="highlight-lego">極度避免重複</span>。為了修辭優雅，他們發展了龐大的同義詞系統。這也帶出歷史階層差異：
-                    <ul>
-                        <li><code>backbone</code>：日耳曼語系，口語的拼裝字 (背+骨)。</li>
-                        <li><code>spine</code>：拉丁語系，正式、醫學感。</li>
-                    </ul>
-                    作者很貼心，先給你平易近人的 backbone，再順水推舟教你脊椎的專有名詞 spine。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    原來是被慢慢引導了。不過像下一個字 <span class="highlight-phonics">hollow</span> (中空的) 根本看不懂怎麼辦？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    別急著查字典！看下一句：<span class="english-quote">Hollow bones have empty space inside.</span>
-                    英文有強大的「上下文自我解釋機制」，它立刻用最基礎的詞 <span class="highlight-lego">empty space inside</span> 解釋了什麼是 hollow！語境本身就是最好的老師。
-                </div>
-            </div>
-
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：樂高造字法與「瑞士刀片語」的高效魔法</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    看到 <span class="english-quote">warm-blooded</span> (溫血的)，我覺得超好笑，就把 <code>warm</code> 跟 <code>blood</code> 像樂高一樣硬扣在一起嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    就是樂高思維！英文面對新概念時，不一定發明全新的字，而是組合簡單的基礎字，這對學習者是一大福音。另外，要注意動詞：<span class="english-quote">make their own body heat</span>。這裡的 <code>make</code> 不是做實體蛋糕椅子的那個 make，還可以「製造抽象的能量/狀態」。解開基礎動詞的框架限制，你的英文會變得很道地！
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    那我再抗議一次！既然英文重效率，那為什麼「照顧」不發明一個字，偏要拼裝 <span class="english-quote">take care of</span> 這三個字來用？很笨重欸！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這正是英文的奧妙——「<span class="highlight-lego">瑞士刀片語</span>」。
-                    你要應付 100 種狀況，你是選背 100 個冷僻的新單字？還是選拿 take/make/of/in 這些你早就認識的零件，拼裝出一把萬用的瑞士刀？
-                    <br><br>
-                    你可以 <span class="highlight-phonics">take care of</span> the chicks (照顧幼鳥)、my dog (照顧狗)、this project (處理專案)。不需背罕見的新單字，這投資報酬率極度驚人！
-                </div>
-            </div>
-
-            <!-- 哲思收尾 -->
-            <div class="inspiration-box">
-                <h4>🧠 本集哲學火花：改變大腦的隱形橋樑</h4>
-                <p>整篇文章一直出現 <span class="highlight-phonics">it</span> 和 <span class="highlight-phonics">they</span>。在中文裡，我們往往認為「大家都知道在講什麼」，動不動就把主詞省略掉（「骨頭中空，可以減輕重量」）。</p>
-                <br>
-                <p>但是英文極度害怕失去主體！它拒絕省略主詞，但又怕重複名詞，於是 <code>It</code> 和 <code>They</code> 成為了一種<span class="highlight-lego">隱形橋樑</span>，強制連接起每一個動作與它的發動者！</p>
-                <br>
-                <p>當你開始習慣必須時刻「錨定主詞」的表達方式，這種語言底層結構的切換，不僅是多了翅膀裝備，會不會在潛移默化中，也重塑了你未來在職場與生活中組織觀點、更講求精確因果對應的邏輯思維呢？</p>
-            </div>
-
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>RPG 裝備學 (with)：</strong> 相比於 have，用 with 表示配備與附著，能在大腦中建造強烈的 3D 空間感。</li>
-                    <li><strong>微型數學 (複數 s)：</strong> S 不是麻煩，是精確。大腦會因為 S 而自動生成複數畫面的視覺對焦。</li>
-                    <li><strong>能力抽離 (Can + 原形動詞)：</strong> 助動詞抽離出純粹的「能力」，讓後方的動詞回歸未經加工的生動原物料節奏 (如 hop)。</li>
-                    <li><strong>上下文神救援：</strong> 遇到艱澀單字 (hollow / spine) 別慌，作者常會在下一句用最簡單的話自我解釋。</li>
-                    <li><strong>瑞士刀片語 (Take care of)：</strong> 熟練運用基礎字組成的片語動詞，降低大腦記憶負荷，一把萬用刀搞定無數情境！</li>
-                    <li><strong>改變腦袋的橋樑 (It / They)：</strong> 英文打死不省略主詞。這種必須隨時錨定發動者的敘事習慣，能默默強化你的邏輯。</li>
-                </ul>
-            </div>
-
         </div>
-    </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">00:12</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">沒錯，很直觀的反應。但你知道嗎？對於一個以英文為母語的人來說，在他開口說出這句話之前，他的大腦其實已經被強制進行了一場微型的數學計算，還有一種空間定位。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">00:26</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哇，數學計算？這個說法蠻有意思的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">00:30</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對呀，他必須先確認這是一隻鳥還是很多隻鳥，動作是正在發生還是已經發生過了。這其實不是因為他們數學比較好啦，而是因為英文這個語言的底層邏輯，逼著他們在開口前必須先戴上一副名為「精確」的眼鏡。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">00:48</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">確實是這樣，其實每一種語言都是一種獨特的文化演算法。它會潛移默化地去塑造你觀察這個世界的方式。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">00:58</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">嗯，「文化演算法」這個詞很精準。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:02</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對啊，所以當你決定從零開始學習英文的時候，你其實不只是在單純地背單字或者是學文法，你其實是在下載另一套觀看世界的作業系統。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:14</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">「下載新的作業系統」，這正是我們今天這趟語言與知識的深度解析之旅的核心任務。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:21</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯。我們知道正在收聽的你是一位準備從零開始學英文的台灣學習者，所以我們今天絕對不打算拿那種厚重的文法書來折磨你啦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:32</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">絕對不會，那樣太痛苦了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:35</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">真的，我們精心挑選了一篇極度精簡的關於鳥類基礎知識的英文短文，叫做 What is a bird?</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:43</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">嗯，鳥是什麼？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:45</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，我們的目標就是利用這篇生物學的小短文作為解剖的素材，帶你直接看透英文的骨架。其實這篇短文雖然只有短短幾行，但它真的就像是一個微觀宇宙。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">01:58</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哦，怎麼說？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">02:00</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">就是裡面完美包含了英文最核心的句型結構，還有名詞的數量邏輯，以及如何精準表達因果。透過這篇文章，我們不僅能學到生物知識，更能拆解出英文到底是怎麼思考的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">02:15</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">太棒了。那為了讓你先感受一下這套全新作業系統的語感，我會先用適中的語速為你朗讀一次這篇完整的英文文本。大家可以先放輕鬆聽。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">02:26</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，你現在不用急著去查字典，或者逼自己聽懂每一個字，你就先讓大腦習慣一下英文的發音還有語調就好。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">02:35</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">我們開始囉。 (朗讀) <em>Birds are warm-blooded. They make their own body heat. Birds lay eggs. The shells are hard. Birds keep the eggs warm. How? They sit on them until the eggs hatch. Then the bird takes care of its chicks.</em></p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">02:58</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">聽完這段朗讀，你可能會覺得啊，裡面的單字看起來好像很基礎，好像沒有很多艱澀的字。但是千萬不要被它簡單的外表騙囉，這篇文章的每一句話其實都像是一把精心打造的鑰匙，能夠幫我們解開中文跟英文之間最核心的邏輯差異。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">03:18</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哇，聽起來很厲害，那我們就直接從我們眼睛能看到的最外層，也就是鳥類的外觀跟動作開始解剖起吧，畢竟人類認識世界通常都是從具體的視覺畫面開始的嘛。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">03:32</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，從具體的東西開始最容易吸收。讓我再用稍微慢一點的速度把第一段讀一次，請你特別注意聽幾個關鍵字的發音哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">03:42</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">好。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">03:43</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text"><em>What is a bird? A bird is an animal with feathers and wings. Most birds can fly. Birds have two legs. They can walk, run or hop.</em></p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">03:58</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">嗯，這幾個字的發音真的非常值得注意，像是 feathers 羽毛，還有 wings 翅膀，以及 walk, run or hop。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:08</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">發音確實是建立語言自信的基石啦，就拿 feathers 這個字來說好了，它其實藏著兩個台灣學生常常覺得很彆扭的發音。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:18</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">真的，feathers 蠻難唸的，是哪兩個？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:22</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">首先是開頭的 F。這個音不是單純吹氣哦，你要輕輕用上排牙齒咬住下嘴唇來送氣。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:30</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">咬住下嘴唇這樣。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:32</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對。然後中間的 TH，這是一個有聲子音，這在中文裡面是完全不存在的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:39</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">沒錯，中文沒有這種要把舌頭伸出來的音。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:43</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對。你必須把舌尖微微伸出，夾在上下牙齒之間，然後讓聲帶震動，發出類似蜜蜂飛舞那種嗡嗡聲，feathers、feathers。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:55</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">那 wings 呢？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">04:57</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">至於 wings，字尾的 ng 是一個鼻音，聽起來有點像中文 on 的尾音，可是那個共鳴點要放在鼻腔。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:06</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哦，共鳴在鼻腔。那把發音弄標準之後，我們來看看句子結構，這裡有個地方我一直覺得超級有趣的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:15</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哪個地方？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:17</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">文本裡面說，「A bird is an animal with feathers and wings.」 為什麼這裡要用 with 啊？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:25</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">嗯，這個問題問得很好。因為在中文裡我們通常會直接說「鳥是有羽毛的動物」嘛。可是英文它不用 have，反而用了 with。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:36</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，這就是中英邏輯的不同。對我來說，這個 with 感覺就好想是我們在玩那個角色扮演遊戲，就是 RPG 的時候，跟你角色裝備上特殊的道具一樣。「裝備了羽毛跟翅膀的動物」這種感覺。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:51</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哇，這個 RPG 裝備的比喻太精準了吧，就完全抓到了英文介系詞的靈魂呢。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">05:58</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">真的嗎？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:00</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對呀，因為在中文裡，我們習慣把所有的擁有權都用「有」這個字直接概括掉。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:07</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">沒錯，有錢，有羽毛，有時間，通通都是有。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:12</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">但在英文的邏輯裡，with 其實是用來表示一種附著、伴隨或者是配備的狀態。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:20</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">配備的狀態，對。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:22</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">所以當作者寫 animal with feathers 的時候，它的視角其實是把羽毛跟翅膀當做一種外掛的配件裝備在這個動物身上。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:33</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">原來如此。這種寫法真的比單純用動詞 have 更有空間感，也更有畫面感。這是極度道地的英文思維哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:43</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">這種畫面感真的很有助於記憶耶。不過接下來就有一個讓我這個中文母語者覺得蠻痛苦的地方了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:52</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">怎麼了？遇到什麼大魔王？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">06:55</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">就是在這短短幾句話裡面，我不斷聽到一個 S 的尾音，像蚊子一樣一直在耳邊嗡嗡嗡。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:03</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哦，複數的 S。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:05</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對啊，feathers, wings, birds, legs. S、S、S，真的超級累人的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:12</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哈哈，我懂我懂。中文我們絕對不會說「我看到天空有一隻鳥們，牠有兩條腿們」啊，為什麼英文非得這樣強迫我們數，這不是很沒效率嗎？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:25</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">你的挫折感非常真實，這絕對是所有中文母語者學英文的時候遇到的第一道高牆啦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:33</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">真的常常忘記加。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:35</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">但這就是我們開場的時候提到的那種強制的「微型數學計算」。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:41</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哦，這就是那個計算。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:43</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，對英文母語人士來說，這絕對不是沒效率，這是「精確」。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:49</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">精確。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">07:50</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">在他們的文化演算法裡面，這個世界是由一個一個獨立的個體組成的，只要數量超過一個，你就必須在字尾加上 S 來標示所謂的複數形態 Plurals。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">08:04</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，這是一種強制的大腦訓練啦，當你說出 Birds 加上那個輕輕的 S 音的時候，你的大腦其實已經自動在虛擬空間裡建構出一個群體的畫面了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">08:16</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哇，群體的畫面。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">08:18</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">如果不加 S 對他們來說就像是看照片畫面失焦一樣，會覺得很難受。所以這真的不是在找我們麻煩，而是他們的大腦根本無法忍受那種模糊的數量概念。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">08:31</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">完全正確。了解這一點之後，加 S 好像就沒那麼討厭了。那我們來看看動作的部分。文本說 Most birds can fly，還有 they can walk, run or hop。我想問哦，為什麼不直接說 most birds fly 就好？這個 can 到底在句子裡扮演了什麼角色啊？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">08:52</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">這也是一個非常棒的觀察。Can 其實是一個非常強大的助動詞。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">08:58</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">助動詞。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:00</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">當我們加上 can 的時候，我們是在將「能力」這個概念從純粹的動作裡面抽離出來，獨立強調它。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:08</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">獨立強調能力。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:10</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，它告訴我們鳥類天生被賦予了這樣的能力，而且英文文法有一個鐵律，就是助動詞後面一定要接原形動詞。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:20</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">原形動詞就是不加 S 的那個。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:23</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">沒錯，不加 S，不加任何過去式，就是最原始的狀態。這就像是把動作還原到最純粹的形式。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:32</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">原形動作就像是未經加工的原物料，walk 走，run 跑，hop 跳，這三個字真的把動態的節奏感展現得淋漓盡致。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:43</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對啊。尤其是 hop 這個字，聽起來短短的超級有畫面。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:48</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">Hop 的發音本身簡直就是一場完美的聲音表演啦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:53</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">怎麼說？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">09:55</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">它中間的母音 O 要發短音，嘴巴微張，發音非常短促有力，就像小鳥用雙腳在地上輕巧俐落地彈跳一次的那種動作。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:06</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哈，這樣。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:08</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，這三個單字完美示範了英文如何用音節精準描繪出截然不同的動態節奏。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:15</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">我們剛從外觀跟動作探討了英文怎麼用精確的數量和裝備邏輯來描寫世界。但是如果我們把視角從身體外面轉移到身體裡面呢？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:26</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哦，進入解剖學了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:28</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對啊。鳥類為什麼能飛？這其實牽涉到了物理還有生物結構嘛，有趣的是當文本的內容從物理效率轉向內部構造的時候，我們似乎也看到了英文這個語言在溝通效率上的展現哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:43</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">嗯，讓我們來聽聽第二段。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">10:46</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">好，我們來聽聽。<em>All birds have a backbone. It is also called a spine. Birds have many hollow bones. Hollow bones have empty space inside. They make a bird's body lighter. That helps birds fly.</em></p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:05</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">大家可以留意這幾個字的發音，像是 backbone, spine, hollow, 還有 lighter。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:12</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，留意這些字。不過講到這裡，我真的必須稍微抱怨一下了啦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:18</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哈哈，又怎麼了？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:20</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">文本說 all birds have a backbone，所有鳥都有背脊骨。緊接著又說，it is also called a spine，它也被稱為脊椎。嗯哼，backbone 還有 spine 明明拼法完全不同，指的卻是完全同一個東西。為什麼不乾脆用一個字就好了？這是不是英文故意要把單字量變大來折磨學習者啊？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:42</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">我完全可以理解你的崩潰。這確實是英文非常獨特、甚至可以說是有點神經質的語言習慣，我們稱之為「避免重複」。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:53</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">避免重複。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">11:55</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，如果你在一篇文章裡面不斷重複使用同一個名詞，在英文的語感裡會顯得非常笨拙或者說很不成熟。為了追求修辭上的流暢跟優雅，英文發展出了極度龐大的同義詞系統。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:10</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">所以他們寧願發明兩個完全不同的字，只是為了讓文章聽起來比較有變化，太誇張了吧。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:18</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">其實不僅僅是變化啦，這背後還有歷史跟語氣層次的差異哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:24</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">歷史差異。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:26</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">英文算是一部混合了多種外來語的歷史書，像 backbone 就是非常直觀的日耳曼語系組合字，back 是背部，bone 是骨頭，合在一起就是背部的骨頭，聽起來非常平易近人，很口語化。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:42</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，字面上完全可以猜出來。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:45</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">但是 spine 這個字呢，則是源自拉丁文，它帶有一點正式、科學或者醫學的色彩。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:53</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哦，所以一個比較口語，一個比較學術。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">12:57</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，這篇文本的作者其實非常貼心，他沒有一開始就用艱澀的 spine 來嚇退你，而是先給你一個看字面就能懂的 backbone。然後再順水推舟教你正式的說法。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:10</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">完全正確。這其實是英文學習者最需要適應的一種語氣轉換。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:16</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">這麼說來，作者其實是在引導我們耶。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:20</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">提到引導，接下來這句 hollow bones 也是個很好的例子。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:25</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">怎麼說？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:27</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">因為 hollow 這個字對初學者來說絕對是個大魔王啊，看過去根本不知道是什麼意思。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:34</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">嗯，如果是單看這個字的話。但如果你繼續往下看，你會發現英文有一個非常強大的自我解釋機制哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:43</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">自我解釋。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:45</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">當你看到 hollow 不懂的時候，千萬不要急著暫停去查字典。你看下一句話：「Hollow bones have empty space inside」，這種骨頭裡面有空出的空間。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">13:58</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哇，它直接在下一句用最簡單的單字 empty space inside 幫 hollow 解釋了，也就是中空的意思。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:06</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，這就是所謂的上下文推敲，在沉浸式學習裡面，語言本身其實就是最好的老師。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:14</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">這個設計真的很巧妙欸。順帶一提，hollow 的發音也非常有意思哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:21</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哦，教一下教一下。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:23</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">開頭的 H 是喉嚨深處無阻礙地吐出氣流，然後中間的雙 L 需要舌尖輕抵上顎。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:31</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">Hollow，對，整個字念起來有一種氣流穿過管子的空靈感，發音的體感可以說完美呼應了它中空的意義。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:41</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">發音的觸感跟字意結合，這招太厲害了，真的很好記。那麼中空的骨頭到底有什麼用呢？文本接著說，<em>They make a bird's body lighter. That helps birds fly.</em> 這裡出現了一個 er 的字尾。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">14:58</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">這裡我們看到了鳥類骨骼的物理效率，同時也看到了英文解釋邏輯的效率。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:05</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">邏輯效率。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:07</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">原本的形容詞是 light，意思是輕的，當我們在字尾加上 er 變成 lighter 的時候，它就啟動了所謂的比較級，意思是「更輕的」。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:18</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哦，所以這兩句話其實是在建立一條因果的鎖鏈囉。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:23</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯。英文非常擅長用這種短小精悍的句子一步一步去推導科學原理。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:30</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">怎麼推導？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:32</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">你看，因為骨頭內部有空間，這是原因一；所以造成了身體變得更輕，這是結果一；然後這個 lighter 的身體又成為了下一個原因，也就是原因二；最後 helps birds fly，幫助了鳥類克服地心引力飛行，這是最終結果。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">15:52</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哇，沒有用到任何冗長的轉折詞，單純用句子的排列順序就完成了這麼完美的因果推演。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:00</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">是不是非常有效率？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:02</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">真的。從中空骨頭的物理機制到英文因果推演的邏輯機制，這一切都像積木一樣環環相扣。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:11</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，就像積木，既然提到了積木，要維持鳥類這樣高耗能的飛行機制，牠們的生命系統肯定有特別的設計嘛，這就來到了我們今天的最後一段，讓我們來聽英文如何用最少的單字說完一個生命的輪迴。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:28</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text"><em>Birds are warm-blooded. They make their own body heat. Birds lay eggs. The shells are hard. Birds keep the eggs warm. How? They sit on them until the eggs hatch. Then the bird takes care of its chicks.</em></p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:45</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">充滿生命力的一段。真的，我剛讀到 warm-blooded 這個字的時候真的忍不住笑得出來。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:53</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">為什麼？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">16:55</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">Warm 是溫暖，blood 是血液。加起來直接變成溫血的。英文是不是很喜歡這樣，直接把兩個感覺不相干的字像樂高積木一樣，硬生生扣在一起啊？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">17:08</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">你有完全看透了英文造字的把戲啦，真的是這樣！Warm-blooded 正是所謂的複合形容詞，你剛才提到的樂高積木比喻真的非常完美。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">17:19</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">樂高積木？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">17:21</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">英文在面對一個新概念的時候，不一定會去發明一個全新的大家都不認識的單字，而是會把既有的簡單字組合起來。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">17:31</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">這對我們學習者來說絕對是個巨大的優勢啊。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">17:35</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，因為只要你掌握了基礎的樂高零件，你就能看懂，甚至自己創造出無數個進階詞彙。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">17:43</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">這種樂高思維真的減輕了我們背單字的壓力。而且下一句又解釋了 make their own body heat，牠們製造自己的體熱。嗯，這裡的動詞也很有學問。我剛好有注意到這裡用了 make 這個字，make 不是通常用來做蛋糕或者是做桌椅那種實體的東西嗎？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:04</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">這是中文母語者常常會有的盲點啦，我們往往把英文動詞的意思鎖得太死，太侷限了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:12</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">鎖得太死。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:14</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對，這英文裡面 make 的概念其實非常寬廣，它不只可以製作實體物品，還可以產生抽象的狀態或能量。像是這裡的體熱 body heat。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:26</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，甚至像是做決定，英文也是說 make a decision。學會解放這些基礎動詞的框架，你的英文就會瞬間變得非常道地哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:37</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">放寬動詞的框架，這點真的很重要，筆記起來。接著我們來看看生命的誕生過程：lay eggs 下蛋，sit on them 坐在上面，hatch 破殼而出。這幾個動詞的排列真的就像電影分鏡一樣。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:53</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">真的畫面感很強。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">18:55</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">這是一條極度清晰的時間軸，而在這條時間軸上有一個掌控大局的關鍵字，不知道你有沒有發現。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">19:04</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">是 until 嗎？直到...為止。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">19:07</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">沒錯。「They sit on them until the eggs hatch.」加了 until 整個動作感覺就有了張力，還有一種期待感。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">19:16</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">非常正確。Until 它設定了一個時間的邊界與條件，牠們會一直坐著直到那個關鍵的瞬間，也就是 hatch 破殼發生為止。哇，配合句子中間那個充滿懸念的問號，以及句尾的驚嘆號，這短短幾句話其實已經超越了生物學的描述，變成了一個充滿戲劇張力的微型故事了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">19:39</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">那小鳥破殼出生之後呢，故事的結尾是「Then the bird takes care of its chicks」，然後鳥兒會照顧牠的雛鳥。嗯，很溫馨的結尾。好，這裡我又要代表所有初學者提出嚴正抗議了。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">19:55</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哈哈，請說。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">19:57</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">你剛剛才說英文很注重效率，會用同義詞避免重複，那為什麼「照顧」這麼簡單的一個概念，英文不直接發明一個動詞就好，非得拿 take, care, of 這三個字拼在一起？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:11</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">Take care of。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:13</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">對啊，這看起來超級笨重又沒效率啊。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:17</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">你的抗議非常有道理，這表面上確實看起來蠻自相矛盾的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:23</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">是不是？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:25</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">但這是英文最奧妙的地方哦，我們稱之為片語動詞 (Phrasal verbs)。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:31</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">片語動詞。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:33</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">如果說剛才的複合字像是樂高，那片語動詞就像是一把瑞士刀。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:39</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">瑞士刀，怎麼說？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:41</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">想像一下，如果你要處理生活中的 100 種狀況，你可以選擇買 100 種不同的專屬工具。這就等於是背 100 個不同的單字。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:51</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">講得超累的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">20:53</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，所以你可以選擇另一種方式。拿幾個最基礎、最常見的零件，像是 take, make, of, up, in 這些字，把它們以不同的方式組合起來。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:05</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">變成一把瑞士刀。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:07</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，變成一把可以應付所有狀況的萬用瑞士刀。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:12</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">所以 take care of 其實是一把瑞士刀。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:16</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，表面上看用了三個字好像沒什麼效率，但從我們大腦記憶的負荷來看，它是極度高效的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:24</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">因為不需要背新單字。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:26</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，你不需要去背一個很罕見的專門名詞，你只需要組合你已經認識的字。而且這把瑞士刀的應用範圍廣得非常驚人哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:37</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">可以用在哪裡？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:39</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">你不僅能用它來描述母鳥照顧小鳥 take care of chicks，你明天去上班也可以跟老闆說 I will take care of this project，我會處理這個專案。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:51</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哇，處理專案也可以。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">21:53</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，你出門前也可以跟室友說 take care of my dog，照顧我的狗。這就是英文片語動詞的威力。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">22:02</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">哇。把基礎單字組合成瑞士刀，這個觀念真的完全顛覆了我以前對背片語那種痛苦的印象，這種投資報酬率實在太高了吧。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">22:13</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">真的掌握片語動詞，英文會進步神速。不知不覺我們已經把這篇短文解剖完畢了。恭喜正在收聽的你完成了這趟深度解析。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">22:25</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">恭喜大家。回顧一下，我們今天不只看懂了鳥類從中空骨骼到溫血孵蛋的生物學機制，我們還打造了你的第一批英文工具。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">22:36</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，我們了解了複數 S 的數量邏輯，助動詞 can 剝離能力的用法，hollow 這種字的上下文推敲法，還有最後那個超強大的瑞士刀片語 take care of。把英文當成是活的規則，而不是去死背它，去理解它背後為什麼要這樣設計的演算法，你會發現它的邏輯非常迷人，而且很直觀。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:01</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">說得太好了。那在我們今天的節目即將畫下句點之前，我想丟給你一個值得在接下來這幾天細細咀嚼的想法。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:11</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">哦，是什麼想法？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:13</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">在我們今天閱讀的這篇文本中，你有沒有發現作者大量使用了 it 還有 they 這兩個代名詞？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:21</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">嗯，it 和 they，像是 It is also called a spine, they make a bird's body lighter. They sit on them. 確實出現蠻多次的。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:33</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">在中文裡，我們常常因為覺得大家都知道在講什麼，就把主詞直接省略了嘛。我們會說「骨頭是中空的，可以減輕重量」，我們絕對不會說「骨頭是中空的，『它們』可以減輕重量」。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:49</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">沒錯，中文很習慣省略主詞。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">23:52</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">但是英文這個語言極度害怕失去主體，它拒絕省略主詞，但同時又很討厭不斷重複 birds 或者是 bones 這些名詞。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:03</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">對，前面有說到避免重複。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:06</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">於是 it 和 they 就成了英文裡面無所不在的隱形橋樑，強制連接起每一個動作與它的發動者。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:15</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">這個隱形橋樑的比喻很好欸。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:18</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">所以隨著你的英文旅程繼續向前，我希望你去觀察這種必須時刻錨定主詞、追求直接的表達方式哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:28</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">嗯。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:29</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">當你被迫在每一句話裡面都放進 it, they 的時候，這種語言結構會不會在潛移默化之中也改變了你未來思考事情，甚至是你你在職場或生活中組織個人觀點的方式呢？</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:44</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">絕對會的。我們常說講話要更有邏輯，或許這就是邏輯重組的第一步啦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">24:51</div>
+            <div>
+                <span class="speaker-tag speaker-host">主持人 (Host)</span>
+                <p class="content-text">沒錯，換個語言就是換個腦袋嘛。下次當你試著在腦海中用英文造句的時候，不妨停下來體會一下這種思維模式的切換。你現在裝備上的不僅僅是羽毛和翅膀，更是另一種觀看世界的方式哦。</p>
+            </div>
+        </div>
+
+        <div class="transcript-row">
+            <div class="timestamp">25:08</div>
+            <div>
+                <span class="speaker-tag speaker-guest">來賓 (Guest)</span>
+                <p class="content-text">帶著這副新眼鏡繼續探索吧。感謝你加入我們這趟深度解析之旅，我們下次見囉，拜拜。</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2026 Podcast 節目組 | 乾淨排版 舒適閱讀</p>
+    </footer>
+</div>
+
 </body>
 </html>
