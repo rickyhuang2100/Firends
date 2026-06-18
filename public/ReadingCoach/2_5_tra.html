@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM Podcast 逐字稿：過馬路背後的英文「生存與動作邏輯」</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --primary-color: #2563eb;
+            --speaker-a-color: #0f172a;
+            --speaker-a-bg: #f1f5f9;
+            --speaker-b-color: #0d9488;
+            --speaker-b-bg: #f0fdfa;
+            --card-bg: #ffffff;
+            --accent-lego: #f59e0b;
+            --accent-phonics: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .podcast-badge {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .meta-info {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        /* Overview Cards */
+        .overview-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 600px) {
+            .overview-section { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Chapter Styles */
+        .chapter {
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chapter-header {
+            font-size: 1.35rem;
+            color: #1e3a8a;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eff6ff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Dialogue Styles */
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .speech-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .speech-block:hover {
+            background-color: #f8fafc;
+        }
+
+        .speaker-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .speaker-a .speaker-meta { color: var(--speaker-a-color); }
+        .speaker-b .speaker-meta { color: var(--speaker-b-color); }
+
+        .speaker-badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .speaker-a .speaker-badge { background-color: #e2e8f0; color: #334155; }
+        .speaker-b .speaker-badge { background-color: #ccfbf1; color: #115e59; }
+
+        .text-content {
+            font-size: 1.05rem;
+            color: #334155;
+            text-align: justify;
+        }
+
+        /* Highlight elements inside text */
+        .highlight-lego {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-lego);
+        }
+
+        .highlight-phonics {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-phonics);
+        }
+
+        /* Special Insert Blocks */
+        .english-quote {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Georgia', serif;
+            color: #1e293b;
+            font-size: 1.1rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.02);
+            line-height: 1.8;
+        }
+
+        .lego-brick-summary {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .lego-brick-title {
+            color: #b45309;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="podcast-badge">NotebookLM Audio Overview</span>
+        <h1>過馬路背後的英文「生存與動作邏輯」</h1>
+        <div class="meta-info">💡 主題短文特訓：Chris Crosses the Street (Chris 過馬路) | 輕鬆閱讀美化版逐字稿</div>
+    </header>
+
+    <section class="overview-section">
+        <div class="card" style="border-top: 4px solid var(--accent-lego);">
+            <h3>🧩 核心觀念：生存與動作邏輯</h3>
+            <p style="font-size: 0.95rem; color: #475569;">英文不只是死板的文法規則，而是為了生存與解決生活問題而發展的系統。用空間、時間與動作的物理感來建立英語語感！</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--primary-color);">
+            <h3>🎯 本課核心要點 (Lego Bricks)</h3>
+            <p style="font-size: 0.95rem; color: #475569;">
+                1. <code>Street vs. Road</code> (街道與道路的空間感)<br>
+                2. <code>Without + V-ing</code> (容器與外套的介係詞邏輯)<br>
+                3. <code>Cried</code> (文學小說中的呼喊與情緒緊繃)<br>
+                4. <code>Linear Logic</code> (「誰、做什麼、如何、去哪」的線性邏輯)
+            </p>
+        </div>
+    </section>
+
+    <!-- Chapter 1 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第一單元：街頭的生存挑戰：英文不只是冷冰冰的數學公式</div>
+        <div class="dialogue-flow">
+            
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">想像一下，你現在正在台北街頭一個超級繁忙的十字路口。對，很典型的台灣日常。然後周圍都是機車的引擎聲啊，行人的說話聲。結果這個時候一台幾乎沒有聲音的電動車就悄悄地朝你開過來。哇，那真的很危險。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，很典型的台灣日常。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">在這種生死一瞬間的時刻，能救你的絕對不是你腦海裡背了幾千個英文單字，或者是那本像磚塊一樣厚的文法書。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，那些根本來不及想。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對啊，能救你的是你有沒有搞懂英文這個語言裡關於生存還有動作的底層邏輯。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">確實是這樣，我們常常把學習語言當成是在背一套那個冷冰冰的數學公式，好像對或錯分得清清楚楚。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">就是死記啦。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，但實際上語言是人類為了解決生活問題或者是為了保命而發展出來的。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">「保命」這個詞用得很精準。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">嗯，它反映了我們的大腦是如何去排序周遭的危險，還有如何感知這個世界。這也是為什麼真實的語境永遠比單一的文法規則來得深刻。所以歡迎來到今天的深度探索。我們今天要把一段看似極度平凡，甚至是給小朋友看的英文小故事徹底拆開來聊一聊。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這真的是一個很棒的切入點。</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第二單元：解構 "Chris Crosses the Street"：重新安裝英文思維</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，我們的任務很明確，就是要陪你跨出從零開始學英文的第一步。我們不談枯燥的文法專有名詞，而是要透過這篇名為 <strong>Chris Crosses the Street</strong> 的短文，帶你重新安裝英文的思維系統。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">我覺得學習語言最寶貴的關鍵永遠在於理解它為什麼這樣運作，然後去應用它。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">真的，應用太重要了。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對啊，這段文本雖然短小，你可能一眼就能看完，但它卻完美地蘊含了日常對話裡最核心的時態切換。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">嗯嗯，而且還有面對危險的空間邏輯。它就像一個微縮模型一樣，展示了英文使用者的腦袋到底是怎麼轉動的。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">哇，聽起來超級厲害！為了讓你完全沉浸在這個語境裡，我現在會用清晰、然後放慢速度，並且帶有自然語調的方式為你朗讀整段故事。準備好了嗎？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，你可以閉上眼睛，在腦海中勾勒出那個畫面去感受角色之間的情緒變化。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">好，我們開始囉，側耳傾聽：</div>
+            </div>
+
+            <div class="english-quote">
+                <strong>Chris Crosses the Street</strong><br><br>
+                “That sounds good,” said Chris. He started to cross the street.<br>
+                “Wait!” cried Grandpa. “You should never walk into the street without looking! You should hold my hand, too.”<br>
+                “But I did not hear any cars coming,” said Chris.<br>
+                “It is still dangerous to cross the street without looking both ways first.”
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">很緊張對不對？爺爺大喊著不要不看路就走上街，還要牽他的手。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">然後 Chris 的反應是：『但我沒聽到有車子過來啊。』</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，接著爺爺說：『過馬路前如果不先看左右兩邊，還是很危險的。』非常嚴格的教導。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">讀得非常好，畫面感很強烈！</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">謝謝。好，故事聽完了，你可能會想，就這麼幾句話，到底能學到什麼深奧的學問？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">其實裡面藏了非常多細節。</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第三單元：空間概念與動作感 — Street vs. Road & Crosses 的節奏</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">我們就先從最容易讓人搞混的空間概念看起。標題說 <strong>Chris crosses the street</strong>，我以前學英文的時候其實一直有個盲點。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">什麼盲點？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">我常常把 <strong>street</strong> 還有 <strong>road</strong> 混著用，就覺得反正都是馬路啊。難道在英文的思維裡，這兩個字真的有差別嗎？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這是一個極度關鍵的差別！它其實牽涉到西方都市計劃的歷史跟文化。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哇，連都市計劃都出來了！</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">是真的。在英文使用者的腦海裡，<span class="highlight-lego">road</span> 通常指的是連接 A 點到 B 點的通道，它的重點在於『通行』。也就是說像公路或是鄉間小道那種。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，周圍可能是一望無際、沒有什麼人煙。但是 <span class="highlight-lego">street</span> 完全不一樣。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">怎麼說？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">從歷史淵源來看， <strong>street</strong> 兩旁通常會有建築物、商店、住家，而且最重要的是，它有『人行道』。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">哦，也就是說 <strong>street</strong> 比較像是一個充滿人類活動跟商業行為，相對完整的生態系統。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">精準！所以當 Chris 要 cross the street 的時候，他面對的絕對不是一條空曠的鄉間小路。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">而是一個充滿變數的地方。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，四面八方都可能有車輛或行人竄出來。這也讓爺爺接下來的那種緊張跟警告變得完全合理。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">原來如此！經你一講，畫面瞬間就立體了。那回到標題的 <strong>crosses</strong> 這個字，以前教科書都會告訴我們，因為 Chris 是第三人稱單數，所以動詞字尾要加 es。這種解釋真的是聽了就想睡覺耶。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對啊，超無聊的。但我剛在朗讀的時候，我發現加了 es 之後，它的發音會多出一個類似 is 的音節。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">欸！你注意到了語言的節奏感，這很棒耶！</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">真的嗎？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，與其去死記文法規則，不如去感受那個發音的『物理性』。當你唸出 <strong>cross</strong> 的時候，它是一個很短促的音。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">嗯，cross。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">但是加上 es 變成 <span class="highlight-phonics">crosses</span> 的時候，你在發音上其實被迫多停留了一步。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">喔，就像是多踩了一步的感覺。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯！這就像是你在跨越一個障礙物，腳步連續踩踏出去的節奏。英文是很重視動態感的，那個多出來的音節簡直就像是在模擬 Chris 一步一步走進街道的動作。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">這個角度太有趣了啦！原來發音本身就有動作感。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">另外在故事一開頭，Chris 說了一句 <strong>That sounds good</strong>，也就是『聽起來不錯』。這句真的是超級實用。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">我覺得這句話根本是台灣人最需要的日常回話神器！像我們平常在辦公室，同事說：『中午吃滷肉飯好不好？』直覺反應就是『好喔』、或者是『沒問題』。你完全不需要去想要怎麼用英文長篇大論地答應人家，直接一句 <span class="highlight-lego">That sounds good</span> 就能完美應對。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，自然又道地。建立語感的第一步，就是把這些高頻率使用的『語塊』直接打包帶走。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">『語塊』這個概念很好。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">是啊，比起在那邊死背單字，記住這種完整的情境短句，在實際溝通時的效率會高非常多。</div>
+            </div>
+
+            <div class="lego-brick-summary">
+                <div class="lego-brick-title">🧩 空間概念與語塊積木</div>
+                <p><strong>• Road:</strong> 強調連接兩地的「通道」，著重交通通行功能。</p>
+                <p><strong>• Street:</strong> 強調有人類活動、商店、人行道的「街道」系統。</p>
+                <p><strong>• That sounds good:</strong> 萬用回話語塊（聽起來不錯／好啊），代替長篇大論的同意。</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第四單元：動作的「外套」：為什麼是 without looking 而非 without look？</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-b">
+                <div class="speech-block speaker-b">
+                    <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                    <div class="text-content">不過故事的轉折馬上就來了。Chris 覺得一切都很好，準備過馬路，結果爺爺急了，趕快阻止他。爺爺說： <strong>You should never walk into the street without looking.</strong> 我以前一直覺得很奇怪，爺爺既然要說『不看路』，為什麼不能直接說 without look 就好？</div>
+                </div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這真的是很多學生的疑問。因為中文都是說『不看』啊，既然都是表達『不』，為什麼 look 後面還要拖一個 ing 的尾巴變成 <strong>looking</strong>？這不是很麻煩嗎？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">這是華語母語者最容易卡關的地方。因為在我們中文裡，動詞跟名詞的界限其實是很模糊的，我們可以很自由地轉換。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">但英文是一個非常講究『模組化』的語言。你要把 <span class="highlight-lego">without</span> 想像成是一個容器（也就是英文裡說的介係詞）。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">容器，嗯。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">這個容器的設計規定，裡面只能裝實體的物品或是某種概念，也就是『名詞』。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">欸，等一下！讓我用一個台灣人絕對秒懂的例子來測試一下你的理論。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">好啊，說來聽聽。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">想想我們最熟悉的手搖飲。當我去買一杯珍珠奶茶，我跟店員說『不加糖』，英文是 <strong>without sugar</strong>。這很道地的舉例吧？因為 sugar（糖）本身就是一個名詞，是一個實體東西，所以它可以直接被丟進 without 這個容器裡，完全沒問題，對吧？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">非常生動的類比，完全正確！糖是名詞，直接放在 without 後面。但是如果我今天想表達的是『不看就走』，麻煩來了。『看 (look)』是一個動作，它是動詞，不是像糖果那樣可以被裝進容器裡的東西。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">所以英文的解決方案，就是幫這個動作套上一件名叫 <strong>ing</strong> 的外套。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">把動作偽裝起來？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，把它從動作偽裝成名詞的狀態，變成 <span class="highlight-lego">looking</span>。這樣去記是不是瞬間就通了？買飲料 sugar 沒問題，但遇到動作就要幫它穿上外套變成 <strong>without looking</strong>。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這個類比非常精準！它完美解釋了文法書上所謂『介係詞後面必須加動名詞』這種冰冷的規則。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對啊，這樣聽起來親切多了。其實這背後是英文對空間和物體的嚴格定義。而且你發現了嗎？爺爺在後面又重複強調了一次。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，他說： <em>“It is still dangerous to cross the street without looking both ways first.”</em></div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，透過在同一個情境下重複出現 <strong>without looking</strong>，大腦就會自然而然地把這個『容器與外套』的搭配法則吸收進去。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">也就是說，多聽幾次就變成反射動作了。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">這就是語感的建立。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這真的解開了我多年的疑惑，我們根本不需要去背那些專有名詞，只需要懂這個語言裝東西的邏輯。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">真的，邏輯通了就簡單了。</div>
+            </div>
+
+            <div class="lego-brick-summary">
+                <div class="lego-brick-title">🧩 介係詞容器法則</div>
+                <p><strong>• Rule:</strong> 介係詞 (如 without) 是一個容器，規定裡面只能裝「名詞」。</p>
+                <p><strong>• 實體名詞：</strong> <code>without sugar</code> (不加糖) ➔ 直接裝入。</p>
+                <p><strong>• 動作動詞：</strong> <code>without look</code> ➔ 錯誤！必須穿上 <strong>-ing 外套</strong> 偽裝成名詞 ➔ <code>without looking</code>。</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 5 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第五單元：Cried 的真實情緒 & 時態切換的電影感</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">接下來我想聊聊一個讓我很震撼的細節，這也是我以前背單字卡留下來的後遺症了。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">單字卡的後遺症可多了。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">真的。故事裡有一句 <strong>“Wait!” cried Grandpa.</strong> 我每次看到小說裡寫 he cried 或 she cried，我都以為他們在掉眼淚、哭了。我那時候就想說：天啊，爺爺過個馬路，怎麼急到當街哭了？這內心戲也太足了吧！</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">這是一個非常經典的文化和語意上的誤解。在我們早年用的那種單字卡上， <span class="highlight-phonics">cry</span> 通常只對應一個中文意思，就是『哭泣』，旁邊還會畫一個流眼淚的臉。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">但在英文的文學作品或者是這種故事裡， <span class="highlight-phonics">cried</span> 這個字其實更多時候是在表達一種『情緒極度緊繃的呼喊』。所以爺爺根本沒有掉眼淚，他只是在大喊：『等一下！』</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">是的。作者其實大可以使用 said（說）或者 shouted（喊叫），但為什麼挑了 cried？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">為什麼？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">因為它帶有一種發自內心的恐懼、急迫感，甚至是一種防衛的本能。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">喔，可以想像 cried 在這裡的真實意義了。哇，單字從來都不是一對一的翻譯，它必須活在情境裡。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">說得太好了！這真的打破了我對英文單字的課本印象。而且這也正好帶出了一個很有趣的對比，如果你只去看這段文本的『時間感』，會發現很有電影鏡頭切換的感覺。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，這正是我們觀察時態的最佳視角。請你注意那些用來推動故事前進的詞彙。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">像是什麼？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">像是說的 said、開始的 started、牽起的 took、還有走的 walked，這些全部都是『過去式』。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">嗯嗯，敘述者在告訴我們這是一件已經發生過的事情，就像是旁白在說故事一樣。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">可是當角色開始說話的時候，也就是在引號裡面的句子，一切又變了。Chris 說、爺爺說，他們用的都是『現在式』。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，這就展現了英文是如何精準地處理時間線。故事的背景框架是過去的，但是當對話框一打開，讀者就像是瞬間被吸進了案發現場的當時。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">很有臨場感！</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，現在式讓那種危險的感覺變得迫在眉睫。這告訴我們，時態不是為了考試而存在的，它是為了讓聽故事的人能準確切換上帝視角和第一人稱視角。</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 6 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第六單元：主動與被動的感官防線 & 英文的線性邏輯</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">說到案發現場的危險，這就扣回了我們節目一開始提到的那個生死攸關的十字路口。Chris 和爺爺在判斷危險這件事上，根本是處於完全不同的感官邏輯。這一點非常值得探討。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對啊，Chris 自己辯護的理由是什麼？他說： <strong>“But I did not hear any cars coming,” said Chris.</strong> 也就是說，他沒有聽到任何車子過來的聲音，他依賴的生存工具是『聽覺』。這其實是一個非常致命的假設。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">怎麼說？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">在文本中 Chris 說的 <strong>cars coming</strong>，這裡的 coming 加了 ing 表示一個『正在持續進行的狀態』。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">喔，也就是說他的大腦在搜尋有沒有那個正在『轟隆轟隆逼近』的聲音。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，但在現代社會這根本行不通的啊！就像我們剛剛說的，現在路上到處都是安靜得跟幽靈一樣的電動車。如果像 Chris 這樣覺得耳朵沒聽到就等於沒車，這簡直是拿命在開玩笑。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">所以爺爺的智慧與人生經驗在這裡就完全體現出來了。爺爺的防線是什麼？不是聽，而是 <strong>looking both ways</strong>（看雙向）。英文對於感官動作的描述其實是非常具體的。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">嗯哼。爺爺強迫 Chris 把生存的依賴從被動的聽覺，轉換成主動的視覺。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content"><strong>Both ways</strong> 指的就是左邊跟右邊，也就是雙向。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯。在充滿未知變數的城市街道（也就是我們剛剛說的 street）上，both ways 不僅僅是語法正確的短語，它根本就是一句保命金句。視覺的確認才是最無可辯駁的事實。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">真的，用看的才準！這段對話太精彩了，原來這不僅僅是爺爺對孫子的日常碎念，這其實是一個完整的『生存動作邏輯』的重建。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">是的。Chris 本來想省略步驟，沒聽到聲音就想衝，但爺爺介入了。我們來看看故事最後一段是怎麼把這個邏輯完美收尾的。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">最後這幾句話，其實它的節奏非常優美，而且踏實。像是 <strong>Grandpa took Chris’s hand</strong>，爺爺牽起孫子的手。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，先建立安全的物理連接。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">接著 <strong>they looked both ways</strong>，執行主動的視覺確認。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">然後確認了客觀事實， <strong>there were no cars coming</strong>（沒有車子過來）。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">最後才迎來那句總結： <strong>Together, they walked safely across the street.</strong> 我們來仔細拆解最後這句話的排列順序，我覺得這點非常關鍵： <strong>Together they walked safely across the street.</strong> 先是主角 they，然後是動作 walked，接著是狀態 safely（安全地），最後才是方向跟目的 across the street（穿過街道）。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這就是英文非常標準的『線性邏輯結構』：誰做了什麼 -> 做得怎麼樣 -> 最後通往哪裡。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哇，這跟我們大腦解決問題的順序是一模一樣的！</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，先決定採取什麼行動，再確保這個行動的品質跟安全性，最後確認我們抵達的目標。它有一種非常嚴謹的因果關係。其實學習英文的過程，就是學習去適應這套注重因果、注重步驟、注重空間與時間明確性的思維模式。懂了這個邏輯之後，文法就不再是死板的規定了，它會變成幫助你精準表達的工具。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">節目最後，讓我們稍微總結一下今天的豐碩成果。我們今天完全沒有翻開厚重的文法書喔。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">輕鬆很多吧！但我們懂了 street 和 road 的文化差異，我們還把超級好用的日常回話 That sounds good 收進了口袋。還有那個手搖飲的例子，我們透過不加糖 without sugar 的概念，破解了為什麼遇到動作一定要加 ing 變成 without looking。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，幫動作穿上名詞的外套。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">更重要的是，我們重新認識了 cried 這個字在文學裡那種緊繃的情緒，以及主動和被動之間的生存感官差異。收穫滿滿！</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">語言終究是要唸出聲音來的。身為你的學習夥伴，我強烈建議你在今天節目結束之後，回放一下前面我朗讀故事的片段，自己試著唸看看。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，試著用你的嘴巴大聲地把 Chris Crosses the Street 朗讀幾遍。讓你的嘴唇、舌頭去感受發出 crosses 那個多出來的音節的感覺。去建立把 look both ways 還有 without looking 掛在嘴邊的『肌肉記憶』。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">肌肉記憶真的很重要！當你唸出聲音去感受那個節奏，這個語言才會真正從書本上長到你的身體裡。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">下次當你準備過馬路的時候，你可以稍微停下腳步想一想。當你開始嘗試用英文的線性邏輯（也就是先確認動作，再確保安全，最後決定方向）去思考這個世界時，你的大腦是不是也在無形之中變得更有條理了呢？</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">語言真的不只是一種溝通的工具，它其實是你大腦的作業系統。當你學會了一種新語言的邏輯，你等於是為自己安裝了一套全新的世界觀。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">說得太好了！非常感謝你加入今天的深度探索，和我們一起把這段故事徹底拆開來聊。記住啊，學英文不需要從痛苦的背誦開始，你只需要像 Chris 一樣理解邏輯，然後勇敢地跨出第一步。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">我們下次見囉。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">下次見！</div>
+            </div>
+
+            <div class="lego-brick-summary" style="background: #e6f7ff; border-color: #91d5ff;">
+                <div class="lego-brick-title" style="color: #0050b3;">🧩 英語思維線性排序</div>
+                <p><strong>• Linear Logic:</strong> [Who (They)] ➔ [Action (Walked)] ➔ [Status (Safely)] ➔ [Destination (Across the street)]</p>
+                <p style="font-size: 0.9rem; color: #333; margin-top: 4px;">• 模擬大腦解決問題的順序：誰 ➔ 決定採取動作 ➔ 確保安全品質 ➔ 抵達目的地。</p>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>NotebookLM Podcast 逐字稿特訓系列 • Designed for Friends Reading Coach</p>
+    </footer>
+</div>
+
+<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+    data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+    data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+
+</body>
+</html>

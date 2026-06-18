@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM Podcast 逐字稿：A Baby Polar Bear Grows Up</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --primary-color: #2563eb;
+            --speaker-a-color: #0f172a;
+            --speaker-a-bg: #f1f5f9;
+            --speaker-b-color: #0d9488;
+            --speaker-b-bg: #f0fdfa;
+            --card-bg: #ffffff;
+            --accent-lego: #f59e0b;
+            --accent-phonics: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .podcast-badge {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .meta-info {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        /* Overview Cards */
+        .overview-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 600px) {
+            .overview-section { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Chapter Styles */
+        .chapter {
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chapter-header {
+            font-size: 1.35rem;
+            color: #1e3a8a;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eff6ff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Dialogue Styles */
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .speech-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .speech-block:hover {
+            background-color: #f8fafc;
+        }
+
+        .speaker-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .speaker-a .speaker-meta { color: var(--speaker-a-color); }
+        .speaker-b .speaker-meta { color: var(--speaker-b-color); }
+
+        .speaker-badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .speaker-a .speaker-badge { background-color: #e2e8f0; color: #334155; }
+        .speaker-b .speaker-badge { background-color: #ccfbf1; color: #115e59; }
+
+        .text-content {
+            font-size: 1.05rem;
+            color: #334155;
+            text-align: justify;
+        }
+
+        /* Highlight elements inside text */
+        .highlight-lego {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-lego);
+        }
+
+        .highlight-phonics {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-phonics);
+        }
+
+        /* Special Insert Blocks */
+        .english-quote {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Georgia', serif;
+            color: #1e293b;
+            font-size: 1.1rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.02);
+            line-height: 1.8;
+        }
+
+        .lego-brick-summary {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .lego-brick-title {
+            color: #b45309;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="podcast-badge">NotebookLM Audio Overview</span>
+        <h1>大自然裡的英文思維：從北極熊寶寶看英文動物詞彙與狀態</h1>
+        <div class="meta-info">💡 主題短文特訓：A Baby Polar Bear Grows Up (北極熊寶寶長大囉) | 輕鬆閱讀美化版逐字稿</div>
+    </header>
+
+    <section class="overview-section">
+        <div class="card" style="border-top: 4px solid var(--accent-lego);">
+            <h3>🧩 核心觀念：英文看世界的角度</h3>
+            <p style="font-size: 0.95rem; color: #475569;">在英文思維裡，描述動物與狀態的方式與中文大不相同。不只是直白的翻譯，而是反映出英文母語者看待自然界的特定角度。</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--primary-color);">
+            <h3>🎯 本課核心要點 (Lego Bricks)</h3>
+            <p style="font-size: 0.95rem; color: #475569;">
+                1. <code>Cub vs. Baby Bear</code> (精準描述野生動物幼崽的專屬名詞)<br>
+                2. <code>Born with</code> (「天生帶有」的狀態描述)<br>
+                3. <code>Keep + Object + Adj</code> (保持某種狀態的句型邏輯)<br>
+                4. <code>Live by itself</code> (獨立自主的空間感)
+            </p>
+        </div>
+    </section>
+
+    <!-- Chapter 1 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第一單元：幼崽的稱呼：為什麼不叫 Baby Bear？</div>
+        <div class="dialogue-flow">
+            
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">你有沒有想過一個問題，就是當我們開始接觸英文的時候，學動物的單字通常是最清的。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，像是小狗啊，小貓之類的。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對啊，小狗叫 puppy, 然後小貓叫 kitten, 但如果今天換成一隻北極熊寶寶，我們的大腦好像就會突然當機。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哈哈，然後就會很偷懶的直接在心裡翻譯成 baby bear。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，就是 baby bear, 可是這樣講真的道地嗎？其實如果對著母語人士一直講 baby bear, 對方大概會覺得 嗯，你是不是在用一種非常童言童語的方式講話。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">真的假的？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">真的啊。因為在英文的思維裡，他們看待自然界的方式和我們不太一樣，就是他們會為不同的動物幼崽賦予特定的專有名詞。在我們今天的故事裡，北極熊寶寶被稱為 <span class="highlight-lego">cub</span>。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">Cub！我以前以為只有獅子老虎的寶寶才叫 cub 耶。</div>
+            </div>
+            
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">其實很多野生食肉哺乳動物的幼崽，像是熊、狐狸、獅子、老虎等，都可以統稱為 cub。這顯示了英文在描述自然生態時的精確性。</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第二單元：與生俱來的狀態：Born with</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">故事裡有一句描寫北極熊寶寶剛出生的狀態，我覺得很有意思：<strong>A cub is born with its eyes closed.</strong> 也就是牠出生的時候眼睛是閉著的。為什麼要用 born with 呢？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這個 <span class="highlight-lego">born with</span> 是一個超級棒的語塊。with 在這裡的意思是「伴隨著某種狀態」。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">所以不只是出生，而是「一出生就帶著」某種特徵。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯。比方說我們中文講「他天生就有一雙藍眼睛」，在英文裡最道地的講法就是 <em>He was born with blue eyes.</em> </div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">原來如此！這個 with 就像是一個掛鉤，把出生這個動作和後面的狀態緊緊扣在一起了。</div>
+            </div>
+            
+            <div class="lego-brick-summary">
+                <div class="lego-brick-title">🧩 Born with 的狀態邏輯</div>
+                <p><strong>• 概念：</strong> 表示「一出生就伴隨/帶有」某種特徵或狀態。</p>
+                <p><strong>• 應用：</strong> <em>born with a talent</em> (天生有才華) / <em>born with blue eyes</em> (天生藍眼)。</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第三單元：狀態的維持：Keep 的妙用</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">除了 born with，這篇短文裡還有一個很生活化的句型。就是當提到熊媽媽照顧寶寶時，故事寫道：<strong>The mother keeps the cub warm.</strong></div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">這句的文法就是我們常背的 <code>keep + 受詞 + 形容詞</code> 嗎？</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，就是它！但不要把它當公式死背。<span class="highlight-lego">keep</span> 的本質就是「維持、保持某個狀態不改變」。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">所以媽媽的動作（可能是抱著、或者在洞穴裡），讓 cub 持續處在 warm（溫暖）的狀態下。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">非常準確。這在日常生活中超級好用。比如冬天你把門關上，是為了 <em>keep the room warm</em>。或者你想告訴別人跟你保持聯絡，就會說 <em>keep in touch</em>。它都是一種狀態的延續。</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第四單元：獨立的終點：Live by itself</div>
+        <div class="dialogue-flow">
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">故事的最後，這隻北極熊寶寶終於長大了，學會了游泳跟打獵。結尾說：<strong>Now the cub can live by itself.</strong> 這個 by itself 我覺得好有畫面感喔。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這又是另一個空間邏輯的展現。介係詞 <span class="highlight-lego">by</span> 有「在...旁邊、靠著」的意思。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">所以 by itself 就像是「只有牠自己待在自己旁邊」，沒有別人了。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">精準！就是「靠自己、獨立」的意思。長大的北極熊不再需要媽媽 keep it warm 了，牠可以自己生存。這短短幾個字，就把成長的獨立感完全寫出來了。</div>
+            </div>
+
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哇，看來這些看似簡單的介係詞和單字，背後都隱藏著英文母語人士看世界、描述事物狀態的獨特方式。</div>
+            </div>
+
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，學習英文從來不是死記硬背，而是去理解並借用他們的眼光來重新看世界。</div>
+            </div>
+
+            <div class="lego-brick-summary">
+                <div class="lego-brick-title">🧩 獨立自主的表達</div>
+                <p><strong>• By oneself:</strong> 藉由「自己待在自己旁邊」的空間感，引申為「靠自己、獨立完成、沒有他人幫助」。</p>
+                <p><strong>• 應用：</strong> <em>I can do it by myself.</em> (我可以自己來。)</p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <footer>
+        <p>© 2026 Reading Coach. NotebookLM Audio Insights.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
