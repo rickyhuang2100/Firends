@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度探討 - Thai Sticky Rice</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --host-a-color: #E3F2FD;
+            --host-b-color: #FFF3E0;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .podcast-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+        }
+
+        .podcast-header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .podcast-title {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .podcast-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .podcast-meta {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .chapter-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin: 40px 0 20px;
+            padding-left: 15px;
+            border-left: 4px solid var(--primary-color);
+            background: #f8fcf8;
+            padding: 10px 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .speaker-row {
+            display: flex;
+            gap: 15px;
+            max-width: 85%;
+        }
+
+        .speaker-row.host-a {
+            align-self: flex-start;
+        }
+
+        .speaker-row.host-b {
+            align-self: flex-flex-start; /* 改回左對齊方便閱讀，但用顏色區分 */
+        }
+
+        .speaker-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .host-a .speaker-avatar {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .host-b .speaker-avatar {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .speech-bubble {
+            padding: 15px 20px;
+            border-radius: 12px;
+            position: relative;
+            font-size: 16px;
+        }
+
+        .host-a .speech-bubble {
+            background-color: var(--host-a-color);
+            border-top-left-radius: 2px;
+        }
+
+        .host-b .speech-bubble {
+            background-color: var(--host-b-color);
+            border-top-left-radius: 2px;
+        }
+
+        /* 內容亮點樣式 */
+        .highlight-lego {
+            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 30%;
+            background-position: 0 90%;
+            font-weight: bold;
+        }
+
+        .highlight-phonics {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #fdeaea;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        .english-quote {
+            display: block;
+            background: #fff;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-left: 3px solid #9b59b6;
+            font-family: 'Georgia', serif;
+            font-size: 1.1em;
+            color: #2c3e50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .lego-brick-summary {
+            background: #fdf6e3;
+            border: 2px dashed #d4c4a8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .lego-brick-summary h4 {
+            color: #b58900;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="podcast-container">
+        <div class="podcast-header">
+            <h1 class="podcast-title">📖 深度探討：Thai Sticky Rice</h1>
+            <p class="podcast-subtitle">從一盤泰國芒果糯米飯，解開英文大腦的發音與邏輯密碼</p>
+            <div class="podcast-meta">
+                <span>⏱️ 建議閱讀時間：15 分鐘</span>
+                <span>🎯 重點：發音技巧(R/L, 長短音)、連音現象、可數與不可數名詞世界觀、使役動詞用法</span>
+            </div>
+            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
+                <audio controls style="width: 100%;">
+                    <source src="2_8.m4a" type="audio/mp4">
+                    您的瀏覽器不支援 audio 元素。
+                </audio>
+            </div>
+        </div>
+
+        <div class="dialogue-flow">
+            <!-- 開場白 -->
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    嗨，歡迎來到這次的深度探討。如果你是一個母語是中文，然後一直很想要從零開始學好英文的台灣聽眾，那今天這場解碼之旅就是為你量身打造的。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    沒錯，因為我們都知道語言學習最怕的就是把它當做無字天書，在那邊死背嘛，真的會背到懷疑人生啊。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    所以我們今天的任務呢，不是翻那種厚重的文法書，而是要用一盤香甜的泰國芒果糯米飯（一篇短的英文趣味短文），來拆解 <span class="highlight-lego">英文母語人士大腦裡的發音跟邏輯密碼</span>。把這段很生活化的文本當做實驗室，我們一步一步來解開那些你只能死背，但從來沒有真正理解過為什麼的語言規則。
+                </div>
+            </div>
+
+            <!-- Chapter 1 -->
+            <h2 class="chapter-title">章節 1：Rice 還是 Lice？差之毫釐，謬以千里的發音危機</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    既然要拆解這盤芒果糯米飯，我們先從這道甜點的核心：糯米飯 <span class="english-quote">Sticky Rice</span> 開始聊起。這個 <span class="highlight-phonics">Rice</span> 其實就是很多台灣學生常常會踩到的發音地雷哦。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    對，我以前就聽說過，如果你稍微不注意，一句「我很愛吃飯」，聽在外國人耳裡可能會變成一場生態浩劫，這到底怎麼回事？哈哈。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    因為台灣學習者常常會把 Rice 開頭的 <span class="highlight-phonics">R</span> 發成了 <span class="highlight-phonics">L</span> 的音。那如果發成 L，rice 就會變成 <span class="highlight-phonics">lice</span>，也就是「蝨子」的複數了。吃飯變成吃蝨子，這真的是會嚇死人。
+                </div>
+            </div>
+            
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    那要怎麼避免這個尷尬的情況啊？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    關鍵就在於你舌尖放的位置。發 <span class="highlight-phonics">R</span> 的時候呢，你的舌頭要往後捲，懸空在口腔裡面，千萬不能碰到上顎，同時你的嘴唇要微微向前突出。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    懸空，然後嘴唇往前...那如果是發 <span class="highlight-phonics">L</span> 呢？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    發 <span class="highlight-phonics">L</span> 的時候啊，舌尖就必須很明確地去頂住你上排牙齒的後方。你可以自己感覺一下這兩個動作在口腔裡面的物理空間差異。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    我試一下，rice 舌頭沒碰到，然後 lice 舌頭頂住牙齒...真的差很多欸！
+                </div>
+            </div>
+
+            <!-- Chapter 2 -->
+            <h2 class="chapter-title">章節 2：長短音陷阱與單字家族基因 (Sticky)</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    那剛剛還有一個字 <span class="english-quote">sticky</span> 就是黏黏的，這個字我聽過超多初學者會唸成 steeky，那個 [i] 拉得超長。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這又是另一個發音的陷阱了！sticky 的第一個母音其實是 <span class="highlight-phonics">短母音的 [ɪ]</span>，而不是長母音的 [i]。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    所以聲音要很短促嘛。
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯，發這個短音的時候，你的下巴要放鬆，稍微掉下來一點，聲音是 <span class="highlight-phonics">短又有力的</span>。如果你把它拉得很長，整個字的節奏感聽起來就會很拖泥帶水了。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    原來如此。話說回來，說到 sticky，我一直有個疑惑。它聽起來跟我小時候收集的「貼紙 sticker」非常像欸，這在英文造字上是巧合嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這絕對不是巧合哦！這展現了英文詞彙的家族感。你看 <span class="highlight-lego">stick</span> 本身當動詞就是「粘貼」的意思嘛，那加上字尾 <span class="highlight-lego">-er</span> 表示做這件事的物品就變成了貼紙 <span class="english-quote">sticker</span>；而加上字尾 <span class="highlight-lego">-y</span> 通常是用來形成形容詞，所以 <span class="english-quote">sticky</span> 就是黏黏的狀態。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    哇，所以當我看透這層關係，我就不是在死背單字，而是理解了他們整個家族的運作邏輯。這種感覺就像掌握了基因一樣！
+                </div>
+            </div>
+
+             <!-- Chapter 3 -->
+            <h2 class="chapter-title">章節 3：Desert 與 Dessert —— 從重音判斷吃甜點還是吃沙子</h2>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    對，這就是語感的建立。這道糯米飯文本裡說它是一道甜點：<span class="english-quote">Did you know that rice can be a dessert?</span>
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    我必須承認哦，<span class="english-quote">dessert (甜點)</span> 跟另一個字 <span class="english-quote">desert (沙漠)</span>，我到現在看到還是會稍微停頓一下，很怕唸錯。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這兩個字真的是很多人的痛點。拼字上，甜點 dessert 有兩個 S，沙漠 desert 只有一個 S。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    我以前聽過一個記憶法：甜點很好吃，所以你想吃兩份，就有兩個 S；那沙漠太乾了你想趕快逃跑，所以只有一個 S。這有用嗎？哈哈。
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這個記憶法很生動啊，很有幫助。不過在發音上，其實更重要的是 <span class="highlight-phonics">重音的位置</span> 哦。甜點的重音在第二個音節 /dɪˈzɜːrt/ ，你的語調要有一種 <span class="highlight-phonics">往上推</span> 的感覺。而沙漠的重音在第一個音節 /ˈdez.ɚt/，聲音是 <span class="highlight-phonics">往下墜</span> 的。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    那為什麼甜點的重音要在後面啊？這有什麼規律嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    如果從語言學的角度來看，dessert 其實是從法文過來的詞彙。法文詞彙的重音經常落在最後一個音節。所以當你唸的時候，那個重音在後的節奏其實保留了一點法語的優雅感哦。
+                </div>
+            </div>
+
+            <!-- Chapter 4 -->
+            <h2 class="chapter-title">章節 4：連音、語調與句子靈魂的連結</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    原來一個單字裡面還有歷史的痕跡！那說到語調，你剛剛唸 <span class="english-quote">Did you know that rice can be a dessert?</span> 的時候，句尾是明顯上揚的。如果我今天心情很平靜，我就平平地唸完它，外國人會聽不懂嗎？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    字面上他們聽得懂，但會對你的 <span class="highlight-lego">社交意圖</span> 感到很困惑。在英文裡遇到這種可以用 Yes/No 來回答的問句（Yes/No Question），句尾上揚不僅僅是文法，它還是一個 <span class="highlight-lego">交出發言權的社交信號</span>。也就是說，當我的語調往上，我等於在告訴對方：「現在輪到你講話了」。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    哇，所以語調其實是英文裡面的隱形標點符號。那接下來文本切入泰國人的飲食習慣說：<span class="english-quote">People in Thailand love to eat sticky rice for dessert.</span> 這裡的 love to eat，為什麼中間非得加一個 to 啊，我不能直接說 love eat 嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    在英文的邏輯裡，一個句子通常只能有一個核心動詞。當你把「愛(love)」跟「吃(eat)」這兩個動作放在一起的時候，就必須要有一個緩衝。這個 <span class="highlight-lego">to</span> 就是那個緩衝。你可以把它想像成一個 <span class="highlight-lego">箭頭</span>，指向你未來的動作或目的 —— 你心裡抱著喜愛的心情 (love)，然後這個箭頭指向去執行吃這個動作 (to eat)。
+                </div>
+            </div>
+            
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    對了，還有下一句簡直是連音的車禍現場哦！<span class="english-quote">Because it is sticky!</span> 我覺得母語人士講 it is 的時候，速度真的快到我根本抓不到字！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這叫做 <span class="highlight-phonics">連音現象</span>。你看 because 的字尾發音是 /z/，後面緊接著 it 的開頭母音 /ɪ/；然後 it 的字尾 /t/，又剛好碰上 is 的母音 /ɪ/。所以為了不用一直停頓，他們就讓這些音全部滑過去了，變成 /bɪˈkʌzɪtɪz/。這純粹是口腔肌肉為了追求最高效率所產生的自然妥協現象。
+                </div>
+            </div>
+
+
+            <!-- Chapter 5 -->
+            <h2 class="chapter-title">章節 5：使役動詞用法與名詞的「邊界感」哲學</h2>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    揭曉完謎底，我們現在要進入廚房了。文本說 <span class="english-quote">People add coconut milk to sticky rice.</span>，然後 <span class="english-quote">Coconut milk makes it sweet.</span>
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    <span class="highlight-lego">add A to B (把A加入B)</span>，這裡的 to 再次扮演了那個箭頭的角色，把椰奶倒向並融合進糯米飯裡面。如果我去夜市買手搖飲想加珍珠，我就可以在腦海中模擬這個句子：add boba to milk tea！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯，這就是語言在地化的過程。那下一句 <span class="english-quote">Coconut milk makes it sweet.</span>，這裡其實隱藏了一個非常實用的「使役動詞」句型。這個 <span class="highlight-lego">make + 受詞 + 形容詞</span> 結構裡，make 不是實體的敲敲打打製造，它是 <span class="highlight-lego">促成某種狀態的改變</span>。椰奶發揮了作用，讓糯米飯進入了甜的這個狀態。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    如果這是一個公式，那我能套用到天氣或情緒上嗎？比如「下雨讓我很冷」，我可以說 Rain makes me cold 嗎？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    邏輯上完全正確，這正是英文母語人士思考的方式哦！他們很習慣用一個沒有生命的物品（如天氣、食物）當做主詞，去改變人的狀態。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    接下來這段非常有意思：<span class="english-quote">Mango is a very popular fruit to eat with sticky rice. Another popular fruit to eat with sticky rice is a banana.</span> 為什麼這段文字裡面芒果就只是 Mango，可是香蕉卻是 a banana？對我來說真的非常困惑。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這關乎到他們是怎麼看待這個世界的 <span class="highlight-lego">對象邊界</span>，也就是我們常說的可數名詞跟不可數名詞。當文本在這裡寫 mango 沒有加 a 也沒有加 s 的時候，它其實是被當做一種沒有固定形狀的「材質」或「風味」（畢竟已經切塊或弄成泥）。
+                    <br><br>
+                    但當我們看到 <span class="english-quote">a banana</span> 的時候，那個 <span class="highlight-lego">a</span> 就賦予了它強烈的 <span class="highlight-lego">個體邊界感</span>。腦海中立刻浮現一整根完好無缺帶著皮的香蕉！如果你今天一半拌進飯裡的是香蕉泥，你絕對也可以只說 with banana，不用加 a。
+                </div>
+            </div>
+
+            <!-- Chapter 6 -->
+            <h2 class="chapter-title">章節 6：發音省力學與代名詞與邏輯鎖定 (Leaves & They)</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    最後我們來看看裝盤：<span class="english-quote">People often put the banana sticky rice inside banana leaves. The banana leaves hold the dessert together. They make it easier to hold.</span> 這裡出現了香蕉葉 <span class="highlight-phonics">leaves</span>。單數的葉子是 leaf (字尾 f)，變成複數時 f 變成 v 再加 es。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    我以前背過老婆(wife->wives)、狼(wolf->wolves)，但我一直不懂，為什麼要這麼麻煩？直接加 s 不是比較快嗎？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這又是 <span class="highlight-phonics">物理發音的省力機制</span>。 [f] 是純粹氣流摩擦的「無聲子音」，而加了的 [s] 經常發成有聲的 [z]。如果你要從無聲 [f] 瞬間切換到有聲 [z]，聲帶要突然啟動，這對口腔其實很卡。所以母語人士為了保持連續震動，就把無聲 f 變成發音位置一樣但有震動的 [v]，這樣接 [z] 就非常平順，唸成 /liːvz/ 連續不斷。這不是死板文法，是人類發聲器官的自然演化。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    原來一切都是為了偷懶！那這句說 <span class="english-quote">They make it easier to hold.</span> 在中文裡指「人的他們」和指「物品的它們」發音完全一樣。聽外國人講的時候，怎麼瞬間判斷「they」是指誰？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這就是用邏輯去鎖定它。當你聽到他們讓它更容易被拿著，你大腦要問：是誰發出這動作？是「人們」讓這份甜點變得容易拿嗎？不合邏輯嘛，是 <span class="highlight-lego">香蕉葉(banana leaves)</span> 作為容器，才讓爛爛的糯米飯變得好拿取。要聽懂代名詞，就要在腦海中不斷建立動作與物品之間的邏輯配對。
+                </div>
+            </div>
+
+
+             <!-- Chapter 7 -->
+            <h2 class="chapter-title">章節 7：教養的細節：Would you like vs Want</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    最後文本用問句作結：<span class="english-quote">What kind of fruit would you like to eat with sticky rice?</span> 這裡最關鍵的語氣其實是 <span class="highlight-lego">would you like</span>。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這跟 want (想要) 有什麼不同嗎？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    want 比較直接，有時候甚至帶有一點要求、命令的感覺。但如果你說 "I would like"，聽起來就非常有教養，因為這是一種 <span class="highlight-lego">保留了選擇空間、非常得體的表達方式</span>。語言從來不只是溝通工具，它其實是一面反映文化怎麼思考、怎麼感知世界的鏡子！
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    說得太好了。當語言走進你的生活，它才會真正成為你的能力！下次逛夜市點飲料，我要試著用這雙英文的眼睛去看待加珍珠跟加糖水的邏輯！
+                </div>
+            </div>
+
+
+            <!-- 總結積木 -->
+            <div class="lego-brick-summary">
+                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
+                <ul>
+                    <li><strong>發音省力學：</strong> Because it is 的「連音」與 leaves (f轉v) 全都是為了讓發音氣流與震動更順暢。</li>
+                    <li><strong>語感邊界感：</strong> 「Mango (泥狀/材質)」 VS 「A banana (具體形狀)」，a/an 決定了物品在我們眼中的形體邊界。</li>
+                    <li><strong>隱形箭頭：</strong> to 就像指向目標的箭頭，連接動作 (love to eat) 或表示方向 (add to)。</li>
+                    <li><strong>狀態改變遙控器：</strong> Make + 受詞 + 形容詞 (make it sweet/easier) 是表示改變狀態的高頻使用句型。</li>
+                    <li><strong>交出發言權的鑰匙：</strong> 在 Yes/No 小問句中，句尾語調上揚代表一種友善交出對話權力的邀請。</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

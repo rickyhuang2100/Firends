@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM Podcast 逐字稿：布魯克林大橋的語言造橋之旅</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --primary-color: #2563eb;
+            --speaker-a-color: #0f172a;
+            --speaker-a-bg: #f1f5f9;
+            --speaker-b-color: #0d9488;
+            --speaker-b-bg: #f0fdfa;
+            --card-bg: #ffffff;
+            --accent-lego: #f59e0b;
+            --accent-phonics: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .podcast-badge {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .meta-info {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        .overview-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 600px) {
+            .overview-section { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chapter-header {
+            font-size: 1.35rem;
+            color: #1e3a8a;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eff6ff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .speech-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .speech-block:hover {
+            background-color: #f8fafc;
+        }
+
+        .speaker-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .speaker-a .speaker-meta { color: var(--speaker-a-color); }
+        .speaker-b .speaker-meta { color: var(--speaker-b-color); }
+
+        .speaker-badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .speaker-a .speaker-badge { background-color: #e2e8f0; color: #334155; }
+        .speaker-b .speaker-badge { background-color: #ccfbf1; color: #115e59; }
+
+        .text-content {
+            font-size: 1.05rem;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .highlight-lego {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-lego);
+        }
+
+        .highlight-phonics {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-phonics);
+        }
+
+        .english-quote {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            color: #1e293b;
+            font-size: 1.1rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.02);
+        }
+
+        .lego-brick-summary {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .lego-brick-title {
+            color: #b45309;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="podcast-badge">NotebookLM Audio Overview</span>
+        <h1>布魯克林大橋的語言造橋之旅</h1>
+        <div class="meta-info">💡 主題短文特訓：The Brooklyn Bridge | 輕鬆閱讀美化版逐字稿</div>
+    </header>
+
+    <section class="overview-section">
+        <div class="card" style="border-top: 4px solid var(--accent-lego);">
+            <h3>🧩 核心觀念：語言造橋學</h3>
+            <p style="font-size: 0.95rem; color: #475569;">學習語言就像在造橋，先把一磚一瓦的邏輯弄懂，了解字詞背後的「為什麼」，才能搭建起一座溝通的橋樑。</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--primary-color);">
+            <h3>🎯 本課核心要點</h3>
+            <p style="font-size: 0.95rem; color: #475569;">
+                1. <code>Have you ever...</code> (打探與分享經驗)<br>
+                2. 單複數發音密碼 (聲帶震動的 <span class="highlight-phonics">z</span> 與無聲的 <span class="highlight-phonics">s</span>)<br>
+                3. 動詞加 S 的「拐杖」邏輯<br>
+                4. <code>Because</code> 的因果與工程邏輯推演
+            </p>
+        </div>
+    </section>
+
+    <!-- Chapter 1 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第一單元：語言學習的造橋之旅</div>
+        <div class="dialogue-flow">
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">想像一下哦，你今天獨自一個人站在紐約的東河畔。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">嗯，很棒的畫面。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對吧，然後你抬頭看著那個巨大的布魯克林大橋那個壯觀的綱鎖啊，還有石塔，真的會讓你覺得超級震撼，然後你轉頭想跟旁邊那個同樣在拍照的外國遊客聊上兩句。分享一下當下的感動，對吧？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，但話到了嘴邊，你腦中就只剩下幾個支離破碎的單字，像是 bridge 或是 big 還有 water. 然後最後只能尷尬的笑一下。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，默默把話吞回去，歡迎你來到今天的深度探討，如果你常常有這種感覺，就是覺得想從零開始把英文學好，卻不知道怎麼打底，那今天的這趟旅程絕對是為你專屬打造的。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">確實啦，面對一門完全陌生的語言，一開始大家總會覺得手足無措嘛。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">我們平常的深度探討可能都在拆解一些很複雜的報告，但今天我們要回歸語言的最根本。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，最基礎的地方。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，我們不僅要讓你聽懂聲音，更要帶你拆解語言背後的齒輪到底是怎麼咬合的。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，那我們今天的素材呢，是一段關於紐約布魯克林大橋 Brooklyn Bridge 的一段英文初階短文，我們來拆解一下這件事哦，其實學習一門新語言就很像是在汪洋大海上造橋一樣。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">哦，這個比喻很有意思。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">你看著遙遠的對岸，可是你手邊只有幾塊零星的石頭跟鋼鎖，聽起來真的很嚇人啊，但只要先把一磚一瓦的邏輯弄懂，你就能穩穩的走到對岸。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">其實我很認同這個造橋的概念，我們今天的目標絕不僅僅是幫你把這段文字念過去就算了，你要知道知識在被理解，然後應用出來的時候才有價值。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">對，要用出來。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，所以我們不僅要知道這些單字是什麼，更要探討他們為什麼要這樣組合，然後最重要的是你要如何發出正確的聲音。好，那我們就從橋樑的起點開始吧，可以請你先為我們朗讀第一段嗎？讓聽眾感受一下這段文字的語感。</div>
+            </div>
+            <div class="english-quote">
+                "Have you ever seen a picture of the Brooklyn Bridge? This is a famous bridge in New York City. It connects Brooklyn and Manhattan. Those are two parts of the city."
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第二單元：與讀者對話的技巧 - Have you ever</div>
+        <div class="dialogue-flow">
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">等一下哦，我注意到第一句有點奇怪。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">怎麼說？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">作者寫 <span class="highlight-lego">Have you ever seen</span> a picture of the Brooklyn Bridge? 意思是你曾經見過布魯克林大橋的照片嗎？嗯，對。可是如果是我的話，我可能直覺會直接說，Do you see a picture? 這樣就好了。為什麼這裡要搞得這麼複雜？還要多加一個 have 跟 ever。這對初學者來說不是很繞口嗎？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">哇，你的直覺真的很敏銳耶，這正是英文文法中很巧妙的一個設計，我們叫它「現在完成式」。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">現在完成式聽起來有點學術。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，不用管專有名詞。你看哦，如果我們問 Do you see a picture? 這其實比較像是在問一個當下正在發生的物理現象。但是在問你現在這一秒眼睛有看到這張照片嗎？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哦，了解，就像是我拿著照片問你說你有看到嗎這樣？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，但作者在這裡並不是在測試你的視力嘛。那他加了那個 ever 是想表達什麼？那個 ever 帶有一種曾經的意思，所以 Have you ever seen 這個句型其實是一種邀請，他是在問在你的生命經驗中，從你出生一直到現在，你有沒有過這樣的經驗？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哦，原來是這樣。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對，這是一種拉近作者與讀者距離的絕佳寫作技巧，他不是在陳述一個冷冰冰的事實，他是在跟你聊天，喚起你腦海中可能看過的電影畫面啊，或是明信片的影像。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">懂了，這就很像是我問外國朋友，你吃過臭豆腐嗎？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">對對對，這個例子很好。如果問 Do you eat stinky tofu? 聽起來好像是在問他平常有沒有吃臭豆腐的習慣。像是問他是不是每天當早餐吃。但我真正想問的是他的人生經驗，所以我應該問，Have you ever eaten stinky tofu? 對吧？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">完全精準，這就是為什麼我們要去理解語法背後的為什麼哦，因為它會直接影響了你想傳達的語氣。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第三單元：節奏與發音的動態力量</div>
+        <div class="dialogue-flow">
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">原來如此。然後另外啊，關於語氣，我們再來看看發音，這段的第一句是一個問句嘛，你有注意到我剛才句尾的語調嗎？你在念 of the Brooklyn Bridge 的時候，聲音是往上揚的。是的，英文的語調本身就帶有功能性哦，當我們問這種只需要回答是或否的疑問句時，句尾語調上揚就像是在向對方拋出一顆球，對不對？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">沒錯，就像拋球一樣，然後懸在半空中等待對方接住並回應你。哇，這個超有畫面感。不過講到發音啊，我剛剛也聽到了兩個我們台灣人很熟的地名，就是布魯克林曼哈頓。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">嗯，這兩個大家常聽到。但我們平常講中文的習慣，好像會把每個字的音量念得差不多重，這就是中文和英文的最大不同咯。中文是聲調語言嘛，有一聲，二聲，三聲，四聲，但英文是充滿重音與輕音節奏的語言。你看 Brooklyn 的重音在第一個音節，Brook, 你要稍微提高音調，把聲音拉長一點，而後面的 lyn 則要非常快速輕輕的帶過去。Brook-lyn, 所以不能念成「布魯克林」四個一樣重的音。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">絕對不行，那聽起來就像機器人了。你可以再試 Manhattan, 它的重音在中間的 hat, 帽子那個 hat。你可以試著把重音想像成一個跳板，在那個音節用力踩下去。我試試看哦。Man-HAT-tan。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">非常棒。聽起來真的有一種起伏的節奏感。而且第二句提到它 connects Brooklyn and Manhattan, 這個動詞 <span class="highlight-phonics">connect</span> 就是連接，聽起來很有力量。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">確實，你可以想像一下這個畫面，一隻手從 Brooklyn 伸出來，另一隻手從 Manhattan 伸出來，這座橋就是將兩者緊握在一起的巨大力量。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第四單元：單字重複的力量與名詞複數的發音密碼</div>
+        <div class="dialogue-flow">
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">哇，既然文本已經確立了這座橋像兩隻手一樣緊抓著紐約的兩端，那麼問題就來了。這種握手是需要肌肉的嘛，在英文裡我們要怎麼去描述那種抵抗著地心引力，不讓幾萬噸鋼鐵掉進河裡的那種原始物理張力。這個轉折問得非常好哦。這正是第二段要處理的任務，展現英文如何精準描述動作與狀態。</div>
+            </div>
+            <div class="english-quote">
+                "How does the Brooklyn Bridge stay up? Big stone towers and big steel ropes. Big ropes go between two towers. More steel ropes hang from those big ropes. The roadway hangs from these ropes."
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">我覺得 stay 這個字用得好妙哦。他問 does the Brooklyn Bridge stay up? 為什麼不用簡單的 stand? 就是站立就好了。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這個嘛，stand 通常用來形容有腿的東西或者底部平穩放在地上的物體。像人站著或是桌子立著。但 stay 是停留保持某種狀態的意思，加上 up 向上，所以 <span class="highlight-lego">stay up</span> 給人一種持續對抗著向下的重力，懸在半空中的動態張力。對抗重力，這非常符合懸索橋的物理特性耶。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">等一下，當我作為一個讀者，發現了一件有點刺眼的事。這短短幾句話，作者瘋狂重複 big 這個字也。big stone towers, 然後 big steel ropes, 還有 big ropes. 我記得以前高中考英文作文的時候，如果我一直寫 big, 老師一定會扣我分數，叫我換字。這真的不是作者詞彙量太匱乏嗎？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這是一個非常好的質疑哦。在這裡重複並非缺乏詞彙，而是一種刻意為之的節奏。你想像一下，每一次念出 big 就像是敲打橋樑巨大的基石，big stone towers, 然後 big steel ropes. 對初學者或是需要強烈視覺印象的讀者來說，這種重複創造了一種無比巨大、穩固的感受。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">所以這就像是橋上那些規律排列的鋼索一樣，雖然看起來都一樣，但加起來就有很有力量，了解。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">完全正確。那如果我們仔細看這些鋼索，這段其實有很多複數名詞，像是 towers 塔，還有 ropes 繩索，它們的字尾都加了 s, 但我剛剛聽裡面發音好像不太一樣。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">哦，你的耳朵非常敏銳，這正是決定你講英文聽起來自不自然的關鍵細節哦。我們來做個實驗，請你把手指輕輕貼在你的喉嚨上。發出 <span class="highlight-phonics">towers</span> 裡面那個 r 的音。你的喉嚨在震動。這在語音學上叫做「有聲子音」，當你在後面加上代表複數的 s 時，聲帶會順勢繼續震動，發出像蜜蜂一樣的 z 音。試著連在一起念：Towers。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">喉嚨一直都是麻麻的。現在我們來試第二個字，<span class="highlight-phonics">ropes</span> 繩索。最後一個音是 p，請你再摸著喉嚨發出 p 的音，記得指送氣不要發出聲音。</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">喉嚨沒有震動，只有空氣從嘴唇噴出來。因為沒有震動，後面的 s 就保持它原本無聲的狀態，發出像蛇一樣嘶的 s 音。從 p 到 s 喉嚨不用動，這其實是一種讓嘴巴最省力的發音機制，對吧？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">完全正確，語言的演化都是為了發音的流暢與省力啦。理解了這個身體的機制，以後就不用死背哪個字要發 s 還是 z, 你的身體自然會告訴你。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter 5 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 第五單元：動詞的「拐杖法則」與因果邏輯結構</div>
+        <div class="dialogue-flow">
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">不過在這一段裡面，我不止看到名詞有 s, 動詞也有，前面寫 steel ropes hang, 很多鋼索懸掛著，動詞 hang 沒有加 s, 但後面一句變成 the roadway hangs, 車道懸掛著，動詞後面卻多了一個 s, 這也是發音機制嗎？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">不不，這就是英文裡著名的「主詞動詞一致性」。當主詞是單數的第三人稱像單一的車道 roadway, 動詞後面就要加上 s 變成 hangs. 單數的第三人稱形單影隻很孤單，力量很弱，所以後面的動詞需要一根 <span class="highlight-lego">拐杖</span> 來支撐它。那個 s 就是它的拐杖！</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">我非常喜歡這個拐杖的比喻，它完美解釋了為什麼要在視覺上增加一個字母。只要能幫助你建立直覺的畫面，那就是最好的學習法。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">好，那我們現在有了石塔和巨大的主鋼索，橋樑的骨架已經出現了，但只有骨架真的有辦法應付紐約每天龐大的車流嗎？我們來聽聽最後一段。</div>
+            </div>
+            <div class="english-quote">
+                "The Brooklyn Bridge has a web of steel ropes on each side. These make the bridge extra strong. That's good because many people and cars go across it every day."
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">很喜歡 web 這個字，我們現在平常都把它翻譯成網路，像 internet 那樣。但在這裡它的原意是蜘蛛網對吧？作者把那些冷冰冰的、生硬的鋼鐵形容得像蜘蛛網一樣細密又堅韌。這是一種非常高明的視覺化寫作手法。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">而且句子接著說，These make the bridge <span class="highlight-phonics">extra strong</span>. 這個 extra 裡面藏著一個清脆的 ks 複合。你看哦，ex 那個 X 發出 ks 的聲音。當你把重音放在第一音節 ex 並用力送氣的時候，自然會產生一種強烈的語氣：Extra strong。這座橋不是普通的堅固，它是特別堅固。那麼，什麼原因讓它需要這麼堅固呢？</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">最後一句寫著 "because many people and cars go across it everyday"。每天有許多人車通過它，這是現實中的需求與壓力。因為有這麼大的壓力，所以需要 extra strong。為了達到這個強度，我們才需要前面的 big stone towers, big ropes, 以及 a web of steel ropes.</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">了解了。所以 <span class="highlight-lego">because</span> 這個字就像是一座無形的橋樑，把人類的需求與物理的工程完美的連接在一起。這篇文章就不再是零碎的單字卡，它變成了一個完整的思想建築。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter 6 -->
+    <div class="chapter">
+        <div class="chapter-header">📌 總結：帶著邏輯去感受語言的橋樑</div>
+        <div class="dialogue-flow">
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">現在所有的零件都拆解完畢，我們將以帶著情感的節奏，完整朗讀一次。請讀者在心裡跟著默讀，去體會重音跳板、喉嚨的震動，還有邀請的語氣。</div>
+            </div>
+            <div class="english-quote">
+                "Have you ever seen a picture of the Brooklyn Bridge? This is a famous bridge in New York City. It connects Brooklyn and Manhattan. Those are two parts of the city. How does the Brooklyn bridge stay up? Big stone towers and big steel ropes. Big ropes go between two towers. More steel ropes hang from those big ropes. The roadway hangs from these ropes. The Brooklyn bridge also has a web of steel ropes on each side. These make the bridge extra strong. That's good because many people and cars go across it every day."
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">你的完整朗讀，我真的有一種很奇妙的滿足感。我不再只是聽到一堆英文單字砸在我臉上，我能聽出那個 Have you ever 伸出來邀請我的手，能感覺到 stay up 對抗重力的感覺，還有那些 z 和 s 尾音自然的切換。對英文的恐懼感完全消失了。</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">這就是我們深度探討的目的！從零開始學習英文就是一趟造橋的過程。只要每天累積，把每一個發音的齒輪咬合對位，理解語言背後的邏輯。最終一定會在你腦海中搭建起一座無比壯觀 strong 的語言橋樑！</div>
+            </div>
+            <div class="speech-block speaker-b">
+                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
+                <div class="text-content">今天學了這座橋如何 connect 個地方，如何 stay up 以及為什麼它需要 extra strong。如果你要用今天學到的這些邏輯，去描述你所居住的城市裡最著名的一個地標，你會怎麼運用這些字呢？</div>
+            </div>
+            <div class="speech-block speaker-a">
+                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
+                <div class="text-content">沒錯，帶著這個挑戰去生活裡找答案吧！當你開始用英文的角度去觀察世界，你會發現學習從來沒有這麼有趣過。感謝你今天加入這場深度探討，我們下次見！</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 NotebookLM Audio Overview Learning Series. 版權所有。
+    </footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度探討 - 日出日落</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --host-a-color: #E3F2FD;
+            --host-b-color: #FFF3E0;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .podcast-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+        }
+
+        .podcast-header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .podcast-title {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .podcast-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .podcast-meta {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .chapter-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin: 40px 0 20px;
+            padding-left: 15px;
+            border-left: 4px solid var(--primary-color);
+            background: #f8fcf8;
+            padding: 10px 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .speaker-row {
+            display: flex;
+            gap: 15px;
+            max-width: 85%;
+        }
+
+        .speaker-row.host-a {
+            align-self: flex-start;
+        }
+
+        .speaker-row.host-b {
+            align-self: flex-start;
+        }
+
+        .speaker-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .host-a .speaker-avatar {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .host-b .speaker-avatar {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .speech-bubble {
+            padding: 15px 20px;
+            border-radius: 12px;
+            position: relative;
+            font-size: 16px;
+        }
+
+        .host-a .speech-bubble {
+            background-color: var(--host-a-color);
+            border-top-left-radius: 2px;
+        }
+
+        .host-b .speech-bubble {
+            background-color: var(--host-b-color);
+            border-top-left-radius: 2px;
+        }
+
+        /* 內容亮點樣式 */
+        .highlight-lego {
+            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 30%;
+            background-position: 0 90%;
+            font-weight: bold;
+        }
+
+        .highlight-phonics {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #fdeaea;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        .english-quote {
+            display: block;
+            background: #fff;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-left: 3px solid #9b59b6;
+            font-family: 'Georgia', serif;
+            font-size: 1.1em;
+            color: #2c3e50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .lego-brick-summary {
+            background: #fdf6e3;
+            border: 2px dashed #d4c4a8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .lego-brick-summary h4 {
+            color: #b58900;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="podcast-container">
+        <div class="podcast-header">
+            <h1 class="podcast-title">📖 深度探討：日出日落 (Sunrise and Sunset)</h1>
+            <p class="podcast-subtitle">用極簡的語言，捕捉現代人被太陽能系統支配的化學對抗</p>
+            <div class="podcast-meta">
+                <span>⏱️ 建議閱讀時間：15 分鐘</span>
+                <span>🎯 重點：夏日超載、冬夜開機掙扎、恆定的黃昏、打破第四道牆</span>
+            </div>
+            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
+                <audio controls style="width: 100%;">
+                    <source src="2_13.m4a" type="audio/mp4">
+                    您的瀏覽器不支援 audio 元素。
+                </audio>
+            </div>
+        </div>
+
+        <div class="dialogue-flow">
+
+            <!-- 開場 -->
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    你有沒有遇過一種情況？夏天明明外面太陽還超級大，天都還亮著，但你已經覺得精疲力盡，甚至不得不直接上床睡覺了。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這種經驗蠻常見的，大腦好像已經「強制關機」了。這看似只是因為那天太累，但實際上，這根本是我們現代人的生理節奏去跟宇宙自然規律發生 <span class="highlight-lego">強烈碰撞</span> 的最好證明。
+                </div>
+            </div>
+            
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    所以我們今天要來拆解的極簡短文，就是關於這類日常瑣事的探討囉？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯！這篇短文叫作《日出日落》。篇幅短到不可思議，描述了夏天白天很長、冬天夜晚很長之類你小學自然課就學過的常識。但它最值得我們花時間的地方在於它的 <span class="highlight-phonics">去蕪存菁</span>：完全沒用深奧的天文學或內分泌學術語，就像一幅極簡主義的畫作，卻精準捕捉了地球上最龐大的一種共同體驗。
+                </div>
+            </div>
+
+            <!-- 章節 1 -->
+            <h2 class="chapter-title">章節 1：夏日光線超載，永不離開的派對客</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    文本一開始描述夏天的白天很長。接著拋出了一個非常具體的問句：<span class="english-quote">在夏天，你曾經在日落前就上床睡覺嗎？</span> 這個問句精準踩在我們「內在機制」跟「外在環境」的摩擦點上。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    摩擦點？意思是我們身體跟環境起衝突了嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    我們的大腦裡有一個區域叫作「交叉上核」，你可以直白地把它想像成我們身體的 <span class="highlight-lego">中央時鐘</span>。這個時鐘主要就是靠 <span class="highlight-phonics">光線</span> 來校準的。日落是一個信號，告訴大腦該開始分泌褪黑激素準備關機。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    懂了！所以當夏天日照時間大幅延長，晚上八九點天都還是亮的，我們的中央時鐘就被搞混了！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯，在那種狀態下，你的肉體累積了足夠的疲勞（想睡了），但眼睛還在接收著大量環境光線，告訴大腦：「喂喂，現在還是白天！保持清醒！」這是一種生物學上的超載狀態。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這讓我想到，夏天的陽光就好像是 <span class="highlight-lego">派對上那個永遠不想離開的客人</span>！身為主人體力已經耗盡，準備打烊，但這個叫夏日陽光的客人還興致勃勃坐在客廳中央，強迫大腦喝下名為「清醒」的咖啡因。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    而且即便是傍晚的自然光，強度也遠超過我們日常室內光！所以夏天時，就算發明了時鐘，試圖「早九晚五」做自己時間的主人，夏天的太陽還是一種壓倒性的物理存在，直接覆蓋掉我們的社會作息。
+                </div>
+            </div>
+
+            <!-- 章節 2 -->
+            <h2 class="chapter-title">章節 2：對稱的極端 —— 在黑暗中醒來的「化學掙扎」</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    接下來，文本把我們推向光譜的第一個極端——冬天。他說冬天夜晚非常長，接著問了另一個完美的對戰問題：<span class="english-quote">在冬天的早晨，你曾經在黑暗中醒來過嗎？</span> 
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這把夏天的「晚」直接對比冬天的「早」。但我困惑的是，他為什麼沒有問我們是不是曾「在天黑之後才下班」，而是改問有沒有「在黑暗中醒來」？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    因為從生物機制來看，「在黑暗中醒來」帶給身體的 <span class="highlight-lego">生理阻力</span> 遠比天黑下班來得巨大！早晨的第一道藍光，是按下我們重新啟動的關鍵鑰匙。它負責壓抑褪黑激素、促使皮質醇上升，讓你進入清醒狀態。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這感覺就像我們的身體是一隻 <span class="highlight-lego">太陽能機械錶</span>！冬天早晨鬧鐘響了，要求這隻錶立刻開機運轉，可是最強大的那顆「太陽能充電源」卻還沒亮起來！
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    鬧鐘逼你醒來，但血液裡還充斥著高濃度褪黑激素，你的大腦化學依然在「睡眠模式」。那不是單純的起床氣，而是一種實實在在的 <span class="highlight-phonics">化學對抗與掙扎</span>。這也正是為什麼很多人在冬天會經歷這極度巨大的疲勞與「季節性情緒失調」(SAD)。
+                </div>
+            </div>
+
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    所以這篇極簡英文短文，完全沒有用深奧的醫學術語！他只用了「在黑暗中醒來」六個字，就擊中了人類被太陽公轉角度支配的巨大盲區！
+                </div>
+            </div>
+
+            <!-- 章節 3 -->
+            <h2 class="chapter-title">章節 3：打破第四道牆 —— 重新定向的測量邀請</h2>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    如果文本只停留在對比，那就只是篇科普文。最有力的是結尾，它直接把焦點拉回到「正在聽的你」。最後一句話：<span class="english-quote">今天，你所在的城鎮，獲得了多少陽光？</span>
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這句話一出來整個起雞皮疙瘩！本來在看客觀紀錄片，這感覺就像電影主角突然轉過頭來，直視著觀眾的眼睛，打破了第四道牆！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯，這稱作「重新定向的邀請」。這問句迫使你從回憶中抽離，主動去「測量現在的環境」。它更深層是指出了現代人的 <span class="highlight-lego">生物學盲目</span> ── 我們大多生活在一個恆定的黃昏裡。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    恆定的黃昏？
+                </div>
+            </div>
+            
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    你想想，室內辦公室的光大約 300~500 洛克斯 (lux)。足夠你看清楚電腦，但對大腦的中央時鐘來說，亮得像個昏暗的黃昏，根本不足以讓大腦知道「現在是白天」。而到了晚上，我們又盯著螢幕的微弱藍光，讓大腦以為太陽還沒下山，不准睡覺。
+                </div>
+            </div>
+
+            <!-- 章節 4 -->
+            <h2 class="chapter-title">章節 4：現代盲點總結與哲理深思</h2>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    老天！也就是說我們用各種人造光源，把夏天的過剩跟冬天的匱乏全部給「平均掉」了。我們創造出一個永遠溫吞、沒有任何強烈節奏變化的環境……
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    所以當作者問「你的城鎮獲得多少陽光？」時，他是在問：<span class="highlight-phonics">你今天有沒有讓你的身體真正去跟著地球同步？還是又在恆定黃昏的室內待了一天？</span> 我們以為掌握了生活節奏，其實只是在與自然脫節的邊緣反覆試探。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    每天看氣溫決定穿衣，卻極少意識到這座城市的陽光正如何悄悄地重塑我們大腦裡的化學物質。短短的幾個英文字，完全顛覆了我的視角。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    在我們結束探討前留給你一個哲理：這個輕按開關就能用 LED 填滿黑夜的時代，這種自以為對光線的絕對控制權，是一種人類的進化嗎？還是我們正在不知不覺中切斷了自己與地球源古節奏最後的連結，失去某種更深層的健康平衡？這個答案，可能就藏在明天早上的第一道陽光裡！
+                </div>
+            </div>
+
+            <!-- 總結積木 -->
+            <div class="lego-brick-summary">
+                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
+                <ul>
+                    <li><strong>極簡句子的力量：</strong> "Have you ever awakened in the dark...?" 沒有專業術語，卻一語道破人類抵抗退黑激素的化學抗衡。 </li>
+                    <li><strong>生動隱喻轉化理科概念：</strong> 太陽能機械錶 (對比缺光早晨開機的困難)、不想離開的派對客人 (對比夏日光線過剩的超載)、恆定的黃昏 (形容現代室內虛假的工作光線)。</li>
+                    <li><strong>打破第四道牆 (Breaking the Fourth Wall)：</strong> "How much sunlight did your town get today?" 改變了句型的受詞方向，直接將客觀科普帶入到「自身行為覺察」，是英文寫作裡極具張力的結尾法。</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
