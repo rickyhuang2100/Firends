@@ -1,48 +1,274 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - The New Clubhouse</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 The New Clubhouse</h1>
+        <audio controls>
+            <source src="2_7.m4a" type="audio/mp4">
+            您的瀏覽器不支援 audio 元素。
+        </audio>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -65,30 +291,40 @@
                 <div class="info-box">
                     <h4 style="color: #2196F3; margin-bottom: 15px;">新建立的祕密基地</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        Max 的祕密基地快要散架了。他告訴媽媽他想要建一個新的。「首先，你需要一個計畫，」Max的媽媽說。「我們來想想要讓這個新的基地看起來像什麼樣子。」他們一起合作。Max 和他的媽媽用黏土捏了一座小房子。Max 向媽媽展示他想要的樣子。他想要房子上有個門。他想要房子上有兩扇窗戶。他想把房子漆成紅色。接著換他媽媽告訴他她想要什麼。「我希望這個房子是安全的，」Max的媽媽說。「我會幫你一起蓋。」
+                        Max 的祕密基地快要散架了。他告訴媽媽他想要建一個新的。「首先，你需要一個計畫，」Max的媽媽說。「我們來想想要讓這個新的基地看起來像什麼樣子。」他們一起合作。Max
+                        和他的媽媽用黏土捏了一座小房子。Max
+                        向媽媽展示他想要的樣子。他想要房子上有個門。他想要房子上有兩扇窗戶。他想把房子漆成紅色。接著換他媽媽告訴他她想要什麼。「我希望這個房子是安全的，」Max的媽媽說。「我會幫你一起蓋。」
                     </p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Max’s clubhouse was falling apart. He told his mom that he wanted to build a new one.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>Max的祕密基地快要散架了。他告訴媽媽他想要建一個新的。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Max’s clubhouse was falling apart. He
+                                told his mom that he wanted to build a new one.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>Max的祕密基地快要散架了。他告訴媽媽他想要建一個新的。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">“First, you need a plan,” said Max’s mom. “Let’s figure out what the new clubhouse should look like.”</td>
-                            <td style="padding: 10px; vertical-align: top;">「首先，你需要一個計畫，」Max的媽媽說。「我們來想想要讓這個新的基地看起來像什麼樣子。」</td>
+                            <td style="padding: 10px; vertical-align: top;">“First, you need a plan,” said Max’s mom.
+                                “Let’s figure out what the new clubhouse should look like.”</td>
+                            <td style="padding: 10px; vertical-align: top;">
+                                「首先，你需要一個計畫，」Max的媽媽說。「我們來想想要讓這個新的基地看起來像什麼樣子。」</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">They worked together. Max and his mom made a small house out of play clay.</td>
+                            <td style="padding: 10px; vertical-align: top;">They worked together. Max and his mom made a
+                                small house out of play clay.</td>
                             <td style="padding: 10px; vertical-align: top;">他們一起合作。Max 和他的媽媽用黏土捏了一座小房子。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Max showed his mom what he wanted. He wanted a door on the house.</td>
+                            <td style="padding: 10px; vertical-align: top;">Max showed his mom what he wanted. He wanted
+                                a door on the house.</td>
                             <td style="padding: 10px; vertical-align: top;">Max 向媽媽展示他想要的樣子。他想要房子上有個門。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">He wanted two windows on the house. He wanted to paint the house red.</td>
+                            <td style="padding: 10px; vertical-align: top;">He wanted two windows on the house. He
+                                wanted to paint the house red.</td>
                             <td style="padding: 10px; vertical-align: top;">他想要房子上有兩扇窗戶。他想把房子漆成紅色。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
@@ -96,7 +332,8 @@
                             <td style="padding: 10px; vertical-align: top;">接著換他媽媽告訴他她想要什麼。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">“I want the house to be safe,” said Max’s mom. “I will help you build it.”</td>
+                            <td style="padding: 10px; vertical-align: top;">“I want the house to be safe,” said Max’s
+                                mom. “I will help you build it.”</td>
                             <td style="padding: 10px; vertical-align: top;">「我希望這個房子是安全的，」Max的媽媽說。「我會幫你一起蓋。」</td>
                         </tr>
                     </table>
@@ -106,49 +343,111 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">clubhouse</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">俱樂部，（小孩玩的）祕密基地</div></div>
-                    <div class="vocab-item"><div class="vocab-word">fall apart</div><div class="vocab-type">[動詞片語]</div><div class="vocab-meaning">散開，崩落，解體</div></div>
-                    <div class="vocab-item"><div class="vocab-word">figure out</div><div class="vocab-type">[動詞片語]</div><div class="vocab-meaning">想出，弄清楚</div></div>
-                    <div class="vocab-item"><div class="vocab-word">play clay</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">玩具黏土（常用 play dough）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">paint</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">油漆，漆上顏料</div></div>
-                    <div class="vocab-item"><div class="vocab-word">safe</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">安全的</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">clubhouse</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">俱樂部，（小孩玩的）祕密基地</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">fall apart</div>
+                        <div class="vocab-type">[動詞片語]</div>
+                        <div class="vocab-meaning">散開，崩落，解體</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">figure out</div>
+                        <div class="vocab-type">[動詞片語]</div>
+                        <div class="vocab-meaning">想出，弄清楚</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">play clay</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">玩具黏土（常用 play dough）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">paint</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">油漆，漆上顏料</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">safe</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">安全的</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. 代名詞 one 的用法</div><div class="example">He wanted to build a new <span class="highlight">one</span>.</div><p>這裡的 one 用來代替前面提過的單數名詞 (clubhouse)，避免重複說 "build a new clubhouse"。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. "make + 物品 + out of + 材質" 用...做成...</div><div class="example">Max and his mom <span class="highlight">made</span> a small house <span class="highlight">out of</span> play clay.</div><p>表達用什麼原料或材質將東西做出來。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. "want... to be..." 想要...是...的狀態</div><div class="example">I <span class="highlight">want</span> the house <span class="highlight">to be</span> safe.</div><p>表達出對於某物或某人的一種期望與狀態的期待。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 代名詞 one 的用法</div>
+                    <div class="example">He wanted to build a new <span class="highlight">one</span>.</div>
+                    <p>這裡的 one 用來代替前面提過的單數名詞 (clubhouse)，避免重複說 "build a new clubhouse"。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "make + 物品 + out of + 材質" 用...做成...</div>
+                    <div class="example">Max and his mom <span class="highlight">made</span> a small house <span
+                            class="highlight">out of</span> play clay.</div>
+                    <p>表達用什麼原料或材質將東西做出來。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "want... to be..." 想要...是...的狀態</div>
+                    <div class="example">I <span class="highlight">want</span> the house <span class="highlight">to
+                            be</span> safe.</div>
+                    <p>表達出對於某物或某人的一種期望與狀態的期待。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: 疑問句名詞子句</strong><div class="example">Let’s figure out <span class="highlight">what the new clubhouse should look like</span>.</div><p>這裡 what 引導的名詞子句當作 figure out 的受詞。「什麼是新的基地應該看起來像的樣子」。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: tell 某人 + that 子句</strong><div class="example">He <span class="highlight">told his mom that</span> he wanted to build a new one.</div><p>用 that 開頭的一整個完整句子，來當作告訴媽媽的內容（受詞）。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: show 某人 + 事情</strong><div class="example">Max <span class="highlight">showed his mom</span> what he wanted.</div><p>展示給某人看他們需要的東西或想法。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: 疑問句名詞子句</strong>
+                    <div class="example">Let’s figure out <span class="highlight">what the new clubhouse should look
+                            like</span>.</div>
+                    <p>這裡 what 引導的名詞子句當作 figure out 的受詞。「什麼是新的基地應該看起來像的樣子」。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: tell 某人 + that 子句</strong>
+                    <div class="example">He <span class="highlight">told his mom that</span> he wanted to build a new
+                        one.</div>
+                    <p>用 that 開頭的一整個完整句子，來當作告訴媽媽的內容（受詞）。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: show 某人 + 事情</strong>
+                    <div class="example">Max <span class="highlight">showed his mom</span> what he wanted.</div>
+                    <p>展示給某人看他們需要的東西或想法。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：問題解決的記敘文</strong><p>文章一開始提出了問題（基地壞了）。接著是計畫階段（想辦法做計畫並捏黏土模擬）。然後帶出要求（門、窗、紅色）。最後點出共同目標（安全並動手蓋）。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Why did Max want a new clubhouse?</li><li>What material did they use to make a small model house?</li><li>What is the most important thing for Max's mom about the new clubhouse?</li></ol></div>
+                <div class="info-box"><strong>文章結構：問題解決的記敘文</strong>
+                    <p>文章一開始提出了問題（基地壞了）。接著是計畫階段（想辦法做計畫並捏黏土模擬）。然後帶出要求（門、窗、紅色）。最後點出共同目標（安全並動手蓋）。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>Why did Max want a new clubhouse?</li>
+                        <li>What material did they use to make a small model house?</li>
+                        <li>What is the most important thing for Max's mom about the new clubhouse?</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `The New Clubhouse\n\nMax’s clubhouse was falling apart. He told his mom that he wanted to build a new one. “First, you need a plan,” said Max’s mom. “Let’s figure out what the new clubhouse should look like.”\n\nThey worked together. Max and his mom made a small house out of play clay. Max showed his mom what he wanted. He wanted a door on the house. He wanted two windows on the house. He wanted to paint the house red.\n\nThen his mom told him what she wanted. “I want the house to be safe,” said Max’s mom. “I will help you build it.”`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>
