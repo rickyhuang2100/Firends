@@ -3,427 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NotebookLM Podcast 逐字稿：A Baby Polar Bear Grows Up</title>
+    <title>北極熊寶寶的英文課：從零開始的學習地圖</title>
     <style>
-        :root {
-            --bg-color: #f8fafc;
-            --text-color: #1e293b;
-            --primary-color: #2563eb;
-            --speaker-a-color: #0f172a;
-            --speaker-a-bg: #f1f5f9;
-            --speaker-b-color: #0d9488;
-            --speaker-b-bg: #f0fdfa;
-            --card-bg: #ffffff;
-            --accent-lego: #f59e0b;
-            --accent-phonics: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: "Helvetica Neue", Arial, "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif;
             line-height: 1.8;
-            padding: 40px 20px;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
         }
-
         .container {
-            max-width: 840px;
+            max-width: 800px;
             margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .podcast-badge {
-            display: inline-block;
-            background-color: #dbeafe;
-            color: #1e40af;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 50px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            color: #0f172a;
-            margin-bottom: 16px;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-        }
-
-        .meta-info {
-            font-size: 0.95rem;
-            color: #64748b;
-        }
-
-        /* Overview Cards */
-        .overview-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        @media (max-width: 600px) {
-            .overview-section { grid-template-columns: 1fr; }
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
+            background: #fff;
+            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-
-        .card h3 {
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Chapter Styles */
-        .chapter {
-            margin-bottom: 40px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02);
-            border: 1px solid #e2e8f0;
-        }
-
-        .chapter-header {
-            font-size: 1.35rem;
-            color: #1e3a8a;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eff6ff;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Dialogue Styles */
-        .dialogue-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .speech-block {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            transition: background-color 0.2s ease;
-        }
-
-        .speech-block:hover {
-            background-color: #f8fafc;
-        }
-
-        .speaker-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        .speaker-a .speaker-meta { color: var(--speaker-a-color); }
-        .speaker-b .speaker-meta { color: var(--speaker-b-color); }
-
-        .speaker-badge {
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .speaker-a .speaker-badge { background-color: #e2e8f0; color: #334155; }
-        .speaker-b .speaker-badge { background-color: #ccfbf1; color: #115e59; }
-
-        .text-content {
-            font-size: 1.05rem;
-            color: #334155;
-            text-align: justify;
-        }
-
-        /* Highlight elements inside text */
-        .highlight-lego {
-            background-color: #fef3c7;
-            color: #92400e;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-            border-bottom: 2px solid var(--accent-lego);
-        }
-
-        .highlight-phonics {
-            background-color: #fee2e2;
-            color: #991b1b;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-            border-bottom: 2px solid var(--accent-phonics);
-        }
-
-        /* Special Insert Blocks */
-        .english-quote {
-            background: #f8fafc;
-            border-left: 4px solid var(--primary-color);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
-            font-family: 'Georgia', serif;
-            color: #1e293b;
-            font-size: 1.1rem;
-            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.02);
-            line-height: 1.8;
-        }
-
-        .lego-brick-summary {
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-        
-        .lego-brick-title {
-            color: #b45309;
-            font-weight: 700;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        footer {
+        h1 {
             text-align: center;
-            margin-top: 60px;
-            color: #94a3b8;
-            font-size: 0.9rem;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        .dialogue {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .speaker-a .name {
+            color: #e67e22;
+        }
+        .speaker-b .name {
+            color: #27ae60;
+        }
+        .name {
+            font-weight: bold;
+            min-width: 70px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+        .text {
+            flex-grow: 1;
+        }
+        .english {
+            font-family: "Georgia", serif;
+            color: #c0392b;
+            background: #fdf2e9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .quote-box {
+            background-color: #ebf5fb;
+            border-left: 5px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <span class="podcast-badge">NotebookLM Audio Overview</span>
-        <h1>大自然裡的英文思維：從北極熊寶寶看英文動物詞彙與狀態</h1>
-        <div class="meta-info">💡 主題短文特訓：A Baby Polar Bear Grows Up (北極熊寶寶長大囉) | 輕鬆閱讀美化版逐字稿</div>
-    </header>
+    <h1>北極熊寶寶的英文課</h1>
+    <div class="subtitle">從零開始的學習地圖 —— 深探自然與文法的隱喻</div>
 
-    <section class="overview-section">
-        <div class="card" style="border-top: 4px solid var(--accent-lego);">
-            <h3>🧩 核心觀念：英文看世界的角度</h3>
-            <p style="font-size: 0.95rem; color: #475569;">在英文思維裡，描述動物與狀態的方式與中文大不相同。不只是直白的翻譯，而是反映出英文母語者看待自然界的特定角度。</p>
-        </div>
-        <div class="card" style="border-top: 4px solid var(--primary-color);">
-            <h3>🎯 本課核心要點 (Lego Bricks)</h3>
-            <p style="font-size: 0.95rem; color: #475569;">
-                1. <code>Cub vs. Baby Bear</code> (精準描述野生動物幼崽的專屬名詞)<br>
-                2. <code>Born with</code> (「天生帶有」的狀態描述)<br>
-                3. <code>Keep + Object + Adj</code> (保持某種狀態的句型邏輯)<br>
-                4. <code>Live by itself</code> (獨立自主的空間感)
-            </p>
-        </div>
-    </section>
-
-    <!-- Chapter 1 -->
-    <div class="chapter">
-        <div class="chapter-header">📌 第一單元：幼崽的稱呼：為什麼不叫 Baby Bear？</div>
-        <div class="dialogue-flow">
-            
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">你有沒有想過一個問題，就是當我們開始接觸英文的時候，學動物的單字通常是最清的。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">沒錯，像是小狗啊，小貓之類的。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">對啊，小狗叫 puppy, 然後小貓叫 kitten, 但如果今天換成一隻北極熊寶寶，我們的大腦好像就會突然當機。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">哈哈，然後就會很偷懶的直接在心裡翻譯成 baby bear。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">對，就是 baby bear, 可是這樣講真的道地嗎？其實如果對著母語人士一直講 baby bear, 對方大概會覺得 嗯，你是不是在用一種非常童言童語的方式講話。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">真的假的？</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">真的啊。因為在英文的思維裡，他們看待自然界的方式和我們不太一樣，就是他們會為不同的動物幼崽賦予特定的專有名詞。在我們今天的故事裡，北極熊寶寶被稱為 <span class="highlight-lego">cub</span>。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">Cub！我以前以為只有獅子老虎的寶寶才叫 cub 耶。</div>
-            </div>
-            
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">其實很多野生食肉哺乳動物的幼崽，像是熊、狐狸、獅子、老虎等，都可以統稱為 cub。這顯示了英文在描述自然生態時的精確性。</div>
-            </div>
-
-        </div>
+    <h2>一、 為什麼不是 Baby Bear？</h2>
+    
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">你有沒有想過一個問題，就是當我們開始接觸英文的時候，學動物的單字通常是最熟悉的。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒錯，像是小狗啊，小貓之類的。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">對啊，小狗叫 <span class="english">puppy</span>，然後小貓叫 <span class="english">kitten</span>，但如果今天換成一隻北極熊寶寶，我們的大腦好像就會突然當機。哈哈，然後就會很偷懶地直接在心裡翻譯成 <span class="english">baby bear</span>。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">對，就是 <span class="english">baby bear</span>，可是這樣講真的道地嗎？其實如果對著母語人士一直講 <span class="english">baby bear</span>，對方大概會覺得：「嗯，你是不是在用一種非常童言童語的方式講話？」</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">真的假的？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">真的啊。因為在英文的思維裡，他們看待自然界的方式和我們不太一樣，就是他們有專屬的分類和詞彙了。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">原來如此，那這就是我們今天要為正在收聽、並且下定決心要從零開始學好英文的你，所進行的一場專屬深入探討！為你量身打造的。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒錯。我們今天絕對不拿那種厚厚的文法書砸人，我們要用一篇非常簡短，只有三段的英文短文，叫做 <span class="english">A baby Polar Bear grows up</span>（北極熊寶寶長大了），來當做你敲開英文大門的第一塊磚頭。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">嗯哼，這篇真的很適合。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">對，我們的目標不只是看懂故事而已，我們還要從中拆解出母語人士到底是怎麼發音的，還有他們是怎麼思考的。其實這真的是一份非常完美的入門地圖，應該說，學習一門新語言就像是看著這隻剛出生的幼熊一樣。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">怎麼說？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">你想嘛，一開始什麼都看不見，也什麼都不會，只能依賴最基礎的生存法則。但是慢慢地你會開始移動、開始探索，然後最終獲得獨立生存的能力。</div>
     </div>
 
-    <!-- Chapter 2 -->
-    <div class="chapter">
-        <div class="chapter-header">📌 第二單元：與生俱來的狀態：Born with</div>
-        <div class="dialogue-flow">
+    <h2>二、 發音陷阱：住在「冰雪」還是「眼睛」裡？</h2>
 
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">故事裡有一句描寫北極熊寶寶剛出生的狀態，我覺得很有意思：<strong>A cub is born with its eyes closed.</strong> 也就是牠出生的時候眼睛是閉著的。為什麼要用 born with 呢？</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">這個 <span class="highlight-lego">born with</span> 是一個超級棒的語塊。with 在這裡的意思是「伴隨著某種狀態」。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">所以不只是出生，而是「一出生就帶著」某種特徵。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">沒錯。比方說我們中文講「他天生就有一雙藍眼睛」，在英文裡最道地的講法就是 <em>He was born with blue eyes.</em> </div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">原來如此！這個 with 就像是一個掛鉤，把出生這個動作和後面的狀態緊緊扣在一起了。</div>
-            </div>
-            
-            <div class="lego-brick-summary">
-                <div class="lego-brick-title">🧩 Born with 的狀態邏輯</div>
-                <p><strong>• 概念：</strong> 表示「一出生就伴隨/帶有」某種特徵或狀態。</p>
-                <p><strong>• 應用：</strong> <em>born with a talent</em> (天生有才華) / <em>born with blue eyes</em> (天生藍眼)。</p>
-            </div>
-
-        </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">哇，這個比喻太有畫面感了啦！而且文本裡真的有一句是這樣寫的，那我們就不要浪費時間，直接來聽這隻小北極熊是怎麼誕生的。專家能不能請你先用適合初學者的語速全文朗讀一下這篇文本的第一段，讓我們先習慣一下那個英文的節奏？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒問題，請仔細聽哦。</div>
+    </div>
+    
+    <div class="quote-box english">
+        Polar bears live in ice and snow.<br>
+        A polar bear baby is a cub.<br>
+        A cub is born with its eyes closed.<br>
+        It does not have much hair.<br>
+        A cub drinks its mother's milk.<br>
+        The mother keeps the cub warm.
     </div>
 
-    <!-- Chapter 3 -->
-    <div class="chapter">
-        <div class="chapter-header">📌 第三單元：狀態的維持：Keep 的妙用</div>
-        <div class="dialogue-flow">
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">除了 born with，這篇短文裡還有一個很生活化的句型。就是當提到熊媽媽照顧寶寶時，故事寫道：<strong>The mother keeps the cub warm.</strong></div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">這句的文法就是我們常背的 <code>keep + 受詞 + 形容詞</code> 嗎？</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">對，就是它！但不要把它當公式死背。<span class="highlight-lego">keep</span> 的本質就是「維持、保持某個狀態不改變」。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">所以媽媽的動作（可能是抱著、或者在洞穴裡），讓 cub 持續處在 warm（溫暖）的狀態下。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">非常準確。這在日常生活中超級好用。比如冬天你把門關上，是為了 <em>keep the room warm</em>。或者你想告訴別人跟你保持聯絡，就會說 <em>keep in touch</em>。它都是一種狀態的延續。</div>
-            </div>
-
-        </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">等一下，我剛才捕捉到一個發音上的小陷阱。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">哦？你說哪個部分？</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">第一句你說 <span class="english">live in ice</span>，冰雪的冰；然後第三句說 <span class="english">with its eyes closed</span>，眼睛。這個 <span class="english">ice</span> 和 <span class="english">eyes</span> 這兩個字，對我們初學者來說聽起來簡直一模一樣啊！超級常搞混。如果不看文本，我真的會以為北極熊住在眼睛和雪裡面。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">住在眼睛裡也太可怕了吧！這的確是一個非常經典的發音混淆點。但其實它們的嘴型和結尾的氣流完全不同哦。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">怎麼分辨？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">你可以試著感受一下，<span class="english">ice</span> 這個字的結尾是一個輕輕的、像蛇吐信一樣的嘶聲。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">就是沒有聲音的 S 對不對？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒錯。但是 <span class="english">eyes</span> 眼睛這個字，因為它是母音結尾，再加上 s，它的尾音會變成一個有聲的、像蜜蜂嗡嗡叫的那種 z 滋聲。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">哦，<span class="english">ice</span> 是輕輕的漏氣，然後 <span class="english">eyes</span> 的話喉嚨會有一點點震動的感覺。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">完全正確，這個細節真的要注意。</div>
     </div>
 
-    <!-- Chapter 4 -->
-    <div class="chapter">
-        <div class="chapter-header">📌 第四單元：獨立的終點：Live by itself</div>
-        <div class="dialogue-flow">
+    <h2>三、 自然界的分類法與「聚光燈」S</h2>
 
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">故事的最後，這隻北極熊寶寶終於長大了，學會了游泳跟打獵。結尾說：<strong>Now the cub can live by itself.</strong> 這個 by itself 我覺得好有畫面感喔。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">這又是另一個空間邏輯的展現。介係詞 <span class="highlight-lego">by</span> 有「在...旁邊、靠著」的意思。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">所以 by itself 就像是「只有牠自己待在自己旁邊」，沒有別人了。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">精準！就是「靠自己、獨立」的意思。長大的北極熊不再需要媽媽 keep it warm 了，牠可以自己生存。這短短幾個字，就把成長的獨立感完全寫出來了。</div>
-            </div>
-
-            <div class="speech-block speaker-b">
-                <div class="speaker-meta">💡 主持人 B <span class="speaker-badge">學員</span></div>
-                <div class="text-content">哇，看來這些看似簡單的介係詞和單字，背後都隱藏著英文母語人士看世界、描述事物狀態的獨特方式。</div>
-            </div>
-
-            <div class="speech-block speaker-a">
-                <div class="speaker-meta">🎙️ 主持人 A <span class="speaker-badge">導師</span></div>
-                <div class="text-content">沒錯，學習英文從來不是死記硬背，而是去理解並借用他們的眼光來重新看世界。</div>
-            </div>
-
-            <div class="lego-brick-summary">
-                <div class="lego-brick-title">🧩 獨立自主的表達</div>
-                <p><strong>• By oneself:</strong> 藉由「自己待在自己旁邊」的空間感，引申為「靠自己、獨立完成、沒有他人幫助」。</p>
-                <p><strong>• 應用：</strong> <em>I can do it by myself.</em> (我可以自己來。)</p>
-            </div>
-
-        </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">好，那回到我們一開始聊到的 <span class="english">baby bear</span> 的問題，文本裡第二句其實直接給了答案，他說 <span class="english">a polar bear baby is a cub</span>。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">嗯，<span class="english">cub</span>。在英文裡啊，<span class="english">cub</span> 這個字是一個專門用來指稱「特定肉食性哺乳動物幼崽」的字。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">肉食性動物？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">對，不只是北極熊，像是獅子啊、老虎、狐狸或是狼的小寶寶，全部都叫做 <span class="english">cub</span>。英文就是透過這個單字，悄悄地把自然界的動物做了一次分類。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">這邏輯其實蠻有趣的耶，就像我們中文裡，我們也不會把小狗叫「狗嬰兒」嘛。所以當我們學會用 <span class="english">cub</span> 而不是 <span class="english">baby bear</span> 的時候，其實就是在學習用英文的視角在看世界。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒錯，這就是語言的魅力。不過說到看世界的視角，這段文本裡有一個初學者的終極噩夢。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">終極噩夢，你是指動詞後面的那個 S 嗎？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">對，就是它！超崩潰的。你看文本後面說，<span class="english">A cub drinks its mother's milk</span>（小熊喝媽媽的奶），還有 <span class="english">The mother keeps the cub warm</span>（讓小熊保持溫暖）。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">嗯，為什麼 <span class="english">drink</span> 和 <span class="english">keep</span> 後面都要加 S 啊？我以前在學校只要遇到什麼 <span class="english">he runs</span> 或是 <span class="english">she eats</span>，我就會覺得超級煩躁欸。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">其實這牽涉到英文裡最核心的時空觀，也就是我們常聽到的「現在簡單式」，還有「第三人稱單數」。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">聽起來超學術的啦。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">別怕別怕，我們換個方式想。首先這篇文章從頭到尾都在描寫北極熊的自然法則，北極熊住在冰雪裡、喝母奶，這不是昨天發生、明天就消失的事情對吧？</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">哦對，它是一個永恆不變的事實。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒錯，所以只要是表達這種不變的事實或是真理，就會用現在簡單式。理解了這個時空背景，我們再來解決那個煩人的 S。你現在想像一個舞台，對話中的我是主角一號（第一人稱），你是主角二號（第二人稱）。除了你跟我之外，所有在舞台外的第三者，像他、她、牠，這就是「第三人稱」。這裡的 <span class="english">a cub</span>（一隻小熊）和 <span class="english">the mother</span>（熊媽媽）都是那個第三者。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">沒錯。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">而在英文的設計裡，如果這個第三者是孤單一個人上台，也就是單數了。為了讓台下的觀眾立刻注意到：「哦！現在是這個人在做動作」，我們就會在動作上面打一盞聚光燈。這個聚光燈，就是那個動詞後面的 S。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">哇，把 S 當成是一盞專屬的聚光燈！因為它是單獨的一個牠，所以 <span class="english">drinks</span> 和 <span class="english">keeps</span> 要打上聚光燈，讓大家看清楚牠在喝奶、牠在保暖。那如果今天是一大群小熊 <span class="english">cubs</span>，舞台上滿滿都是人，就不需要特別打聚光燈了，動詞就直接用 <span class="english">drink</span>！</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">完全正確！當你把 S 想成標識單獨第三者的聚光燈，而不是一個死背的規則時，這個文法就變得有邏輯多了。</div>
     </div>
 
+    <h2>四、 動作與互動：It's 和 Its 的致命差異</h2>
 
-    <footer>
-        <p>© 2026 Reading Coach. NotebookLM Audio Insights.</p>
-    </footer>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">真的耶，豁然開朗。好，現在這隻小北極熊在媽媽的保暖下，喝著奶慢慢長大了，我們進入這隻熊的下一個階段。專家請幫我們朗讀第二段。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">好的，聽聽看這段畫面發生了什麼變化：</div>
+    </div>
+
+    <div class="quote-box english">
+        The cub walks and swims.<br>
+        It plays and rolls in the snow.<br>
+        Its mother shows it how to hunt.
+    </div>
+
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">哇，整個氣氛完全不一樣。第一段的時候，小熊像顆馬鈴薯一樣，眼睛閉著沒有毛，只能被動的接受照顧。但這一段畫面突然動起來了耶。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">這是因為文本裡開始大量使用了動作動詞（action verbs），像是 <span class="english">walks</span> 走路，<span class="english">swims</span> 游泳，<span class="english">plays</span> 玩耍，還有 <span class="english">rolls</span> 打滾。從語言學習的角度來看，這其實象徵著主體開始與外在世界產生互動了。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">不過在這些動作裡，我看到了一個初學者絕對會踩坑的地方！第三句說，<span class="english">Its mother shows it how to hunt.</span> 等等，這裡出現了兩個發音一模一樣的字哦，<span class="english">It's</span> 和 <span class="english">Its</span>。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">哦，這個真的是大魔王。千萬千萬不能有那一撇！有撇的 <span class="english">it's</span> 是 <span class="english">it is</span> 的縮寫，代表「牠是」；而沒有撇的 <span class="english">its</span> 則是代表「牠的」，用來表示所有權。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">所以如果是沒有撇的 <span class="english">its mother</span>，就是「牠的媽媽」。那如果手殘加上了一撇變成 <span class="english">it's mother</span>...</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">整句話就會變成超荒謬的：「牠是媽媽」。北極熊寶寶瞬間當機！這差異真的非常巨大。</div>
+    </div>
+
+    <h2>五、 黃金句型：Show Someone How To</h2>
+
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">既然聊到這句，我必須說 <span class="english">shows it how to hunt</span>（示範給牠看如何狩獵），這個句型的實用程度簡直破表欸！這不就是我們每天在辦公室裡會聽到的話嗎？「前輩你可以示範給我看這台影印機怎麼用嗎？」</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">非常棒的聯想，<span class="english">show 某人 how to + 動詞</span>，這絕對是一個黃金句型。它的核心邏輯就是「傳授技能」。在英文裡我們不一定要用很死板的 <span class="english">teach</span>（教），用 <span class="english">show</span> 給人一種更具體、手把手帶著你做的感覺。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">原來如此！假設我要教一個外國朋友怎麼拿筷子，我就可以直接說，<span class="english">Let me show you how to use chopsticks</span>，對吧？或者手機當機跑去求救：<span class="english">Can you show me how to fix this?</span> 句子立刻就活了起來。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">沒錯！把這個架構拆下來，套上自己的單字，你就能在真實世界裡生存了。</div>
+    </div>
+
+    <h2>六、 獨立的象徵：助動詞 Can 的「霸氣主管」隱喻</h2>
+
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">好！北極熊寶寶現在學會了走路、游泳、狩獵，牠終於迎來了最後的階段。讓我們來聽這段充滿力量的結尾。</div>
+    </div>
+    
+    <div class="quote-box english">
+        The cub grows stronger.<br>
+        The cub learns to swim.<br>
+        It can find its own food.<br>
+        Now the cub can live by itself.
+    </div>
+
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">這段讀起來真的有一種讓人熱血沸騰的感覺。前面都在說 <span class="english">grows</span>（成長）、<span class="english">learns</span>（學習），但到了後面一個非常關鍵的字出現了：<span class="english">can</span>。加上這個字，感覺小熊的等級完全不同了。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">在語言學裡啊，<span class="english">can</span> 被稱為情態動詞或者是助動詞。顧名思義，它的作用就是去幫助主要動詞，賦予它一種特定的態度或狀態。而在這裡，<span class="english">can</span> 賦予的就是一種主動的能力與獨立性。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">而且哦，如果仔細觀察加了 <span class="english">can</span> 之後的文法變化，你看最後這兩句：<span class="english">It can find</span>，還有 <span class="english">cub can live</span>。主詞一樣是單獨的第三人稱，但是 <span class="english">find</span> 和 <span class="english">live</span> 後面的那個 S 不見了！為什麼？你剛不是才說不變的真理都要加 S 嗎？</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">這就是 <span class="english">can</span> 這類情態動詞的霸氣之處了。你可以把 <span class="english">can</span> 想像成一位能力超強的「主管」。當這位主管親自到現場盯場的時候，底下的員工（後面的動詞），就不需要再穿戴整齊、掛著名牌去標識身份了（名牌就是那個 S）。主管 <span class="english">can</span> 扛下了所有的文法責任，所以後面的動詞必須卸下所有附加物，回到最原始最純粹的「原形動詞」。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">這不就是一種隱喻嗎？當動詞卸下了所有文法規則的束縛、回到原形的時候，正好對應了這隻小北極熊不再需要媽媽的庇護，真正獲得了獨立生存的能力！</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">對！這就是語言美麗的地方。外在的文法規則與內在的故事邏輯，在這裡達到了完美的契合。當你掌握了 <span class="english">can</span>，你就掌握了獨立。</div>
+    </div>
+
+    <h2>七、 結語：你的「狩獵」目標是什麼？</h2>
+
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">我們今天居然從一篇講述北極熊的極短篇裡挖出了這麼多東西。一開始你就像那隻眼睛閉著的小熊，只能透過認識名詞重新替世界命名；然後你學會了現在簡單式的基礎鏡頭，知道怎麼用 S 打聚光燈；接著你掌握了 <span class="english">show you how to</span> 黃金句型；最後你迎來了象徵能力的 <span class="english">can</span>！</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">是的。就像這隻獨自走向冰雪世界的小北極熊，不再需要依賴翻譯軟體，不需要別人替你查單字，因為動詞回歸了原形，而你也擁有了獨立探索這個語言世界的能力。</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">如果你現在還覺得自己像是在雪地裡蹣跚學步、常常跌倒的小熊，請記得這是一個必經的過程。可能連發音都會把 <span class="english">ice</span> 和 <span class="english">eyes</span> 搞混，每次打字都會被 <span class="english">it's</span> 和 <span class="english">its</span> 弄得氣壞。但只要你持續吸收、持續模仿別人 <span class="english">show you how to do it</span>，總有一天那個 <span class="english">can</span> 會降臨到你身上。</div>
+    </div>
+    <div class="dialogue speaker-b">
+        <div class="name">專家</div>
+        <div class="text">說得太好了。這就來到我們今天要留給你的一個思考題了。這隻小北極熊學會了狩獵，牠的目標是在極圈裡找到海豹來填飽肚子。而現在正在收聽這場深入探討的你，如果有一天你真的完全掌握了英文這個強大的工具，真正達到了 <span class="english">can live by itself</span> 的獨立狀態...</div>
+    </div>
+    <div class="dialogue speaker-a">
+        <div class="name">主持人</div>
+        <div class="text">那會是什麼樣子呢？這份名為「英文」的能力會是你人生中的哪一種狩獵技巧？你打算用它去為自己尋找什麼樣的新食物，去開拓什麼樣的新世界呢？是獨自去國外旅行、看懂你最喜歡的影集，或者是為了爭取一個更好的工作機會？把那個新世界當做你的目標，每次你想放棄的時候，就想想那隻在雪地裡打滾、最終獨當一面的小北極熊吧！加油。</div>
+    </div>
 
 </div>
 

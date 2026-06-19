@@ -1,453 +1,1577 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - What Are Stars?</title>
+    <title>星空錯覺與英文學習的大腦重構 — 深度對談精華</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+            --space-bg: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
+            --body-bg: #f4f6fa;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent-primary: #1d4ed8;
+            --accent-secondary: #0284c7;
+            --accent-gold: #b45309;
+            --accent-gold-light: #fef3c7;
+            --focus-border: #2563eb;
+            --sky-border: #0ea5e9;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK TC", sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-main);
             line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
-            padding: 20px;
+            padding-bottom: 60px;
         }
 
-        .podcast-container {
+        .container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            padding: 40px;
+            padding: 0 20px;
         }
 
-        .podcast-header {
+        /* Hero Header */
+        header {
+            background: var(--space-bg);
+            color: #ffffff;
+            padding: 50px 0;
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
+            border-bottom: 5px solid #38bdf8;
             margin-bottom: 40px;
-        }
-
-        .podcast-title {
-            font-size: 28px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .podcast-subtitle {
-            font-size: 18px;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        .podcast-meta {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
-        }
-
-        .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding-left: 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
-            padding: 10px 15px;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .dialogue-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .speaker-row {
-            display: flex;
-            gap: 15px;
-            max-width: 85%;
-        }
-
-        .speaker-row.host-a {
-            align-self: flex-start;
-        }
-
-        .speaker-row.host-b {
-            align-self: flex-start;
-        }
-
-        .speaker-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .host-a .speaker-avatar {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .host-b .speaker-avatar {
-            background-color: #FF9800;
-            color: white;
-        }
-
-        .speech-bubble {
-            padding: 15px 20px;
-            border-radius: 12px;
+            box-shadow: var(--shadow-md);
             position: relative;
-            font-size: 16px;
+            overflow: hidden;
         }
 
-        .host-a .speech-bubble {
-            background-color: var(--host-a-color);
-            border-top-left-radius: 2px;
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(white 1px, transparent 0);
+            background-size: 40px 40px;
+            opacity: 0.15;
         }
 
-        .host-b .speech-bubble {
-            background-color: var(--host-b-color);
-            border-top-left-radius: 2px;
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* 內容亮點樣式 */
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
-            font-weight: bold;
+        header p {
+            color: #93c5fd;
+            font-size: 1.1rem;
+            font-weight: 300;
         }
 
-        .highlight-phonics {
-            color: #e74c3c;
-            font-weight: bold;
-            background: #fdeaea;
-            padding: 0 4px;
-            border-radius: 3px;
+        /* Intro Box */
+        .intro-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--accent-secondary);
         }
 
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        .intro-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
         }
 
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
+        /* Short Text Display Card */
+        .text-display-card {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #334155;
         }
 
-        .lego-brick-summary h4 {
-            color: #b58900;
-            margin-bottom: 10px;
+        .text-display-card h2 {
+            color: #38bdf8;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .text-body {
+            font-family: "Georgia", serif;
+            font-size: 1.25rem;
+            line-height: 1.9;
+            letter-spacing: 0.5px;
+        }
+
+        .text-paragraph {
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 2px solid #475569;
+        }
+        
+        .text-paragraph:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Section Title Divider */
+        .section-divider {
+            margin: 50px 0 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-divider h2 {
+            font-size: 1.3rem;
+            color: #1e3a8a;
+            white-space: nowrap;
+            background: #e2e8f0;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .section-divider::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: #cbd5e1;
+        }
+
+        /* Dialogue Script Styling */
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .speech-block {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .speech-block:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .speaker-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Focus Speaker Styles */
+        .speech-block.focus-speaker {
+            border-left: 5px solid var(--focus-border);
+            background: #f8fafc;
+        }
+
+        .speech-block.focus-speaker .speaker-meta {
+            color: var(--accent-primary);
+        }
+
+        /* Sky Speaker Styles */
+        .speech-block.sky-speaker {
+            border-left: 5px solid var(--sky-border);
+        }
+
+        .speech-block.sky-speaker .speaker-meta {
+            color: var(--accent-secondary);
+        }
+
+        .speech-content {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            text-align: justify;
+        }
+
+        .speech-content em {
+            font-style: italic;
+            color: var(--accent-gold);
+            font-weight: 600;
+            background: #fffbeb;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+        
+        .speech-content strong {
+            color: #0f172a;
+            font-weight: 700;
+            border-bottom: 2px dotted #94a3b8;
+        }
+
+        /* Learning Takeaway Callout Boxes */
+        .takeaway-panel {
+            background: linear-gradient(to right, #fef3c7, #fffbef);
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .takeaway-title {
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .takeaway-body {
+            font-size: 0.98rem;
+            color: #78350f;
+        }
+
+        /* Quiz Box Styling */
+        .quiz-container {
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .quiz-container h3 {
+            font-size: 1.25rem;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quiz-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quiz-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .quiz-question {
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .quiz-answer {
+            color: #2563eb;
+            font-weight: 500;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .quiz-answer::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        /* Epilogue / Card Box Styling */
+        .epilogue-card {
+            background: var(--space-bg);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 35px;
+            margin-top: 50px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+        
+        .epilogue-card h3 {
+            color: #38bdf8;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .epilogue-card p {
+            color: #cbd5e1;
+            max-width: 750px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Responsive Settings */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5rem; }
+            header p { font-size: 0.95rem; }
+            .text-body { font-size: 1.1rem; }
+            .speech-block { padding: 16px; }
+        }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：What Are Stars?</h1>
-            <p class="podcast-subtitle">打破視覺與認知錯覺，透過星星解碼英文底層的強大邏輯</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：節奏類型(重音 vs 音節)、視角層次(Farther / Far away)、邏輯水泥結構</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_2.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
+
+    <header>
+        <div class="container">
+            <h1>星空錯覺與英文學習的大腦重構</h1>
+            <p>《What are Stars》聲音節目深度對談逐字稿精華</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="intro-card">
+            <p><strong>💡 導讀說明：</strong>本篇章轉載自一場精彩的跨界語言學習對談。兩位主持人藉由夜空星芒的「視覺錯覺」切入，優美地解構了一篇看似基礎卻暗藏英文核心機制的短文《What are Stars》。全篇從發音的「爵士樂節奏感」、單字的「空間體感」到文法的「邏輯水泥」層層拆解，帶領讀者打破中文思維，重新設定大腦的英文學習迴路。</p>
+        </div>
+
+        <!-- 英文短文呈現區 -->
+        <div class="text-display-card">
+            <h2>🌌 核心精簡短文：《What are stars?》</h2>
+            <div class="text-body">
+                <div class="text-paragraph">The sun has set. I see a red and orange glow in the sky. Soon it gets dark outside. Now I see stars in the sky. There are so many.</div>
+                <div class="text-paragraph">Stars are made of hot gases. They give off their own light. Some stars look white, others may look blue, red or gold.</div>
+                <div class="text-paragraph">Stars are different sizes. They can be big or small. The sun is a star. It is closer; others are farther away. That is why they look so small. In fact, some far away stars are bigger than the sun.</div>
             </div>
         </div>
 
+        <!-- 逐字稿流動 -->
         <div class="dialogue-flow">
 
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：從星空錯覺到語言學習焦慮的重設</h2>
+            <div class="section-divider">
+                <h2>第一幕：夜空錯覺與英文焦慮</h2>
+            </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    你有沒有想過，當我們抬頭仰望夜空的時候，其實我們看到的全部都是一種「視覺錯覺」。你以為自己看到的是一顆微弱的小光點，但實際上它可能是一團比我們的太陽還要龐大幾百倍，正在劇烈燃燒的地獄之火。完全只是因為距離太遙遠了，我們的大腦就被徹底欺騙了。
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    你有沒有想過，當我們抬頭仰望夜空的時候，其實我們看到的全都是一種<strong>視覺錯覺</strong>。真的就是你以為自己看到的是一顆微弱的小光點，但實際上，它可能是一團比我們的太陽還要龐大幾百倍、正在劇烈燃燒的地獄之火啦。
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    沒錯，這是一個非常精準的切入點。面對一門全新的語言（尤其身為母語中為的台灣聽眾），那種焦慮感其實跟看著遙遠星空的錯覺非常像。就是會覺得哇，那些密密麻麻的長句還有文法規則，就像遙不可及的星系一樣龐大又難懂。
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒錯，完全只是因為距離太遙遠了，我們的大腦就被徹底欺騙了。
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    事實上只要 <span class="highlight-lego">找對焦距</span> 去拆解它們的結構，你會發現它們背後的邏輯出奇的單純哦。所以今天我們不搬出那種厚重的文法教科書，我們要借用一篇非常精簡的短文，叫做 <span class="english-quote">What are stars?</span>。不要因為這篇文章的單字看起來很基礎就低估它，短短幾句話裡面，其實隱藏了英文這門語言最核心的 <span class="highlight-lego">運作機制</span>。
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    那今天呢，在這場深度探索中，我們要利用這個打破認知錯覺的過程，來幫你重新設定大腦學習英文的迴路。
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    像發音的節奏感、核心單字、還有關鍵句型。我們這趟由零開始的學習之旅像拆解積木一樣！
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒錯，這是一個非常精準的切入點，特別是對於正在收聽這場節目的你，尤其是母語為中文的台灣聽眾。面對一門全新的語言，那種焦慮感其實跟看著遙遠星空的錯覺非常像。就是會覺得，哇，那些密密麻麻的<strong>長句</strong>還有文法規則，就像遙不可及的<strong>星系</strong>一樣龐大又難懂。
                 </div>
             </div>
 
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：爵士樂節奏：音節計時 vs. 重音計時</h2>
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，但事實上只要找對焦距去拆解他們的結構，你會發現他們背後的邏輯<strong>出奇的單純</strong>哦。所以今天我們不搬出那種厚重的文法教科書，我們要藉用一篇非常精簡的英文短文，叫做《What are stars?》，也就是《什麼是星星》。
+                </div>
+            </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    現在請你閉上眼睛，想像你正在一片空曠的草地上，看著夕陽逐漸落下，我要開始為你朗讀囉... 
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    嗯，千萬不要因為<strong>這篇文章</strong>的單字看起來很基礎就低估它，這短短幾句話裡面，其實隱藏了英文這門語言最核心的運作機制。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，像是發音的節奏感、核心單字，還有關鍵句型，我們絕對不會讓你感到資訊超載。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speech-block-inner">
+                    <div class="speaker-meta">💬 觀點主持 Sky</div>
+                    <div class="speech-content">
+                        沒錯，我們這趟從零開始的英文之旅會像拆解積木一樣，一步一步帶你解析這篇充滿<strong>畫面感</strong>的文章。那準備好了嗎？現在請你閉上眼睛，想像你正在一片空曠的草地上，看著夕陽逐漸落下，我要開始為你朗讀囉：
+                        <br><br>
+                        <em>"The sun has set. I see a red and orange glow in the sky. Soon it gets dark outside. Now I see stars in the sky. There are so many."</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    嗯，這個開場非常畫面，馬上就把人帶進那個黃昏的情景裡了。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對吧，有一種慢慢進入夜晚的感覺，那我繼續往下讀：
                     <br><br>
-                    <span class="english-quote">The sun has set. I see a red and orange glow in the sky. Soon it gets dark outside. Now I see stars in the sky. There are so many. Stars are made of hot gases. They give off their own light. Some stars look white, others may look blue, red or gold. Stars are different sizes. They can be big or small. The sun is a star. It is closest to Earth. Other stars are farther away. That is why they look so small. In fact, some far away stars are bigger than the sun.</span>
+                    <em>"Stars are made of hot gases. They give off their own light. Some stars look white, others may look blue, red or gold."</em>
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    哇，連星星的顏色都帶出來了。而且剛聽這樣聽下來，你可以感覺到發音跟語調的起伏是非常明顯的。不過我想挑戰一個普遍的學習觀念：為什麼我們今天反而要先聽整段？「只聽感覺」真的對從零開始學英文有幫助嗎？
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    哇，連星星的顏色都帶出來了，而且你剛念的那個節奏感真的很好。
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    絕對有。這牽涉到語言學裡面一個蠻重要的概念，叫做 <span class="highlight-phonics">節奏類型</span>。中文和英文在發聲的底層邏輯上完全不一樣。中文是「音節計時語言」，每一個字在的時間跟輕重都差不多，像節拍器「搭 搭 搭 搭」這樣；但英文不一樣，英文是 <span class="highlight-phonics">重音計時語言 (Stress-timed)</span>，它聽起來其實更像是 <span class="highlight-lego">爵士樂</span>。
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    謝謝啦，那最後一段是這樣的：
+                    <br><br>
+                    <em>"Stars are different sizes. They can be big or small. The sun is a star. It is..."</em>
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    爵士樂？這個比喻很新鮮欸。意思是，英文會把句子的時間和力氣全投資在傳遞核心資訊的單字上，像是名詞跟動詞，不重要的介系詞就會滑過去。重音就落在 red, orange, glow, sky 這些字上。
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    嗯嗯，這裡把太陽當做一個很具體的參考點了。
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯，這就像先在畫布上打上底色，培養出對這個爵士樂的節奏語感，這比一開始死記每個字的中文字譯還要關鍵！
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒錯，最後幾句：
+                    <br><br>
+                    <em>"Others are farther away. That is why they look so small. In fact, some far away stars are bigger than the sun."</em>
                 </div>
             </div>
 
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：有溫度的光暈與物理空間軌跡 (Glow & Give off)</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    現在讓我們拿出放大鏡。黃昏場景裡那個字 <span class="english-quote">glow</span>。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    其實這個字有引起我的注意，為什麼不用我們最熟悉的 light 呢？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這就是英文用字講究「語感」的地方。如果你用 light，它就是一個統稱的光，甚至可能是很刺眼的探照燈。但 <span class="highlight-lego">glow</span> 自帶一種溫度跟延續性，它描述的是沒有明確邊界、柔和而且持續散發的光暈。像夕陽或螢火蟲的光。你必須把單字連同它背後的視覺特效一起記下來。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    那下一段描寫星星發光：<span class="english-quote">They give off their own light.</span> 的片語 <span class="highlight-lego">give off</span>。聽起來有一種非常自然毫不費力的感覺！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    對，就像冬天開的暖爐，它不需要刻意啟動什麼流程，熱能就自然地向外散發出來。中文常用抽象的動詞，但英文極度依賴 <span class="highlight-lego">動詞加上空間介系詞的組合</span>。這讓英文變成一種非常有物理空間感的語言。你強迫自己想像一個動作的空間軌跡：東西本來在裡面 (give)，然後離開主體向外擴散 (off)。冷氣機 give off 冷氣，花朵 give off 香味，其實都是同一個物理軌跡。
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    念得真好。其實剛才這樣聽下來，你可以感覺到那個發音跟語調的起伏是非常明顯的。
                 </div>
             </div>
 
 
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：相對座標與絕對濾鏡 (Farther vs. Far Away)</h2>
+            <div class="section-divider">
+                <h2>第二幕：大腦底層的發音邏輯 — 爵士樂節奏</h2>
+            </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    講到空間感，文章裡面有一句 <span class="english-quote">Other stars are farther away.</span>，然後後面又說 <span class="english-quote">Some far away stars...</span>。這兩個都有 far，中文也都是遙遠，為什麼英文要搞得這麼麻煩，拆成兩種表達？
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒錯，每次讀這段文字我都覺得像是在看一部微電影。不過我想挑戰一個大家普遍的學習觀念。我們從小學英文第一步好像都是先翻開單字表一個一個死背。為什麼我們今天反而要先聽完整段？只聽這種感覺真的對<strong>從零開始</strong>學英文有幫助嗎？
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這正是兩種語言邏輯底層巨大的分歧。中文依賴情境（我說遠你就懂），但是英文是一種高度<span class="highlight-lego">空間座標化</span>的語言，它隨時要求你給出一個<span class="highlight-lego">參考點 (錨點)</span>。當使用比較級 <span class="highlight-phonics">farther</span>，英文文法強迫大腦設定一個錨點，在這裡就是相對於「太陽」，其他的星星在更深處。這充滿動態拉扯的相對位置感。
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    絕對有！這其實牽涉到<strong>語言學</strong>裡面一個蠻重要的概念，叫做<strong>節奏類型</strong>。
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    了解。但是 <span class="highlight-phonics">far away</span> 這個當形容詞用時，就沒這種拉扯感嗎？
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    節奏類型？
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    當我們說 far away stars 時，它變成了一種「絕對狀態」。想像你拍了一張夜空照片，套上一個叫做「遙遠」的<span class="highlight-lego">靜態濾鏡</span>。我們不在乎它跟誰比，只描述它帶有遙不可及的屬性。
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，中文和英文在<strong>發音</strong>的底層邏輯上完全不一樣。中文是<strong>音節計時（Syllable-timed）</strong>的語言，就像節拍器一樣。也就是每一個字佔的時間跟輕重都差不多。
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    哇，所以 farther 是一把尺，量測之間的距離；而 far away 是一張加了濾鏡的照片，描述狀態。這讓我驚覺，英文的比較級 (bigger, farther) 極度渴望把世間萬物拉在一起對比、測量。也難怪中文只說星星大，英文總是不自覺要追問 "bigger than what?"
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    像是「搭、噠、噠、搭」這樣嘛。
                 </div>
             </div>
 
-            <!-- 章節 5 -->
-            <h2 class="chapter-title">章節 5：物理變化 vs. 化學變化的介系詞 (Made of/from)</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    對了，介系詞也是。為什麼星星組成是用 <span class="english-quote">made of hot gases</span>，而不是 made from？這難道只能死背嗎？
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對對對！但英文不一樣，英文是<strong>重音計時（Stress-timed）</strong>的語言，它聽起來其實更像是<strong>爵士樂</strong>。
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    絕對不是死背。英文介系詞是用來描述事物<span class="highlight-lego">變化發生的程度</span>。當我們用 <span class="highlight-phonics">made of</span>，代表這是一個「物理變化」，也就是你肉眼還看得出它原本的材質；就像桌子是 made of wood，星星是 made of gases（本質還是氣體）。
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哇，爵士樂！這個比喻很新鮮呢，怎麼說？
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    那 <span class="highlight-phonics">made from</span> 就是暗發生了化學變化，已經徹底改頭換面了囉？
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    意思是英文會把句子的時間和力氣全投資在傳遞核心資訊的單字上，像是名詞跟動詞。
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    對！比如說葡萄酒是葡萄釀的：<span class="english-quote">Wine is made from grapes.</span> 從酒裡已經看不出葡萄形狀了。這段「從原料到成品的距離」比較遙遠，英文就會用 from (來自遠方)。
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    了解，所以那些不重要的<strong>介系詞</strong>就會滑過去。
                 </div>
             </div>
 
-
-            <!-- 章節 6 -->
-            <h2 class="chapter-title">章節 6：邏輯的鋼筋水泥 (That is why)</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                     文章裡說 <span class="english-quote">The other stars are farther away. That is why they look so small.</span> 老實說， <span class="highlight-lego">that is why</span> (這就是為什麼) 看起來很不起眼，但加上去後，整段話突然變得很具備說服力！
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯！你的重音就會落在 <em>red</em>, <em>orange</em>, <em>glow</em>, 還有 <em>sky</em> 這些核心關鍵字上。
                 </div>
             </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    你抓到了英文寫作靈魂！中文習慣把句子並列（意合），讓聽眾自己猜測關係。比如「外面下雨，我不出門」，我們不加連接詞，大家自然懂因果。但在英文裡，如果直接斷開寫，對他們大腦來說是缺乏鋼筋支撐。英文必須把邏輯關係「具象化」。
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哦，我懂了。這就像是在畫一幅星空圖一樣，對不對？我們剛剛的朗讀其實是先在畫布上打上底色。
                 </div>
             </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    也就是說，如果要講得道地，我們不能只丟磚頭，必須主動提供「水泥」把邏輯黏在一起！所以 That is why 就是最強的邏輯水泥！
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯，先把底色畫好，培養出對這個爵士樂節奏的語感。這比一開始死記每一個字的中文翻譯還要關鍵。那既然底色已經畫好了，現在讓我們拿出放大鏡來看看構成這片星空的重要單字積木吧。
                 </div>
             </div>
 
-
-            <!-- 章節 7 -->
-            <h2 class="chapter-title">章節 7：打破宇宙的錯覺與統整測驗</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    最後來個小檢驗，這也是一個認知的翻轉。作者的寫作技巧非常高明：<br>
-                    1. <b>What are stars made of?</b> —— （物理沒有本質改變的）hot gases。<br>
-                    2. <b>Why do other stars look smaller?</b> —— 利用邏輯水泥，因為 they are farther away 導致的錯覺。<br>
-                    3. <b>何物導致這錯覺？</b> —— 把太陽當比較尺規（錨點）。揭露出其實它們 some far away stars are bigger than the sun 的事實。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    這篇文章帶著讀者從對大小距離的表象，經歷一次認知錯覺的顛覆。這跟我對於「學英文」的遙不可及、覺得它是神秘怪獸的想法如出一轍！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    你看，英文就跟這片夜空一樣，只要願意拉近距離去拆解（爵士樂節奏、軌跡的空間感、邏輯鋼筋的具象化），它其實也就是一套有跡可循的溝通系統。你並不渺小，英文也沒有你想像得那麼難，一切都只是「距離」造成的視覺錯覺罷了！期待大家用新的眼光看宇宙！
+            <div class="takeaway-panel">
+                <div class="takeaway-title">🧠 語言學核心：音節計時 vs 重音計時</div>
+                <div class="takeaway-body">
+                    <strong>中文（音節計時）：</strong>每個音節等長等重，節奏平穩如節拍器。習慣平鋪直敘。<br>
+                    <strong>英文（重音計時）：</strong>時間分配給「重音節」（實詞如名詞、動詞），虛詞（介系詞、冠詞）會被快速弱化滑過。節奏起伏如爵士樂。
                 </div>
             </div>
 
 
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>重音計時的爵士樂：</strong> 英文不是節拍器般每個字都一樣長。力氣投入在核心名詞、動詞上，介系詞等字會快速輕巧帶過。</li>
-                    <li><strong>空間方位感 (Space & Trajectory)：</strong> Give off、Farther，英文極度渴望把物理空間與相對比較放進表達方式裡。</li>
-                    <li><strong>變化的距離尺：</strong> Made of 代表本質尚存的物理變化；Made from 則是徹底脫胎換骨的化學變化。</li>
-                    <li><strong>主動的邏輯水泥：</strong> 中文明顯因果常省略連接詞，而英文像蓋房子，必須用 "That is why..." 來把句子如鋼筋水泥般緊扣在一起。</li>
-                </ul>
+            <div class="section-divider">
+                <h2>第三幕：核心單字拆解 — 充滿畫面與物理體感的詞彙</h2>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    好啊，那我們先來看黃昏場景裡那個字：<em>glow</em>。其實這個字剛剛有引起我的注意，為什麼不用我們最熟悉的 *light* 呢？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    這就是英文用字非常講究「語感」的地方了。如果你用 *light*，它就是一個統稱的光，甚至可能是那種很刺眼的探照燈。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    嗯，那 *glow* 給人的感覺是什麼？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    <em>glow</em> 這個字啊，它自帶一種溫度跟延續性，它描述的是那種沒有明確邊界、柔和而且持續散發的光暈。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哇，帶有溫度的光暈！像是夕陽，或是螢火蟲的光那樣嗎？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，完全正確！這不是死背中文翻譯能體會的，你必須把單字連同它背後的視覺特效一起記下來。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    這個解釋太有畫面了。那接下來文本說到星星的本質說，<em>"Stars are made of hot gases."</em>
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，高溫氣體，這裡的 *gas* 加了 *s* 變成了複數的 *gases*。但這裡真正抓住我眼球的是下一句描述發光的方式：<em>"They give off their own light."</em> 這個動詞片語 <strong>give off</strong> 是散發對吧？你覺得這個片語有什麼特別的地方嗎？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    我在腦海裡對比了一下。如果用中文，我們可能會說<strong>星星</strong>製造光或是發出光，但英文用 *give off*，聽起來有一種非常自然、毫不費力的感覺。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，有一種很順暢的感覺。就像冬天家裡開的暖爐，它不需要刻意去啟動什麼流程，它就是很自然地把熱能向外散發出來，對吧？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哇，這個暖爐的比喻抓到了英語動詞片語的精髓，這也帶出了一個很有趣的觀察：中文常常用抽象的動詞向「散發」、「釋放」，但英文好像很喜歡把動詞跟<strong>介系詞</strong>綁在一起。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯，英文極度依賴這種動詞加上空間介系詞的組合，這讓英文變成一種非常物理、非常<strong>富有體感</strong>的語言。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    物理感？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，它強迫你去想像一個動作的<strong>空間軌跡</strong>。東西本來在裡面，也就是 <em>give</em>，然後現在離開了主體向外擴散，也就是 <em>off</em>。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    原來如此，所以我們學片語的時候不要把它當公式死背，要在腦海裡畫出那個空間移動的軌跡。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    完全正確！只要掌握這種空間感，你就會懂為什麼冷氣機 *give off* 熱氣，或者是花 *give off* 香味，其實都是同一個物理軌跡。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    太酷了吧！那講到空間感，文章接下來探討距離和大小的地方，真的是把這種執著發揮到了極致。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    嗯，你說的是 <em>farther</em> 跟 <em>far away</em> 吧？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對，文章裡先說 *The other stars are farther away*，其他的星星離得比較遠。然後最後一句又說 *some far away stars*，一些遙遠的星星。這兩個字裡面都有 *far*，中文也都翻成遙遠，為什麼英文要搞得這麼麻煩，拆成兩種表達方式啊？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    呃，這正是英文跟中文在邏輯底層一個巨大的分歧哦。中文是高度依賴情境的，我說這顆星星比較遠，你自然聽得懂。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對啊。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    但是英文是一種高度<strong>空間座標化</strong>的語言，它隨時隨地都要求你給出一個<strong>參考點（錨點）</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    參考點？你的意思是它需要一個比較的基準嗎？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對！當你使用 *farther*，也就是「更遠」的這個<strong>比較級</strong>的時候，英文的文法機制其實在強迫你的大腦設定一個錨點。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哦，所以在這篇文章裡這個錨點就是<strong>太陽</strong>了。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯！所以 *The other stars are farther away*，它的潛台詞其實是：相對於太陽這個座標，其他的星星在更深處。這是一個充滿動態拉扯感的相對位置。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    了解。那 *far away* 呢？它就沒有這種拉扯感嘛。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    *far away* 寫在一起作為形容詞的時候，它就變成了一種<strong>絕對狀態</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    絕對狀態是指什麼感覺？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    想像一下，你拿出相機幫夜空拍了一張照片，然後套上了一個叫做「遙遠」的靜態濾鏡。當我們說 *far away stars* 的時候，我們不在乎它比誰遠了，我們只是在描述這些星星帶有一種遙不可及的屬性。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哇，所以 *farther* 是一把尺正在測量兩者之間的距離，而 *far away* 是一張加了濾鏡的照片描述一種狀態。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯，這個比喻非常好！
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    這讓我突然驚覺，英文的<strong>比較級</strong>像是 <em>bigger</em>, <em>farther</em>, <em>closest</em>，並不是單純為了讓單字變長，而是英文極度渴望把世界上的事物放在一起<strong>稱重和測量</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    你的洞察力非常強！這其實也解釋了為什麼很多中文母語者講英文會<strong>卡卡的</strong>，因為中文可以很輕易地說「星星很大」，但英文總是忍不住要問：什麼比起來大？對吧，也就是 <strong>bigger than what</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    完全正確。這就完美地銜接到了我們剛才讀到的那句：<em>"some far away stars are bigger than the sun."</em> 我們不只說星星大，還一定要把<strong>太陽</strong>拉進來當比例尺，語言背後真的是人類觀察世界的習慣耶。
+                </div>
+            </div>
+
+            <table style="width:100%; border-collapse: collapse; margin: 20px 0; background: #fff; border-radius: 8px; overflow:hidden; box-shadow: var(--shadow-sm);">
+                <thead>
+                    <tr style="background: #1e293b; color: #fff; text-align: left;">
+                        <th style="padding: 12px; font-size: 0.95rem;">英文核心詞彙</th>
+                        <th style="padding: 12px; font-size: 0.95rem;">底層空間/畫面邏輯</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px; font-weight: 700; color: var(--accent-primary);">glow</td>
+                        <td style="padding: 12px; color: var(--text-main);">無明確邊界、自帶溫度的柔和光暈（如夕陽、螢火蟲）。而非刺眼的 light。</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                        <td style="padding: 12px; font-weight: 700; color: var(--accent-primary);">give off</td>
+                        <td style="padding: 12px; color: var(--text-main);">物理軌跡：主體內部（give）向空間外部（off）自然流淌、毫不費力地散發（如暖爐）。</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px; font-weight: 700; color: var(--accent-primary);">farther</td>
+                        <td style="padding: 12px; color: var(--text-main);">相對座標：大腦的「動態一把尺」，強迫設定一個比較的「錨點」（本篇中為太陽）。</td>
+                    </tr>
+                    <tr style="background: #f8fafc;">
+                        <td style="padding: 12px; font-weight: 700; color: var(--accent-primary);">far away</td>
+                        <td style="padding: 12px; color: var(--text-main);">絕對狀態：大腦的「靜態濾鏡」，純粹形容遙不可及的靜態屬性。</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div class="section-divider">
+                <h2>第四幕：文法與關鍵句型 — 骨架中的鋼筋與水泥</h2>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    的確是這樣。既然我們已經掌握了單字跟空間的顏料，現在我們來看看怎麼把顏料組合起來，也就是撐起句子的骨架——文法與關鍵句型。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒問題，很多人最怕文法了，但其實邏輯很簡單。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，像是<strong>介系詞</strong>，文章說 *stars are made of hot gases*。那我問你，為什麼是用 <strong>made of</strong>，而不是 *made from* 啊？這難道只能死背嗎？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對耶，為什麼呢？這難道不是公式嗎？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    絕對不是死背，你可以這樣想，英文的介系詞其實是在描述事物發生變化的<strong>程度</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    變化的程度？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對，當我們用 *made of* 的時候，代表這是一個<strong>物理變化</strong>。也就是說，雖然它被做成了某個東西，但你用肉眼還是看得出它原本的材質。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哦！就像<strong>木桌</strong>是用木頭做的，*made of wood*。星星是由氣體組成的，它本質上還是氣體。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯！那如果是 *made from* 呢，就暗示著發生了<strong>化學變化</strong>，它已經徹底改頭換面了。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    有什麼具體的例子嗎？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    比如說葡萄酒是由葡萄釀成的：*Wine is made from grapes.* 你從一杯酒裡面已經看不出葡萄的形狀了嘛，這段從原料到成品的距離比較遠，所以英文就用 *from*。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    我的天吶，這簡直是<strong>醍醐灌頂</strong>啊！所以 *of* 保留了原本的樣貌，而 *from* 經歷了徹底的轉變。以前老師如果這樣教，誰還會搞混呢？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    其實只要懂了背後的邏輯，就不用死背。好，那我們再來拆解這篇文章裡，我認為最具威力的一個句型。文章裡說：*The other stars are farther away. That is why they look so small.*
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    嗯，其他的星星離我們比較遠，這就是為什麼他們看起來這麼小。*that is why* 這個片語看起來很不起眼，但加上去之後，整段話突然變得非常有說服力。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    你敏銳地抓到了英文寫作的靈魂所在哦，這牽涉到中西文結構最根本的差異。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    這聽起來有點學術了，能不能白話一點解釋？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒問題，所謂的<strong>意合</strong>就是中文習慣把句子並列在一起，讓聽眾自己去猜他們的關係。像我會說「外面下雨我不出門」。我們沒加連接詞，但大家自然懂前者是原因，後者是結果。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對，但在英文裡如果你直接說 *It is raining outside, I don't go out*, 雖然老外聽得懂，但對他們的大腦來說，這兩個句子之間斷裂了，缺乏鋼筋來支撐。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    所以英文必須把邏輯關係巨像化地寫出來。沒錯，<strong>that is why</strong>（這就是為什麼）就是那根<strong>關鍵的鋼筋</strong>。它緊咬住前面的原因，然後拋出後面的結果。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    也就是說，如果我們想把英文說得道地，我們不能只丟出一塊塊的磚頭，我們必須主動提供水泥，把邏輯<strong>緊連在一起</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對！*That is why* 就是最強的<strong>邏輯水泥</strong>。
+                </div>
+            </div>
+
+            <div class="takeaway-panel" style="background: linear-gradient(to right, #ecfdf5, #f0fdf4); border-color: #a7f3d0;">
+                <div class="takeaway-title" style="color: #065f46;">🏗️ 文法骨架：Made of/From & 邏輯水泥</div>
+                <div class="takeaway-body" style="color: #064e3b;">
+                    <strong>made of（物理變化）：</strong>成品仍保留原料本質與外觀（如 stars made of gases / table made of wood）。<br>
+                    <strong>made from（化學變化）：</strong>原料已徹底改頭換面（如 wine made from grapes）。<br>
+                    <strong>That is why（邏輯水泥）：</strong>相較於中文的「意合」（不加連接詞），英文要求將「因果關係」具象化，用這根鋼筋緊緊焊接前後句。
+                </div>
+            </div>
+
+
+            <div class="section-divider">
+                <h2>第五幕：大腦邏輯檢驗與認知翻轉</h2>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    哇，這真是一個超級<strong>大躍進</strong>的觀念。好，既然我們已經破解了空間邏輯，物理變化，還有邏輯水泥，現在我要向收聽的你發出挑戰了。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    哦，要來驗收一下了嗎？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對，我們從素材裡挑三個核心問題來驗證一下，你是不是真的看穿這篇文章的結構了，這<strong>不是國小</strong>測驗哦，這是對大腦邏輯的檢驗。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯，這是一篇標準的說明文，目的是解釋現象，我們來看看第一題。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    第一題，*What are stars made of?* 星星是由什麼組成的？這個答案對現在的聽眾來說應該是直覺反應了吧。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    沒錯，因為星星的核心本質沒有改變，所以用 *made of*，答案就是 <strong>hot gases</strong>，高溫氣體。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    很好，<strong>原汁原味</strong>的氣體，那第二題呢？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    第二題非常關鍵。*Why do other stars look smaller than the sun?* 為什麼其他的星星看起來比太陽小？答案就在我們剛剛談到的那個邏輯鋼筋上哦。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對。*Others are farther away.* 因為其他的星星距離我們更遙遠，你不覺得這篇文章的作者很高明嗎？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    怎麼說？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    他利用這短短幾句話揭示了人類認知上的錯覺，先用星星看起來很小當誘餌，再用 *farther away* 解釋，最後帶出一個違反直覺的事實，也就是他們其實 <strong>bigger than the sun</strong>。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    這就是說明文最精湛的寫作技巧了，他帶著讀者經歷一次認知翻轉，表面上教你大小跟距離。實際上教你怎麼用語言解釋視覺錯覺。這真的太精彩了。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    好，最後一題。*Name three possible colors of a star*, 說出星星可能的三種顏色。這裡其實作者用到了一個我們剛剛特別提，但也非常高級的分類句型。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    哦，哪一個？
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    就是 *some*, 然後 *others*。有些星星看起來是白色，其他可能是藍色，紅色或者金色。這就像是在整理衣櫃一樣有條不紊的分類。所以答案包含了 <strong>white, blue, red, 還有 gold</strong>。如果你在收聽的時候，腦海裡不僅浮現這些答案，還能看見背後那根 *is why* 的鋼筋，那恭喜你，你已經完全突破死背的無效循環了。
+                </div>
+            </div>
+
+            <!-- 隨堂驗證區 -->
+            <div class="quiz-container">
+                <h3>📝 大腦思維邏輯檢驗</h3>
+                <div class="quiz-item">
+                    <div class="quiz-question">Q1: What are stars made of? (星星由什麼組成？)</div>
+                    <div class="quiz-answer">Hot gases (高溫氣體) —— 運用 made of 保留物理本質。</div>
+                </div>
+                <div class="quiz-item">
+                    <div class="quiz-question">Q2: Why do other stars look smaller than the sun? (為什麼其他星星看起來比太陽小？)</div>
+                    <div class="quiz-answer">Because they are farther away (因為它們更遙遠) —— 藉由太陽作為比較錨點。</div>
+                </div>
+                <div class="quiz-item">
+                    <div class="quiz-question">Q3: What are the possible colors of a star? (星星可能有哪些顏色？)</div>
+                    <div class="quiz-answer">White, blue, red, gold —— 文章使用 "some... others..." 進行有條不紊的範疇分類。</div>
+                </div>
+            </div>
+
+            <div class="section-divider">
+                <h2>最終章：拉近距離，打破英文的錯覺</h2>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    的確如此啦，我們今天從感受爵士樂節奏開始，看見了 *give off* 產生的物理畫面，理解了 *farther* 跟 *far away* 的座標感，還看透了 *made of gases* 搭建的骨架。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒錯，這種將語言解構至骨髓的過程才是真正長遠的學習之道，這也讓我想起我們一開始提到的那個概念。距離造成了錯覺嗎？
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    對。文章裡最震撼我的一句話是 *other stars are farther away. That is why they look so small.* 我在想這是不是跟我們學習英文有著異曲同工之妙。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    這個觀點很有意思。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    那些看似微小的星星，真實體積可能比太陽還要龐大。對學英文的你來說，英文就像是那些遙遠的星星，因為覺得他離你很遠，也就是 *far away*, 你對他感到陌生，覺得自己的能力很渺小。那種距離感真的很容易讓人產生我永遠學不會的錯覺。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    沒錯。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    但今天當我們把這道文字拉近，看懂他的脈絡，邏輯和對空間的理解之後，你會發現英文根本不是什麼神秘天體。它就只是一種人類溝通的工具而已。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    對，一套有機可循的邏輯系統。你並不渺小，英文也沒有你想像的那麼難，一切都只是距離的問題。只要願意主動拉近距離去拆解，就能看破這個錯覺。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    下次當你在夜空中抬頭仰望滿天星斗時，試著在心裡用我們今天探討的這些帶有空間感和邏輯的英文去重新描繪這片星空吧。我相信你看到的將會是一個完全不一樣的宇宙。
+                </div>
+            </div>
+
+            <div class="speech-block sky-speaker">
+                <div class="speaker-meta">💬 觀點主持 Sky</div>
+                <div class="speech-content">
+                    期待大家都能用全新的眼光看世界。感謝你今天加入我們的這場深度探索，我們非常期待在下一次的旅程中繼續為你拆解世界上更多迷人的知識與語言，我們下次見咯。
+                </div>
+            </div>
+
+            <div class="speech-block focus-speaker">
+                <div class="speaker-meta">🎙️ 語言導師 Focus</div>
+                <div class="speech-content">
+                    下次見。
+                </div>
             </div>
 
         </div>
+
+        <!-- 結尾小卡 -->
+        <div class="epilogue-card">
+            <h3>✨ 「一切都只是距離的問題。」</h3>
+            <p>英文不是遙不可及的死板規則，而是一套充滿物理美感與空間感的人類語言系統。<br>只要找對焦距、主動拆解，你也能在浩瀚語境中，看見那座初顯邏輯的純粹星空。</p>
+        </div>
+
     </div>
+
+</body>
+</html>
+"""
+
+# Write content to html file
+file_name = "stargazing_english_learning_transcript.html"
+with open(file_name, "w", encoding="utf-8") as file:
+    file.write(html_content)
+
+print(f"File generated successfully: {file_name}")
+
+程式碼輸出內容
+File generated successfully: stargazing_english_learning_transcript.html
+
+這份逐字稿非常有畫面感，把「星空」與「英文學習」做了一個很浪漫又精準的連結！
+
+我幫你把原本黏在一起、帶有空格的文字進行了徹底的清洗，辨識出雙人對話的結構，並且編排成一個現代、美觀、好閱讀的 .html 檔案。
+
+這裡面內建了精美的 CSS 樣式（採用了星空藍與晨曦金的配色），包含了重點標記、對比表格、語音節奏圖解卡片，讓聽眾或讀者可以一目了然。
+
+你可以直接複製下方的程式碼，黏貼到記事本中，並另存為 english_stars.html 即可雙擊打開閱讀：
+
+HTML
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用星空重設大腦的英文學習迴路</title>
+    <style>
+        :root {
+            --primary-color: #1a2a6c;
+            --secondary-color: #b21f1f;
+            --accent-color: #fdbb2d;
+            --bg-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid #eaedf0;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        /* 對話樣式 */
+        .dialogue {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .speaker-a, .speaker-b {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 8px;
+        }
+
+        .speaker-a {
+            background-color: #f0f4f8;
+            border-left: 4px solid #3498db;
+        }
+
+        .speaker-b {
+            background-color: #fff9e6;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        .speaker-a .name { color: #2980b9; }
+        .speaker-b .name { color: #d35400; }
+
+        /* 英文文本卡片 */
+        .english-box {
+            background: linear-gradient(135deg, #1a2a6c, #275d8c);
+            color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(26, 42, 108, 0.2);
+        }
+
+        .english-box h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+
+        .english-text {
+            font-family: "Georgia", serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* 重點強調 */
+        .highlight {
+            background-color: #ffeaa7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .keyword {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* 表格樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* 測驗區塊 */
+        .quiz-box {
+            background-color: #fdf2f2;
+            border: 1px solid #f5c6cb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .quiz-question {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-top: 15px;
+        }
+        
+        .quiz-answer {
+            margin-left: 20px;
+            color: #333;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e0e0e0;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌌 仰望星空：重設大腦的英文學習迴路</h1>
+        <p>深度探索講座隨堂精華筆記</p>
+    </header>
+
+    <h2 class="section-title">一、 引言：打破認知的視覺錯覺</h2>
+    
+    <div class="dialogue">
+        <div class="speaker-a">
+            <span class="name">🎙️ 主持人 A</span>
+            你有沒有想過，當我們抬頭仰望夜空的時候，其實我們看到的，全都 Richmond 是一種「視覺錯覺」？你以為自己看到的是一顆微弱的小光點，但實際上，它可能是一團比我們的太陽還要龐大幾百倍、正在劇烈燃燒的「地獄之火」啦！
+        </div>
+        <div class="speaker-b">
+            <span class="name">🎙️ 主持人 B</span>
+            沒錯，完全是因為距離太遙遠了，我們的大腦就被徹底欺騙了。那今天呢，在這場深度探索中，我們要利用這個打破認知錯覺的過程，來幫你<span class="highlight">重新設定大腦學習英文的迴路</span>。
+        </div>
+        <div class="speaker-a">
+            <span class="name">🎙️ 主持人 A</span>
+            這是一個非常精準的切入點。特別是對於母語為中文的台灣聽眾，面對一門全新的語言，那種焦慮感其實跟看著遙遠星空的錯覺非常像。你會覺得密密麻麻的長句還有文法規則，就像遙不可及的星系一樣龐大又難懂。
+        </div>
+        <div class="speaker-b">
+            <span class="name">🎙️ 主持人 B</span>
+            但事實上，只要找對焦距去拆解它們的結構，你會發現它們背後的邏輯出奇的單純哦。所以今天我們不搬出厚重的文法教科書，我們要藉用一篇非常精簡的英文短文，叫做 <span class="keyword">"What are stars"</span>（什麼是星星）。千萬不要因為這篇文章的單字看起來很基礎就低估它，這短短幾句話裡面，其實隱藏了英文這門語言最核心的運作機制：發音的節奏感、核心單字，還有關鍵句型。
+        </div>
+    </div>
+
+    <hr>
+
+    <h2 class="section-title">二、 文本朗讀：遇見黃昏與星空</h2>
+
+    <div class="english-box">
+        <h3>📝 What are stars?</h3>
+        <p class="english-text">
+            The sun has set. I see a red and orange glow in the sky. Soon it gets dark outside. Now I see stars in the sky. There are so many.<br><br>
+            Stars are made of hot gases. They give off their own light. Some stars look white, others may look blue, red or gold.<br><br>
+            Stars are different sizes. They can be big or small. The sun is a star. It is close to us, others are farther away. That is why they look so small. In fact, some far away stars are bigger than the sun.
+        </p>
+    </div>
+
+    <hr>
+
+    <h2 class="section-title">三、 核心觀念解析</h2>
+
+    <h3>1. 語言的節奏底層：中文「節拍器」vs. 英文「爵士樂」</h3>
+    <p>為什麼學英文第一步不是死背單字表，而是先聽完整段的「感覺」？這牽涉到語言學的<b>節奏類型（Rhythm Type）</b>：</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>語言</th>
+                <th>節奏類型</th>
+                <th>特點說明</th>
+                <th>聲音意象</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="keyword">中文</td>
+                <td>音節計時 (Syllable-timed)</td>
+                <td>每一個字佔用的時間跟輕重都差不多。</td>
+                <td>🎵 節拍器（嗒、嗒、嗒、嗒）</td>
+            </tr>
+            <tr>
+                <td class="keyword">英文</td>
+                <td>重音計時 (Stress-timed)</td>
+                <td>時間和力氣全投資在傳遞核心資訊的單字上（如名詞、動詞），介系詞則快速滑過。</td>
+                <td>🎷 爵士樂（強弱交織、充滿律動）</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2. 精準用字拆解：視覺特效與右體感</h3>
+    <ul>
+        <li><span class="keyword">Glow vs. Light：</span> <span class="highlight">Glow</span> 自帶一種溫度跟延續性，描述的是那種沒有明確邊界、柔和而且持續散發的「光暈」（如夕陽或螢火蟲），而非刺眼的探照燈。</li>
+        <li><span class="keyword">Give off（散發）：</span> 英文極度依賴「動詞 + 空間介系詞」的組合，讓語言充滿了<b>物理感</b>與<b>空間移動軌跡</b>。東西本來在裡面（give），然後離開主體向外擴散（off）。不論是冷氣機散發熱氣、或是花朵散發香味，都是同一個物理軌跡。</li>
+    </ul>
+
+    <h3>3. 空間座標化：Farther vs. Far away</h3>
+    <p>中文高度依賴情境，但英文是一門<b>高度空間座標化</b>的語言，隨時要求給出「參考點（錨點）」：</p>
+    <ul>
+        <li><span class="keyword">Farther：</span> 比較級。帶有動態拉扯感的「相對位置」。文章中以「太陽」為錨點，指其他星星相較於太陽，在更深處的距離。</li>
+        <li><span class="keyword">Far away：</span> 寫在一起作為形容詞時，是一種「絕對狀態」。就像幫夜空拍了一張照片、套上一個名為遙遠的靜態濾鏡，單純描述它帶有遙不可及的屬性。</li>
+    </ul>
+
+    <h3>4. 文法骨架：Made of vs. Made from</h3>
+    <p>介系詞其實是在描述事物的<b>變化程度</b>：</p>
+    <ul>
+        <li><span class="keyword">Made of（物理變化）：</span> 做成成品後，肉眼還是看得出原本的材質。例如：<i>Stars are made of hot gases.</i>（星星本質上還是氣體）、<i>The table is made of wood.</i></li>
+        <li><span class="keyword">Made from（化學變化）：</span> 徹底改頭換面，與原料距離較遠。例如：<i>Wine is made from grapes.</i>（從酒裡已經看不出葡萄的形狀了）。</li>
+    </ul>
+
+    <h3>5. 邏輯水泥：That is why</h3>
+    <p>中文習慣「意合」，將句子並列（例如：外面下雨我不出門，不加連接詞大家也能懂因果）。但英文大腦需要「鋼筋」與「水泥」來主動緊連邏輯。<span class="highlight">That is why</span> 就是最強的邏輯水泥，緊咬住前面的原因，拋出後面的結果。</p>
+
+    <hr>
+
+    <h2 class="section-title">四、 大腦邏輯檢驗（隨堂驗收）</h2>
+    
+    <div class="quiz-box">
+        <div class="quiz-question">Q1: What are stars made of? （星星是由什麼組成的？）</div>
+        <div class="quiz-answer">💡 <b>Answer:</b> <span class="keyword">Hot gases</span>（高溫氣體）。因為星星的核心本質沒有改變，所以用物理變化的 made of。</div>
+
+        <div class="quiz-question">Q2: Why do other stars look smaller than the sun? （為什麼其他星星看起來比太陽小？）</div>
+        <div class="quiz-answer">💡 <b>Answer:</b> <span class="keyword">Because others are farther away.</span>（因為它們距離我們更遙遠）。作者利用這句話揭示了認知的翻轉：先用「看起來很小」當誘餌，再用距離解釋，最後帶出違反直覺的事實（其實它們 bigger than the sun）。</div>
+
+        <div class="quiz-question">Q3: Name three possible colors of a star. （說出星星可能的三種顏色。）</div>
+        <div class="quiz-answer">💡 <b>Answer:</b> <span class="keyword">White, blue, red, or gold.</span>。文中使用了高級的分類句型（Some..., others...），像整理衣櫃一樣有條不紊。</div>
+    </div>
+
+    <hr>
+
+    <h2 class="section-title">五、 結語：看破距離的錯覺</h2>
+    <p>
+        英文就像那些遙遠的星星，因為你覺得它離你很遠（far away），所以感到陌生、覺得自己渺小，產生了「我永遠學不會」的錯覺。
+    </p>
+    <blockquote>
+        <p><b>"Other stars are farther away. That is why they look so small."</b></p>
+    </blockquote>
+    <p>
+        但今天當我們把文字拉近，看懂它的脈絡、邏輯和對空間的理解之後，你會發現英文根本不是神秘天體，它只是一套有跡可循的有機邏輯系統。<b>你並不渺小，英文也沒想像中難，一切都只是距離的問題。</b>
+    </p>
+    <p style="text-align: center; font-weight: bold; color: var(--primary-color); margin-top: 30px;">
+        🌌 下次仰望星空時，試著用帶有空間感和邏輯的英文，重新描繪這片星空吧！我們下次見。
+    </p>
+</div>
+
 </body>
 </html>
