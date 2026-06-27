@@ -668,10 +668,34 @@
 <footer>
 <p>&copy; 2026 英語地基重塑計畫 &bull; 讓語言在重建中長出靈魂</p>
 </footer></div>
-<div id="audio-panel" style="position: fixed; bottom: 20px; left: 20px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><audio style="height: 36px; width: 250px; outline: none;" controls="controls" autoplay="autoplay">
+<div id="audio-panel" style="position: fixed; bottom: 20px; left: 20px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+    <!-- 自訂的播放/暫停按鈕 -->
+    <button id="bg-audio-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #e74c3c; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;" onclick="toggleBgAudio()">🔊⏸️ </button>
+    
+    <!-- 隱藏原生 audio 標籤 (移除 controls 屬性) -->
+    <audio id="bg-audio" autoplay="autoplay" onplay="updateAudioBtn(true)" onpause="updateAudioBtn(false)">
         <source src="2_7.m4a" type="audio/mp4">
         您的瀏覽器不支援音訊播放。
-    </audio></div>
+    </audio>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
 <div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
 <p>
 <script>
@@ -692,7 +716,7 @@
 
     function scrollPage() {
         if (isScrolling) {
-            toggleBtn.innerHTML = '⏸️';
+            toggleBtn.innerHTML = '⏬⏸️';
             if (Math.abs(window.scrollY - virtualScrollY) > 2) {
                 virtualScrollY = window.scrollY;
             }
@@ -702,7 +726,7 @@
             
             if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                 isScrolling = false;
-                toggleBtn.innerHTML = '▶️';
+                toggleBtn.innerHTML = '⏬▶️';
                 toggleBtn.style.background = '#27ae60';
                 return;
             }
@@ -715,12 +739,12 @@
         isScrolling = !isScrolling;
         
         if (isScrolling) {
-            this.innerHTML = '⏸️';
+            this.innerHTML = '⏬⏸️';
             this.style.background = '#e74c3c';
             virtualScrollY = window.scrollY; 
             scrollPage();
         } else {
-            this.innerHTML = '▶️';
+            this.innerHTML = '⏬▶️';
             this.style.background = '#27ae60';
             cancelAnimationFrame(animationFrameId);
         }
