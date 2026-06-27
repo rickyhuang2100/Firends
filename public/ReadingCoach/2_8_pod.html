@@ -571,9 +571,19 @@
     
     <!-- 隱藏原生 audio 標籤 (移除 controls 屬性) -->
     <audio id="bg-audio" autoplay="autoplay" onplay="updateAudioBtn(true)" onpause="updateAudioBtn(false)">
-        <source src="https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/2_8.m4a" type="audio/mp4">
+        <source src="" type="audio/mp4">
         您的瀏覽器不支援音訊播放。
     </audio>
+    
+    <script>
+        (function () {
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? '2_8.m4a'
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/2_8.m4a';
+        document.getElementById('bg-audio').load(); // 動態換 src 後要呼叫 load()
+        })();
+    </script>
     <!-- 用來切換與更新按鈕狀態的 JavaScript -->
     <script>
         function toggleBgAudio() {
