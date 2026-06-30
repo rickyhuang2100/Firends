@@ -668,15 +668,27 @@
 <footer>
 <p>&copy; 2026 英語地基重塑計畫 &bull; 讓語言在重建中長出靈魂</p>
 </footer></div>
+</p>
 <div id="audio-panel" style="position: fixed; bottom: 20px; left: 20px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
     <!-- 自訂的播放/暫停按鈕 -->
     <button id="bg-audio-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #e74c3c; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;" onclick="toggleBgAudio()">🔊⏸️ </button>
     
     <!-- 隱藏原生 audio 標籤 (移除 controls 屬性) -->
     <audio id="bg-audio" autoplay="autoplay" onplay="updateAudioBtn(true)" onpause="updateAudioBtn(false)">
-        <source src="2_7.m4a" type="audio/mp4">
+        <source src="" type="audio/mp4">
         您的瀏覽器不支援音訊播放。
     </audio>
+    
+    <script>
+        (function () {
+        var filename = '2_7.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        document.getElementById('bg-audio').load(); // 動態換 src 後要呼叫 load()
+        })();
+    </script>
     <!-- 用來切換與更新按鈕狀態的 JavaScript -->
     <script>
         function toggleBgAudio() {
@@ -752,6 +764,5 @@
     // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
     scrollPage();
 </script>
-</p>
 </body>
 </html>
