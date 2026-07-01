@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度探討 - The Statue of Liberty</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --host-a-color: #E3F2FD;
+            --host-b-color: #FFF3E0;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .podcast-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 40px;
+        }
+
+        .podcast-header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
+        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
+        .podcast-meta {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #888;
+            flex-wrap: wrap;
+        }
+
+        .chapter-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin: 40px 0 20px;
+            padding: 10px 15px;
+            border-left: 4px solid var(--primary-color);
+            background: #f8fcf8;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
+
+        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
+
+        .speaker-avatar {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 18px; flex-shrink: 0;
+        }
+
+        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
+        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
+
+        .speech-bubble { padding: 15px 20px; border-radius: 12px; font-size: 16px; }
+        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
+        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
+
+        .highlight-lego {
+            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 30%;
+            background-position: 0 90%;
+            font-weight: bold;
+        }
+
+        .highlight-phonics {
+            color: #e74c3c; font-weight: bold;
+            background: #fdeaea; padding: 0 4px; border-radius: 3px;
+        }
+
+        .english-quote {
+            display: block;
+            background: #fff;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-left: 3px solid #9b59b6;
+            font-family: 'Georgia', serif;
+            font-size: 1.1em;
+            color: #2c3e50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .lego-brick-summary {
+            background: #fdf6e3;
+            border: 2px dashed #d4c4a8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
+        li { margin-bottom: 6px; }
+    </style>
+</head>
+
+<body>
+    <div class="podcast-container">
+        <div class="podcast-header">
+            <h1 class="podcast-title">📖 深度探討：The Statue of Liberty</h1>
+            <p class="podcast-subtitle">用七句話，拆解英文如何用單複數畫邊界、介系詞建立3D座標、動詞穿越時空</p>
+            <div class="podcast-meta">
+                <span>⏱️ 建議閱讀時間：15 分鐘</span>
+                <span>🎯 重點：freedom vs. liberty 的混血歷史、on vs. above 的3D座標、is holding 賦予靜態永恆動態、A gave B C 的授予句型</span>
+            </div>
+            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
+                <audio controls style="width: 100%;">
+                    <source src="2_16.m4a" type="audio/mp4">
+                    您的瀏覽器不支援 audio 元素。
+                </audio>
+            </div>
+        </div>
+
+        <div class="dialogue-flow">
+
+            <!-- 開場 -->
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    今天的任務非常特別——我們手邊有一份極簡的基礎英文本，主題是紐約的自由女神像。我們不只是把它翻成中文而已，而是要把它當作顯微鏡底下的標本，解剖英文這個語言的 DNA。透過這幾句話，可以看見英文如何處理空間感、數量、甚至時間的概念，比背十條文法規則有效得多！
+                </div>
+            </div>
+
+            <!-- 章節 1 -->
+            <h2 class="chapter-title">章節 1：發音訣竅 —— statue 的摩擦音 與 liberty 的重音節奏</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    <span class="english-quote">The Statue of Liberty is a symbol of freedom.</span>
+                    <br>
+                    先看 <span class="highlight-phonics">statue</span>（雕像）。很多人看到 t-u 直覺念成 state，但英文母語者的 t 在這個位置會產生摩擦音，比較接近「tʃ」（區的感覺）。以 <span class="highlight-phonics">statue</span> 的方式發音，瞬間口音就更自然了。
+                    <br><br>
+                    再看 <span class="highlight-phonics">liberty</span>（自由）：重音一定要放在第一個音節，念成 <b>LI</b>-ber-ty，力量放在最前面再順勢流下來，有生命力多了。重音放錯位置，有時候對方真的會聽不懂。
+                </div>
+            </div>
+
+            <!-- 章節 2 -->
+            <h2 class="chapter-title">章節 2：freedom vs. liberty —— 英文的混血歷史</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    文本裡同時出現了 liberty 和 freedom，中文都翻成「自由」。為什麼英文需要兩個完全不同的單字表達同一個概念？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這牽涉到英文語言的 <span class="highlight-lego">混血歷史</span>！
+                    <br><br>
+                    <b>Freedom</b> —— 古老的日耳曼語系單字，根植於古代平民的日常，給人一種很直覺的「不受束縛、可以自由呼吸」的原始感受，就像週末終於不用上班耍廢的那種自由。
+                    <br><br>
+                    <b>Liberty</b> —— 西元 1066 年諾曼人征服英國後帶進英語的拉丁血統字，通常出現在法律、政治等正式場合，指的是一種<span class="highlight-lego">被制度保障的公民權利</span>。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    所以是「the Statue of Liberty」而不是「the Statue of Freedom」，因為它代表的是民主制度賦予人民的理念！而且作者在第三句寫了：<span class="english-quote">The word liberty means freedom.</span> 用初學者更熟悉的字 freedom 來解釋 liberty，文本本身就是一本迷你字典！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這也是一個重要的閱讀策略：遇到不懂的單字，<span class="highlight-lego">先不要立刻查字典，學會相信上下文</span>。好的文本會自我解釋，在附近留下線索。這種推敲的過程讓大腦對單字的記憶深刻十倍以上！
+                </div>
+            </div>
+
+            <!-- 章節 3 -->
+            <h2 class="chapter-title">章節 3：單複數畫邊界 與 on vs. above 的3D座標系統</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    <span class="english-quote">A statue is a piece of art. Statues are made in the shape of humans or animals. The statue of Liberty has a crown on her head. She is holding a torch high above her head.</span>
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    一開始說 <i>a statue</i>（一座），後面又說 <i>statues are made</i>（加 S）。中文說一個雕像或很多雕像，「雕像」這個字根本不用改變形狀！真的有必要這麼在意那個 S 嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    必須在意！在英文的邏輯裡，世界被嚴格區分為「可以數」和「不能數」的。加上 a 或字尾 S，你是在大腦裡為這個物體畫出一道明確的邊界。
+                    <br><br>
+                    想像把水倒在桌上，水是沒有固定形狀的。如果「statue」沒有加 a 也沒有加 S，對英文母語者來說，它聽起來就會像桌上的水一樣——變成沒有邊界的抽象材質。那個 S 就是 <span class="highlight-lego">讓物品從抽象概念實體化的魔術棒</span>！
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    好！現在腦袋有了實體雕像。接下來的 on / above 又是為什麼要分這麼細？中文不都翻成「在上面」嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    英文的空間介系詞是你大腦畫布上的 <span class="highlight-lego">3D 座標系統</span>——
+                    <br><br>
+                    <b>on</b> 的核心概念是「<span class="highlight-phonics">表面接觸</span>」。crown on her head → 皇冠貼在女神的頭上，必須碰到。如果說 crown above her head，就像皇冠憑空懸浮在頭頂，完全沒有碰到她，變成科幻片！
+                    <br><br>
+                    <b>above</b> 的核心概念是「<span class="highlight-phonics">在較高的位置，但沒有直接接觸</span>」。holding a torch high above her head → 火炬被手臂舉高，火炬本身並沒有貼在頭上，而是在頭頂上方一段距離之外，完全正確！
+                </div>
+            </div>
+
+            <!-- 章節 4 -->
+            <h2 class="chapter-title">章節 4：is holding 賦予靜態雕像永恆的動態感</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    等等，<span class="english-quote">she is holding a torch</span>，用了現在進行式。但雕像是靜止的，它不會動！難道雕像正在舉著火炬嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    是一種 <span class="highlight-lego">永恆的動態感</span>！作者在這裡使用進行式，不是在描述一個偶然的動作，而是在邀請你——讀者——來到紐約港口，抬起頭看著她。
+                    <br><br>
+                    他在告訴你：此時此刻，在你正看著她的這一秒，她正在為你高舉著那把火炬。一個微小的 ing，<span class="highlight-lego">把靜態的雕像變成了動態的永恆畫面</span>，讓死板的文字瞬間有了生命力。
+                </div>
+            </div>
+
+            <!-- 章節 5 -->
+            <h2 class="chapter-title">章節 5：動詞時光機 與 A gave B C 授予句型</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    說到歷史，動詞就要開始切換了：
+                    <span class="english-quote">France gave the United States of America the statue of Liberty. It was a gift. France wanted to give the United States this gift to celebrate their friendship.</span>
+                    前段都是 is / has / are，但這裡全部變形：gave / was / wanted。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    中文只要加「以前」「了」，動詞「給」永遠不會變。但英文的 give 變成 gave，is 變成 was……為什麼英文要這麼折磨人？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    英文是一種<span class="highlight-lego">對時間流逝有強迫症的語言</span>。它的動詞不只是表示動作，本身就是一台時光機！
+                    <br><br>
+                    它不允許你只靠外加的時間詞（like "yesterday"）交代，而要求動作本身親自帶時間刻度。聽到 gave/was/wanted 的瞬間，就像在電影裡切換濾鏡——彩色的現代畫面瞬間變成帶有年代感的泛黃色調。這叫 <span class="highlight-phonics">強制性時空定位</span>。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    那 "France gave the United States of America the Statue of Liberty" 這句好長，初學者要怎麼處理？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    別被長度嚇到，看它的 <span class="highlight-lego">骨架——授予動詞句型：A gave B C</span>（A 給了 B 一個東西 C）。
+                    <br><br>
+                    不需要加任何介系詞，不像中文要繞「A 把 C 給了 B」。只要把三個區塊按順序排好，把 gave 放在 A 和 B 中間：
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><b>A</b>（送禮人）= France</li>
+                        <li><b>B</b>（收禮人）= the United States of America</li>
+                        <li><b>C</b>（禮物）= the Statue of Liberty</li>
+                    </ul>
+                    誰送禮、誰收禮、禮物是什麼，一目了然！最後的 <span class="english-quote">to celebrate their friendship</span>，一個簡單的 to 就帶出了整個歷史事件的動機。
+                </div>
+            </div>
+
+            <!-- 總結積木 -->
+            <div class="lego-brick-summary">
+                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
+                <ul>
+                    <li><strong>freedom vs. liberty：</strong> freedom = 日耳曼原始直覺自由；liberty = 拉丁法律制度保障的公民權利。</li>
+                    <li><strong>單複數 = 畫邊界：</strong> 加 a 或 S 是讓物品從抽象概念變成有輪廓實體的視覺魔術棒。不加的話，在母語者耳中它就會「融化」成沒有固定形狀的抽象材質。</li>
+                    <li><strong>on vs. above 的3D座標：</strong> on = 表面接觸（貼上去）；above = 在較高位置但不接觸（懸在上方）。</li>
+                    <li><strong>is holding = 賦予永恆動態感：</strong> 對靜態藝術品使用進行式，不是在描述偶然動作，而是邀請讀者感受「此時此刻，她正在為你高舉火炬」的永恆存在。</li>
+                    <li><strong>動詞自帶時光機 (past tense)：</strong> 聽到 gave / was / wanted，大腦畫面從彩色現代切換成泛黃年代感，不需要額外的時間副詞。</li>
+                    <li><strong>A gave B C 授予句型：</strong> 送禮人 + gave + 收禮人 + 禮物。無需介系詞，線性直觀，是英文表達「給予」最高效的骨架。</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

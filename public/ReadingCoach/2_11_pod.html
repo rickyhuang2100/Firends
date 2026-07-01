@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度探討 - Maria Makes a Snake</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --host-a-color: #E3F2FD;
+            --host-b-color: #FFF3E0;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .podcast-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+        }
+
+        .podcast-header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .podcast-title {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .podcast-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .podcast-meta {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .chapter-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin: 40px 0 20px;
+            padding-left: 15px;
+            border-left: 4px solid var(--primary-color);
+            background: #f8fcf8;
+            padding: 10px 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .dialogue-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .speaker-row {
+            display: flex;
+            gap: 15px;
+            max-width: 85%;
+        }
+
+        .speaker-row.host-a {
+            align-self: flex-start;
+        }
+
+        .speaker-row.host-b {
+            align-self: flex-start;
+        }
+
+        .speaker-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .host-a .speaker-avatar {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .host-b .speaker-avatar {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .speech-bubble {
+            padding: 15px 20px;
+            border-radius: 12px;
+            position: relative;
+            font-size: 16px;
+        }
+
+        .host-a .speech-bubble {
+            background-color: var(--host-a-color);
+            border-top-left-radius: 2px;
+        }
+
+        .host-b .speech-bubble {
+            background-color: var(--host-b-color);
+            border-top-left-radius: 2px;
+        }
+
+        /* 內容亮點樣式 */
+        .highlight-lego {
+            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 30%;
+            background-position: 0 90%;
+            font-weight: bold;
+        }
+
+        .highlight-phonics {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #fdeaea;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        .english-quote {
+            display: block;
+            background: #fff;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-left: 3px solid #9b59b6;
+            font-family: 'Georgia', serif;
+            font-size: 1.1em;
+            color: #2c3e50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .lego-brick-summary {
+            background: #fdf6e3;
+            border: 2px dashed #d4c4a8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .lego-brick-summary h4 {
+            color: #b58900;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="podcast-container">
+        <div class="podcast-header">
+            <h1 class="podcast-title">📖 深度探討：Maria Makes a Snake</h1>
+            <p class="podcast-subtitle">擺脫解碼工程公式，用心智畫面看見英文底層邏輯</p>
+            <div class="podcast-meta">
+                <span>⏱️ 建議閱讀時間：15 分鐘</span>
+                <span>🎯 重點：無聲與有聲發音工會、VR進行式、長句骨幹 SVO 掃描法、情緒能量接發觀</span>
+            </div>
+            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
+                <audio controls style="width: 100%;">
+                    <source src="2_11.m4a" type="audio/mp4">
+                    您的瀏覽器不支援 audio 元素。
+                </audio>
+            </div>
+        </div>
+
+        <div class="dialogue-flow">
+
+            <!-- 開場 -->
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    你知道嗎？很多台灣人學了十年、甚至十五年的英文，背了一堆艱澀的文法規則，考卷上的選擇題通常都能拿超高分。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    真的！可是如果你今天請大家用英文描述一個極度簡單的日常畫面，比如：「手電筒的光照在帳篷上」，很多人可能瞬間就結巴了。腦袋直接當機，根本找不到對應的動詞。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    其實大家腦子裡明明裝了幾千個單字，但為何無法流利說出一個生動的故事？因為我們過去學英文的方式，往往是把它當作一門「解碼工程」。我們都在背中文翻譯、文法公式，卻很少去體會 <span class="highlight-lego">英文母語人士在說話時，大腦裡到底是如何建構那個畫面的</span>。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    當你沒有看見那個畫面，語言就只是一堆沒有生命的符號，所以講出來就會卡卡的。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯。如果你的母語為中文並準備從零開始學英文，或是想打掉重練找回語感，請戴好耳機。我們今天的素材是一個非常有意思的極短篇故事 <span class="english-quote">Maria Makes a Snake</span>。我們要把短短幾行文本当作透視英文邏輯的絕佳透鏡。
+                </div>
+            </div>
+
+            <!-- 章節 1 -->
+            <h2 class="chapter-title">章節 1：名詞尾音的「人體工學」奧秘</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    先來聽聽作者怎麼在兩句話內就立體化場景：
+                    <br><br>
+                    <span class="english-quote">Marco and Maria are camping in the yard. They have their flashlights and some snacks.</span>
+                    <br><br>
+                    這裡使用了 flashlights (手電筒) 與 snacks (零食) 這兩個加上複數 S 的單字。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    我們在台灣學英文，老師總是千交代萬交代複數要加 S。可是在實際講話時常常就會自動省略，因為中文說「帶手電筒」不會去改變名詞長相。這個 S 真的有必要這麼講究嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    在中文裡我們的確高度依賴上下文或數量詞。但英文是一種<span class="highlight-lego">極度依賴形態變化來傳遞精確資訊</span>的語言。如果你不把 S 發出來，在母語人士耳裡，聽起來就會有一種「話沒講完」的違和感。而且，這個 S 的發音其實藏著 <span class="highlight-phonics">人體工學</span> 的奧秘！
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    聽起來很玄，有什麼好記的訣竅嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    把一隻手輕輕放在你的喉嚨上。然後你發出 snacks 裡的那個 k 聲音（氣音 [k]）。你會發現喉嚨沒有震動，只有單純氣音。因為聲帶沒有震動，為了發音順暢，你的大腦跟嘴巴就會自然而然選擇<span class="highlight-phonics">同樣不震動聲帶的氣音 [s]</span>。你唸唸看 snacks。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    對耶！喉嚨不震動，直接接 [s] 超順的。那如果今天是一個會讓喉嚨震動的尾音，比如 dog 的 g，那個 S 就會自動變成有震動的 [z] 音變成 dogs！原來這根本不是死背的東西，而是口腔最自然的物理反應。
+                </div>
+            </div>
+
+            <!-- 章節 2 -->
+            <h2 class="chapter-title">章節 2：長鏡頭與 VR 的切換：現在進行式</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    我也想討論開頭動詞：<span class="english-quote">Marco and Maria are camping...</span>。如果對剛接觸英文的人，一定會問，為什麼不能簡單直接點說 Marco and Maria camp 就好？多加 "are" 跟 "ing" 畫面真的有差嗎？
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    差異非常巨大喔！如果你說 ...camp in the yard，在英文邏輯裡這是「現在簡單式」，代表一個不變的事實或習慣。聽起來就像是在維基百科上唸：他們有一種常常在院子裡露營的習慣。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    但是故事一開始需要的是帶入感！加上了 are 和動詞字尾 ing 的「現在進行式」，就像導演突然開啟了一顆一鏡到底的 <span class="highlight-lego">長鏡頭</span>，把時間凍結在現在這一秒，告訴讀者說：「看啊，事情正在發生」。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯，就是戴上 VR 眼鏡直接參與其中的感覺！這就是動詞時態切換的不可思議之處。
+                </div>
+            </div>
+
+            <!-- 章節 3 -->
+            <h2 class="chapter-title">章節 3：空間動態化與情緒能量的接收</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    前段說他們在帳篷裡，但 Marco 開始作怪了：<span class="english-quote">Marco swings his flashlight around in the tent. "Hoo!" He makes scary noises. Maria is not scared.</span> 這裡我一定要提 swings (揮動) 加上 around (四處)，根本沒用高深的單字，但在暗暗帳篷裡光束 360 度亂掃的畫面瞬間就衝出來了！
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    對啊！我們常以為英文要好就是要背長單字，但道地的英文極度依賴這種 <span class="highlight-lego">簡單動詞 + 空間介系詞</span> 的精準組合。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    而說到嚇人，作者描述聲音用了 scary noises 還有 "Hoo!"。這帶出了一個情緒字尾差異的致命觀念：<span class="highlight-phonics">y(或ing) 和 ed 的結尾差異</span>。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這個真的是很多學生的死穴。Marco 製造 scary noises，而 Maria is not scared。這到底怎麼分？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    掌握一個核心邏輯：「發射源」與「接收體」。<br>
+                    你可以把 y(如 scary) 或 ing(如 boring) 的情緒形容詞，想成正在 <span class="highlight-lego">往外輻射能量的發射器</span>。而 ed 結尾 (如 scared/bored) 則是 <span class="highlight-lego">吸收了能量的接收體</span>。Marco 的聲音是釋放恐怖感覺的源頭 (scary)，而 Maria 是一個沒買單的聽眾，沒有感受到恐懼 (not scared)。
+                </div>
+            </div>
+
+
+            <!-- 章節 4 -->
+            <h2 class="chapter-title">章節 4：SVO 長句骨幹掃描與強大的 Makes (主動性)</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    Maria 發揮了理科大腦，這裡帶出故事關鍵：<span class="english-quote">She remembers what she learned in school about shadows. A solid object in front of light makes a shadow.</span> 這一長串字大腦就開始暈了，習慣性想從第一個字逐字翻譯到最後一個字。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    覺得暈是因為試圖同時處理所有細節。掌握長句子的訣竅其實是找到它的 <span class="highlight-lego">骨幹 (主詞＋動詞＋受詞，SVO)</span>。你先像雷達一樣去掃描這句話的核心動詞是哪一個？
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    應該是 makes 吧？誰製造？製造了什麼？答案是 <span class="english-quote">object makes a shadow</span> (物體製造了影子)。這就是整句話不可撼動的骨架！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    沒錯。像 a solid (實質的) 還有 in front of light (在光的前方)，都只是掛在骨架上的修飾配件。
+                    不過這裡有一個中英邏輯盲點。中文說「物體擋住光產生影子」，是個客觀發生的現象。但英文是 <span class="english-quote">object makes a shadow</span>，它是非常有 <span class="highlight-lego">主動性</span> 的！不是被動產生影子，而是大發神威主動製造了影子。這反映了英文看待世界不同於中文的主動角度。
+                </div>
+            </div>
+
+            <!-- 章節 5 -->
+            <h2 class="chapter-title">章節 5：第三人稱單數 S —— 動作的小標記與流暢節奏</h2>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    Maria 反擊：<span class="english-quote">She shines her flashlight... She puts her hand... She twists her hand around.</span> 這幾句動作非常乾淨俐落，但動詞結尾又加上了大家都討厭的 <span class="highlight-phonics">第三人稱單數 S (shines, puts, twists)</span>。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    這超煩的，我即使不加 S，外國人也完全聽得懂我在指誰吧！
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    如果我說這其實是為了「說話時的節奏和流暢度」，你相信嗎？你用自然語速唸唸看 <span class="english-quote">She twists her hand</span>。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    twist 結尾是 st，再加 s 變 sts，舌頭根本快打結了，哪有什麼節奏感？
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    那是因為你在台灣學時，把 st-s 當成獨立的三個子音硬要咬牙切齒發出來。母語人士在唸的時候，中堅的這個 T 幾乎是含著不發出聲音的！氣流直接滑過去，只保留最後 S 的摩擦音：/twɪss/。
+                </div>
+            </div>
+
+             <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    (試唸) She /twɪss/ her hand... 誒！真的順超多耶！如果不糾結每個字母用力發音，那個 S 就像節拍器「搭 搭 搭」一樣把動作很有節奏地串連起來了。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    在語音長河中，這個字尾 S 就是個 <span class="highlight-phonics">微小的動作標記</span>，提供一個小小的摩擦音讓聽者大腦能精準捕捉。所以，<span class="highlight-lego">不要用眼睛背文法，用嘴巴去感受節奏吧。</span>
+                </div>
+            </div>
+
+             <!-- 章節 6 -->
+            <h2 class="chapter-title">章節 6：laugh and laugh (疊字創造的時間延續感)</h2>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    最後結局很溫馨。Marco 發覺這是一場騙局：<span class="english-quote">They laugh and laugh together.</span> 這裡不寫 "laugh a lot"，卻用了 "laugh and laugh"。
+                </div>
+            </div>
+
+            <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這是英文寫作一個非常充滿感染力的技巧。「laugh a lot」只是客觀冷冰冰的形容「量很多」，但「laugh and laugh」在語言上創造了一種 <span class="highlight-lego">時間的延續感</span>。讀者彷彿能聽見笑聲停了一下，接著又爆發出來的連續感覺，這是用最基礎的單字達到高級能產生情感共鳴的寫法。
+                </div>
+            </div>
+
+            <div class="speaker-row host-b">
+                <div class="speaker-avatar">學員</div>
+                <div class="speech-bubble">
+                    哇，回顧這短短百字的故事真的起雞皮疙瘩。我們從 camping (進行式)、scary/scared (發射體接收體)、object makes shadow (骨幹掃描)、到 twists (發音節拍標記)。
+                </div>
+            </div>
+
+             <div class="speaker-row host-a">
+                <div class="speaker-avatar">導師</div>
+                <div class="speech-bubble">
+                    這就是深度解析文本的價值。不需要挑戰 CNN 新聞或莎士比亞，把基礎底層邏輯摸透，才是未來能流利開口的基石！最後有個回家功課：試著拉到最前面去「跟讀 (shadowing)」，如同影子跟著物體，用聲音把節奏內化為肌肉記憶；然後看看你身邊的東西，套入 <span class="english-quote">A solid object makes a shadow</span> 這個主動攻擊的句型，將這些邏輯應用到你的日常生活吧！
+                </div>
+            </div>
+
+
+            <!-- 總結積木 -->
+            <div class="lego-brick-summary">
+                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
+                <ul>
+                    <li><strong>無聲有聲順路工學：</strong> 字尾發 S 或 Z，完全取決於名詞/動詞的最後一個子音有沒有震動聲帶，這是肌肉最順暢的滑行本能。</li>
+                    <li><strong>情緒的發射器與接收端：</strong> y / ing = 對外輻射(發射端)；ed = 被影響接收(接收端)。</li>
+                    <li><strong>SVO 骨幹掃描法：</strong> 對付長句，不要逐字死背！抓出「主詞＋主要動詞」 (如：Object makes shadow)，其它只不過是修飾配件。</li>
+                    <li><strong>動詞結尾 S = 節拍器標記：</strong> 不要硬塞母音去咬清楚。它在長句子的滑音中，擔任「下一個動作來了」的輕巧提醒節拍。</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
