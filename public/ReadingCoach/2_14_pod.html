@@ -1,305 +1,251 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - Let's Play Lacrosse</title>
+    <title>深度解析：從零開始學英文，用 90 個字破解底層邏輯</title>
     <style>
-        :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Helvetica Neue', Arial, 'LiHei Pro', 'Microsoft JhengHei', sans-serif;
             line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
-            padding: 20px;
-        }
-
-        .podcast-container {
-            max-width: 900px;
+            color: #333;
+            max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 40px;
+            padding: 30px 20px;
+            background-color: #f7f9fa;
         }
-
-        .podcast-header {
-            text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
-            margin-bottom: 40px;
-        }
-
-        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
-        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
-        .podcast-meta {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
-        }
-
-        .chapter-title {
-            font-size: 22px;
+        h1 {
             color: #2c3e50;
-            margin: 40px 0 20px;
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 5px solid #e74c3c;
+            padding-left: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .host {
+            color: #e67e22;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .expert {
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .english-quote {
+            background-color: #ecf0f1;
+            border-left: 5px solid #34495e;
+            padding: 20px;
+            font-size: 1.15em;
+            font-style: italic;
+            color: #2c3e50;
+            margin: 20px 0;
             border-radius: 0 8px 8px 0;
+            line-height: 1.6;
         }
-
-        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
-
-        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
-
-        .speaker-avatar {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; flex-shrink: 0;
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #856404;
         }
-
-        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
-        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
-
-        .speech-bubble {
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-size: 16px;
-        }
-
-        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
-        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
-
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
+        .keyword {
+            color: #c0392b;
             font-weight: bold;
         }
-
-        .highlight-phonics {
-            color: #e74c3c; font-weight: bold;
-            background: #fdeaea; padding: 0 4px; border-radius: 3px;
-        }
-
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
-        }
-
-        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：Let's Play Lacrosse</h1>
-            <p class="podcast-subtitle">骨牌效應、時光機動詞、鏡頭焦點 —— 用長曲棍球拆解英文底層邏輯</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：SVO骨牌邏輯、複數開關S、動詞自帶時光機、被動語態鏡頭焦點</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_14.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
-            </div>
-        </div>
 
-        <div class="dialogue-flow">
+    <h1>🎧 深度解析：從零開始學英文<br>用 90 個字破解底層邏輯</h1>
 
-            <!-- 開場 -->
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    想像一下，有一種方法能讓你把過去十幾年死記硬背的厚重文法書全部丟進垃圾桶，你願意試試看嗎？我們今天的素材就是一篇只有 90 個英文字的短文，叫做 <span class="english-quote">Let's Play Lacrosse（長曲棍球）</span>，但這 90 個字裡面，濃縮了英文最核心的運作邏輯。
-                </div>
-            </div>
+    <h2>第一章：告別痛苦的「文字解剖學」</h2>
+    <p><span class="host">主持人：</span>想像一下哦，如果現在有一種方法能讓你把過去十幾年就是在學校死記硬背的那些厚重文法書，全部丟進垃圾桶，你願意試試看嗎？</p>
+    
+    <p><span class="expert">專家：</span>哇，我想很多聽眾現在應該都在狂點頭了吧。絕對會啊，因為對於很多以中文為母語的台灣聽眾來說，只要一提到「從零開始學英文」這件事，腦海裡浮現的通常都是滿滿的挫折感。</p>
+    
+    <p><span class="host">主持人：</span>對，都是那些背不完的單字跟考卷。我們總覺得學英文就是在做一場很痛苦的文字解剖學，你看著考卷要把什麼主詞啦、動詞啦、受詞像拆機器零件一樣大卸八塊，然後還要死背下各種什麼完成進行式之類的時態公式。</p>
+    
+    <p><span class="expert">專家：</span>這過程真的充滿壓迫感，而且坦白說常常考完試一出考場就全還給老師了。很多台灣學習者在剛起步的時候都被傳統的教育框架給困住了。大家會覺得學習語言就像在蓋一堵牆，你必須先完美的掌握每一塊叫做文法的磚頭，而且要保證他們絲毫不差，然後你才有那個資格開口說話。</p>
+    
+    <p><span class="host">主持人：</span>對，怕講錯就不敢講。但這完全違背了我們人類大腦吸收語言的自然機制啊！語言從來就不是死板的數學公式，它是一個<span class="highlight">有生命的有機體，是用來傳遞你的畫面還有情感的工具</span>。今天我們絕對不碰任何艱澀的專有名詞，也絕對不發考卷，我們要帶給你一個完全不一樣的視角！</p>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    與其死背規則，不如搞懂老外的腦袋到底在想什麼！
-                </div>
-            </div>
+    <h2>第二章：走進 Lacrosse 的時空膠囊</h2>
+    <p><span class="expert">專家：</span>放心，我們今天為你準備了一篇非常短，大概只有 90 個英文字的短文。主題是一項在美加超級受歡迎，但在台灣可能相對少見的運動——袋棍球，或俗稱的長曲棍球，英文叫做 <span class="keyword">Lacrosse</span>。</p>
+    
+    <p><span class="host">主持人：</span>大家千萬別因為這篇叫 <i>Let's play Lacrosse</i> 的文章只有短短三段就小看它哦！因為這 90 個字裡面其實就像是一顆<span class="highlight">高度濃縮的時空膠囊</span>，它完美涵蓋了英文最核心的運作邏輯。我們先來聽聽看文獻上是怎麼介紹它的基本規則的：</p>
 
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：骨牌效應 — SVO 線性邏輯</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    第一段介紹基本規則：
-                    <span class="english-quote">Lacrosse is a sport with two teams. Players hold long sticks. Each stick has a small net on one end. Players use the stick to throw the ball. Players try to get the ball into a goal.</span>
-                    這段全部使用現在簡單式，因為我們想描述普遍存在的事實與常態規則，大腦就自動切換到這個頻道。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我覺得與其說 SVO 是數學公式，不如說它是一種 <span class="highlight-lego">骨牌效應</span>——英文永遠是一個主體 A，發出一個動作，推倒了客體 B。就像 <span class="english-quote">Players hold long sticks</span>，Players 是第一張骨牌，hold 是倒下的動作，壓在了 long sticks 上面。
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這個比喻非常生動！英文確實是一種高度依賴<span class="highlight-phonics">線性邏輯與位置</span>的語言。誰是發動者、做了什麼動作、承受者是誰，這三個元素的位置像被釘死一樣不能隨便換。在中文裡語序相對靈活，但英文一旦把骨牌順序排錯，整個句子邏輯就崩塌了。
-                </div>
-            </div>
-
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：複數 S — 大腦的畫面切換開關</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我一直很不解，第一句說 <span class="english-quote">a sport</span>（一項運動），結尾卻是 <span class="english-quote">two teams</span>（兩對），team 後面加 S。中文說「兩對」，那個「對」字根本不需要變形，既然前面都有數字了，為什麼英文非得加那個 S？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    在英語的思維世界裡，世界上的事物被嚴格畫出了一道界限：這一邊是「單一個體」，另一邊是「複數群體」。當一個東西超過一個，大腦就發出強烈訊號，而這個訊號必須透過字尾輕輕的 S 音來釋放。
-                    <br><br>
-                    所以當聽到 <span class="english-quote">a sport</span> 時，大腦浮現的是一個單一的點；而聽到 <span class="english-quote">two teams</span> 的 S 瞬間，畫面就自動分裂擴展成一個群體。那個 S 就是 <span class="highlight-lego">啟動群體畫面的視覺開關</span>，不是考卷上害你被扣分的項目。
-                </div>
-            </div>
-
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：動詞的時光機 — d/ed 尾音啟動過去時空</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    接著文章跳入歷史，齒輪切換：
-                    <span class="english-quote">Native Americans were the first people to play Lacrosse. They played the game hundreds of years ago. The ball was made of animal skin. The stick was made of wood. Only men played Lacrosse then.</span>
-                    對比第一段，動詞全面改變：is → were，play → played。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我懂了！中文要表達過去，是用「以前、昨天、曾經」等時間副詞，但動詞本身「玩」從頭到尾不會變。而英文的動詞則是 <span class="highlight-lego">自帶時間刻度</span>！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯，這是一種極高效的資訊壓縮方式。當你聽到動詞發音改變了、尾巴多了 d 或 t 的音，你的大腦根本不需要等到句子最後出現「以前」這個字眼，就應該立刻知道：這是一段發生在過去的故事。
-                </div>
-            </div>
-
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：被動語態的真相 — 鏡頭焦點不是公式</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    雖然時間軸切換得很順，但這段藏了一個我最痛恨的魔王關卡。既然骨牌效應是 A 推倒 B，印第安人用獸皮做球，那為什麼不說 <span class="english-quote">animal skin made the ball</span>，反而要用那個又繞口的 <span class="english-quote">the ball was made of animal skin</span>？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這可以用攝影學的 <span class="highlight-lego">鏡頭焦點</span> 來解釋。如果說 "animal skin made the ball"，焦點打在獸皮上，聽起來像是一塊充滿魔力的獸皮自己爬起來縫成了球——非常像恐怖片對不對？
-                    <br><br>
-                    當我們在介紹這項運動時，眼睛盯著看的主角是「球」，所以我們必須把球推到句首佔 C 位。但球是物品，不能自己做動作，動詞就必須妥協，轉換成被動的 <span class="english-quote">was made of</span>。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    等等！這跟我們中文天天在說的話邏輯一模一樣！我們去買東西問老闆「這件衣服是純棉做的嗎？」，我們絕對不會說「老闆，純棉製造了這件衣服嗎？」——那聽起來完全像外星人！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    完全正確！人類在表達事物材質時的底層邏輯其實一模一樣，都是把焦點放在物品本身。英文裡的 <span class="highlight-lego">was made of</span>，其實就等於中文裡的「是⋯⋯做的」。這不是你需要死背的公式，而是你用來<span class="highlight-phonics">轉移鏡頭焦點到主角的工具</span>！
-                </div>
-            </div>
-
-            <!-- 章節 5 -->
-            <h2 class="chapter-title">章節 5：手尾呼應與 Anyone！— 語言見證社會解放</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    最後一段把時鐘撥回現代：
-                    <span class="english-quote">Today, the ball is made of rubber. Balls are usually bright orange or yellow. The stick is made of wood and plastic. Now anyone can play lacrosse!</span>
-                    美麗的設計：骨架完好如初，只是把 <span class="highlight-lego">was → is</span>，僅換一個字就完成了數百年時空的跨越。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    這代表我不需要背 100 種不同的句型！只要掌握核心骨架，再替換裡面的時態齒輪和單字顏料，就能表達無限廣闊的時間跨度！
-                    <br><br>
-                    而且最後一句 <span class="english-quote">Now anyone can play lacrosse!</span> 直接打破了第二段歷史的 <span class="english-quote">Only men played lacrosse then</span> 的限制。那個驚嘆號不只是標點符號，那是在宣告一種「解放」。從 man（限制）到 anyone（開放），整個音調自然上揚，充滿包容感與慶祝的意味！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    當你能夠讀懂字裡行間隱藏的社會變遷與情緒張力時，你就不再只是一個在背誦單字的外國人，你已經開始真正 <span class="highlight-lego">體會</span> 這個語言了。
-                </div>
-            </div>
-
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>骨牌效應 (SVO)：</strong> 英文的誰(發動者)→做了什麼→推到誰(承受者)，位置被釘死不能亂換。</li>
-                    <li><strong>複數 S = 大腦畫面切換開關：</strong> 聽到 S，大腦自動從「一個點」擴展成「一個群體」的視覺畫面。</li>
-                    <li><strong>動詞自帶時光機：</strong> 字尾加 d/ed，或不規則變形 (is→was, are→were)，秒速把意識傳送到過去時空。</li>
-                    <li><strong>被動語態 = 鏡頭焦點移轉：</strong> was/is made of 不是難背公式，而是「把想強調的主角推到句首 C 位」的電影鏡頭技巧，跟中文「是⋯做的」的概念完全互通！</li>
-                </ul>
-            </div>
-
-        </div>
+    <div class="english-quote">
+        "Lacrosse is a sport with two teams. Players hold long sticks. Each lacrosse stick has a small net on one end. Players use the stick to throw the ball. Players try to get the ball into a goal."
     </div>
+
+    <h2>第三章：發音的爆發力與視覺連結</h2>
+    <p><span class="expert">專家：</span>聽完這段朗讀，即使你對英文真的很陌生，應該也能感受到裡面有幾個不斷重複的聲音。首先最吸引人的就是這個運動的名字 <span class="keyword">Lacrosse</span>。當我們在念它的時候，重音是落在第二個音節（後面那個部分）。</p>
+    
+    <p><span class="host">主持人：</span>對，當你在練習發音的時候，你可以想像把你的力氣和氣流全部集中在後面的 "cross" 上面，聽起來很有爆發力。只要掌握了重音的位置，即使單字量還不多，你講出來的英文就會立刻多了一份道地的節奏感。</p>
+    
+    <p><span class="expert">專家：</span>除了特別的運動名稱，其實還有很多非常具象的詞彙。比如在台灣我們很熟悉的棒球是用 bat (球棒)，但在這裡球員拿的是 <span class="keyword">stick</span> (棍子)，一端有一個 <span class="keyword">net</span> (網子)，最後要把球投進 <span class="keyword">goal</span> (球門)。當我們把這些單字跟實際的物理動作連接在一起的時候，那個畫面感超級強烈！這正是語言學習的第一步：<span class="highlight">建立視覺連結</span>。</p>
+
+    <h2>第四章：骨牌效應 — 英文的線性邏輯</h2>
+    <p><span class="host">主持人：</span>如果仔細觀察這一段的動詞，比如 hold (拿著)、use (使用)、try (嘗試)，全部都是<span class="highlight">現在簡單式</span>。在英文的底層邏輯裡，當我們想要描述一個普遍存在的事實、一個常態，大腦就會自動切換到現在簡單式的頻道。</p>
+    
+    <p><span class="expert">專家：</span>說到這，以前國中學句型時老師總是教公式「主詞 + 動詞 + 受詞」(S+V+O)。但我現在覺得與其說它是數學公式，不如說它更像是一種<span class="highlight">「骨牌效應」</span>！</p>
+    
+    <p><span class="host">主持人：</span>骨牌效應這個比喻蠻新鮮的！在英文裡好像永遠是一個主體 A 發出了一個動作，然後推倒了另一個客體 B。就像文章裡的 <i>Players hold long sticks</i> (球員拿著長棍)。</p>
+    
+    <p><span class="expert">專家：</span>沒錯，<span class="keyword">Players</span> 就是第一張骨牌，<span class="keyword">hold</span> 是倒下去的動作，最後壓在了 <span class="keyword">long sticks</span> 上面。英文確實是一種高度依賴線性邏輯跟位置的語言。在中文裡語序相對靈活，你可以說「球員拿著長棍」，也可以說「長棍被球員拿著」，甚至「長棍球員拿著」大家都聽得懂。</p>
+    
+    <p><span class="host">主持人：</span>但英文不行哦！誰是發動者、做了什麼動作、承受者是誰，這三個元素在句子裡的位置像是被釘死的一樣不能隨便換。一旦骨牌的順序排錯了，整個句子的邏輯就崩塌了。</p>
+
+    <h2>第五章：打破大魔王一：複數 S 不只是扣分陷阱</h2>
+    <p><span class="expert">專家：</span>既然聊到了中英文的思維轉換，我提出一個長久以來的痛點：第一句話說 <i>Lacrosse is <b>a</b> sport</i>，但結尾卻變成了 <i>with two <b>teams</b></i> (team 後面加了 s)。在中文裡我們說「一隊」或「兩隊」，「隊」字根本不需要變形啊！這是不是單純為了增加考試難度發明的規則，少寫一個 S 就被扣分？</p>
+    
+    <p><span class="host">主持人：</span>哈哈，這真的是個經典痛點！但如果我們跳脫考試框架，進入英語母語者的思維世界，你會發現這其實反映了他們對於<span class="highlight">「數量與邊界」</span>的一種極度執著。在他們的認知裡，世界上的事物被嚴格畫出了一道界限：一邊是單一的個體，另一邊是複數的群體。</p>
+    
+    <p><span class="expert">專家：</span>當一個東西超過一個的時候，他們的大腦就會發出強烈訊號，必須透過字尾輕輕的 <span class="keyword">S</span> 音釋放出來。所以那個 S 絕對不是多餘的裝飾品，它是<span class="highlight">啟動群體畫面的視覺開關</span>！如果你漏掉了 S，在母語者的耳朵裡聽起來就像畫面突然卡住，邏輯上會產生微微的不協調感。</p>
+
+    <h2>第六章：語言的時光機 — 讓齒輪轉動</h2>
+    <p><span class="host">主持人：</span>接下來，我們要跟著這篇文章進行一場時空旅行，從現在式跨越到另一個時間維度。請聽接下來的歷史文獻：</p>
+
+    <div class="english-quote">
+        "Native Americans were the first people to play Lacrosse. They played the game hundreds of years ago. The ball was made of animal skin. The stick was made of wood. Only men played Lacrosse then."
+    </div>
+
+    <p><span class="expert">專家：</span>對比第一段，最明顯的就是代表現在狀態的 <i>is</i> 變成了 <span class="keyword">were</span>，而倒下的骨牌動作 <i>play</i> 也長出尾巴變成了 <span class="keyword">played</span>。中文裡表達過去通常是加上時間副詞（以前、昨天），動詞長相不會變；但在英文的世界裡，<span class="highlight">動詞本身就承載著時間的刻度</span>！</p>
+    
+    <p><span class="host">主持人：</span>透過字尾加上 -ed 或不規則變身，動詞會立刻把聽眾的意識拉回到數百年前。這是一種非常高效的資訊壓縮方式，你根本不需要等到句子最後出現「昨天」等字眼，大腦就應該立刻知道：這是一段發生在過去的故事。</p>
+
+    <h2>第七章：破解大魔王二：被動語態的「鏡頭焦點」</h2>
+    <p><span class="expert">專家：</span>不過這段藏了一個巨大的陷阱，也是台灣學生最痛恨的魔王關卡：<i>The ball was made of animal skin</i> (球由獸皮製成)。既然剛剛建立好完美的骨牌效應 (A 推倒 B)，為什麼不直接說 <i>Animal skin made the ball</i> (獸皮製造了球)？為什麼要發明聽起來很拗口的「被動語態」？</p>
+    
+    <p><span class="host">主持人：</span>你抓到了極度關鍵的痛點！原因其實可以用攝影學裡的一個概念來解釋：<span class="highlight">鏡頭的焦點</span>。你可以把每一個英文句子都想像成攝影機鏡頭。如果你說「獸皮製造了球」，焦點是打在獸皮上，聽起來就像是一塊充滿魔力的獸皮，自己動手「啪啪啪」把自己縫成了一顆球，這是不是像魔法電影？</p>
+    
+    <p><span class="expert">專家：</span>真的蠻怪的！當我們在描述運動用具時，我們真正關心、眼睛盯著看的主角是「球」。所以我們必須<span class="highlight">把球推到句子的最前面，讓它佔據 C 位</span>！</p>
+    
+    <p><span class="host">主持人：</span>沒錯，因為強調的是材質，不在乎是哪位工匠做的。但球本身不會做動作，為了配合佔據了第一張牌的主角，動詞必須妥協轉換成被動形式：<span class="keyword">was made of</span>。這其實跟我們中文說「這件衣服是純棉『做的』」邏輯一模一樣！當你把它當作轉移鏡頭焦點的工具，文法就變得非常自然了。</p>
+
+    <h2>第八章：語言，是人類思維的演化史</h2>
+    <p><span class="host">主持人：</span>文章最後一段做了一個強烈的對比，檢驗我們剛才有沒有吸收進去：</p>
+
+    <div class="english-quote">
+        "Today, the ball is made of rubber. Balls are usually bright orange or yellow. The stick is made of wood and plastic. Now anyone can play lacrosse!"
+    </div>
+
+    <p><span class="expert">專家：</span>整個節奏瞬間明亮了！材質從獸皮變成橡膠 (rubber) 跟塑膠 (plastic)，顏色也變成了明亮的橘色或黃色。最精妙的是，句型骨架完好如初，唯一做的就是<span class="highlight">輕輕撥動了時間的刻度</span>，把代表過去的 <i>was</i> 切換回代表現在的 <i>is</i>，瞬間完成數百年時空的跳躍。</p>
+    
+    <p><span class="host">主持人：</span>學英文真的不需要背 100 種不同的句型。只要掌握了核心的骨架，學會如何抽換裡面的時態齒輪與單字顏料，就能舉一反三。最後，你有注意到語氣轉折嗎？歷史那段寫著 <i>Only men played Lacrosse then</i> (當時只有男人能玩)；但現代的結尾變成了 <i>Now <b>anyone</b> can play Lacrosse!</i></p>
+    
+    <p><span class="expert">專家：</span>那個驚嘆號絕對不是單純的排版！它傳遞了一種強烈的包容感與慶祝意味。從限制走向開放，從專屬走向平權，這些改變最終紀錄在這個小小的 anyone 加上驚嘆號裡面。當你能讀懂字裡行間隱藏的社會變遷與情緒張力時，你就開始真正體會這個語言了。</p>
+    
+    <p><span class="host">主持人：</span>在短短十幾分鐘裡，透過 90 個字，你沒翻開任何文法書，卻搞懂了直線推導的骨牌邏輯、數量視覺開關、時空穿梭的動詞，並破解了轉移鏡頭焦點的被動語態。下一次當你覺得時態跟句型很煩人的時候，不妨想一想，語言會變形、會演進，是為了適應我們不斷進步的生活。<span class="highlight">放下死板的文法書，去感受語言的畫面與故事吧！</span></p>
+<div id="audio-panel" style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+    <audio id="bg-audio" controls style="width: 100%;">
+        <source src="" type="audio/mp4" >
+        您的瀏覽器不支援音訊播放。
+    </audio>
+    <script>
+        (function () {
+        var filename = '2_14.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        const audio = document.getElementById('bg-audio');
+        audio.load();
+        audio.play();
+        })();
+    </script>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
+<div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+<p>
+<script>
+    //let isScrolling = false;
+    let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+    let scrollSpeed = 0.15; 
+    let animationFrameId;
+    let virtualScrollY = window.scrollY; 
+
+    const toggleBtn = document.getElementById('scroll-toggle');
+    const speedControl = document.getElementById('speed-control');
+    const speedDisplay = document.getElementById('speed-display');
+
+    speedControl.addEventListener('input', function() {
+        scrollSpeed = parseFloat(this.value);
+        speedDisplay.innerText = scrollSpeed.toFixed(2);
+    });
+
+    function scrollPage() {
+        if (isScrolling) {
+            toggleBtn.innerHTML = '⏬⏸️';
+            if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                virtualScrollY = window.scrollY;
+            }
+
+            virtualScrollY += scrollSpeed;
+            window.scrollTo(0, virtualScrollY);
+            
+            if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                isScrolling = false;
+                toggleBtn.innerHTML = '⏬▶️';
+                toggleBtn.style.background = '#27ae60';
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(scrollPage);
+        }
+    }
+
+    toggleBtn.addEventListener('click', function() {
+        isScrolling = !isScrolling;
+        
+        if (isScrolling) {
+            this.innerHTML = '⏬⏸️';
+            this.style.background = '#e74c3c';
+            virtualScrollY = window.scrollY; 
+            scrollPage();
+        } else {
+            this.innerHTML = '⏬▶️';
+            this.style.background = '#27ae60';
+            cancelAnimationFrame(animationFrameId);
+        }
+    });
+    // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+    scrollPage();
+</script>
 </body>
 </html>

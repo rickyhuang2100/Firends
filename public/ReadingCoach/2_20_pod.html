@@ -1,318 +1,556 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - Toni Morrison: An Inspiring Author</title>
+    <title>文學巨擘的街頭語感：從 Toni Morrison 的故事拆解英文思維底層邏輯</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+            --primary-color: #342a21; /* 深木色，展現文學厚重感 */
+            --accent-color: #d35400;  /* 街頭活力橘，展現 Who's got game 的反差 */
+            --bg-page: #f9f6f0;       /* 柔和書香米白 */
+            --bg-card: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --host-a-bg: #f5ede3;     /* 導師對話框背景 */
+            --host-b-bg: #eef2f5;     /* 學員對話框背景 */
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
             line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
-            padding: 20px;
+            padding: 50px 20px;
         }
 
-        .podcast-container {
-            max-width: 900px;
+        .container {
+            max-width: 880px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 40px;
+            background: var(--bg-card);
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
         }
 
-        .podcast-header {
+        header {
             text-align: center;
-            border-bottom: 2px solid #eee;
+            border-bottom: 2px solid #e67e22;
             padding-bottom: 30px;
             margin-bottom: 40px;
         }
 
-        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
-        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
-        .podcast-meta {
-            margin-top: 15px;
+        header h1 {
+            font-size: 26pt;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 11.5pt;
+            color: var(--text-muted);
+        }
+
+        .meta-tags {
+            margin-top: 18px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f1f2f6;
+            color: #57606f;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 9.5pt;
+            margin: 0 5px;
+            font-weight: 500;
+        }
+
+        /* 英文經典語句學習卡片 */
+        .quote-section {
+            background: linear-gradient(135deg, #fdfbf7 0%, #eee5d8 100%);
+            border-left: 6px solid var(--accent-color);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .quote-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 14pt;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding-bottom: 8px;
+        }
+
+        .english-block {
+            font-family: "Georgia", "Times New Roman", serif;
+            font-size: 12.5pt;
+            color: #1a1a1a;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+
+        .english-block span {
+            font-weight: bold;
+            color: var(--accent-color);
+            background-color: #fff2cc;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        /* 思維模型速查表 */
+        .insight-grid {
+            margin: 40px 0;
+        }
+
+        .insight-box {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid var(--primary-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .insight-box h4 {
+            color: var(--accent-color);
+            font-size: 13pt;
+            margin-bottom: 12px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
-            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .insight-box ul {
+            padding-left: 22px;
+            font-size: 11pt;
+        }
+
+        .insight-box li {
+            margin-bottom: 8px;
+        }
+
+        /* 對話內容排版 */
+        .transcript-container {
+            margin-top: 40px;
         }
 
         .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
-            border-radius: 0 8px 8px 0;
+            font-size: 16pt;
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 12px;
+            margin: 45px 0 25px 0;
+            font-weight: 700;
         }
 
-        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
-
-        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
-
-        .speaker-avatar {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; flex-shrink: 0;
-        }
-
-        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
-        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
-
-        .speech-bubble { padding: 15px 20px; border-radius: 12px; font-size: 16px; }
-        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
-        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
-
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
-            font-weight: bold;
-        }
-
-        .highlight-phonics {
-            color: #e74c3c; font-weight: bold;
-            background: #fdeaea; padding: 0 4px; border-radius: 3px;
-        }
-
-        .english-quote {
+        .dialogue-unit {
+            margin-bottom: 22px;
             display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
+        .speaker-label {
+            display: inline-block;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 10pt;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .speaker-a .speaker-label {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .speaker-b .speaker-label {
+            background-color: #7f8c8d;
+            color: #ffffff;
+        }
+
+        .bubble-text {
+            padding: 18px 24px;
             border-radius: 8px;
-            margin: 30px 0;
+            font-size: 11.5pt;
+            text-align: justify;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.01);
         }
 
-        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
-        li { margin-bottom: 6px; }
+        .speaker-a .bubble-text {
+            background-color: var(--host-a-bg);
+            border-left: 4px solid var(--primary-color);
+        }
 
-        .inspiration-box {
-            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-            border: 2px solid #a5d6a7;
+        .speaker-b .bubble-text {
+            background-color: var(--host-b-bg);
+            border-left: 4px solid #7f8c8d;
+        }
+
+        .keyword {
+            font-weight: bold;
+            color: #c0392b;
+            background-color: #fce4d6;
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        /* 課後思維彩蛋區 */
+        .egg-section {
+            background-color: #fffaf0;
+            border: 1px dashed #e67e22;
+            padding: 30px;
             border-radius: 10px;
-            padding: 20px 25px;
-            margin: 30px 0;
+            margin-top: 50px;
         }
-        .inspiration-box h4 { color: #388e3c; margin-bottom: 10px; }
+
+        .egg-section h4 {
+            color: var(--accent-color);
+            font-size: 14pt;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 10pt;
+            color: var(--text-muted);
+            border-top: 1px solid #e9ecef;
+            padding-top: 25px;
+        }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：Toni Morrison: An Inspiring Author</h1>
-            <p class="podcast-subtitle">從諾貝爾文學獎得主的文字，拆解深層單字力、時態魔術與語言的衣櫃</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：過去式復古濾鏡、dealing with 的韌性、時態的拍立得與河流、Who's Got Game 街頭語感</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_20.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
-            </div>
+
+<div class="container">
+    <header>
+        <h1>文學巨擘的街頭語感</h1>
+        <p>跟著諾貝爾文學獎得主 Toni Morrison 拆解從零開始的英文核心思維</p>
+        <div class="meta-tags">
+            <span class="tag">📸 過去式復古濾鏡</span>
+            <span class="tag">🃏 Deal with 的牌桌智慧</span>
+            <span class="tag">🕰 時間整包打包邏輯</span>
+            <span class="tag">🧥 語言的西裝與T恤</span>
         </div>
+    </header>
 
-        <div class="dialogue-flow">
-
-            <!-- 開場 -->
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    一位獲得諾貝爾文學獎的偉大作家，探討種族主義、創傷等沉重歷史，聽起來像燈塔般莊重。但她居然出版了一本書，書名像是在街頭籃球場嗆聲：<span class="english-quote">Who's got game?</span> (誰才是真正的高手)。這種反差超迷人！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這正是 Toni Morrison 的魅力，她運用語言就像魔術師。今天，我們不背無聊的公式，我們要透過她的真實故事，來感受英文是如何表達身分、時間與情感的。
-                </div>
-            </div>
-
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：過去式 —— 套上泛黃的「復古濾鏡」</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">Toni Morrison was an African American author. She wrote about Black Americans and their lives.</span>
-                    注意這裡的動詞不是 is 或 writes，而是 <span class="highlight-phonics">was</span> 和 <span class="highlight-phonics">wrote</span>。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我一直覺得英文的過去式很像手機相機裡的「復古濾鏡」！
-                    當講話時把動詞變形（is → was, write → wrote），就像瞬間套了一層泛黃的濾鏡。聽的人大腦立刻切換到「回憶模式」，意識到這是一段屬於過去的歷史。
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    非常精準！因為她已過世，我們在談論她已完成的生平，所以必須套上過去式的濾鏡。
-                    初學者不需要拿著不規則動詞表死背 `write-wrote-written`，只要在故事中把 <span class="highlight-lego">wrote about</span>（寫關於...）當作一個整體區塊來感受。大腦自然會把這發音和她過去的創作連結起來。
-                </div>
-            </div>
-
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：成人該學什麼單字？「Dealing with」的人生牌局</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">Many of her characters experienced racism. She wrote about dealing with those struggles...</span>
-                    這段話有很有份量的字：<span class="highlight-phonics">racism</span> (種族主義，-ism結尾代表主義或體制) 和 <span class="highlight-phonics">struggles</span> (深陷泥淖不斷掙扎的感覺)。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    <span class="highlight-lego">dealing with</span> (處理/應對) 這個片語，讓我聯想到打撲克牌時的「發牌」(deal)。老天爺發給你什麼牌（膚色、命運），你無法選擇。但牌發到手上了，你就必須去 deal with it 去應對這局艱難的牌局。
-                    <br><br>
-                    但我有個共鳴，很多初學者看到 racism、struggles 會退縮，覺得太沉重，「我日常對話只要會 I am fine 就好了吧？」
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這是一個很大的誤區！你是一位心智成熟的成人，對世界的理解本就是深刻的。如果只會說 I am fine，當遇到真實挫折或看見不公義時，你會發現自己突然「失語」，沒有詞彙表達內心的真實感受。
-                    <br><br>
-                    學習 struggles 這樣的詞，是為了<span class="highlight-lego">把你母語中已具備的深刻思想，對應到英文裡</span>。單字不分難易，只看它能不能精準表達我們的世界！
-                </div>
-            </div>
-
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：時態的魔術 —— 流動的河流 vs. 定格的拍立得</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    接下來有三句話，時間維度發生了劇烈的跳躍：
-                    <span class="english-quote">Many people around the world love her writing. She even won many awards for her writing. Toni Morrison wrote her whole life.</span>
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    第一句 <span class="highlight-phonics">love</span> (現在式)，接下來 <span class="highlight-phonics">won</span> / <span class="highlight-phonics">wrote</span> (過去式)。像變魔術一樣！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    把它們視覺化：
-                    <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li><strong>love（現在式）：</strong> 像一條 <span class="highlight-lego">持續流動的河</span>。全世界讀者昨、今、明都持續被感動著，是活著的事實。</li>
-                        <li><strong>won / wrote（過去式）：</strong> 像拍下來的 <span class="highlight-lego">拍立得照片</span>。頒獎典禮已經是特定時間點定格的瞬間，「喀嚓」，動作徹底完成了。</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    可是最後一句話 <span class="english-quote">she wrote her whole life</span>（她寫了一輩子），「一輩子」聽起來極度漫長，為什麼英文只用最簡單的過去式 wrote，而不是很複雜的進行式？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    因為英文時態的關鍵，「不在於動作持續多久」，而在於「<span class="highlight-lego">這動作的狀態是否已經畫下句點</span>」。
-                    她已離開人世，她人生這本書正式闔上。無論歲月多麼漫長，在歷史的長河中都已被完整打包成一個「已完成」的過去式。這時，簡單的過去式像是一種致敬，承載了她整個傳奇一生的重量。
-                </div>
-            </div>
-
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：語言的衣櫃 —— 從西裝到街頭 T-shirt</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">Toni Morrison even wrote a few children's books. She wrote them with her son. One of these books is called Who's Got Game?</span>
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-bubble">
-                    <span class="highlight-phonics">Who's</span> 其實是 <span class="highlight-phonics">Who has</span> 的縮寫。<span class="english-quote">Who's got game?</span> (誰有這個本事 / 誰才是高手) 這個寫法充滿了街頭俚語感，甚至有挑釁意味！一開始就學這麼不正式的英文好嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這反而是最寶貴的一課！很多人希望學到一套「絕對正確、四平八穩」的公式，但現實世界的語言是鮮活的。<span class="highlight-lego">語言就像是我們的衣櫃：</span>
-                    <br><br>
-                    你需要一套剪裁合宜的<strong>西裝</strong>，用來探討 racism 和 struggles（嚴肅字眼）；你也需要一件舒服的 <strong>T-shirt</strong>，用來在街頭打球跟孩子開玩笑（Who's got game 口語）。兩者都不可或缺！真正掌握語言，不是永遠穿西裝，而是知道場合拿出適合的衣服。
-                </div>
-            </div>
-
-            <!-- 哲思收尾 -->
-            <div class="inspiration-box">
-                <h4>🐜 本集哲學火花：螞蟻與蚱蜢的弦外之音</h4>
-                <p>這本童書的副標題是 <i>The Ant or the Grasshopper?</i> (螞蟻還是蚱蜢？)</p>
-                <p>傳統的《伊索寓言》教導我們：螞蟻勤奮工作有飯吃，蚱蜢唱歌玩樂會餓死（好孩子與壞孩子）。</p>
-                <p>但請思考：一位畢生寫作探討「系統性壓迫」的非裔文學巨擘，真的只是在講一個關於懶惰與勤奮的故事嗎？</p>
-                <br>
-                <p>有沒有一種可能：那隻被傳統定罪為懶惰的<strong>蚱蜢</strong>，象徵著「在主流體制外不被理解的藝術家」？而那群只懂不斷囤積的<strong>螞蟻</strong>，暗示著「某種缺乏同理心、只看重生產力的僵化體制」？所以她才嗆聲 <i>Who's got game?</i>，企圖推翻我們從小聽大、理所當然的主流價值觀。</p>
-                <br>
-                <p>隨著英文閱讀能力提升，希望有一天你能親自翻開這本童書原文書，看看這位偉大作家到底藏了什麼給現代社會的全新訊息！這就是閱讀的終極樂趣！</p>
-            </div>
-
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>過去式的復古濾鏡：</strong> 看到 went, wrote 不是想到冰冷文法，而是像套上泛黃濾鏡，大腦切換至「這是一段回憶 / 歷史」的模式。</li>
-                    <li><strong>Dealing with (應對/處理)：</strong> 就像打牌 (deal)，人生發給你什麼牌你無法決定（如出身、困境），但你必須去應對它，充滿韌性。</li>
-                    <li><strong>成人字彙的權利：</strong> 不要被 struggles (掙扎) / racism (種族主義) 嚇到。成人的世界本就深刻，你需要這些字彙來避免「失語」。</li>
-                    <li><strong>時態的對比藝術：</strong> 現在式 (love) 像流動的河，表達永恆不變的事實；過去式 (wrote) 像拍立得照片，即使寫了「一輩子」，只要人生已經落幕，就是一個完整的已結束包裹。</li>
-                    <li><strong>語言衣櫃 (Register)：</strong> 正式深沉的字眼是「西裝」，Who's got game 這種街頭縮寫是舒服的「T-shirt」。好的英文學習者應該兩者皆備。</li>
-                    <li><strong>'s 所有格標籤：</strong> children's books。撇號加 S，就是給名詞貼上標籤，說明這東西「屬於」誰。</li>
-                </ul>
-            </div>
-
+    <!-- 核心英文文摘卡片 -->
+    <div class="quote-section">
+        <h3>💡 本課精選原文字句（朗讀與語感素材）</h3>
+        <div class="english-block">
+            1. Toni Morrison <span>was</span> an African American author. She <span>wrote</span> about black Americans and their lives.<br><br>
+            2. Many of her characters <span>experienced</span> racism. She wrote about how they <span>dealt with</span> those struggles in their community.<br><br>
+            3. Many people around the world <span>love</span> her writing. She even <span>won</span> many awards for her writing. Toni Morrison <span>wrote</span> her whole life.<br><br>
+            4. Toni Morrison even <span>wrote</span> a few children's books. She wrote them with her son. One of these books is called <em>"Who's Got Game? The Ant or the Grasshopper?"</em> Maybe you can find one of her children's books in the library.
         </div>
     </div>
+
+    <!-- 核心觀念速查 -->
+    <div class="insight-grid">
+        <div class="insight-box">
+            <h4>💡 核心英語思維外掛摘要</h4>
+            <ul>
+                <li><strong>時態即濾鏡：</strong> 過去式（如 <em>was, wrote</em>）不是生硬的規則，而是大腦自動套用的「泛黃復古濾鏡」，瞬間切換至歷史記憶模式。</li>
+                <li><strong>大腦認知塊（Chunking）：</strong> 拋棄單字表，將 <span class="keyword">wrote about</span>（過去寫關於...）、<span class="keyword">deal with</span>（處理/應對困境）當作完整語塊吸收。</li>
+                <li><strong>成人學英語的誤區：</strong> 不要只學 apple 或 I'm fine。身為心智成熟的成人，你需要 <span class="keyword">racism</span>、<span class="keyword">struggles</span> 這樣有分量的詞彙來精準表達對複雜世界的理解。</li>
+                <li><strong>狀態的定格與流動：</strong> 現在式 <em>love</em> 是一條超越時間、持續流動的河；過去式 <em>won</em> 與 <em>wrote</em> 則是拍立得照片，記錄已定棺論定的歷史瞬間。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 逐字稿內容區 -->
+    <div class="transcript-container">
+        
+        <div class="chapter-title">第一幕：文學登塔的驚艷反差</div>
+        
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                想像一下這樣一個畫面哦：一位獲得諾貝爾文學獎的偉大作家，她筆下的文字充滿了歷史的重量，深刻探討著像是種族主義啊、創傷，還有非裔美國人最深層的掙扎。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                嗯，聽起來是一位非常嚴肅，猶如文學界燈塔般的莊重人物。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                對，但是有一天這位巨匠居然出版了一本書，而且書名聽起來簡直就像是在街頭籃球場上對人嗆聲，叫做 <span class="keyword">"Who's Got Game"</span>。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                哇，這聽起來像是「誰才是真正的老大、誰有真本事」這種感覺哦！
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-badge" style="display:none;"></span><!-- 保持格式 -->
+            <div class="bubble-text" style="background-color: var(--host-a-bg); border-left: 4px solid var(--primary-color); padding: 18px 24px; border-radius: 8px;">
+                <strong>主持人 A (導師)：</strong>沒錯，這種強烈的反差是不是超級迷人的？這其實就是我們今天這趟深度探索的核心人物：<span class="keyword">Toni Morrison</span>（托妮·摩里森）。她不僅是美國文學史上的巨擘，她運用語言的方式更像是一位魔術師。無論是沉重的歷史還是充滿活力的街頭日常，她都能精準捕捉。而這正是我們今天為正在收聽的你量身打造這段內容的原因——我知道你是一位中文為母語的台灣人，而且你正非常有企圖心地準備從零開始重新建立對英文這門語言的理解。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                對，很多初學者其實都有這種企圖心，但往往會不知從何下手。過去可能覺得學英文就是背單字表、記無聊的文法公式，但今天我們不走那條枯燥的路，我們要直接走進 Toni Morrison 的世界，透過真實的故事來學。
+            </div>
+        </div>
+
+        <div class="chapter-title">第二幕：時態濾鏡與成人的語彙分量</div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                要認識一個人，英文通常會用最俐落的方式給出一個定位。大家仔細聽好第一段文本：<br>
+                <em style="font-family: Georgia; color: #111;">"Toni Morrison was an African American author. She wrote about black Americans and their lives."</em><br>
+                當你聽到這句，大腦應該立刻接收到清晰的身分標籤——她是一位「非裔美國作家」，一生專注於描寫美國黑人以及他們的生活。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                了解，不過這裡有一個細節：這兩個句子的核心動詞用的是 <span class="keyword">was</span> 和 <span class="keyword">wrote</span>，而不是 is 或 write。你之前提過英文的「過去式」很像手機相機裡的「復古濾鏡」，這個比喻好有畫面感！
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                對！當我們講話刻意把動詞變形（is 變 was，write 變 wrote），就像瞬間套用了一層泛黃的復古濾鏡。聽話的人大腦立刻切換到回憶模式，意識到這是一段已逝的歷史事實。初學者不用死背不規則動詞表，你只需要在讀故事時，把 <span class="keyword">wrote about</span> 當成一個整體的「語塊（chunk）」來理解，多看幾次，發音和場景自然就綁定在一起了。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                這就是不知不覺培養出的語感！那我們接下來聽聽看她筆下的世界。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                請聽第二段朗讀：<br>
+                <em style="font-family: Georgia; color: #111;">"Many of her characters experienced racism. She wrote about how they dealt with those struggles in their community."</em><br>
+                這裡出現了很有分量的詞：人物/角色 (<span class="keyword">characters</span>)、種族主義 (<span class="keyword">racism</span>，字尾 -ism 代表某種主義體制)、掙扎 (<span class="keyword">struggles</span>) 和社群 (<span class="keyword">community</span>)。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                我想特別聊聊 <span class="keyword">dealing with</span>（處理/應對）這個片語。你說 deal 讓你想到了撲克牌的「發牌」？
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                沒錯！人生就像坐在牌桌上，你無法決定老天爺發給你什麼牌。就像她書中的角色無法選擇出生膚色、無法選擇是否會遭遇 racism。這很無奈，但牌發到手上，你就必須學會去 <strong>deal with it</strong>——去應對、去處理手上的艱難牌局。這個片語完美表達了面對現實的韌性。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                這個比喻太生動了！這也翻轉了我們對基礎英文的定義。很多從零開始的初學者覺得，一開始只能學 apple、banana 或 How are you?，看到 racism 或 struggles 這種沉重的字就覺得日常對話用不到。但其實我們是心智成熟的成人，如果只會說 I am fine，當我們遇到不公義或挫折時，在英文的世界裡就會瞬間「失語」，找不到詞彙表達內心真實的深刻感受。單字不分難易，只看它能不能精準對應你的世界！
+            </div>
+        </div>
+
+        <div class="chapter-title">第三幕：時態變魔術——流動的河與拍立得</div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                完全正確！接下來這段話展示了英文裡簡直像變魔術一樣的時態轉換：<br>
+                <em style="font-family: Georgia; color: #111;">"Many people around the world love her writing. She even won many awards for her writing. Toni Morrison wrote her whole life."</em><br>
+                注意到嗎？短短三句話，時間維度發生劇烈跳躍。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                第一句的 <span class="keyword">love</span> 用的是現在式，但接下來的 <span class="keyword">won</span>（贏得）與 <span class="keyword">wrote</span>（寫）又立刻切回過去式。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                這就是最精采的地方。現在式的 <strong>love</strong> 就像是一條「持續流動的河」，因為全世界的讀者不管是昨天、今天還是明天，都正持續被她的文字感動，這是活著的事實。但過去式的 <strong>won</strong> 與 <strong>wrote</strong> 就像是一張張「定格的拍立得照片」——那些頒獎典禮、一生的創作歷程，隨著她的離世，動作已經徹底完成，在歷史場合中被「完整打包」起來了。簡單過去式在這裡不是冷冰冰的文法，而是一種蓋棺論定的致敬，承載了一生豐厚的重量。
+            </div>
+        </div>
+
+        <div class="chapter-title">第四幕：衣櫃理論——西裝與 T-shirt 的靈活切換</div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                讀到這裡，本以為她是一位永遠眉頭深鎖、無比嚴肅的文學巨匠。結果文本最後給了一個超大驚喜：<br>
+                <em style="font-family: Georgia; color: #111;">"Toni Morrison even wrote a few children's books. She wrote them with her son. One of these books is called Who's Got Game? The ant or the grasshopper?"</em><br>
+                她居然和兒子一起寫童書！而且書名叫 <span class="keyword">"Who's Got Game?"</span>（誰是遊戲高手/誰有真本事？）。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                這個書名非常酷，帶有滿滿的街頭俚語色彩。<span class="keyword">who's</span> 是 who has 的縮寫。初學者可能會擔心：一開始就接處這種很不正式、甚至有點街頭的用法好嗎？這符合正規標準嗎？但我認為這反而是語言學習中最寶貴的一課——語言是活生生的！
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                沒錯，一位文學巨擘在童書裡毫不避諱地使用街頭語言，這證明了英文不是死板的教科書規則，而是充满多樣性與活力。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-a">
+            <span class="speaker-label">主持人 A (導師)</span>
+            <div class="bubble-text">
+                這就是我常說的<strong>「衣櫃理論」</strong>：你的衣櫃裡需要有一套剪裁合宜的「西裝」用來出席正式場合，就像探討 racism、struggle 時實用的嚴肅字眼；但你同時也需要一件舒服的「T-shirt」，可以用來在街頭打球、跟孩子們開玩笑，就像 Who's Got Game 這種口語。真正掌握一門語言，不是永遠穿著西裝，而是知道在什麼場合該拿出衣櫃裡的哪一件衣服。
+            </div>
+        </div>
+
+        <div class="dialogue-unit speaker-b">
+            <span class="speaker-label">主持人 B (學員)</span>
+            <div class="bubble-text">
+                恭喜大家完成了這次的學習任務！我們沒有死背任何一張表格，但我們學會了過去式的復古濾鏡、deal with 的人生手牌、成人的深刻單字，還有靈活的口語問句。透過真實且啟發人心的故事來學習，真的是太迷人了。
+            </div>
+        </div>
+    </div>
+
+    <!-- 思考彩蛋區 -->
+    <div class="egg-section">
+        <h4>課後思考彩蛋 🥚</h4>
+        <p style="font-size: 11pt; text-align: justify;">
+            大師在節目最後留下了一個引人深思的問題：Morrison 與兒子改寫的童書副標題是 <strong>"The Ant or the Grasshopper"（螞蟻與蚱蜢）</strong>。在傳統的伊索寓言裡，這是一個教導我們要像螞蟻一樣勤奮囤積粮食、不要像蚱蜢一樣只顧唱歌玩樂的道德故事。
+            <br><br>
+            但是，請你想一想：一位畢生書寫非裔創傷、深刻探討體制壓迫的偉大文學家，為什麼要挑選這個故事改寫？在她的眼裡，那隻被傳統社會定罪為懶惰、只會唱歌的蚱蜢，會不會其實象徵著<span>在主流體制外不被理解的藝術家</span>？而勤勞卻只懂遵循規則、缺乏同理心的螞蟻，是否暗示著<span>只看重生產力的僵化體制</span>？
+            <br><br>
+            Morrison 寫下 <em>"Who's Got Game?"</em> 這個挑釁的書名，是不是正打算推翻我們從小聽到大的刻板價值觀呢？期待有一天，你也能充滿自信地走進圖書館，親自翻開這本英文童書去尋找答案！
+        </p>
+    </div>
+
+    <footer>
+        <p>© 2026 語感底層邏輯大師課 · 用成人的心智自然內化英文思維</p>
+    </footer>
+</div>
+<div id="audio-panel" style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+    <audio id="bg-audio" controls style="width: 100%;">
+        <source src="" type="audio/mp4" >
+        您的瀏覽器不支援音訊播放。
+    </audio>
+    <script>
+        (function () {
+        var filename = '2_20.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        const audio = document.getElementById('bg-audio');
+        audio.load();
+        audio.play();
+        })();
+    </script>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
+<div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+<p>
+<script>
+    //let isScrolling = false;
+    let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+    let scrollSpeed = 0.15; 
+    let animationFrameId;
+    let virtualScrollY = window.scrollY; 
+
+    const toggleBtn = document.getElementById('scroll-toggle');
+    const speedControl = document.getElementById('speed-control');
+    const speedDisplay = document.getElementById('speed-display');
+
+    speedControl.addEventListener('input', function() {
+        scrollSpeed = parseFloat(this.value);
+        speedDisplay.innerText = scrollSpeed.toFixed(2);
+    });
+
+    function scrollPage() {
+        if (isScrolling) {
+            toggleBtn.innerHTML = '⏬⏸️';
+            if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                virtualScrollY = window.scrollY;
+            }
+
+            virtualScrollY += scrollSpeed;
+            window.scrollTo(0, virtualScrollY);
+            
+            if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                isScrolling = false;
+                toggleBtn.innerHTML = '⏬▶️';
+                toggleBtn.style.background = '#27ae60';
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(scrollPage);
+        }
+    }
+
+    toggleBtn.addEventListener('click', function() {
+        isScrolling = !isScrolling;
+        
+        if (isScrolling) {
+            this.innerHTML = '⏬⏸️';
+            this.style.background = '#e74c3c';
+            virtualScrollY = window.scrollY; 
+            scrollPage();
+        } else {
+            this.innerHTML = '⏬▶️';
+            this.style.background = '#27ae60';
+            cancelAnimationFrame(animationFrameId);
+        }
+    });
+    // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+    scrollPage();
+</script>
 </body>
 </html>

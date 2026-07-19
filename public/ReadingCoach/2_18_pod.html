@@ -1,330 +1,763 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - Soccer is a great game</title>
+    <title>用一場足球賽看懂英文核心骨架 — 深度解析逐字稿</title>
     <style>
-        :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f4;
+            font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+            color: #2c3e50;
             line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
-            padding: 20px;
+            font-size: 11pt;
+            -webkit-font-smoothing: antialiased;
         }
-
-        .podcast-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 40px 50px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
         }
-
+        
+        /* Header section */
         .podcast-header {
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
+            border-bottom: 3px solid #1e4620;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+        .podcast-badge {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 9pt;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        h1 {
+            color: #1e4620;
+            font-size: 22pt;
+            margin: 5px 0 15px 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 11pt;
+            margin: 0;
+        }
+
+        /* Summary Dashboard Box */
+        .summary-box {
+            background-color: #f9fbf9;
+            border-left: 5px solid #2e7d32;
+            padding: 20px 25px;
             margin-bottom: 40px;
-        }
-
-        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
-        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
-        .podcast-meta {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
-            flex-wrap: wrap;
-        }
-
-        .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
             border-radius: 0 8px 8px 0;
         }
-
-        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
-
-        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
-
-        .speaker-avatar {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; flex-shrink: 0;
+        .summary-box h3 {
+            margin-top: 0;
+            color: #1e4620;
+            font-size: 13pt;
+            margin-bottom: 10px;
+        }
+        .summary-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .summary-box li {
+            margin-bottom: 6px;
+            font-size: 10.5pt;
         }
 
-        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
-        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
-
-        .speech-bubble { padding: 15px 20px; border-radius: 12px; font-size: 16px; }
-        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
-        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
-
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
+        /* Section dividers */
+        .section-title {
+            text-align: center;
+            margin: 45px 0 25px 0;
+            position: relative;
+        }
+        .section-title span {
+            background: #ffffff;
+            padding: 0 20px;
+            font-size: 13pt;
             font-weight: bold;
+            color: #1e4620;
+            position: relative;
+            z-index: 2;
+        }
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+            z-index: 1;
         }
 
-        .highlight-phonics {
-            color: #e74c3c; font-weight: bold;
-            background: #fdeaea; padding: 0 4px; border-radius: 3px;
-        }
-
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
+        /* Dialogue components using standard blocks to prevent flex breakdown */
+        .dialogue-node {
+            margin-bottom: 25px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin: 30px 0;
+            background-color: #fafafa;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .speaker-a {
+            border-left: 5px solid #2e7d32;
+            background-color: #fdfdfd;
+        }
+        .speaker-b {
+            border-left: 5px solid #0288d1;
+            background-color: #f7fbfd;
         }
 
-        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
-        li { margin-bottom: 6px; }
-
-        .inspiration-box {
-            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-            border: 2px solid #a5d6a7;
-            border-radius: 10px;
-            padding: 20px 25px;
-            margin: 30px 0;
+        .speaker-meta {
+            margin-bottom: 6px;
         }
-        .inspiration-box h4 { color: #388e3c; margin-bottom: 10px; }
+        .badge-a {
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        .badge-b {
+            color: #0288d1;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        
+        .speech-text {
+            font-size: 11pt;
+            color: #34495e;
+            text-align: justify;
+            margin: 0;
+        }
+
+        /* Text Highlights within dialogue */
+        .english-quote {
+            font-family: "Times New Roman", Georgia, serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #c0392b;
+            background: #fff5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .phonetic-focus {
+            background: #fff9db;
+            color: #d44000;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 9.5pt;
+            color: #bdc3c7;
+        }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：Soccer is a great game</h1>
-            <p class="podcast-subtitle">用 100 字看懂英文底層架構 —— 語法邏輯與足球規則的奇妙呼應</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：SVO直線性、Z音的人體工學、加er的人形外掛、撇號的所有權、90 vs 19的聽力魔王</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_18.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
-            </div>
-        </div>
 
-        <div class="dialogue-flow">
-
-            <!-- 開場 -->
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    如果你想看懂整個英文語言的最基礎架構，不需要啃 500 頁文法書，只要看一場足球賽就可以了！語言的邏輯跟球場上的規則有著驚人的相似。今天我們挑選了一篇不到 100 個單字的短文 <i>Soccer is a great game</i>。別看它短，它就像個微型實驗室，裝滿了英文最核心的運作機制。
-                </div>
-            </div>
-
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：SVO 的直線邏輯 與 等號「is」</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">Soccer is a team sport. Two teams play. Each team has 11 players. The players try to kick the ball into the other team's goal.</span>
-                    在英文的邏輯裡，優先順序永遠是這條直線（SVO）：誰做這件事 → 做了什麼動作 → 動作目標是誰。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    就像 <span class="english-quote">players try to kick the ball</span>（球員 踢 球）。The players (發動的人) → try to kick (動作) → the ball (被踢的對象)。一路往前衝的直線邏輯。
-                    <br><br>
-                    但我有個疑問，第一句話 <span class="english-quote">Soccer is a team sport.</span> 裡面好像沒有像「踢」或「跑」這麼具體的動作啊，那這個 is 扮演什麼角色？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    你可以把 <strong>is</strong>（Be動詞）想成數學方程式裡的 <span class="highlight-lego">等號（＝）</span>。它不是肢體動作，而是一個狀態連接：足球 ＝ 團隊運動。它負責把前面的主體跟後面的定義死死綁在一起。
-                </div>
-            </div>
-
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：複數加 S 的強制性 與 「Z」音的人體工學</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    中文說「一隊」或「兩隊」，「隊」字都不變形。但這段英文裡一直出現 S，為什麼英文對字尾變化這麼執著？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    中文高度依賴上下文，但英文是一種結構顯性的語言。只要超過一個，它會<span class="highlight-lego">強迫你在名詞貼上數量的標籤（字尾加S）</span>，將數量內建在單字裡以降低溝通模糊，所以 team 變 teams，player 變 players。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    講到加 S 我就有發音障礙。我看到 S 就很想發出像蛇一樣「嘶～」的聲音，但 teams 和 players 聽起來像蜜蜂「嗡～」的 Z 音。難道還要死背哪裡發 S、哪裡發 Z 嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    千萬別背！這完全是 <span class="highlight-phonics">人體工學的自然反應</span>。
-                    <br><br>
-                    做個實驗：把手指放在喉嚨聲帶。發出 team 最後的 m 音（嗯～），有感覺喉嚨在震動吧？（這叫有聲子音）。
-                    既然喉嚨已經在震動了，如果要你立刻切換去發不震動的 S 音，聲帶絕對會打結。所以大腦為了省力，會自動把後面那個 S 轉換成同樣也會震動的 Z 音！你只要順著發聲器官的機制，身體自然會告訴你正確發音！
-                </div>
-            </div>
-
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：「-er」造字外掛 與 撇號的巧妙功能</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">Soccer players have different jobs. The goalkeeper's job is to keep the ball away. Defenders try to keep the ball away from the goal.</span>
-                    發現了嗎？keep (看守) → goalkeeper (守門員)，defend (防守) → defenders (後衛)。
-                    在英文裡，只要在動詞後面加上 <span class="highlight-lego">-er</span>，它就自動長出手腳，變成「做那個動作的人」。這是一個買一送一的模組化外掛！
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    那 forward (前鋒) 沒有 er 啊？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    因為 forward 本身就是「前方、向前」。在陣型中被配置在最前方衝鋒陷陣的人，自然就被稱為 forwards。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    了解！但我又看到名詞字尾有飛在半空中的符號，像是 <span class="english-quote">goalkeeper's</span> 和 <span class="english-quote">the other team's goal</span>。這是什麼？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    那叫 <span class="highlight-lego">撇號 (apostrophe)</span>，是一個視覺警報器：這裡的 S 不是複數！加了撇號 S，代表「所有權」，也就是中文的「的」。goalkeeper's = 守門員的。
-                    <br><br>
-                    <strong>實戰進階：</strong>如果單字已經是複數（像 players 球員們），要表達「她們的（球衣）」，不用寫 players's 這會讓舌頭打結。只要在最後面<span class="highlight-lego">輕輕點上一個撇號（players'）</span>。發音不變，但在文字上大家一看就知道代表複數的所有權！
-                </div>
-            </div>
-
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：聽力大魔王 90 vs 19 與 winner 的防護機制</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">Games usually last 90 minutes. The team with the most points is the winner.</span>
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    暫停！聽到 90 (ninety) 和 19 (nineteen)，這對台灣人耳朵根本是雙胞胎，常常付計程車錢會聽錯而大失血！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    分辨的關鍵不在字母，而在 <span class="highlight-phonics">重音和聲音長短</span>：
-                    <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li><strong>90 (nine-ty)：</strong> 重音在前面。後面的 -ty 像手指輕彈，<strong>非常短促俐落</strong>。</li>
-                        <li><strong>19 (nine-TEEN)：</strong> 重音在後面。後面的 -teen 必須把聲音<strong>拉長</strong>。</li>
-                    </ul>
-                    記住：尾音收得乾脆俐落 = 幾十；尾音拉得很長 = 十幾。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    還有最後一句的 <span class="english-quote">most points</span>（最高分）和 <span class="english-quote">winner</span>。winner 就是 win + er 外掛對吧！但為什麼拼字是 w-i-n-n-e-r（兩個n）？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這是一個 <span class="highlight-phonics">保護發音的機制</span>。
-                    win 的母音 i 是短音。如果直接加 -er，後面的 e 會跑去干擾前面的 i，變成拉長音——聽起來就很像 winer（愛抱怨的人）。為了把短促的 i 鎖住，必須在中間多加一個子音 n 當作「牆」，擋住後面母音的影響，拼成 winner。英文的規則背後都是為了解決實際的發音問題！
-                </div>
-            </div>
-
-            <!-- 哲思收尾 -->
-            <div class="inspiration-box">
-                <h4>⚽ 語言就像足球：將知識化為肌肉記憶</h4>
-                <p>學語言從來不是死記硬背的學問，語言是一種<strong>肌肉記憶</strong>。一開始大聲朗讀時舌頭一定會打結，就像第一次盤球一定會踢出界。但只要跟著音檔朗讀，讓聲帶習慣 Z 的震動，讓嘴巴習慣 ninety 短促重音，這些規則慢慢就會內化成身體的反射動作。</p>
-                <br>
-                <p>今天這篇不到100字的短文精準解釋了千萬人為之瘋狂的足球。語言也是一樣：掌握這些看似簡單的基礎規則，未來你就能運用它們，組合並表達出腦海中無限精彩的複雜想法。用最簡單的規則，踢出最無限精彩的比賽！</p>
-            </div>
-
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>SVO直線邏輯：</strong> 主詞→動詞→受詞 (誰→動作→承受對象)，英文語序是一路往前的。</li>
-                    <li><strong>is（Be動詞）= 等號：</strong> 負責把主體跟定義綁在一起（Soccer = team sport）。</li>
-                    <li><strong>字尾 Z音 的人體工學：</strong> 字尾有聲子音（如m, r）發音時喉嚨會震動，大腦為了省力，會自動將加上的 S 唸成有聲的 Z音。</li>
-                    <li><strong>造字外掛「-er」：</strong> 動詞後面加 -er = 做那個動作的人（defend -> defender）。</li>
-                    <li><strong>撇號 ( ' ) ＝ 所有權：</strong> 單數用 's。複數本身有 s 想表達所有權時，只要在最後面點上撇號（players'）即可，發音不變，不需結巴。</li>
-                    <li><strong>九十 vs 十九 怎麼聽：</strong> 90 (NINE-ty) 前面大聲，後面尾巴短促俐落；19 (nine-TEEN) 後面大聲，尾巴往後拉長。</li>
-                    <li><strong>短母音保護機制（雙寫子音）：</strong> win 變成 winner 多一個 n，是為了當作隔音牆，保護原本短促的 i 音不被後面的母音干擾而變質。</li>
-                </ul>
-            </div>
-
-        </div>
+<div class="container">
+    <!-- Header -->
+    <div class="podcast-header">
+        <div class="podcast-badge">Podcast 節目精華隨堂筆記</div>
+        <h1>用一場足球賽，看懂英文核心骨架</h1>
+        <p class="subtitle">主題深度解析：擺脫死記硬背，用邏輯與肌肉記憶直覺學英文</p>
     </div>
+
+    <!-- Quick Dashboard Summary -->
+    <div class="summary-box">
+        <h3>💡 本集精華核心觀念速覽</h3>
+        <ul>
+            <li><strong>黃金主軸：</strong> 英文句型核心為「直線型邏輯」，誰發動動作 → 做什麼動作 → 目標是誰（主動受）。</li>
+            <li><strong>等號概念：</strong> Be動詞（is）並非肢體動作，而是連接主體與定義的「數學等號」。</li>
+            <li><strong>結構顯性：</strong> 英文具備強迫症般的數量標籤機制，複數加 <span class="english-quote">s</span> 時需順應人體工學發 <span class="phonetic-focus">[z]</span> 音。</li>
+            <li><strong>模組外掛：</strong> 動詞後方加上 <span class="english-quote">-er</span> 可直接賦予動作生命，轉化為執行該動作的人（單字量倍增）。</li>
+            <li><strong>聽力魔王：</strong> 分辨 <span class="english-quote">90 (Ninety)</span> 與 <span class="english-quote">19 (Nineteen)</span> 的關鍵在於「重音落點」與「尾音收尾長短」。</li>
+        </ul>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section-title"><span>⚽ 開球哨音：直進的英文邏輯與 Be 動詞等號</span></div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">呃，如果我今天直接告訴你，想要看懂那個整個英文語言的最基礎架構，你根本不需要去啃什麼 500 頁的厚重文法書。你只要在場邊看滿 90 分鐘的足球賽，你相信嗎？</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，這個聽起來其實蠻不可思議的啦，但就是語言的邏輯跟那個球場上的規則，確實有著非常驚人的相似之處哦。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對啊。這就是我們今天這次深度解析要為你帶來的內容。如果你現在正聽著這段節目，然後你剛好跟許多母語是中文的台灣人一樣，心裡一直有個聲音說：『我想從零開始把英文學好，但我真的超怕那些專有名詞的話』，請你先放輕鬆。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">沒錯，大家真的先放輕鬆，我們今天絕對不背什麼單字表，也不要你死記硬背。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對。今天我們為你挑選了一篇不到 100 個英文字的超簡短文章，叫做 <span class="english-quote">Soccer is a great game</span>，就是『足球是一項偉大的運動』。其實這篇文章雖然很短，但它就算是一個完整的微型實驗室了，裡面裝滿了英文最核心的那個運作機制。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">嗯嗯。那我們今天的任務其實很明確，就是我會親自用標準的英文語素分段來朗讀這篇文章，讓你可以先熟悉英文那種真實的發音還有節奏。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對，然後接著我們就會帶你像拆積木一樣把這些句子拆開，看看英文到底是怎麼被組裝起來的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">對的，就是拆解它。所以如果你現在手邊剛好有這篇文本，你可以邊聽邊看啊；如果沒有，其實也完全沒關係，我們就把這個當做一場聽覺的球賽轉播。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯沒錯，那我們就直接從開球的第一聲哨音開始囉。一場足球賽最核心的運作方式到底是什麼？還有就是英文句型最底層的骨架又是長什麼樣子？好，那我們直接從文章的第一部分來聽聽看，請你留意一下我朗讀的時候，那個句子到底是怎麼往前走的。嗯，大家仔細聽哦：</p>
+        <p class="speech-text" style="margin-top: 10px; padding-left: 15px; border-left: 3px solid #ccc; font-style: italic;">
+            "Soccer is a team sport. Two teams play. Each team has 11 players. The players try to kick the ball into the other team's goal. If the ball goes into the goal, their team gets a point."
+        </p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，節奏聽起來非常俐落。而其實我剛剛有提到嘛，很多初學者只要一聽到什麼主詞、動詞、受詞這類的術語就直接想放棄了。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對，頭都痛了。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">對啊，但如果我們把這些東西放到這段文字裡，用語氣或者物理空間感來想像，它其實就是一條直線，對吧？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯，它確實就是一條直線。如果我們抓出剛剛那段裡面最具代表性的一句話，就是 <span class="english-quote">players try to kick the ball</span>，球員試圖去踢球。在英文的邏輯裡，它的優先順序永遠都是『誰在做這件事』，然後『做了什麼動作』，最後是『動作的目標是誰』。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哦，所以是一路往前衝的概念。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">就是這樣。<span class="english-quote">The players</span> 是發動作的人，<span class="english-quote">kick</span> 是那個動作，然後 <span class="english-quote">the ball</span> 就是被踢的對象，一路往前，絕不回頭。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">誒，其實這一點跟我們中文蠻像的，所以這條主軸對我們台灣人來說應該不難懂。不過第一句話，<span class="english-quote">soccer is a team sport</span> 裡面，好像根本沒有『踢』或者『跑』這種很具體的動作啊。這觀察很敏銳，那這個 <span class="english-quote">is</span> 在這裡到底是扮演什麼樣的角色啊？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">呃，你可以把 <span class="english-quote">is</span> 這種所謂的 Be 動詞，想像成數學方程式裡面的那個<strong>等號</strong>。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">等號？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對，等號它不是一個肢體動作，它其實是一個狀態的連接。就是 <span class="english-quote">soccer</span> (足球) 等於 <span class="english-quote">a team sport</span> (一項團隊運動)，它就是負責把前面的主體跟後面的定義死死地綁在一起。</p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section-title"><span>⚽ 上半場：複數密碼與聲帶震動的自然反應</span></div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哦，原來是等號的概念啊。但我現在看著這段文字，我又發現一個讓很多台灣學生超頭痛的現象。在中文裡面，我們說一隻隊伍或是兩隻隊伍，這個『隊伍』這兩個字的寫法跟念法是完全不會變的嘛，我們是靠前面的數字來決定到底有幾個。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對，中文是這樣沒錯。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">但是這段英文裡面一直出現 <span class="english-quote">s</span> 耶！到底為什麼英文對這種字尾的變化這麼執著啊？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">哈哈，因為這兩種語言處理事情的基底是完全不一樣的。我們中文呢，算是一種高度依賴上下文的語言。比如說我說：『昨天我買了蘋果』，你不會馬上逼問我說：『你到底是買了一顆還是十顆？』除非這個數量真的很重要。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">對啊，通常不會特別去問。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">但是英文不一樣，它是一種<strong>結構非常顯性</strong>的語言。就是它有一種近乎強迫症的機制，要求你必須在名詞的本身直接貼上數量的標籤。只要超過一個，也就是複數的時候，它就逼著你一定要在字尾加上 <span class="english-quote">s</span>。所以原本的 <span class="english-quote">team</span> 就變成了 <span class="english-quote">teams</span>，<span class="english-quote">player</span> 就一定得變成 <span class="english-quote">players</span>。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，所以英文是直接把數量給內建在單字裡面，用這個方式來降低溝通上的那個模糊空間。沒錯，就是內建。但這樣就帶來一個大問題了：發音。我自己在練習的時候，只要一看到 <span class="english-quote">s</span>，我就會很自然地想發出像蛇一樣那種嘶嘶的聲音。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">很多人都會這樣的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">可是我剛聽裡面 <span class="english-quote">teams</span> 還有 <span class="english-quote">players</span> 的時候，那個結尾聽起來一點都不像嘶嘶聲誒，反而有點像是蜜蜂在飛的那種嗡嗡聲。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">你的耳朵非常敏銳！這就是初學者超級容易踩雷的地方。大家都以為加上 <span class="english-quote">s</span> 就一定得發 <span class="phonetic-focus">[s]</span> 的音，其實不是哦。在 <span class="english-quote">teams</span> 和 <span class="english-quote">players</span> 這裡，它發的其實是字母 Z 的聲音，也就是 <span class="phonetic-focus">[z]</span> 的音。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">為什麼會這樣？難道我們還得去死背哪裡要發 <span class="phonetic-focus">[s]</span>、哪裡要發 <span class="phonetic-focus">[z]</span> 嗎？那也太痛苦了吧！</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">千萬千萬不要死背，這其實完全是<strong>人體工學的一種自然反應</strong>。來，我們直接做個實驗。請你先把手指輕輕放在你的喉嚨聲帶那個位置。放好了嗎？現在請你發出 <span class="english-quote">team</span> 最後的那個『姆』的聲音，就是閉上嘴巴發 <span class="phonetic-focus">[m]</span>。你有感覺到喉嚨在震動嗎？</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">嗯，有誒，蠻明顯的，麻麻的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對，這種會震動的音在語音學叫『有聲音（有聲子音）』。既然你的喉嚨現在已經在震動了，如果我突然要你立刻切換去發一個完全不震動、只有氣流的 <span class="phonetic-focus">[s]</span> 音，你的聲帶絕對會打結的，會有卡住的感覺。沒錯，所以大腦為了省力，它就會自動把後面那個 <span class="english-quote">s</span> 轉換成同樣也會震動喉嚨的音，你可以順著剛剛的震動繼續發音看看，變成了 <span class="english-quote">teams</span> <span class="phonetic-focus">[z]</span>。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">聽起來超級順誒！那 <span class="english-quote">players</span> 也是一樣的道理囉？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">完全一樣，<span class="english-quote">player</span> 字尾的 <span class="english-quote">r</span> 本身也是震動的，所以順理成章結尾就是 <span class="phonetic-focus">[z]</span> 的音。你只要順著發音器官的運作機制，根本就不需要去背誦什麼規則，身體自然會告訴你正確的發音啦。</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section-title"><span>⚽ 下半場：球員分工、-er 職能外掛與撇號所有權</span></div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇塞，這真的解開了我多年的疑惑誒。所以我們現在搞懂了，球場上有兩支隊伍 (<span class="english-quote">teams</span>)、11 名球員 (<span class="english-quote">players</span>)，他們順著主詞、動詞、受詞的直線邏輯，試著把球踢進對方的球門 (<span class="english-quote">goal</span>)。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯，這就是最基礎的架構。但稍微想一下就知道了吧，如果這群人全部都只顧著追求跟踢球，那畫面不就跟小學生下課踢球一樣，一團混亂了。絕對會變成大亂鬥！所以職業比賽絕對是需要分工的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">對啊，每個人都必須要有明確的定位。而英文這個語言啊，在創造這些職位的單字的時候，其實裡面藏著一個非常聰明的『偷吃步』。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">偷吃步？對，我們來聽聽看文章的第二段是怎麼描述球員的：</p>
+        <p class="speech-text" style="margin-top: 10px; padding-left: 15px; border-left: 3px solid #ccc; font-style: italic;">
+            "Soccer players have different jobs. The goalkeeper's job is to stay near the goal and stop the ball. Defenders try to take the ball away from the other team. Forwards try to kick the ball into the other team's goal."
+        </p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">這段提到了好幾個不同的角色，而且我發現一個蠻有趣的規律。我們剛剛知道 <span class="english-quote">goal</span> 是球門，<span class="english-quote">keep</span> 有看守或是保持的意思，然後 <span class="english-quote">defend</span> 是防守的意思。結果守門員就叫 <span class="english-quote">goalkeeper</span>，後衛就叫 <span class="english-quote">defenders</span>。英文是不是可以隨便去抓一個動作，然後在它的屁股後面加上 <span class="english-quote">-er</span>，它就會自動變成『做那個動作的人』啊？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯！這就是英文裡面最大的一種構詞法，就是<strong>字尾外掛</strong>。基本上一抓到動作加上 <span class="english-quote">-er</span>，就是它的核心機制啦。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，所以這就像是一個模組化的外掛囉，我只要知道動詞，我就可以自己創造出名詞來。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">呃，準確來說它算是一種『賦予動作生命』的方法。對初學者來說這代表什麼？這代表你的單字量可以直接翻倍、買一送一的感覺！你不需要把 <span class="english-quote">defend</span> (防守) 跟 <span class="english-quote">defender</span> (後衛) 當成兩個完全沒有關聯的單字來硬背。你只要知道這個動作，然後加上 <span class="english-quote">-er</span> 這個字就長出了手腳，變成了一個具體在做那件事的人。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，這邏輯也太好用了吧。不過等一下，前鋒叫做 <span class="english-quote">forwards</span>，這裡就沒有 <span class="english-quote">-er</span> 了耶。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">哦，對，這確實是一個例外，但它其實同樣是符合邏輯的。因為 <span class="english-quote">forward</span> 這個字本身就有『前方』、『向前』的意思。那你在陣行中被配置在最前方，負責往前衝鋒陷陣的人，自然而然就被稱為 <span class="english-quote">forwards</span> 了。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">原來如此，就是最前面的人嘛。不過在這段裡面，我還有一個一直過去不去的坎呢。前面你才剛提醒我名詞字尾加 <span class="english-quote">s</span> 代表複數嘛，但是這段裡面出現了 <span class="english-quote">Goalkeeper's job</span>，還有 <span class="english-quote">other team's goal</span>。這兩個詞裡面的 <span class="english-quote">s</span> 前面，多了一個像小逗號一樣飛在半空中的符號，這到底又是什麼意思啊？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">哦，那個飛在半空中的符號叫做<strong>撇號</strong>，英文叫 <span class="english-quote">apostrophe</span>。這其實是一個視覺上的警報器，它在提醒你說：『誒，注意哦，這裡的 s 絕對不是複數的意思！』</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">不是複數？那它是什麼？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">當你在名詞後面看到『撇號加上 s (<span class="english-quote">'s</span>)』的時候，它代表的其實是<strong>所有權</strong>，也就是我們中文裡的『的』的意思。沒錯，所以 <span class="english-quote">goalkeeper's job</span> 就是『守門員的工作』，然後 <span class="english-quote">the other team's goal</span> 就是『另一支隊伍的球門』。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">原來是這樣。但我現在要來挑戰你一個稍微進階一點的問題哦。放馬過來！如果一個東西它本身就已經是複數了，比如說我們剛剛學過的 <span class="english-quote">players</span> (有很多球員)，那如果我想表達『球員們的球衣』，難道我要寫成 <span class="english-quote">players's</span> 這樣加兩個 s 嗎？那樣念起來舌頭不會打結嗎？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">哇，這是個非常棒的實戰問題耶！老實說，英文的母語人士也覺得這樣念舌頭會打結。所以當一個字它已經是複數、字尾早就已經有 <span class="english-quote">s</span> 的時候，我們就只要在最後面<strong>輕輕點上那個撇號 <span class="english-quote">'</span> 就好了</strong>，完全不用再加第二個 s。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哦，就寫成 <span class="english-quote">players'</span> 加上撇號。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯，發音維持不變，就念 <span class="english-quote">players</span>，但是在文字上大家一看那個撇號在 <span class="english-quote">s</span> 的後面，就知道這代表了『複數的所有權』。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，所以只要加個撇號就可以很優雅地解決所有權跟發音衝突的問題，這發明真的很聰明誒，很簡潔。好，那到目前為止，我們已經有了球員，有了各自負責看守跟進攻的球門，這場球賽的架構已經蠻完整的了。那麼這場充滿各種動作和規則的比賽到底要怎麼分出勝負呢？</p>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section-title"><span>⚽ 傷停補時：重音生死戰與短音防護牆</span></div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="sketch-marker"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">接著就帶我們來到文章的最後一部分啦，這也是整場比賽的最高潮，我們來聽聽結局是如何設定的哦：</p>
+        <p class="speech-text" style="margin-top: 10px; padding-left: 15px; border-left: 3px solid #ccc; font-style: italic;">
+            "Soccer games usually last 90 minutes. The team with the most points is the winner."
+        </p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">等一下，我要立刻打斷你。這短短兩句話裡面，藏著我以前學英文的超級慘痛回憶。文章裡面說，比賽通常持續 90 分鐘 (<span class="english-quote">90 minutes</span>)。我以前在國外搭計程車的時候，車資明明是 19 塊，司機跟我說 <span class="english-quote">19</span>，結果我聽成 <span class="english-quote">90</span>，我直接付了 90 塊！大失血！對我們台灣人的耳朵來說，90 還是 19 聽起來根本是一模一樣的雙胞胎啊，這到底要怎麼分辨？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">哈，我完全懂你的痛苦，這絕對是台灣學生聽力上的第一大魔王！其實要分辨這兩個字，重點根本不在於它們是由哪些字母組成的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">那重點是什麼？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">重點在於<strong>重音落在哪裡</strong>，還有聲音的長短。重音是指講話特別大聲的地方，你可以把它想像成音樂確認裡的重拍。我們先來看 90 (<span class="english-quote">Ninety</span>)，它的重音在最前面，而且後面那個 <span class="english-quote">-ty</span> 就像是用手指輕輕彈一下那樣，非常短促。你聽聽看哦：<span class="english-quote">NINETY</span>。前面的 <span class="english-quote">Nine</span> 很用力，後面的 <span class="english-quote">ty</span> 很快就收尾了，很俐落。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，對，很俐落。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">但是如果是 19 (<span class="english-quote">Nineteen</span>)，它的重音會落在後面的 <span class="english-quote">-teen</span>，而且這個 <span class="english-quote">teen</span> 絕對不能只彈一下，它是要把聲音拉長的。你聽：<span class="english-quote">nine-TEEN</span>。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哦，所以一個是『重輕』，然後另一個是『輕重』而且還要拉長音。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯沒錯，聽眾朋友也可以跟著試試看。下次當你聽到數字的時候，如果對方尾音收得非常乾脆俐落，那絕對就是整數的幾十；那如果對方尾音拉得很長，那就是十幾。只要掌握這個節奏，以後就再也不會多付計程車錢了。絕對不會了！</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">好，那我們撐過 90 分鐘 (<span class="english-quote">90 minutes</span>) 之後，最後的勝負條件是 <span class="english-quote">The team with the most points is the winner.</span> 這句話有兩個亮點我想確認一下：首先是這個 <span class="english-quote">the most points</span> (最多的分數)，這個 <span class="english-quote">most</span> 就是表達極限的意思嗎？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">是的，這個在文法上就叫做最高級。就是當你要在三個以上的選項裡面，選出一個『最...』的東西的時候就會用到它。然後搭配前面的 <span class="english-quote">the</span>，也就是定冠詞，<span class="english-quote">the most points</span> 就是明確指出那個無人能敵的最高分數。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">了解。接著拿到最高分的隊伍就會成為 <span class="english-quote">winner</span>。誒，等一下，這不就是我們剛剛在第二段學到的那個 <span class="english-quote">-er</span> 外掛嗎？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">哈哈，被你發現了！<span class="english-quote">win</span> 是贏的動作，加上 <span class="english-quote">-er</span> 就變成了贏家。沒錯，你已經能舉一反三了，超棒的。不過如果你仔細看角色的拼字哦，你會發現它不是直接加上 <span class="english-quote">-er</span> 而已，它是重複了字尾的 n，變成了 <span class="english-quote">winner</span>。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">誒，真的耶，有兩個 n。為什麼要多此一舉啊？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">這其實是英文拼字裡面一個<strong>保護發音的防護機制</strong>。因為 <span class="english-quote">win</span> 中間的那個母音 <span class="english-quote">i</span> 它發的是短音，如果我們直接加上 <span class="english-quote">-er</span>，後面的母音 <span class="english-quote">e</span> 會跑去干擾前面 <span class="english-quote">i</span> 的發音，它可能會被念成長音。那聽起來就會變成 <span class="english-quote">winer</span>，意思就變成『愛抱怨的人』了！</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">什麼！從『贏家』變成『愛抱怨的人』？這差太多了吧！</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對啊，所以為了把那個短促的 <span class="english-quote">i</span> 鎖住，我們必須在中間多加一個子音 <span class="english-quote">n</span> 來當做一堵牆，擋住後面母音的影響，所以拼成了 <span class="english-quote">winner</span>。這聽起來可能有一點點複雜，但是其實再次證明了一件事：英文的每一條規則背後，都是為了解決某種發音或是溝通上的實際問題啦。</p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section-title"><span>⚽ 終場觀點：大聲朗讀與肌肉記憶</span></div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇，今天這一集真的讓我對英文大改觀了耶！我們居然只用了一篇不到 100 個英文字的短文，竟然就把這麼多語言最核心的骨架都看懂了。我們來快速回顧一下今天拆解下來的這幾塊積木好了。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">好啊。首先我們看到了主詞、動詞、受詞這種像直線一樣往前的句型邏輯。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">嗯，絕不回頭的直線。接著我們發現了英文對數量的堅持，也就是複數要加 <span class="english-quote">s</span>，還破解了因為聲帶震動而產生 <span class="phonetic-focus">[z]</span> 發音的祕密。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">對，那個 <span class="english-quote">teams</span> 的 <span class="phonetic-focus">[z]</span> 音。然後我們還拿到了一個超級實用的外掛，只要在動詞後面加上 <span class="english-quote">-er</span> 就可以直接創造出代表該動作的人物。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">沒錯，我們也釐清了那個藏在半空中的撇號 s (<span class="english-quote">'s</span>) 其實是代表所有權的『的』。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">然後最後我們終於學會用重音還有長短音來分辨 90 還 有 19。你看，這就是英文的基礎架構，它真的沒有大家想像的那麼可怕吧。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">真的不可怕。不過知道這些規則之後，下一步到底是什麼啊？我現在覺得腦袋吸收了蠻多東西的，但要怎麼把這些知識轉化為真正會用的英文？</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">這個嘛，就像我們這篇文章的主題一樣，學習語言跟學習踢足球其實是一模一樣的。我們必須親自下場去踢！</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">完全正確！語言它從來就不是一門需要你去死記硬背的學問，語言是一種<strong>肌肉記憶</strong>。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">肌肉記憶，嗯。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">對，一開始當你試著把我們今天講的這些句子大聲念出來的時候，你的舌頭一定會瘋狂打結，這就跟就像你第一次用腳去盤球一樣，球一定會一直飛出界外，一定會不停失控。但請你務必跟著音檔多朗讀幾次，讓你的聲帶去真實感受那個 <span class="phonetic-focus">[z]</span> 的震動，讓你的嘴巴去習慣那短促的重音。慢慢的，這些規則就會內化成你身體的反射動作了。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">大聲朗讀，把知識變成肌肉的反射動作，這真的是非常中肯的建議。在我們即將結束今天的解析之前，我其實想留給你，也就是正在聽節目的聽眾一個蠻值得思考的問題。請說：你看哦，我們今天閱讀的這篇短文，長度根本不到 100 個英文字，而且採用的都是最基礎的文法，對吧？</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">對啊，超短的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">但是它卻能夠非常精準的、而且完整的去解釋一場千變萬化，讓全世界數十億人都為之瘋狂的足球比賽。確實才 100 個字就講完了一項世界級的運動。語言學習最奇妙的地方就在這裡：你今天掌握的這幾個看似基礎的英文規則，不管是主詞動詞的直線、複數的變化，還是代表身份的字尾，它們就像是足球場上最根本的那些規則一樣。只要你熟練了這些最簡單的基礎，未來你就能運用這些有限的規則，去組合、去表達出你腦海中那種無限複雜、無限精彩的想法。規則看似簡單，但它能創造出來的意義是無窮無盡的。</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">哇！用最簡單的規則去踢出最無限精彩的比賽，這就是掌握基礎的真正力量！</p>
+    </div>
+
+    <div class="dialogue-node speaker-a">
+        <div class="speaker-meta"><span class="badge-a">主持人 A</span></div>
+        <p class="speech-text">沒錯，就是這個意思。今天非常開心能用這篇短文帶領大家踏上英文學習的這個球場。規則你現在都懂了，現在就看你什麼時候要踢出那第一球了。這裡是我們這次的深度解析，我們下次見！</p>
+    </div>
+
+    <div class="dialogue-node speaker-b">
+        <div class="speaker-meta"><span class="badge-b">主持人 B</span></div>
+        <p class="speech-text">下次見！</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2026 深度解析英語學習講堂 | 讓知識內化為身體的肌肉記憶
+    </div>
+</div>
+<div id="audio-panel" style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+    <audio id="bg-audio" controls style="width: 100%;">
+        <source src="" type="audio/mp4" >
+        您的瀏覽器不支援音訊播放。
+    </audio>
+    <script>
+        (function () {
+        var filename = '2_18.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        const audio = document.getElementById('bg-audio');
+        audio.load();
+        audio.play();
+        })();
+    </script>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
+<div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+<p>
+<script>
+    //let isScrolling = false;
+    let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+    let scrollSpeed = 0.15; 
+    let animationFrameId;
+    let virtualScrollY = window.scrollY; 
+
+    const toggleBtn = document.getElementById('scroll-toggle');
+    const speedControl = document.getElementById('speed-control');
+    const speedDisplay = document.getElementById('speed-display');
+
+    speedControl.addEventListener('input', function() {
+        scrollSpeed = parseFloat(this.value);
+        speedDisplay.innerText = scrollSpeed.toFixed(2);
+    });
+
+    function scrollPage() {
+        if (isScrolling) {
+            toggleBtn.innerHTML = '⏬⏸️';
+            if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                virtualScrollY = window.scrollY;
+            }
+
+            virtualScrollY += scrollSpeed;
+            window.scrollTo(0, virtualScrollY);
+            
+            if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                isScrolling = false;
+                toggleBtn.innerHTML = '⏬▶️';
+                toggleBtn.style.background = '#27ae60';
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(scrollPage);
+        }
+    }
+
+    toggleBtn.addEventListener('click', function() {
+        isScrolling = !isScrolling;
+        
+        if (isScrolling) {
+            this.innerHTML = '⏬⏸️';
+            this.style.background = '#e74c3c';
+            virtualScrollY = window.scrollY; 
+            scrollPage();
+        } else {
+            this.innerHTML = '⏬▶️';
+            this.style.background = '#27ae60';
+            cancelAnimationFrame(animationFrameId);
+        }
+    });
+    // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+    scrollPage();
+</script>
 </body>
 </html>

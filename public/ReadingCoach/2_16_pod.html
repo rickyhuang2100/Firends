@@ -1,327 +1,653 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - The Statue of Liberty</title>
+    <title>深入探討：拆解語言的 DNA - 自由女神像</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+            --bg-color: #f9fafb;
+            --text-color: #333333;
+            --host-bg: #e0f2fe;
+            --host-border: #bae6fd;
+            --guest-bg: #ffffff;
+            --guest-border: #e5e7eb;
+            --accent-color: #0284c7;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
+            font-family: 'Helvetica Neue', Arial, '微軟正黑體', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
             padding: 20px;
         }
 
-        .podcast-container {
-            max-width: 900px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background-color: #ffffff;
             padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .podcast-header {
+        h1 {
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
-            margin-bottom: 40px;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
         }
 
-        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
-        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
-        .podcast-meta {
-            margin-top: 15px;
+        h2 {
+            color: #0369a1;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.4em;
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
-            border-radius: 0 8px 8px 0;
+        h2::before {
+            content: "✦";
+            margin-right: 10px;
+            color: #38bdf8;
         }
 
-        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
-
-        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
-
-        .speaker-avatar {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; flex-shrink: 0;
-        }
-
-        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
-        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
-
-        .speech-bubble { padding: 15px 20px; border-radius: 12px; font-size: 16px; }
-        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
-        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
-
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
-            font-weight: bold;
-        }
-
-        .highlight-phonics {
-            color: #e74c3c; font-weight: bold;
-            background: #fdeaea; padding: 0 4px; border-radius: 3px;
-        }
-
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
+        .dialogue {
+            margin-bottom: 20px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin: 30px 0;
+            border-left: 4px solid transparent;
         }
 
-        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
-        li { margin-bottom: 6px; }
+        .host {
+            background-color: var(--host-bg);
+            border-left-color: var(--accent-color);
+        }
+
+        .guest {
+            background-color: var(--guest-bg);
+            border: 1px solid var(--guest-border);
+            border-left-color: #9ca3af;
+        }
+
+        .name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .host .name {
+            color: var(--accent-color);
+        }
+
+        .guest .name {
+            color: #4b5563;
+        }
+
+        .text {
+            font-size: 1.05em;
+        }
+
+        .english {
+            font-family: 'Georgia', serif;
+            color: #b91c1c;
+            font-weight: 500;
+        }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：The Statue of Liberty</h1>
-            <p class="podcast-subtitle">用七句話，拆解英文如何用單複數畫邊界、介系詞建立3D座標、動詞穿越時空</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：freedom vs. liberty 的混血歷史、on vs. above 的3D座標、is holding 賦予靜態永恆動態、A gave B C 的授予句型</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_16.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
-            </div>
-        </div>
 
-        <div class="dialogue-flow">
+<div class="container">
+    <h1>深入探討：拆解英文的 DNA</h1>
 
-            <!-- 開場 -->
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    今天的任務非常特別——我們手邊有一份極簡的基礎英文本，主題是紐約的自由女神像。我們不只是把它翻成中文而已，而是要把它當作顯微鏡底下的標本，解剖英文這個語言的 DNA。透過這幾句話，可以看見英文如何處理空間感、數量、甚至時間的概念，比背十條文法規則有效得多！
-                </div>
-            </div>
+    <h2>第一章：打破死背單字的迷思</h2>
 
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：發音訣竅 —— statue 的摩擦音 與 liberty 的重音節奏</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">The Statue of Liberty is a symbol of freedom.</span>
-                    <br>
-                    先看 <span class="highlight-phonics">statue</span>（雕像）。很多人看到 t-u 直覺念成 state，但英文母語者的 t 在這個位置會產生摩擦音，比較接近「tʃ」（區的感覺）。以 <span class="highlight-phonics">statue</span> 的方式發音，瞬間口音就更自然了。
-                    <br><br>
-                    再看 <span class="highlight-phonics">liberty</span>（自由）：重音一定要放在第一個音節，念成 <b>LI</b>-ber-ty，力量放在最前面再順勢流下來，有生命力多了。重音放錯位置，有時候對方真的會聽不懂。
-                </div>
-            </div>
-
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：freedom vs. liberty —— 英文的混血歷史</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    文本裡同時出現了 liberty 和 freedom，中文都翻成「自由」。為什麼英文需要兩個完全不同的單字表達同一個概念？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這牽涉到英文語言的 <span class="highlight-lego">混血歷史</span>！
-                    <br><br>
-                    <b>Freedom</b> —— 古老的日耳曼語系單字，根植於古代平民的日常，給人一種很直覺的「不受束縛、可以自由呼吸」的原始感受，就像週末終於不用上班耍廢的那種自由。
-                    <br><br>
-                    <b>Liberty</b> —— 西元 1066 年諾曼人征服英國後帶進英語的拉丁血統字，通常出現在法律、政治等正式場合，指的是一種<span class="highlight-lego">被制度保障的公民權利</span>。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    所以是「the Statue of Liberty」而不是「the Statue of Freedom」，因為它代表的是民主制度賦予人民的理念！而且作者在第三句寫了：<span class="english-quote">The word liberty means freedom.</span> 用初學者更熟悉的字 freedom 來解釋 liberty，文本本身就是一本迷你字典！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這也是一個重要的閱讀策略：遇到不懂的單字，<span class="highlight-lego">先不要立刻查字典，學會相信上下文</span>。好的文本會自我解釋，在附近留下線索。這種推敲的過程讓大腦對單字的記憶深刻十倍以上！
-                </div>
-            </div>
-
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：單複數畫邊界 與 on vs. above 的3D座標系統</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="english-quote">A statue is a piece of art. Statues are made in the shape of humans or animals. The statue of Liberty has a crown on her head. She is holding a torch high above her head.</span>
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    一開始說 <i>a statue</i>（一座），後面又說 <i>statues are made</i>（加 S）。中文說一個雕像或很多雕像，「雕像」這個字根本不用改變形狀！真的有必要這麼在意那個 S 嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    必須在意！在英文的邏輯裡，世界被嚴格區分為「可以數」和「不能數」的。加上 a 或字尾 S，你是在大腦裡為這個物體畫出一道明確的邊界。
-                    <br><br>
-                    想像把水倒在桌上，水是沒有固定形狀的。如果「statue」沒有加 a 也沒有加 S，對英文母語者來說，它聽起來就會像桌上的水一樣——變成沒有邊界的抽象材質。那個 S 就是 <span class="highlight-lego">讓物品從抽象概念實體化的魔術棒</span>！
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    好！現在腦袋有了實體雕像。接下來的 on / above 又是為什麼要分這麼細？中文不都翻成「在上面」嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    英文的空間介系詞是你大腦畫布上的 <span class="highlight-lego">3D 座標系統</span>——
-                    <br><br>
-                    <b>on</b> 的核心概念是「<span class="highlight-phonics">表面接觸</span>」。crown on her head → 皇冠貼在女神的頭上，必須碰到。如果說 crown above her head，就像皇冠憑空懸浮在頭頂，完全沒有碰到她，變成科幻片！
-                    <br><br>
-                    <b>above</b> 的核心概念是「<span class="highlight-phonics">在較高的位置，但沒有直接接觸</span>」。holding a torch high above her head → 火炬被手臂舉高，火炬本身並沒有貼在頭上，而是在頭頂上方一段距離之外，完全正確！
-                </div>
-            </div>
-
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：is holding 賦予靜態雕像永恆的動態感</h2>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    等等，<span class="english-quote">she is holding a torch</span>，用了現在進行式。但雕像是靜止的，它不會動！難道雕像正在舉著火炬嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    是一種 <span class="highlight-lego">永恆的動態感</span>！作者在這裡使用進行式，不是在描述一個偶然的動作，而是在邀請你——讀者——來到紐約港口，抬起頭看著她。
-                    <br><br>
-                    他在告訴你：此時此刻，在你正看著她的這一秒，她正在為你高舉著那把火炬。一個微小的 ing，<span class="highlight-lego">把靜態的雕像變成了動態的永恆畫面</span>，讓死板的文字瞬間有了生命力。
-                </div>
-            </div>
-
-            <!-- 章節 5 -->
-            <h2 class="chapter-title">章節 5：動詞時光機 與 A gave B C 授予句型</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    說到歷史，動詞就要開始切換了：
-                    <span class="english-quote">France gave the United States of America the statue of Liberty. It was a gift. France wanted to give the United States this gift to celebrate their friendship.</span>
-                    前段都是 is / has / are，但這裡全部變形：gave / was / wanted。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    中文只要加「以前」「了」，動詞「給」永遠不會變。但英文的 give 變成 gave，is 變成 was……為什麼英文要這麼折磨人？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    英文是一種<span class="highlight-lego">對時間流逝有強迫症的語言</span>。它的動詞不只是表示動作，本身就是一台時光機！
-                    <br><br>
-                    它不允許你只靠外加的時間詞（like "yesterday"）交代，而要求動作本身親自帶時間刻度。聽到 gave/was/wanted 的瞬間，就像在電影裡切換濾鏡——彩色的現代畫面瞬間變成帶有年代感的泛黃色調。這叫 <span class="highlight-phonics">強制性時空定位</span>。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    那 "France gave the United States of America the Statue of Liberty" 這句好長，初學者要怎麼處理？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    別被長度嚇到，看它的 <span class="highlight-lego">骨架——授予動詞句型：A gave B C</span>（A 給了 B 一個東西 C）。
-                    <br><br>
-                    不需要加任何介系詞，不像中文要繞「A 把 C 給了 B」。只要把三個區塊按順序排好，把 gave 放在 A 和 B 中間：
-                    <ul style="margin-top: 8px; padding-left: 20px;">
-                        <li><b>A</b>（送禮人）= France</li>
-                        <li><b>B</b>（收禮人）= the United States of America</li>
-                        <li><b>C</b>（禮物）= the Statue of Liberty</li>
-                    </ul>
-                    誰送禮、誰收禮、禮物是什麼，一目了然！最後的 <span class="english-quote">to celebrate their friendship</span>，一個簡單的 to 就帶出了整個歷史事件的動機。
-                </div>
-            </div>
-
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>freedom vs. liberty：</strong> freedom = 日耳曼原始直覺自由；liberty = 拉丁法律制度保障的公民權利。</li>
-                    <li><strong>單複數 = 畫邊界：</strong> 加 a 或 S 是讓物品從抽象概念變成有輪廓實體的視覺魔術棒。不加的話，在母語者耳中它就會「融化」成沒有固定形狀的抽象材質。</li>
-                    <li><strong>on vs. above 的3D座標：</strong> on = 表面接觸（貼上去）；above = 在較高位置但不接觸（懸在上方）。</li>
-                    <li><strong>is holding = 賦予永恆動態感：</strong> 對靜態藝術品使用進行式，不是在描述偶然動作，而是邀請讀者感受「此時此刻，她正在為你高舉火炬」的永恆存在。</li>
-                    <li><strong>動詞自帶時光機 (past tense)：</strong> 聽到 gave / was / wanted，大腦畫面從彩色現代切換成泛黃年代感，不需要額外的時間副詞。</li>
-                    <li><strong>A gave B C 授予句型：</strong> 送禮人 + gave + 收禮人 + 禮物。無需介系詞，線性直觀，是英文表達「給予」最高效的骨架。</li>
-                </ul>
-            </div>
-
-        </div>
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">如果我現在告訴你啊，那個你根本不需要去死背一本 5000 字的單字書，也不需要買那種厚得像磚頭一樣的文法課本，就能開始掌握英文的精髓，你會相信嗎？</div>
     </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">其實蠻難相信的啦，因為大家以前的經驗都是一直背嘛。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">對啊，我們常常有一種迷思，就覺得說學習一門新語言，尤其是對我們這種中文母語的台灣人來說，好像就是要跳進一片無邊無際的資訊汪洋裡面。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">嗯。然後還要拼命掙扎，不要被淹死，對吧？</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">沒錯沒錯，就是那種超窒息的感覺。但今天我們在這集的深入探討裡就是要來打破這個迷思的。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">確實如此。因為老實說人類的大腦本來就不是設計來像電腦一樣去下載字典的。我們的大腦啊其實是透過情境還有故事來吸收資訊的。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">嗯，當你把語言拆解得太零碎，只剩下一列列的單字表的時候，大腦就會開始排斥它。這也是為什麼很多初學者會感到極度挫折的原因啊。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">真的，背了就忘，忘了又背，超痛苦的！所以正在收聽這集深入探討的你，如果你一直想從零開始學英文，卻對傳統教材感到恐懼的話，那麼今天這場對話就是為你量身打造的哦。</div>
+    </div>
+
+    <h2>第二章：解剖文本標本</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">對，今天會很不一樣。我們的任務非常特別，我們手邊有一份極度精簡、其實只有短短幾句話的基礎英文文本，它的主題是紐約的自由女神像，<span class="english">The Statue of Liberty</span>。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">沒錯。我們今天不會只是把它翻譯成中文就算了，我們要把它當做是顯微鏡底下的標本。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">對，我們要來解剖它。我們要把這段文本拆解開來，看看英文這個語言的——你可以說是它的 DNA——到底長什麼樣子。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">哇，看語言的 DNA！</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">是啊，因為透過這幾句話，我們不僅能練發音，還能看見英文是如何處理空間感、數量，甚至是時間的概念。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">說真的，這比你硬背十條文法規則還要有效得多。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">好，那我們就來拆解一下吧！我們直接進入文本的第一段，我會先用稍微緩慢一點點的速度念出這份文本的開頭，那請你仔細聽裡面的發音跟節奏哦。大家可以仔細聽聽看：<br><br><span class="english">The Statue of Liberty. The Statue of Liberty is a symbol of freedom. The word...</span></div>
+    </div>
+
+    <h2>第三章：發音的細節與重音的節奏</h2>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">嗯，聽起來非常簡單對吧？但我們立刻就遇到挑戰了。首先就是發音了，既然我們是說要從零開始嘛，發音絕對是建立自信的第一步。標題裡有兩個字，<span class="english">statue</span> 以及 <span class="english">liberty</span>。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">這兩個字其實蠻常看到的。我們先看 <span class="english">statue</span>，也就是「雕像」這個字，它的拼法是 s-t-a-t-u-e，很多中文母語者看到那個 T 跟 U 連在一起，直覺就會想念成 state。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">哦對，<span class="english">statue</span> 很像我們會念出來的聲音。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">但這在英文母語者聽起來其實會有點生硬。實際上這裡的 T 會產生一種摩擦音，聽起來比較接近我們中文的「屈」或者是英文的 ch 哦。所以它發起來比較像是 <span class="english">statue</span>，像嗎？帶有一點點氣流摩擦的那種感覺。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">對對對，就是這樣，這會讓你的口音瞬間自然非常多！那再來是 <span class="english">Liberty</span>，也就是自由。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">這個字感覺就蠻有學問的。這個詞的關鍵其實在於那個重音，英文是一個非常有節奏感的語言，如果你重音放錯位置，有時候對方甚至會聽不懂你在說什麼。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">真的假的？差一個重音會聽不懂？</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">會哦！<span class="english">liberty</span> 的重音在第一個音節上面，所以是 <span class="english">LI-ber-ty</span>，力量放在最前面，然後順勢這樣流下來。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這聽起來確實比平鋪直敘的念法有生命力多了。</div>
+    </div>
+
+    <h2>第四章：Liberty 與 Freedom 的歷史淵源</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">沒錯，節奏感很重要。不過老實說啦，當我在看這段文本的時候，我心裡冒出一個蠻大的疑問。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">什麼疑問？</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">就是對於一個剛接觸英文的人來說，這裡同時出現了 <span class="english">liberty</span> 跟 <span class="english">freedom</span>，這兩個字的意思不都是自由嗎？這會不會太把簡單的事情複雜化了啊？為什麼英文會需要兩個完全不同的單字來表達同一個概念？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這是一個非常犀利的問題哦！其實這牽涉到英文這門語言的「混血歷史」。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">混血？英文是混血兒嗎？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">沒錯，簡單來說，<span class="english">freedom</span> 是一個非常古老的日耳曼語系單字，它深植於古代平民的日常生活中。當你說 <span class="english">freedom</span> 的時候，它給人一種很直覺的「不受身體束縛，可以自由呼吸」的感覺。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">哦懂了，就像是週末終於不用上班可以在家耍廢的那種純粹的自由感嗎？哈哈。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">哈哈，對！就是那種很原始的自由。但 <span class="english">Liberty</span> 就不一樣了，它是在西元 1000 多年左右的時候，跟著法國人（也就是諾曼人）征服英國之後，帶進英語的一個帶有拉丁血統的字。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">原來是這樣，是後來才進來的。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">對，所以它通常出現在法律、政治或是比較正式的場合。它指的是一種「被制度保障的權利」。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">哇，這差蠻多的！所以我們說自由女神像是 <span class="english">Statue of Liberty</span>，而不是 <span class="english">The Statue of Freedom</span>，因為她代表的是一種民主制度底下賦予人民的理念。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這背後的歷史重量完全不一樣。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">但等一下，如果我是一個英文初學者，我怎麼可能會知道這兩個字有這種差別啊？這不是反而會讓我覺得英文很難親近、很可怕嗎？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這就是這段文本作者極度巧妙的地方了。你再看一次第三句話，他是怎麼說的？<span class="english">The word liberty means freedom.</span>（Liberty 這個詞的意思就是 freedom。）作者非常清楚，liberty 對初學者來說可能太難或者是太抽象了，所以他沒有把你丟在旁邊不管。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">嗯嗯，他直接用你可能比較熟悉的日常單字，也就是 <span class="english">freedom</span> 來向你解釋。也就是說這個文本本身它就像是一本「迷你字典」。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">正是如此！這其實揭示了一個非常重要的閱讀策略：在你未來學習英文的路上，如果遇到不懂的單字，千萬不要立刻停下來去查手機字典。你要學會去相信上下文啦！好的文本它會自我解釋的，它會在附近留下線索。這種推敲的過程，其實會讓你的大腦對這個單字的記憶深刻十倍以上。</div>
+    </div>
+
+    <h2>第五章：單複數的魔力：畫出實體的邊界</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">原來如此。雖然這給了我們很大的安全感，但說到底文字如果只是飄在空中的一種概念，其實真的蠻難記住的，要有畫面感才行。如果我要在腦海裡看到這座雕像，英文是如何在沒有畫面的情況下幫我們建構出一個 3D 的立體視覺？我常常覺得英文的描述好像就是一堆零散的單字拼在一起而已。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">其實不是這樣的，它的結構非常嚴謹。那我們來看看下一段文本是怎麼做的：<br><br><span class="english">A statue is a piece of art. Statues are made in the shape of humans or animals. The Statue of Liberty has a crown on her head. She is holding a torch high above her head.</span></div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">這整段話完全就是在教你如何用英文畫畫哦！但在畫畫之前，我們必須先跨越一個中文母語者最容易絆倒的文法障礙——名詞的單數跟複數！文本一開始說 <span class="english">A statue</span>，前面加了一個 A，然後後面又說 <span class="english">statues are made</span>，字尾又加了 S。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">沒錯，非常明顯的痛點。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">坦白說啦，作為一個台灣人，加這個 S 真的讓人覺得超級煩的！我們中文說「一個雕像」或是「很多雕像」，「雕像」這兩個字完全不用改變形狀啊，我們溝通起來也毫無障礙。我們真的有必要這麼在意這個小小的 S 嗎？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這是無數中文母語者的心聲啦。但答案是：是的，你必須在意。因為這不僅僅是死板的文法規則，這其實是英文母語者看世界的方式。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">看世界的方式？加個 S 有這麼嚴重嗎？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">在英文的邏輯裡面，這個世界被嚴格區分為「可以數的」和「不能數的」。當你給一個名詞加上 A 或者在字尾加上 S 的時候，你其實是在大腦裡為這個物體畫出了一道明確的邊界。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">畫出邊界，這怎麼說？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">你想像一下，如果我們把水倒在桌上，水是沒有固定形狀的，會流來流去，對吧？在英文裡如果一個可以數的東西，比如 <span class="english">statue</span> 雕像，你沒有加 A 也沒有加 S，對英文母語者來說，那個東西聽起來就會像桌上的水一樣。會變成一種沒有邊界的抽象材質或者是概念。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">所以當你說 <span class="english">statues are made in the shape of...</span> 那個 S 就像是魔術棒一樣，瞬間在聽者的腦海裡變出一個一個有具體輪廓的實體物件！如果我偷懶不加那個 S 的話，在老外聽起來我可能是在談論某種叫做「雕像」的抽象哲學，而不是真正放在那裡可以摸到的物體。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">完全正確，那個 S 就是讓物品實體化的關鍵。</div>
+    </div>
+
+    <h2>第六章：空間介係詞：大腦的 3D 座標</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">好，那我現在腦袋裡有實體了，但接下來這段呢，才是讓我真正覺得不可思議的地方。文本說 <span class="english">crown on her head</span> 頭上有個皇冠，然後 <span class="english">is holding a torch high above her head</span> 高舉火炬在頭頂上方。這裡出現了 <span class="english">on</span> 跟 <span class="english">above</span>。老實說在中文裡，我們可能都會很籠統的翻譯成「在...上面」而已。英文為什麼要分得這麼細啊？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">如果我們把這個跟更宏觀的畫面連接起來看的話，英文的空間介係詞其實就是你大腦畫布上的那個 3D 座標系統。<span class="english">on</span> 這個字它的核心概念是「表面接觸」，所以當你聽到 <span class="english">crown on her head</span> 的那個瞬間，你的大腦必須把皇冠那個物件實實在在的貼在女神的頭皮或頭髮上面。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">也就是說如果我用錯了字，我說成 <span class="english">crown above her head</span>，那聽起來就會非常搞笑。就像是有一個皇冠像幽浮一樣憑空懸浮在她的頭頂上，完全沒有碰到她，變成科幻片了哈哈。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">對啊，因為 <span class="english">above</span> 的核心概念就是在較高的位置，但沒有直接接觸。所以你回來看火炬那一句，<span class="english">holding a torch high above her head</span>，火炬是被她的手臂舉上去的，火炬本身並沒有貼在她的頭上嘛，它是在頭頂上方的一段距離之外。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">這真的太有畫面感了！所以我們在讀這段英文的時候，絕對不能只是在腦袋裡去死背什麼 on 等於在上面，而是要像那個導演在擺設道具一樣，把皇冠戴上去，也就是 <span class="english">on</span>，然後把火炬舉高就是 <span class="english">above</span>。</div>
+    </div>
+
+    <h2>第七章：賦予畫面的永恆動態感</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">你要在腦袋裡做動作。但說到舉高哦，這句 <span class="english">She is holding a torch</span>，為什麼作者不用簡單的 <span class="english">she holds a torch</span> 就好了？為什麼要加一個 is, 然後字尾又加 ing 啊？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這就是英文文法裡非常迷人的一個設計哦，也就是「現在進行式」。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">但我們通常學到的進行式不是代表現在正在做的事嗎？比如說我現在正在吃飯這樣，但是雕像是靜止的啊，它又不會動，它怎麼會「正在舉著」火炬呢？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這裡的 <span class="english">is holding</span> 其實是在賦予這件藝術品，一種永恆的動態感。當作者使用進行式的時候，他其實不是在描述一個生硬的事實，他是在邀請你，也就是讀者，來到紐約的港口，然後抬起頭看著她。他在告訴你：此時此刻當你正看著她的這一秒，她「正在」為你高舉著那把火炬。這種時態的選擇能讓一段死板的文字瞬間有了生命力。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">原來如此！一個微小的 ing 能把靜態的雕像變成動態的永恆畫面，這真的完全顛覆了我對英文文法的想像誒，是不是很像在看電影？</div>
+    </div>
+
+    <h2>第八章：動詞時態，內建的時光機</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">不過接下來我們可能要面對一個沒那麼浪漫，甚至可以說是許多台灣人學英文的終極噩夢了——時態！這座雕像現在已經在我們腦海裡建構完畢了，但她並不是憑空出現在美國的嘛，她有一段歷史。而只要一講到歷史，我們就必須面對英文的時態變化。讓我來念一下最後一段文本，大家注意聽動詞的變化哦：<br><br>
+        <span class="english">France gave the United States of America the Statue of Liberty. It was a gift. France is a country in Europe. France wanted to give the United States this gift to celebrate...</span></div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">請仔細感受一下這段文字的時間感是不是跟前面完全不一樣了？根本就是整個世界都變了。前面明明都是 is, has, are, 但到了這裡動詞好像會變形一樣。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">這真的是最讓初學者崩潰的地方了。在我們中文裡，如果我要講過去發生的事，我只要加個時間副詞就好了啊，像是「法國以前給了美國」，或者是加個了字「法國給了美國」。動詞「給」永遠都是那個給的形狀，是不會變的。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">可是英文的 give 竟然直接變成了 <span class="english">gave</span>，is 變成了 <span class="english">was</span>，want 甚至在屁股後面長出了一個 ed 變成 <span class="english">wanted</span>。為什麼英文要這麼折磨人啊？我完全理解這種挫折感啦，這確實是中文大腦在學習英文的時候必須跨越的最大的一個認知鴻溝。但要理解為什麼，你必須先明白一件事：英文是一種對時間流逝有著極度「強迫症」的語言。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">強迫症？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">對，在英文裡動詞不僅僅是表示動作而已，它本身其實就是一台時光機。英文不允許你只用一個外加的時間詞，比如說 yesterday 來交代。它要求你說話的核心，也就是動作本身必須親自帶有時間的刻度。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">嗯，動作自己要負責。聽起來很像是在電影裡面切換濾鏡的感覺。聽到 <span class="english">give</span> 就是彩色的現代畫面，聽到 <span class="english">gave</span> 畫面就瞬間變成那種帶有年代感的黑白或者是泛黃的色調。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這個比喻非常精準。這也就是我們所謂的過去式 <span class="english">past tense</span>。它真的不是為了折磨你而存在的啦，它是為了讓沒有上下文的情況下，依然能精準無誤的傳達時間狀態。</div>
+    </div>
+
+    <h2>第九章：化繁為簡的授與動詞與地理常識</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">好吧，如果我接受了這個時光機濾鏡的概念，那我們來看看這句話的結構好了。<span class="english">France gave the United States of America the Statue of Liberty.</span> 這句話實在是有夠長。對於一個連單字都還認不太全的初學者來說，要怎麼在腦袋裡去處理這麼長的資訊啊？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這個時候不要被句子的長度嚇到，我們要學會去看它的骨架。這句話展示了英文裡面一個非常強大，而且你以後會無數次用到的句型，也就是授與動詞句型。它的公式極度簡單哦，就是 <strong>A gave B C</strong>，A 給了 B 一個東西 C。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">啊，就這樣？不需要加任何介係詞，不需要像我們中文說 A 把 C 給了 B 這樣繞來繞去的嗎？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">完全不需要。在這裡 A 是法國 <span class="english">France</span>，B 是美國 <span class="english">the United States of America</span>，C 就是自由女神像 <span class="english">the Statue of Liberty</span>。只要你把這三個區塊按照順序排好，然後把 <span class="english">give</span> 放在 A 和 B 的中間。動作的流向就如鐵一般清晰了。誰是送禮人，誰是收禮人，禮物是什麼，一目了然嘛。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">哇，A give B C，這的確很像數學公式誒，把複雜的名詞套進去就好了。不過我還注意到一點哦，這段文本的作者真的非常像一個保姆誒。他在講完送禮物之後，突然插了一句，<span class="english">France is a country in Europe</span>，法國是歐洲的一個國家。為什麼要在這裡教地理啊？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這帶出了一個非常重要的問題哦。我們學語言到底是為了什麼？我們前面談了發音，單複數，空間介係詞，還有時光機動詞。但語言的最終目的其實是為了傳達意義。作者加上這句地理常識，是為了確保哪怕是全世界最沒有背景知識的初學者，也能完全跟上這個故事的脈絡。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">而且你看最後一句，<span class="english">France wanted to give the United States this gift to celebrate their friendship.</span> 這裡用了一個簡單的 <span class="english">to</span>，就是為了解釋帶出了整個歷史事件的動機。他用最少最簡單的單字，不僅建構了視覺空間，交代了時間脈絡，最後還帶出了人類情感的層面，也就是友誼。這就是這段基礎文本最了不起的地方。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">聽你這樣講，這真的讓我有點起雞皮疙瘩，所以我們這短短十幾分鐘根本不是在讀一篇無聊的課文而已耶。我們其實是在拆解一個精密的語言機關。</div>
+    </div>
+
+    <h2>結語：獲得一副看世界的新眼鏡</h2>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">完全沒錯。所以如果你是剛開始學英文的聽眾，請務必記住這個感覺。你不需要一開始就去挑戰什麼華爾街日報或者是莎士比亞，那太痛苦了啦。你只要找一篇像這樣只有七八句的基礎文本，把每一個 S，每一個介係詞的空間感，還有每一個動詞的時態變化都徹底搞懂一遍。這種深度的理解絕對會為你的英文打下難以想像的堅實基礎。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這真的是一個很大的啟發誒！大家不要害怕一開始進度很慢，因為你其實是在建立一套全新的思考邏輯，像是如何用單複數畫出邊界，用介係詞擺放 3D，還有用動詞穿越時空。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">而就在我們即將結束今天的深入探討時，我想留下一個稍微不同角度的想法，讓你能繼續思考看看。我們今天分析這份英文文本，看它如何精準的把法國送給美國的禮物，塑造成全世界公認的自由與友誼的最高象徵。但這也讓人不禁去想，如果情況反過來呢？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">反過來？</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">假設今天有一位美國的作者用英文寫了一段關於我們台灣著名地標的文本，比如說台北 101 或者是八卦山大佛，當我們用他們語言中的名詞，他們習慣的空間介係詞，以及他們看待時間的方式來描述我們自己的文化時，就會暴露出什麼樣的文化盲點呢？或者說英文這套邏輯會如何改變我們講述自己故事的方式？</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">這思考角度非常有意思！當你開始學習英文的時候，你不僅僅是在學會如何跟外國人講話而已，你其實是獲得了一副全新的眼鏡來看待這個世界，甚至重新看待你自己的文化。</div>
+    </div>
+
+    <div class="dialogue host">
+        <div class="name">🎙️ 主持人</div>
+        <div class="text">帶著這個想法，以及今天我們拆解出來的這些語言積木，希望你在學習英文的這條路上能感受到前所未有的自由，就是我們今天說的 <span class="english">freedom</span>，或者該說是 <span class="english">liberty</span> 呢！感謝你收聽今天的深入探討，我們下次見囉。</div>
+    </div>
+
+    <div class="dialogue guest">
+        <div class="name">🗣️ 來賓</div>
+        <div class="text">大家下次見！</div>
+    </div>
+
+</div>
+<div id="audio-panel" style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+    <audio id="bg-audio" controls style="width: 100%;">
+        <source src="" type="audio/mp4" >
+        您的瀏覽器不支援音訊播放。
+    </audio>
+    <script>
+        (function () {
+        var filename = '2_16.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        const audio = document.getElementById('bg-audio');
+        audio.load();
+        audio.play();
+        })();
+    </script>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
+<div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+<p>
+<script>
+    //let isScrolling = false;
+    let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+    let scrollSpeed = 0.15; 
+    let animationFrameId;
+    let virtualScrollY = window.scrollY; 
+
+    const toggleBtn = document.getElementById('scroll-toggle');
+    const speedControl = document.getElementById('speed-control');
+    const speedDisplay = document.getElementById('speed-display');
+
+    speedControl.addEventListener('input', function() {
+        scrollSpeed = parseFloat(this.value);
+        speedDisplay.innerText = scrollSpeed.toFixed(2);
+    });
+
+    function scrollPage() {
+        if (isScrolling) {
+            toggleBtn.innerHTML = '⏬⏸️';
+            if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                virtualScrollY = window.scrollY;
+            }
+
+            virtualScrollY += scrollSpeed;
+            window.scrollTo(0, virtualScrollY);
+            
+            if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                isScrolling = false;
+                toggleBtn.innerHTML = '⏬▶️';
+                toggleBtn.style.background = '#27ae60';
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(scrollPage);
+        }
+    }
+
+    toggleBtn.addEventListener('click', function() {
+        isScrolling = !isScrolling;
+        
+        if (isScrolling) {
+            this.innerHTML = '⏬⏸️';
+            this.style.background = '#e74c3c';
+            virtualScrollY = window.scrollY; 
+            scrollPage();
+        } else {
+            this.innerHTML = '⏬▶️';
+            this.style.background = '#27ae60';
+            cancelAnimationFrame(animationFrameId);
+        }
+    });
+    // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+    scrollPage();
+</script>
 </body>
 </html>

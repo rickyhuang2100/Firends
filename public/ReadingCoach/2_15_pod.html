@@ -1,311 +1,795 @@
+HTML
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - Geysers in Iceland</title>
+    <title>冰島間歇泉：駭客你的語言大腦</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+            --bg-color: #f4f7f6;
+            --chat-bg: #ffffff;
+            --host-a-bg: #e3f2fd;
+            --host-a-text: #0d47a1;
+            --host-b-bg: #f5f5f5;
+            --host-b-text: #333333;
+            --eng-highlight: #d35400;
+            --eng-bg: rgba(211, 84, 0, 0.08);
+            --title-color: #2c3e50;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
+            font-family: 'Helvetica Neue', 'Microsoft JhengHei', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
             padding: 20px;
-        }
-
-        .podcast-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 40px;
-        }
-
-        .podcast-header {
-            text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
-            margin-bottom: 40px;
-        }
-
-        .podcast-title { font-size: 28px; color: var(--primary-color); margin-bottom: 15px; }
-        .podcast-subtitle { font-size: 18px; color: var(--text-light); font-style: italic; }
-        .podcast-meta {
-            margin-top: 15px;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
         }
-
-        .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
-            border-radius: 0 8px 8px 0;
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--chat-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 30px 40px;
+            box-sizing: border-box;
         }
-
-        .dialogue-flow { display: flex; flex-direction: column; gap: 15px; }
-
-        .speaker-row { display: flex; gap: 15px; max-width: 85%; align-self: flex-start; }
-
-        .speaker-avatar {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; flex-shrink: 0;
+        h1 {
+            text-align: center;
+            color: var(--title-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
         }
-
-        .host-a .speaker-avatar { background-color: #2196F3; color: white; }
-        .host-b .speaker-avatar { background-color: #FF9800; color: white; }
-
-        .speech-bubble {
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-size: 16px;
+        p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
         }
-
-        .host-a .speech-bubble { background-color: var(--host-a-color); border-top-left-radius: 2px; }
-        .host-b .speech-bubble { background-color: var(--host-b-color); border-top-left-radius: 2px; }
-
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
+        .chat-line {
+            display: flex;
+            margin-bottom: 24px;
+            flex-direction: column;
+        }
+        .host-a {
+            align-items: flex-start;
+        }
+        .host-b {
+            align-items: flex-end;
+        }
+        .speaker {
+            font-size: 0.85rem;
             font-weight: bold;
+            margin-bottom: 6px;
+            color: #888;
+            padding: 0 5px;
         }
-
-        .highlight-phonics {
-            color: #e74c3c; font-weight: bold;
-            background: #fdeaea; padding: 0 4px; border-radius: 3px;
+        .bubble {
+            max-width: 85%;
+            padding: 14px 20px;
+            border-radius: 18px;
+            font-size: 1.05rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            letter-spacing: 0.5px;
         }
-
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        .host-a .bubble {
+            background-color: var(--host-a-bg);
+            color: var(--host-a-text);
+            border-bottom-left-radius: 4px;
         }
-
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
+        .host-b .bubble {
+            background-color: var(--host-b-bg);
+            color: var(--host-b-text);
+            border-bottom-right-radius: 4px;
         }
-
-        .lego-brick-summary h4 { color: #b58900; margin-bottom: 10px; }
-
-        li { margin-bottom: 6px; }
+        .eng {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--eng-highlight);
+            font-weight: 500;
+            background-color: var(--eng-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin: 0 2px;
+        }
+        @media (max-width: 600px) {
+            .bubble { max-width: 95%; }
+            .container { padding: 20px 15px; }
+        }
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：Geysers in Iceland</h1>
-            <p class="podcast-subtitle">冰島間歇泉爆發的那一刻，同時拆解英文底層運作的建築藍圖</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：Chunking 打包記憶法、A is A 鋼骨結構、send 的底層推力、though 的口語事後補充</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_15.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
-            </div>
+    <div class="container">
+        <h1>冰島間歇泉：駭客你的語言大腦</h1>
+        <p class="subtitle">Podcast 逐字稿整理（已為您修正語音辨識錯漏字，並標註英文以提升閱讀體驗）</p>
+        
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">想像一下你現在正站在冰島一片非常冰冷而且很荒涼的平原上。空氣超凍的，四周一片寂靜。突然之間你腳下的岩石開始隱隱震動。</div>
         </div>
 
-        <div class="dialogue-flow">
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哇，這聽起來很有電影的畫面感耶。</div>
+        </div>
 
-            <!-- 開場 -->
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    想像一下，你現在正在冰島一片冰冷的荒原上。突然腳下的岩石開始震動，轟的一聲巨響，一道沸騰的滾燙水柱直接衝破地表，像火箭一樣射向差不多十層樓高的天空。今天我們要利用這股能量來「駭客」你的大腦！
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對吧，緊接著就是轟的一聲巨響，一道沸騰的滾燙水柱哦，直接衝破地表。它就像火箭一樣直接射向差不多十層樓高的天空哦。</div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    成人學語言最常犯的錯誤就是把自己當成一本空白字典，把每個單字孤立地死背。但大腦喜歡有邏輯、有畫面、有脈絡的資訊。
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">沒錯。那種大自然的爆發力真的是非常震撼的。</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯，透過學習真實的自然現象，你不是在「背課文」，你是在「理解世界」，而英文只是你用來理解世界的其中一個工具而已。這篇關於冰島間歇泉的短文，就是一張非常精密的語言建築藍圖。
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">真的。所以今天呢，我們這場深入探討，不只要帶你去感受這顆星球上最暴力的自然奇觀之一，也就是冰島的間歇泉。我們還要利用這股能量來駭客你的大腦。</div>
+        </div>
 
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：A is A 鋼骨結構與 Chunking 打包記憶法</h2>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">駭客大腦，這個說法很有趣哦。</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    文章開篇：
-                    <span class="english-quote">Do you know what a geyser is? A geyser is a natural pool of hot water that sometimes erupts.</span>
-                    先問懸念，再立即自答。這裡用了 <span class="highlight-lego">A 某物 is a 某物</span> 這個定義鋼骨結構——堅固、通用，可以把 geyser 換成任何東西，比如 "A podcast is..."，初學者開口解釋新事物的最強武器！
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">呃，這其實是一次為你量身打造的任務啦。如果你跟我們一樣母語是中文，而且一直想要從零基礎開始把英文學好，那麼這段關於間歇泉的短文就會是你打破語言高牆的完美起點。其實啊，成人學語言最常犯的錯誤就是把自己當成一本空白的字典，就是試著把每一個單字孤立起來死背。</div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我注意到 <span class="english-quote">natural pool of hot water</span> 這幾個字串在一起念起來很順，感覺像是一整塊磚頭。
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對，以前學校都是這樣教的啊。</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    你抓到了認知科學上的 <span class="highlight-lego">Chunking（打包記憶法）</span>！不要把 natural（天然的）、pool（水池）、hot（熱的）、water（水）一個個孤立地背，而是直接把 "natural pool of hot water" 當作一整塊磚頭來記憶。你的腦海裡浮現的就直接是「一座天然熱水池」的完整畫面。
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯，但我們的大腦不是這樣運作的哦，大腦喜歡有邏輯，有畫面，還有脈絡的資訊。當我們透過學習一個真實的自然現象來學習的時候，你其實不是在背英文。</div>
+        </div>
 
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：erupt —— 壓力瞬間釋放的語音象徵</h2>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">嗯哼，那是在做什麼？</div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    說到 erupt 這個字，光是發音本身，那個 <span class="highlight-phonics">-rupt</span> 的重音感覺就帶有一種壓力瞬間釋放的張力！
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">你是在理解世界啦，而英文他就只是你用來理解世界的其中一個工具而已。</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    完全正確。地底下的岩漿把地下水加熱到沸騰，但上方有厚厚地層壓著，水沒辦法立刻變成蒸氣。壓力在密閉空間不斷累積，像快要爆炸的壓力鍋……直到能量找到地表的縫隙，瞬間爆發出來——<span class="highlight-phonics">erupt！</span>這個字不只用在間歇泉，火山爆發是，甚至人長期壓抑的情緒突然大爆發也是同一個字，因為它描述的是同一種物理機制。
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">原來如此。</div>
+        </div>
 
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：send 的底層推動力（不只是「寄信」）</h2>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">那為了讓這個工具在你腦海中建立起第一道聲音的軌跡，我現在會用平穩的語速為你朗讀這段關於冰島間歇泉的文本。大家不用急著去翻譯每一個字哦，只要放輕鬆，閉上眼睛，試著去感受那個節奏跟畫面就好了。因為文本稍微有一點長，我會分段來念。準備好了嗎？我們要開始囉。<br><br><span class="eng">Geysers in Iceland. Do you know what a geyser is? A geyser is a natural pool of hot water that sometimes erupts.</span></div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    我在這裡卡住了！<span class="english-quote">it sends a tall jet of water and steam into the air</span>。我們學 send 都是學「寄信」或「發 email」，但間歇泉難道是在把水柱寄給天空嗎？聽起來超違和的！
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">嗯，這一段很清楚的點出了我們今天的主題。</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這正是我們太依賴中英對照字典學語言的盲點！send 在英文的底層空間概念，是 <span class="highlight-lego">施加一股力量，促使某個東西從 A 點移動到 B 點</span>。你按下「送出」按鈕，驅動那封信穿過網路到達對方信箱；大自然按下它的按鈕，地底下的極大壓力將幾十噸重的水柱強行推送到天空——本質上是同一件事。
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對，接下來是描述爆發的畫面。<span class="eng">When a geyser erupts, it sends a tall jet of water and steam into the air.</span></div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    懂了！強調的是那一股「推動力」。如果翻成「噴出來」反而失去了那種強大外力介入的動態感。而後面的 <span class="english-quote">a tall jet of water</span>——jet 就是噴射機 jet plane 的那個 jet，絕對不是細流，是高速高壓的水流！
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">那個水柱衝上去的畫面感真的完全出來了耶。</div>
+        </div>
 
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：大小寫背後的邏輯 與 not anymore 的時間感</h2>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">真的，然後這關於歷史的部分。<span class="eng">[The English word...]</span></div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    文章還提到：geyser（英文普通名詞）這個字，來自冰島語的地名 Geysir。你有注意到嗎？描述一般間歇泉用小寫 geyser，而特指那座冰島間歇泉地名時，G 就大寫了。
-                    <br><br>
-                    這是英文大小寫的底層邏輯：<span class="highlight-lego">小寫代表類別（普通名詞）；大寫代表獨一無二的專屬身份（專有名詞）</span>。中文裡沒有這個視覺區分，但這是英文書寫的絕對規則。
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哇，最古老的竟然已經不噴發了。</div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    還有那句 <span class="english-quote">it does not erupt anymore</span>（它不再噴發了）！not 是否定，但加上句尾的 anymore，整個句子的時間感就出來了——它不是從一開始就不噴，而是曾經無比輝煌，但現在狀態已永久改變了。
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對啊，但故事還沒完哦，最後一段是這樣說的。<span class="eng">Another geyser can be found nearby though. This one is called Strokkur. Strokkur erupts every few minutes. The hot water from...</span></div>
+        </div>
 
-            <!-- 章節 5 -->
-            <h2 class="chapter-title">章節 5：though 放句尾的口語事後補充</h2>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">剛剛這段文字啊，長度其實大概只有一分鐘左右，但它其實是一張非常精密的建築藍圖哦。</div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    最後一段出現了一個我常不知道怎麼用的用法：<span class="english-quote">Another geyser can be found nearby, though.</span> though 被丟在句子最後面，這是為什麼？中文習慣把「雖然/但是」放在最前面啊！
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">怎麼說是一張藍圖呢？</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這是書面語與口語的根本差異！寫文章時，你可以提前規劃好整個邏輯，所以把 although 放句首。但日常對話中，大腦是邊想邊說的，<span class="highlight-lego">講完了一句話，腦袋才突然閃過一個需要補充的轉折或讓步——these are all added as an afterthought at the end！</span>把 though 放句尾，等於是在說「對了，不過呢……」。理解了這一點，以後話說出口才想到要轉折，不用慌張吞回去重說，只要輕輕加上一個 though，你的英文立刻聽起來極度自然道地。
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">因為對於零基礎的學習者來說，他裡面完全沒有塞滿那種複雜的文法術語，他反而示範了母語人士在解釋一個未知事物的時候，大腦是怎麼組織邏輯的。</div>
+        </div>
 
-            <!-- 章節 6 -->
-            <h2 class="chapter-title">章節 6：as high as 的主觀敬畏 與 every few minutes 的頻率模組</h2>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">哦，那我們就直接潛入這張藍圖的結構裡吧。文章一開頭的第一句話就是一個問句。<span class="eng">Do you know what a geyser is?</span></div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    文本介紹活躍的 Strokkur：erupts <span class="english-quote">every few minutes</span>，每隔幾分鐘噴一次——這是一個極實用的表達頻率的現成模組，every + 時間。然後說水柱可以 <span class="english-quote">reach as high as 40 meters</span>（高達 40 公尺），也就是標準十層樓的高度。
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對，然後他立刻自己回答了，<span class="eng">a geyser is a natural pool of hot water that sometimes erupts.</span> 這裡我有個感覺，就是他把 <span class="eng">natural pool of hot water</span> 串在一起講，這聽起來很順誒。</div>
+        </div>
 
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    為什麼不是平鋪直敘地說 "reaches 40 meters"，而要用 "as high as"？
-                </div>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯，這裡隱藏著一個成人學習語言的高階技巧。我們在認知科學上稱為意群，也就是 <span class="eng">chunking</span>。</div>
+        </div>
 
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    <span class="highlight-lego">as high as 不只提供客觀數字，還包含了說話者的主觀敬畏</span>——它在告訴你「這個高度是極端的、超出預期的」！這對於日後英文簡報中強調驚人數據，是非常有力的句型。難怪文本最後忍不住發出驚呼：<span class="english-quote">That's really high!</span>
-                </div>
-            </div>
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">意群聽起來有點專業，是可以把單字打包的意思嗎？</div>
+        </div>
 
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>打包記憶法 (Chunking)：</strong> 把 "natural pool of hot water" 當作一整塊磚頭記，腦中直接浮現完整畫面，比逐字死背有效百倍。</li>
-                    <li><strong>A is a 鋼骨定義結構：</strong> "A geyser is a natural pool..." 是初學者解釋任何事物的萬用開場方程式。</li>
-                    <li><strong>send 的底層推力：</strong> 不是「寄信」的 send，而是「施力推動某物從 A 抵達 B」的核心概念。</li>
-                    <li><strong>not ... anymore 的永久改變感：</strong> 曾經有過，但現在已改變，not 加上 anymore 精準抓住了狀態的時間流逝。</li>
-                    <li><strong>though 放句尾 = 口語事後補充：</strong> 話說完才想到要轉折時的救援神器，讓英文瞬間變得自然道地。</li>
-                    <li><strong>as high as = 數字 + 主觀敬畏：</strong> 比單純的數字更有力，帶出「超出預期的極端感」。</li>
-                </ul>
-            </div>
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對的，就是把幾個單字打包成一個區塊來記憶，與其去死背 <span class="eng">natural</span> 天然的、<span class="eng">pool</span> 水池、<span class="eng">hot</span> 熱的、<span class="eng">water</span> 水。</div>
+        </div>
 
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">這樣一個一個背真的超痛苦的。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">真的啊，所以不如直接把 <span class="eng">natural pool of hot water</span> 當做一整塊磚頭來理解。它在你的腦海裡就直接是一座天然的熱水池。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">懂了，所以我們不是在記單字，我們是在記一整個概念。而且我注意到前面那個句型，<span class="eng">a geyser is, a</span> 然後接東西。這感覺就像是一棟建築物的鋼骨結構誒。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">這個比喻非常精準哦。英文就是一個極度依賴結構位置的語言。<span class="eng">A</span> 某物 <span class="eng">is a</span> 某物，這就是最堅固的鋼骨。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">所以我可以把 <span class="eng">geyser</span> 這塊磚頭抽出來換成任何其他的東西咯。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">完全可以。比如說 <span class="eng">a smartphone is</span> 或者是 <span class="eng">a podcast is</span> 後面接你要解釋的東西。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哇，只要這個鋼骨結構穩固，隨時可以把新的單字像積木一樣填進去，難怪這是初學者開口解釋新事物的最強武器。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">是的。不過這句話裡面我覺得最關鍵的其實是最後那個動詞 <span class="eng">erupt</span>。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對，我也正想說這個字，我們說間歇泉有時候會 <span class="eng">erupt</span>，這個字光是發音本身 <span class="eng">erupt</span> 那個 <span class="eng">rupt</span> 的重音感覺就帶有一種壓力瞬間釋放的張力耶。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯，他完美的捕捉了地質學上的力學變化。你可以想像一下地底下的岩漿把地下水加熱到沸騰。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">嗯哼，然後呢？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">但因為上方有厚厚的地層壓著，水沒辦法立刻變成蒸氣。壓力在地底那個密閉空間裡不斷不斷的累積。就像是一個快要爆炸的壓力鍋。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">沒錯，直到那個臨界點，這股龐大的能量終於找到地表的縫隙，然後瞬間爆發出來。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">哇，所以 <span class="eng">erupt</span> 這個字不只用在間歇泉，火山爆發應該也是用這個字吧？</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對，火山爆發也是，甚至你也可以用來形容人類壓抑很久的情緒，突然失控大爆發。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">這種能量釋放的畫面真的立刻就把我們帶到了文本的下一個動作了。我們定義了間歇泉是什麼嘛，接下來文本開始描述那個爆發瞬間是怎麼運作的。句子是這樣說的：<span class="eng">when a geyser erupts, it sends a tall jet of water and steam into the air.</span></div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">等一下，這裡我必須暫停一下哦，因為我遇到一個卡關的地方。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">哦，哪裡卡關了？請說。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">就我們剛開始學英文的時候啊，一學到 <span class="eng">send</span> 這個動詞，字典或課本通常都是叫我們寄信，也就是 <span class="eng">send a letter</span>。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對，或者發電子郵件，<span class="eng">send an email</span>。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對啊，但在這裡文本卻說間歇泉 <span class="eng">sends</span> 一道水柱跟蒸氣到空中。這聽起來超違和的耶，難道間歇泉在把水郵寄給天空嗎？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">哈哈，這是一個非常核心的問題哦，這也點出了我們太依賴中英對照字典來學語言的盲點。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">所以 <span class="eng">send</span> 不只有寄送的意思嗎？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">其實 <span class="eng">send</span> 在英文裡的底層空間概念是施加一股力量，促使某個東西從 A 點移動到 B 點。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哦，所以它強調的是那一股推動力。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯。當你 <span class="eng">send</span> 一封電子郵件的時候，你是按下按鈕驅動這封信，穿過網絡到達對方的信箱。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">原來是這樣，那在間歇泉的場景裡就是大自然按下那個按鈕咯。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對，地底下的極大壓力就是那個推動力，將幾十噸重的水柱強行推送到天空裡。如果你只把它翻譯成噴出來，反而失去了那種強大外力介入的動態感。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哇，這真的打破了我對英文單字的死板印象。如果用這個角度去想後面的 <span class="eng">tall jet of water</span>, 也就是高聳的水柱，感覺也變得非常有畫面了。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">是不是？而且你有聽過噴射機叫做 <span class="eng">jet plane</span> 吧？</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">有啊，所以這裡的 <span class="eng">jet</span> 絕對不是那種涓涓細流，而是像噴射引擎那樣高速高壓的水流，對不對？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">完全正確，再加上前半句的 <span class="eng">when</span> 當什麼什麼的時候，這又是一個非常聰明的邏輯連接哦。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">嗯，加一個 <span class="eng">when</span> 有什麼特別的魔力嗎？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">初學者常犯的毛病啊，就是講話像在列點，一句一句切斷。但加上一個簡單的 <span class="eng">when</span>, 你就在大腦裡建立了一條時間軸。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哦，就是當壓力累積到頂點引發爆發的時候，它就會把高壓水柱推向空中。這兩個動作瞬間就產生了因果關係。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯，從結構到動作，這整個畫面是不是就很清晰了。不過語言有趣的地方就在於他不止描繪自然，他本身也是歷史的遺跡哦。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">歷史的遺跡，這就帶我們來到了文本的下一段了。<span class="eng">The English word geyser comes from the Icelandic...</span></div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">這裡我們就看到了英文身為一個大鎔爐語言的特性了，英文其實借用了大量來自世界各地的詞彙。文本裡面用了一個超級實用的片語來表達這件事，就是 <span class="eng">comes from</span> 來自於。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">沒錯，這個是不是就跟我們平常自我介紹的時候說 <span class="eng">I come from Taiwan</span> 是一模一樣的邏輯啊。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">完全一樣啊，你可以用他來介紹一個人的家鄉，當然也可以用來追溯一個概念或是單字的起源。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">這裡我覺得很有趣的是，英文的普通名詞 <span class="eng">geyser</span> 根本就是冰島語 <span class="eng">Geysir</span> 的雙胞胎嘛。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對啊，發音幾乎一樣，但你有注意到文本裡這兩個字在書寫上有什麼差別嗎？</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">有欸，當他在講一般的間歇泉的時候，<span class="eng">geyser</span> 的第一個字母 g 是小寫，但是當他特別指冰島那座名叫 <span class="eng">Geysir</span> 的間歇泉時，G 就變成大寫了。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">這就是英文大小寫的底層邏輯了。小寫代表的是類別。也就是普通名詞，世界上有成千上萬個間歇泉。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">那大寫呢？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">大寫代表的是獨一無二的專屬身份，也就是專有名詞。這種視覺上的區分在我們中文裡是沒有的，但卻是英文書寫的絕對規則。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">原來如此，這樣看文章就非常清楚了。另外啊，我還想探討一下這段裡出現的一個轉折詞，<span class="eng">in fact</span>。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">哦，這是一個很好的點。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">因為我通常想要表達事實上的時候可能會直接想到 <span class="eng">actually</span>。這裡用 <span class="eng">in fact</span> 在口語對話中它會對聽的人產生什麼樣的心理暗示啊？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">呃，你可以把它想像成舞台上的聚光燈。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">聚光燈？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對，當你在句子開頭丟出 <span class="eng">in fact</span> 的時候，你其實是在向聽眾的潛意識發出一個信號。就是在說，嘿，接下來我要揭露一個你可能意想不到，甚至有點違背直覺的細節哦。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哦，這是一種用來牢牢抓住對方注意力的對話技巧誒。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯。而在這個文本裡，他是用來帶出一個歷史的諷刺感。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">諷刺感怎麼說？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">因為文本說這座最古老的 <span class="eng">Geysir</span>, 雖然偉大到讓全世界所有的間歇泉都以他為名。但接著卻寫到 <span class="eng">it does not erupt anymore</span>, 他不再噴發了。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哇，這聽起來真的有一種英雄遲暮的感覺。<span class="eng">Does not</span> 我們都知道是否定，但加上句尾的 <span class="eng">anymore</span>, 整個句子的時間感就出來了。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">是的，他不是一開始就不會噴發，而是曾經無比輝煌，但現在這個狀態已經改變了。語言在這裡真的是精準的捕捉了時間的流逝，還有狀態的永久改變。這也是我們初學者必須掌握的語氣，如何用簡單的 <span class="eng">not anymore</span> 來講述一個發生改變的故事。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">沒錯。不過大自然的劇本總是充滿驚奇啦，舊的傳奇雖然沉睡了，但旁邊卻有新的生命在跳動哦。這就帶我們進入了文本的最後一個段落了，這裡出現了一個我覺得非常道地，但我自己講英文時常不知道怎麼用的字。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">嗯，是哪個字？</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">文本第一句是這樣寫的。<span class="eng">Another geyser can be found nearby, though.</span></div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">啊，你指的應該是句尾的那個 <span class="eng">though</span> 吧。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對對對，在中文裡我們習慣說雖然怎樣怎樣，但是怎樣怎樣，這兩個邏輯詞都會放在句子的最前面嘛。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">嗯，沒錯。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">但是英文卻常常把 <span class="eng">though</span> 當做一個小尾巴丟在句子的最後面，為什麼母語人士這麼喜歡這種說話方式啊？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">這個其實是書面語跟口語在運作機制上的根本差異啦。當你在寫文章的時候，你可以提前規劃好整個句子的邏輯，所以你會把 <span class="eng">although</span> 或 <span class="eng">but</span> 放在最前面。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">那講話的時候呢？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">可是當我們在日常對話的時候，大腦是邊想邊講的啊，很多時候我們講完了一句話，腦袋裡才突然閃過一個需要補充的讓步條件或者是一個轉折。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哦，所以把 <span class="eng">though</span> 放在句尾其實是一種對話中的事後補充咯，像是在說「對了，不過呢怎樣怎樣」。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">正是如此，他反應了真實說話時的動態過程。理解了這一點，你以後在講英文時，如果話說出口了才想到要轉折，就不用慌張的把整句話吞回去重講了。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對，只要在句尾輕輕加上一個 <span class="eng">though</span>，我的英文聽起來就會極度自然，而且很道地了。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯。那接著文本向我們介紹了這個活躍的新鄰居。<span class="eng">This one is called Strokkur</span>, 這一個叫做史托克。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">文本還說它 <span class="eng">erupts every few minutes</span>, 每隔幾分鐘就噴發一次，這是一組非常實用的表達頻率的模組。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble"><span class="eng">Every</span> 加 <span class="eng">few minutes</span>。是的，而且為了讓你對這股力量有具體的認知，文本不只給了頻率，它還給了數據的極限值哦，就是 <span class="eng">reach as high as 40 meters</span>, 高達 40 公尺。我來幫大家建立一個畫面好了，40 公尺到底是什麼概念啊？你可以想像一下台北街頭那種標準的十層樓高的電梯大廈。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哇，那真的很高耶。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">對啊，現在想像一下，大自然在沒有任何機械馬達的輔助下，每隔幾分鐘就把一鍋滾燙的沸水直接轟到十層樓高的屋頂上。這畫面太震撼了，這也是為什麼這裡不是平鋪直敘的說 <span class="eng">water reaches 40 meters</span>, 而是加上了 <span class="eng">as high as</span>。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">哦。<span class="eng">as high as</span> 有什麼特別的語氣嗎？</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">它不只是在提供一個客觀的數字，它還包含了說話者的主觀敬畏，他在告訴你這個高度是非常極端的，是超出預期的，這對於日後要在英文簡報中強調某個驚人數值的時候是非常有利的句型哦。難怪文本最後會忍不住發出驚呼。<span class="eng">That's really high</span>。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">好了，我們現在把整張藍圖退後一步來看，今天我們不只是讀了一篇關於冰島的短文而已哦，我們其實是拆解了母語人士大腦的運作方式。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">沒錯，大家今天學會了用 <span class="eng">A is a</span> 這個結構來定義未知事物，還學會了用意群，也就是把單字結合成有意義的畫面。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對，還有理解了 <span class="eng">send</span> 背後那股推動力量的底層邏輯，也搞懂了為什麼口語喜歡把 <span class="eng">though</span> 放在句尾作為事後補充，這絕對比死背厚厚的文法書來得深刻懂了吧。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">真的，語言的學習從來就不應該被困在教室的黑板上了，當你把語言放回真實的世界，放回大自然歷史，還有我們人類的認知習慣裡，去理解的時候，那些原本枯燥的單字跟句型就會瞬間變得有血有肉了。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">完全同意。在你結束今夜深入探討，準備自己開始練習朗讀這段文字的時候，我想在你的腦海裡植入一個懸念。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">嗯，什麼懸念？</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">文本中有提到，那座曾經偉大到成為所有間歇泉代名詞的 <span class="eng">Geysir</span>, 現在已經陷入了永久的沉睡了，也就是 <span class="eng">it does not erupt anymore.</span></div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">嗯，有點感傷。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">然而呢，就在他旁邊不遠處的 <span class="eng">Strokkur</span>, 卻依然像個狂暴的巨獸，每隔幾分鐘就將沸水噴向十層樓的高空，這不禁讓人深思啊。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">思考什麼呢？</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">在冰島那片冰冷的岩層之下，地底深處究竟發生了什麼樣神秘的板塊位移或者是地質洗牌啊，竟然會悄悄切斷了一座古老間歇泉的能量命脈，卻又同時讓他的鄰居獲得了源源不絕的爆發力。</div>
+        </div>
+
+        <div class="chat-line host-a">
+            <div class="speaker">主講者 A</div>
+            <div class="bubble">這真的是一個很迷人的地質學謎團耶。</div>
+        </div>
+
+        <div class="chat-line host-b">
+            <div class="speaker">主講者 B</div>
+            <div class="bubble">對啊，所以當你下一次練習念出這個充滿張力的單字時，或許你可以想像一下，那個藏在我們視線之外，卻改變著地表樣貌的神秘地底世界哦。</div>
         </div>
     </div>
+<div id="audio-panel" style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+    <audio id="bg-audio" controls style="width: 100%;">
+        <source src="" type="audio/mp4" >
+        您的瀏覽器不支援音訊播放。
+    </audio>
+    <script>
+        (function () {
+        var filename = '2_15.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        const audio = document.getElementById('bg-audio');
+        audio.load();
+        audio.play();
+        })();
+    </script>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
+<div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+<p>
+<script>
+    //let isScrolling = false;
+    let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+    let scrollSpeed = 0.15; 
+    let animationFrameId;
+    let virtualScrollY = window.scrollY; 
+
+    const toggleBtn = document.getElementById('scroll-toggle');
+    const speedControl = document.getElementById('speed-control');
+    const speedDisplay = document.getElementById('speed-display');
+
+    speedControl.addEventListener('input', function() {
+        scrollSpeed = parseFloat(this.value);
+        speedDisplay.innerText = scrollSpeed.toFixed(2);
+    });
+
+    function scrollPage() {
+        if (isScrolling) {
+            toggleBtn.innerHTML = '⏬⏸️';
+            if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                virtualScrollY = window.scrollY;
+            }
+
+            virtualScrollY += scrollSpeed;
+            window.scrollTo(0, virtualScrollY);
+            
+            if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                isScrolling = false;
+                toggleBtn.innerHTML = '⏬▶️';
+                toggleBtn.style.background = '#27ae60';
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(scrollPage);
+        }
+    }
+
+    toggleBtn.addEventListener('click', function() {
+        isScrolling = !isScrolling;
+        
+        if (isScrolling) {
+            this.innerHTML = '⏬⏸️';
+            this.style.background = '#e74c3c';
+            virtualScrollY = window.scrollY; 
+            scrollPage();
+        } else {
+            this.innerHTML = '⏬▶️';
+            this.style.background = '#27ae60';
+            cancelAnimationFrame(animationFrameId);
+        }
+    });
+    // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+    scrollPage();
+</script>
 </body>
 </html>

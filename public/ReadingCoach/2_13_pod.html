@@ -1,415 +1,631 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深度探討 - 日出日落</title>
+    <title>Podcast 逐字稿：破解英文隱藏密碼</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --host-a-color: #E3F2FD;
-            --host-b-color: #FFF3E0;
-            --text-dark: #333;
-            --text-light: #666;
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #e74c3c;
+            --bg-color: #fcfcfc;
+            --text-color: #333333;
+            --bubble-a-bg: #edf2f7;
+            --bubble-b-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
             line-height: 1.8;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
         }
 
-        .podcast-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            padding: 40px;
-        }
-
-        .podcast-header {
+        h1 {
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 30px;
-            margin-bottom: 40px;
-        }
-
-        .podcast-title {
-            font-size: 28px;
             color: var(--primary-color);
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
         }
 
-        .podcast-subtitle {
-            font-size: 18px;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        .podcast-meta {
-            margin-top: 15px;
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #888;
+            align-items: center;
         }
 
-        .chapter-title {
-            font-size: 22px;
-            color: #2c3e50;
-            margin: 40px 0 20px;
-            padding-left: 15px;
-            border-left: 4px solid var(--primary-color);
-            background: #f8fcf8;
-            padding: 10px 15px;
-            border-radius: 0 8px 8px 0;
+        h2::before {
+            content: "💡";
+            margin-right: 10px;
         }
 
-        .dialogue-flow {
+        .intro {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        .dialogue {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .speaker-row {
-            display: flex;
-            gap: 15px;
-            max-width: 85%;
-        }
-
-        .speaker-row.host-a {
-            align-self: flex-start;
-        }
-
-        .speaker-row.host-b {
-            align-self: flex-start;
-        }
-
-        .speaker-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .host-a .speaker-avatar {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .host-b .speaker-avatar {
-            background-color: #FF9800;
-            color: white;
-        }
-
-        .speech-bubble {
+        .speaker-box {
             padding: 15px 20px;
             border-radius: 12px;
+            border: 1px solid var(--border-color);
             position: relative;
-            font-size: 16px;
         }
 
-        .host-a .speech-bubble {
-            background-color: var(--host-a-color);
-            border-top-left-radius: 2px;
+        .speaker-a {
+            background-color: var(--bubble-a-bg);
+            border-left: 5px solid #3182ce;
         }
 
-        .host-b .speech-bubble {
-            background-color: var(--host-b-color);
-            border-top-left-radius: 2px;
+        .speaker-b {
+            background-color: var(--bubble-b-bg);
+            border-left: 5px solid #38a169;
         }
 
-        /* 內容亮點樣式 */
-        .highlight-lego {
-            background: linear-gradient(120deg, #ffd966 0%, #ffd966 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 30%;
-            background-position: 0 90%;
+        .speaker-label {
             font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: inline-block;
         }
 
-        .highlight-phonics {
-            color: #e74c3c;
-            font-weight: bold;
-            background: #fdeaea;
-            padding: 0 4px;
+        .speaker-a .speaker-label { color: #2b6cb0; }
+        .speaker-b .speaker-label { color: #276749; }
+
+        .text-en {
+            font-family: 'Georgia', serif;
+            color: #2c5282;
+            font-weight: 600;
+        }
+
+        blockquote {
+            background-color: #fdf6e3;
+            border-left: 5px solid #d69e2e;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 10px 10px 0;
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        mark {
+            background-color: #fef08a;
+            padding: 2px 5px;
             border-radius: 3px;
         }
 
-        .english-quote {
-            display: block;
-            background: #fff;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-left: 3px solid #9b59b6;
-            font-family: 'Georgia', serif;
-            font-size: 1.1em;
-            color: #2c3e50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        hr {
+            border: 0;
+            height: 1px;
+            background: #cbd5e0;
+            margin: 40px 0;
         }
 
-        .lego-brick-summary {
-            background: #fdf6e3;
-            border: 2px dashed #d4c4a8;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
+        .conclusion {
+            background-color: #ebf8fa;
+            border: 1px solid #b2ebf2;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 40px;
         }
-
-        .lego-brick-summary h4 {
-            color: #b58900;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        
+        .conclusion h3 {
+            margin-top: 0;
+            color: #00838f;
         }
-
     </style>
 </head>
-
 <body>
-    <div class="podcast-container">
-        <div class="podcast-header">
-            <h1 class="podcast-title">📖 深度探討：日出日落 (Sunrise and Sunset)</h1>
-            <p class="podcast-subtitle">用極簡的語言，捕捉現代人被太陽能系統支配的化學對抗</p>
-            <div class="podcast-meta">
-                <span>⏱️ 建議閱讀時間：15 分鐘</span>
-                <span>🎯 重點：夏日超載、冬夜開機掙扎、恆定的黃昏、打破第四道牆</span>
-            </div>
-            <div style="margin-top: 20px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px; font-weight: bold; color: var(--primary-color);">🎧 搭配原聲帶收聽：</p>
-                <audio controls style="width: 100%;">
-                    <source src="2_13.m4a" type="audio/mp4">
-                    您的瀏覽器不支援 audio 元素。
-                </audio>
-            </div>
+
+    <h1>破解英文隱藏密碼：從《Sunrise, Sunset》看懂底層邏輯</h1>
+    <p class="intro">這是一場專屬的深度探討，帶你從零開始，利用極短的文本拆解英文發音機制與對比結構。</p>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>那個，你先想像一下「陽光」這個詞，就是 <span class="text-en">sunlight</span> 這個字。其實陽光完全沒有重量對吧？你抓不住它，然後你也絕對沒有辦法把陽光給數出來，說什麼「一粒陽光」、「兩粒陽光」之類的。</p>
         </div>
-
-        <div class="dialogue-flow">
-
-            <!-- 開場 -->
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    你有沒有遇過一種情況？夏天明明外面太陽還超級大，天都還亮著，但你已經覺得精疲力盡，甚至不得不直接上床睡覺了。
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    這種經驗蠻常見的，大腦好像已經「強制關機」了。這看似只是因為那天太累，但實際上，這根本是我們現代人的生理節奏去跟宇宙自然規律發生 <span class="highlight-lego">強烈碰撞</span> 的最好證明。
-                </div>
-            </div>
-            
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    所以我們今天要來拆解的極簡短文，就是關於這類日常瑣事的探討囉？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯！這篇短文叫作《日出日落》。篇幅短到不可思議，描述了夏天白天很長、冬天夜晚很長之類你小學自然課就學過的常識。但它最值得我們花時間的地方在於它的 <span class="highlight-phonics">去蕪存菁</span>：完全沒用深奧的天文學或內分泌學術語，就像一幅極簡主義的畫作，卻精準捕捉了地球上最龐大的一種共同體驗。
-                </div>
-            </div>
-
-            <!-- 章節 1 -->
-            <h2 class="chapter-title">章節 1：夏日光線超載，永不離開的派對客</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    文本一開始描述夏天的白天很長。接著拋出了一個非常具體的問句：<span class="english-quote">在夏天，你曾經在日落前就上床睡覺嗎？</span> 這個問句精準踩在我們「內在機制」跟「外在環境」的摩擦點上。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    摩擦點？意思是我們身體跟環境起衝突了嗎？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    我們的大腦裡有一個區域叫作「交叉上核」，你可以直白地把它想像成我們身體的 <span class="highlight-lego">中央時鐘</span>。這個時鐘主要就是靠 <span class="highlight-phonics">光線</span> 來校準的。日落是一個信號，告訴大腦該開始分泌褪黑激素準備關機。
-                </div>
-            </div>
-
-             <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    懂了！所以當夏天日照時間大幅延長，晚上八九點天都還是亮的，我們的中央時鐘就被搞混了！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯，在那種狀態下，你的肉體累積了足夠的疲勞（想睡了），但眼睛還在接收著大量環境光線，告訴大腦：「喂喂，現在還是白天！保持清醒！」這是一種生物學上的超載狀態。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    這讓我想到，夏天的陽光就好像是 <span class="highlight-lego">派對上那個永遠不想離開的客人</span>！身為主人體力已經耗盡，準備打烊，但這個叫夏日陽光的客人還興致勃勃坐在客廳中央，強迫大腦喝下名為「清醒」的咖啡因。
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    而且即便是傍晚的自然光，強度也遠超過我們日常室內光！所以夏天時，就算發明了時鐘，試圖「早九晚五」做自己時間的主人，夏天的太陽還是一種壓倒性的物理存在，直接覆蓋掉我們的社會作息。
-                </div>
-            </div>
-
-            <!-- 章節 2 -->
-            <h2 class="chapter-title">章節 2：對稱的極端 —— 在黑暗中醒來的「化學掙扎」</h2>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    接下來，文本把我們推向光譜的第一個極端——冬天。他說冬天夜晚非常長，接著問了另一個完美的對戰問題：<span class="english-quote">在冬天的早晨，你曾經在黑暗中醒來過嗎？</span> 
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    這把夏天的「晚」直接對比冬天的「早」。但我困惑的是，他為什麼沒有問我們是不是曾「在天黑之後才下班」，而是改問有沒有「在黑暗中醒來」？
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    因為從生物機制來看，「在黑暗中醒來」帶給身體的 <span class="highlight-lego">生理阻力</span> 遠比天黑下班來得巨大！早晨的第一道藍光，是按下我們重新啟動的關鍵鑰匙。它負責壓抑褪黑激素、促使皮質醇上升，讓你進入清醒狀態。
-                </div>
-            </div>
-
-             <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    這感覺就像我們的身體是一隻 <span class="highlight-lego">太陽能機械錶</span>！冬天早晨鬧鐘響了，要求這隻錶立刻開機運轉，可是最強大的那顆「太陽能充電源」卻還沒亮起來！
-                </div>
-            </div>
-
-             <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    鬧鐘逼你醒來，但血液裡還充斥著高濃度褪黑激素，你的大腦化學依然在「睡眠模式」。那不是單純的起床氣，而是一種實實在在的 <span class="highlight-phonics">化學對抗與掙扎</span>。這也正是為什麼很多人在冬天會經歷這極度巨大的疲勞與「季節性情緒失調」(SAD)。
-                </div>
-            </div>
-
-
-             <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    所以這篇極簡英文短文，完全沒有用深奧的醫學術語！他只用了「在黑暗中醒來」六個字，就擊中了人類被太陽公轉角度支配的巨大盲區！
-                </div>
-            </div>
-
-            <!-- 章節 3 -->
-            <h2 class="chapter-title">章節 3：打破第四道牆 —— 重新定向的測量邀請</h2>
-
-             <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    如果文本只停留在對比，那就只是篇科普文。最有力的是結尾，它直接把焦點拉回到「正在聽的你」。最後一句話：<span class="english-quote">今天，你所在的城鎮，獲得了多少陽光？</span>
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    這句話一出來整個起雞皮疙瘩！本來在看客觀紀錄片，這感覺就像電影主角突然轉過頭來，直視著觀眾的眼睛，打破了第四道牆！
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    沒錯，這稱作「重新定向的邀請」。這問句迫使你從回憶中抽離，主動去「測量現在的環境」。它更深層是指出了現代人的 <span class="highlight-lego">生物學盲目</span> ── 我們大多生活在一個恆定的黃昏裡。
-                </div>
-            </div>
-
-             <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    恆定的黃昏？
-                </div>
-            </div>
-            
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    你想想，室內辦公室的光大約 300~500 洛克斯 (lux)。足夠你看清楚電腦，但對大腦的中央時鐘來說，亮得像個昏暗的黃昏，根本不足以讓大腦知道「現在是白天」。而到了晚上，我們又盯著螢幕的微弱藍光，讓大腦以為太陽還沒下山，不准睡覺。
-                </div>
-            </div>
-
-            <!-- 章節 4 -->
-            <h2 class="chapter-title">章節 4：現代盲點總結與哲理深思</h2>
-
-             <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    老天！也就是說我們用各種人造光源，把夏天的過剩跟冬天的匱乏全部給「平均掉」了。我們創造出一個永遠溫吞、沒有任何強烈節奏變化的環境……
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    所以當作者問「你的城鎮獲得多少陽光？」時，他是在問：<span class="highlight-phonics">你今天有沒有讓你的身體真正去跟著地球同步？還是又在恆定黃昏的室內待了一天？</span> 我們以為掌握了生活節奏，其實只是在與自然脫節的邊緣反覆試探。
-                </div>
-            </div>
-
-            <div class="speaker-row host-b">
-                <div class="speaker-avatar">學員</div>
-                <div class="speech-bubble">
-                    每天看氣溫決定穿衣，卻極少意識到這座城市的陽光正如何悄悄地重塑我們大腦裡的化學物質。短短的幾個英文字，完全顛覆了我的視角。
-                </div>
-            </div>
-
-            <div class="speaker-row host-a">
-                <div class="speaker-avatar">導師</div>
-                <div class="speech-bubble">
-                    在我們結束探討前留給你一個哲理：這個輕按開關就能用 LED 填滿黑夜的時代，這種自以為對光線的絕對控制權，是一種人類的進化嗎？還是我們正在不知不覺中切斷了自己與地球源古節奏最後的連結，失去某種更深層的健康平衡？這個答案，可能就藏在明天早上的第一道陽光裡！
-                </div>
-            </div>
-
-            <!-- 總結積木 -->
-            <div class="lego-brick-summary">
-                <h4>🎯 學習積木總結 (Learning Lego Bricks)</h4>
-                <ul>
-                    <li><strong>極簡句子的力量：</strong> "Have you ever awakened in the dark...?" 沒有專業術語，卻一語道破人類抵抗退黑激素的化學抗衡。 </li>
-                    <li><strong>生動隱喻轉化理科概念：</strong> 太陽能機械錶 (對比缺光早晨開機的困難)、不想離開的派對客人 (對比夏日光線過剩的超載)、恆定的黃昏 (形容現代室內虛假的工作光線)。</li>
-                    <li><strong>打破第四道牆 (Breaking the Fourth Wall)：</strong> "How much sunlight did your town get today?" 改變了句型的受詞方向，直接將客觀科普帶入到「自身行為覺察」，是英文寫作裡極具張力的結尾法。</li>
-                </ul>
-            </div>
-
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>對，這是很抽象的概念。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>沒錯！但是呢，當英文母語人士在談論太陽或陽光的時候，他們用的那些詞彙跟句型，其實偷偷揭示了這門語言裡面一套非常精密的——算是一種數學邏輯跟物理規則吧。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>嗯，聽起來有點反直覺對不對？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>對啊，超級反直覺的！所以如果你是那種母語是中文、住在台灣，然後心裡一直想著說：「哇，我真的好想從零開始把英文學好！」如果你是這樣的聽眾，那我們今天這場專屬的深度探討，就是要來幫你破解這套隱藏的密碼。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯，而且我們今天絕對不看那種很厚重的文法書。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>絕對不看！我們將透過一篇非常簡短的短文，叫做 <span class="text-en">Sunrise, sunset</span>（日出日落），透過這個短文本帶你拆解英文的發音機制、對比結構，還有它到底是怎麼改變你看世界的方式。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>其實語言本來就不應該是死的規則嘛。當你從零開始接觸英文的時候，我覺得最有效的方法就是——你拿著放大鏡去好好檢視一段結構很完整的文本。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>嗯，就像是一個微型的實驗室這樣子。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>對對對，就是實驗室。我們今天看的這篇短文，雖然它真的只有短短幾行字而已，但裡面其實裝滿了英文處理時間、空間，還有數量那些最核心的邏輯。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>好，所以在我們開始拆解這些邏輯之前，我們必須先聽這門語言實際運作的聲音。因為你不能只看文字嘛，你要聽見那個旋律。所以如果你現在正在收聽，請你把注意力放在接下來的這段朗讀上。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>嗯，好的。我們請專家為你完整唸一次這個短文，然後請你特別留意一下聲音的高低起伏，還有句子停頓的那個節奏感。</p>
         </div>
     </div>
+
+    <blockquote>
+        <p><strong>Sunrise, sunset.</strong></p>
+        <p>Did you ever go to bed before sunset in the summer?<br>
+        In summer, the days are very long. The sun rises early, it sets late. There are more hours of sunlight than at other times of year.</p>
+        <p>Did you ever wake up in the dark on a winter morning?<br>
+        In winter, the nights are very long. The sun rises late. It sets early. There are fewer hours of sunlight in winter than at other times of year.<br>
+        How much sun is your town getting today?</p>
+    </blockquote>
+
+    <h2>時光機：Did 的過去式按鈕</h2>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>好，我們來拆解一下這個文本。我覺得第一句話就超有意思的喔，他說：<span class="text-en">Did you ever go to bed before sunset in the summer?</span></p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>嗯，這句其實藏了很大的學問。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>對啊！因為如果你用中文想，我們通常是問：「你在夏天『曾經』在日落前睡覺嗎？」我們把時間標記放在句子的中間，或者是根本就看上下文來猜。可是你看英文，它一開頭直接砸了一個 <span class="text-en">Did</span> 給你。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯沒錯，這其實正是英文跟中文在運作上一個非常大的分歧。對於剛開始學英文的你來說，其實你可以把這個 <span class="text-en">Did</span> 想像成一台<mark>時光機</mark>。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哇，時光機這個比喻很有畫面！</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>對，因為英文這門語言，它非常在乎動作發生的時間點。中文的動詞都不會變嘛，我們是用「曾經」或「昨天」這些字來輔助。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>嗯，我吃，我昨天吃。動詞都是吃。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>是的，但英文呢，它是把這個時間標記直接推到句子的最前面。<span class="text-en">Did you ever</span> 這個開頭，就像是說話的人先按下了一個「過去式」的按鈕。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哦，等於是先警告聽眾說：「注意了，我現在要問你的是過去發生的事情。」</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>對對對，就是先給你一個心理準備。</p>
+        </div>
+    </div>
+
+    <h2>聲音物理學：上揚語調的強制回應機制</h2>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>這個時光機的概念真的很具體。不過除了 <span class="text-en">Did</span> 這個字，我其實剛剛更在意的是這句話的那個旋律。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>哦，怎麼說？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>剛才唸到句尾那個 <span class="text-en">in the summer</span> 的時候，聲音非常明顯地往上揚了。這在中文裡其實很不常見呢，我們中文通常就是加一個「嗎」這個字在結尾，像是「吃飯了嗎？」，語氣其實是平的。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這個觀察非常的敏銳喔！這就是英文利用「聲音的物理學」來傳遞文法訊號的一個超棒的例子。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>聲音的物理學？聽起來這麼玄？</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>其實不玄啦。這是一個 Yes/No question，也就是說答案只能是「是」或「否」的問句。因為英文不像我們中文有一個專門丟在句尾的疑問詞，所以他們只好用聲音來代替。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>答對了，說話的人必須利用音高的變化。你把句尾的音調往上拉高，其實就像是把一顆球拋在空中，懸在那邊。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>哦，製造一種未完成的感覺。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>對！這種物理上的未完成感，它會強迫聽話的那個人必須趕快接話，給出一個答案，好讓那個音調可以平安落地。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>哇，原來語調上揚不只是一種習慣而已，它根本就是一種強制對方回應的機制啊！這真的太有趣了。</p>
+        </div>
+    </div>
+
+    <h2>發音的生理學：Rises 的濁音秘密</h2>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>好，接著我們看文本進入了對夏天的描述，他說：<span class="text-en">In summer, the days are very long. The sun rises early, it sets late.</span> 這裡面有兩個核心的動詞，就是 <span class="text-en">rises</span>（升起）跟 <span class="text-en">sets</span>（落下）。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>嗯，這兩個字很關鍵。我覺得這就像是劇院的布幕，<span class="text-en">rises</span> 就是布幕早早就拉起來了，然後 <span class="text-en">sets</span> 就是布幕很晚才放下來，讓夏天這齣戲演得特別長。不過等一下，我得打斷一下，我對發音有一個很大的疑問。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>好啊，你說說看。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這裡最有趣的地方是，當我在看 <span class="text-en">rises</span> 這個字的時候，它字尾明明就是拼成一個 S 對吧？但是剛剛在唸的時候，我聽到的根本不是氣音的那個「斯」的聲音，而是一個有震動感 Z 的那個「滋」的聲音，欸？這是為什麼啊？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>這個問題問得非常好。難道英文的拼字跟發音是可以這樣隨便脫鉤的嗎？我想怎麼唸就怎麼唸？</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>當然不是隨意脫鉤啊。這背後其實有著非常嚴謹的生理學原因。在語音學上這叫做「濁音規則」。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>濁音規則？聽起來有點專業。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>我們來做個小實驗，你就懂了。當你發 <span class="text-en">rise</span> 這個字的母音，就是那個 /aɪ/ 的時候，你把兩根手指頭放在你的喉嚨上。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>好，我現在放著。發 <span class="text-en">rise</span>... 嗯！對，喉嚨的確有一陣一陣在震動的感覺。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯。這個有聲帶震動的聲音就叫做「濁音」。當你的聲帶已經因為前面的母音處在一個高速震動的狀態時，如果你硬要在字尾接一個完全不震動、只有純粹氣流的清音（死音 /s/）...</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哦，會怎樣？</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>你的發聲器官會非常非常吃力！為了讓整個發音的系統可以平滑地運作下去，我們的大腦會自動把結尾的那個 /s/ 也同化成帶有震動的音。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哦！所以它自然而然就變成了 <span class="text-en">rises</span> 的那個「滋」的聲音。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>完全正確！這其實就像是在開手排車，對不對？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>我懂你的意思了！如果你的聲帶已經因為母音在高速運轉，你突然踩個急煞車去發一個完全不震動的清音，這簡直就像是語言上的「頸椎鞭打症」嘛，超級不順暢的啊！但如果你發出的聲音，就像是讓引擎自然滑行，慢慢停下來...</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>哇，這個手排車的比喻真的太精準了！其實英文發音的演變，很大一部分就是為了發聲器官的省力跟流暢。也就是說，身體是很誠實的。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>對，所以初學者根本不需要去死背什麼時候發 /s/，什麼時候發 /z/。你只要去感受你的喉嚨到底有沒有在震動，你的身體自然就會帶著你發出正確的聲音。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這真的打破了我以前覺得發音規則都要死背的迷思欸，身體會自動幫你換檔！</p>
+        </div>
+    </div>
+
+    <h2>節奏心理學與鏡像對稱</h2>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>那另外我想問，<span class="text-en">The sun rises early</span> 還有 <span class="text-en">it sets late</span>，短得有點不可思議耶？作者為什麼不乾脆把它們連起來，寫成 <span class="text-en">The sun rises early and sets late</span> 就好了？這樣不是比較像我們平時講話的長度嗎？</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這裡牽涉到的其實是<mark>節奏的心理學</mark>喔！越短的獨立句子，它會創造出一種不容反駁的事實感。你問夏天的特徵是什麼？就是早升、晚落。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哇，真的很像斷言一樣。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯，這種短促的節奏會在讀者的腦海裡面打下非常堅實的地基，強化了「夏天白天就是很長」的這個強烈印象。夏天給了我們這種漫長、明確而且充滿延伸感的印象。但是我們知道，英文這門語言非常非常依賴對比來建構意義。沒有黑暗就沒有光明嘛！所以作者要怎麼打破這種溫暖夏日的錯覺呢？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>他沒有隨機跳去寫秋天喔，他是直接把我們拉進了最冷冽的黑暗裡面。我們來看第二段，他直接問：<span class="text-en">Did you ever wake up in the dark?</span></p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>從這裡我們就看到了一種結構上的鏡像對稱。在語言學習裡面，這種鏡像結構是幫大腦建立神經連結最強大的工具喔！</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>你看第一段是 <span class="text-en">go to bed before sunset</span>（在日落前睡覺），然後到了第二段變成 <span class="text-en">wake up in the dark</span>（在黑暗中醒來）。這絕對不只是換個單字而已，它是在極端的物理環境裡面——極度亮跟極度暗之間，重新套用了同一個文法骨架，對吧？</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯！這感覺真的很像是在健身房做重量訓練，你用的是同一台器材，但是你換了不同重量的槓片。作者接著寫 <span class="text-en">In winter, the nights are very long. The sun rises late. It sets early.</span> 這根本就是剛剛夏天句型的完美倒影嘛！</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p><span class="text-en">Summer</span> 變成 <span class="text-en">winter</span>，<span class="text-en">days</span> 變成 <span class="text-en">nights</span>，<span class="text-en">long</span> 還是 <span class="text-en">long</span>，但是呢，<span class="text-en">rises early</span> 變成了 <span class="text-en">rises late</span>。這種對稱性可以讓初學者很容易去預測語言接下來的走向。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>當你掌握了夏天是怎麼描述的，你幾乎可以連文本都不看，自己就能推導出冬天該怎麼寫了！這種可預測性絕對會大幅降低我們在學外語時的那種焦慮感，自信心就是這樣建立起來的。</p>
+        </div>
+    </div>
+
+    <h2>深水區：Fewer vs. Less (規範性與描述性文法)</h2>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>這種結構上的美感真的是迷人。不過呢，接下來我們可能要碰到一個會讓很多人大卡關的地方了，要進入深水區了！</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>你聽喔，第一段寫著 <span class="text-en">There are more hours of sunlight</span>（夏天有更多的日照小時），然後第二段寫 <span class="text-en">there are fewer hours of sunlight</span>（冬天有更少的日照小時）。我知道這裡的 <span class="text-en">than at other times of year</span>（比起一年中其他時候）是一個很實用的比較級對比框架。但是我反駁一下這個 <span class="text-en">fewer</span> 的用法喔！</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哦，來吧，準備好接招了。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>傳統的文法書，就是我們以前學校教的，總是說 <span class="text-en">few</span> 要用在能數的東西，也就是「可數名詞」；然後 <span class="text-en">less</span> 要用在不能數的東西上，像是「不可數名詞」。這裡因為小時 <span class="text-en">hours</span> 是可以一個、兩個數出來的，作者就用了 <span class="text-en">fewer hours</span>，這很合理。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B (續)</span>
+            <p>但是！如果我今天去美國逛超市那個快速結帳的通道，那個牌子上明明就大大的寫著 <span class="text-en">10 items or less</span>（十件物品或更少）。<span class="text-en">Items</span> 物品，這個字明明也是可數的啊！難道那些英文母語人士連自己的母語都搞錯了嗎？還是其實是教科書騙了我們這麼多年？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>哇，你這個問題真的是極度核心而且直擊痛點！如果我們把這個連結到更大的英文法架構來看，你剛剛其實點出了語言學上「描述性文法」跟「規範性文法」之間非常巨大的衝擊。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這兩個名詞聽起來好學術，可以幫我們具體解釋一下嗎？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>沒問題！**規範性文法**呢，就是你剛剛說的教科書上的那套鐵律，它在告訴你語言「應該」要長什麼樣子。在這套規則裡，世界被很嚴格地分成了兩半：一半是可以一個一個指出來算數的（可數名詞）；另一半是像液體或抽象概念那種渾然一體的（不可數名詞）。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A (續)</span>
+            <p>按照這套鐵律，可數名詞變少，你必須要用 <span class="text-en">fewer</span>。這篇文本的作者非常嚴格地遵守了這個標準英文邏輯，所以他精準地寫下了 <span class="text-en">fewer hours</span>。可是，超市牌子上的那個 <span class="text-en">10 items or less</span>，它顯然沒有在管這個鐵律。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯，因為真實世界的語言，它是**描述性文法**。也就是說，我們去記錄人們實際上到底是怎麼說話的。在日常口語裡面，<span class="text-en">less</span> 這個字變得越來越強勢了。很多母語人士在語感上已經不再去嚴格區分到底可不可數，他們乾脆統一用 <span class="text-en">less</span> 表達「比較少」這個概念。這不是說他們錯了，而是這門語言正在演化中。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>我懂了！所以當我們說 <span class="text-en">less sunlight</span> 的時候，我們是把陽光當成水壺裡面的水，倒出來就變少了。可是當作者說 <span class="text-en">fewer hours</span> 的時候，他是非常精準地把時間切成一個一個的量杯，然後再數那個量杯的數量。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這個比喻非常好。但身為一個初學者，我到底該聽誰的啊？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>對於剛起步的你，我會強烈建議**先掌握規範**（先學教科書的）。你要先去理解為什麼作者在這裡要精準地使用 <span class="text-en">fewer hours</span> 來計算時間的單位。同時你也要去理解 <span class="text-en">sunlight</span>（陽光）本身為什麼它是不可數的，因為陽光是抽象的整體。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>沒錯，當你在腦袋裡建立了這套標準的邏輯框架之後，未來當你走在街頭聽到母語人士說 <span class="text-en">less items</span> 的時候，你就不會覺得很恐慌、覺得自己學的都白費了。因為你會知道：「哦，那只是語言在現實生活中的一種彈性變形而已。」先建構骨架，再去適應肌肉的變形。</p>
+        </div>
+    </div>
+
+    <h2>動詞的魔力：Have vs. Is getting</h2>
+
+    <div class="dialogue">
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>這個觀念真的太重要了！好，我們剛剛跟著文本從夏天的極端亮走到冬天的極端暗，然後我們探討了時光機、過去式、發音的物理學，還有可數不可數的糾葛...但這些都還是停留在討論客觀的大自然規律。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這個文本最厲害的地方在於，它的最後一句話做了一個非常非常漂亮的鏡頭轉換。他把焦距拉近了，把遙遠的大自然直接拉近到了正在聽這段節目的你、你所在的那個城鎮。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>這最後一句是 <span class="text-en">How much sun is your town getting today?</span> 這句話直接把前面建立的那些靜態知識全部轉化成了動態的現實欸！而且你看，陽光在這裡作為一個整體概念是不可數的，所以疑問詞就是用 <span class="text-en">how much</span> 而不是用 <span class="text-en">how many</span>。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>但我真正想討論的其實是它後面的那個動詞結構：<span class="text-en">is getting</span>（現在進行式）。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>我在思考這個 <span class="text-en">getting</span> 的時候啊，我突然發現一件事。如果作者只是想要表達「你的城鎮今天有多少陽光」，他大可以寫 <span class="text-en">How much sun does your town have today?</span> 對吧？在文法上這樣寫完全沒有問題，聽起來就像天氣預報一樣很客觀。可是作者偏偏選了 <span class="text-en">getting</span>，這兩個字給人的感覺完全不同欸。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>那你要不要說看你覺得不同的點在哪裡？</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>我覺得如果你用 <span class="text-en">have</span>，那城鎮就只是一個冷冰冰的靜態容器而已，陽光就在那裡。但是如果你用了 <span class="text-en">getting</span>，這感覺就像天空是一個超級盡責的快遞員！天空是快遞，然後你住的這個城鎮，此時此刻正在「簽收」一份包裹。這份包裹裡面裝的就是今天的陽光！</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B</span>
+            <p>這個快遞員的比喻真的是太傳神了！而且這引出了一個重要的思考點：這直指了英文動詞選擇的哲學核心。</p>
+        </div>
+        <div class="speaker-box speaker-b">
+            <span class="speaker-label">講者 B (續)</span>
+            <p>這就是為什麼我們常常說，學英文不能只是把單字對應到中文的翻譯上。在英文裡面，你選用的動詞會決定你怎麼去感知這個世界。選擇 <span class="text-en">have</span>，它是一種靜態的擁有；但是你選擇了 <span class="text-en">is getting</span>，它就變成了一種動態的接收。它等於是把被動的現象變成了一種主動的經歷。</p>
+        </div>
+        <div class="speaker-box speaker-a">
+            <span class="speaker-label">講者 A</span>
+            <p>確實如此！作者透過這個現在進行式，把讀者從一個只會在旁邊觀察四季變化的旁觀者，瞬間變成了一個此時此刻正在接收陽光的參與者。他其實是在問你身為一個活生生的個體，你今天正在經歷什麼樣的自然變化？這就是動詞的魔力。</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="conclusion">
+        <h3>生活小實踐：換上全新的語言濾鏡</h3>
+        <p>不知不覺中，我們已經把這短短幾行字的短文給徹底解剖了一遍。</p>
+        <ul>
+            <li>你現在懂了 <span class="text-en">Did</span> 這個時光機是怎麼啟動過去式的。</li>
+            <li>你明白了，發音不只是死背規則，而是發聲器官的物理運動（手排車換檔）。</li>
+            <li>你看到了英文是怎麼透過鏡像對比來建立一種可預測性。</li>
+            <li>你理解了可數與不可數名詞背後真正的分類邏輯。</li>
+            <li>最關鍵的是，你體會到了動詞選擇（像是充滿生命力的 <span class="text-en">is getting</span>）如何改變句子的動態感。</li>
+        </ul>
+        <p>學習語言的重點真的不在於你今天是不是死背了 200 個單字，而是在於你是不是真正理解了這門語言在運作時的底層邏輯。沒錯，先把地基打好最重要！</p>
+        <p><strong>給你的課後挑戰：</strong><br>
+        現在如果你剛好在窗邊，或者是當你等一下走出室外的時候，請你抬頭看看天空。請你不要用中文去想「哦，今天天氣真好」或是「天黑了」。試著用你今天剛剛獲得的這套新濾鏡來看看這個世界：在心裡問自己，此刻的陽光是把你的城鎮給照亮了（<span class="text-en">light</span>），還是它已經陷入黑暗了（<span class="text-en">dark</span>）？太陽現在是正在升起（<span class="text-en">rising</span>），還是正在落下（<span class="text-en">setting</span>）？天空這個快遞員發給你的城鎮的是 <span class="text-en">more sunlight</span> 還是 <span class="text-en">less sunlight</span> 呢？</p>
+        <p>當你開始嘗試用這門語言的邏輯去為眼前的現實命名的時候，這就是你真正掌握英文的第一步了。帶著這份全新的觀察力，我們下次的深度探討見！</p>
+    </div>
+<div id="audio-panel" style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+    <audio id="bg-audio" controls style="width: 100%;">
+        <source src="" type="audio/mp4" >
+        您的瀏覽器不支援音訊播放。
+    </audio>
+    <script>
+        (function () {
+        var filename = '2_13.m4a';
+        const isLocal = location.hostname === 'localhost' || location.hostname   === '127.0.0.1';
+        document.getElementById('bg-audio').src = isLocal
+        ? filename
+        : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+        const audio = document.getElementById('bg-audio');
+        audio.load();
+        audio.play();
+        })();
+    </script>
+    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+    <script>
+        function toggleBgAudio() {
+            const audio = document.getElementById('bg-audio');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+        function updateAudioBtn(isPlaying) {
+            const btn = document.getElementById('bg-audio-toggle');
+            if (isPlaying) {
+                btn.innerHTML = '🔊⏸️';
+                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+            } else {
+                btn.innerHTML = '🔊▶️';
+                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+            }
+        }
+    </script>
+</div>
+<div id="auto-scroll-panel" style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;" onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';" onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle" style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;"> ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15" style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display" style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+<p>
+<script>
+    //let isScrolling = false;
+    let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+    let scrollSpeed = 0.15; 
+    let animationFrameId;
+    let virtualScrollY = window.scrollY; 
+
+    const toggleBtn = document.getElementById('scroll-toggle');
+    const speedControl = document.getElementById('speed-control');
+    const speedDisplay = document.getElementById('speed-display');
+
+    speedControl.addEventListener('input', function() {
+        scrollSpeed = parseFloat(this.value);
+        speedDisplay.innerText = scrollSpeed.toFixed(2);
+    });
+
+    function scrollPage() {
+        if (isScrolling) {
+            toggleBtn.innerHTML = '⏬⏸️';
+            if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                virtualScrollY = window.scrollY;
+            }
+
+            virtualScrollY += scrollSpeed;
+            window.scrollTo(0, virtualScrollY);
+            
+            if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                isScrolling = false;
+                toggleBtn.innerHTML = '⏬▶️';
+                toggleBtn.style.background = '#27ae60';
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(scrollPage);
+        }
+    }
+
+    toggleBtn.addEventListener('click', function() {
+        isScrolling = !isScrolling;
+        
+        if (isScrolling) {
+            this.innerHTML = '⏬⏸️';
+            this.style.background = '#e74c3c';
+            virtualScrollY = window.scrollY; 
+            scrollPage();
+        } else {
+            this.innerHTML = '⏬▶️';
+            this.style.background = '#27ae60';
+            cancelAnimationFrame(animationFrameId);
+        }
+    });
+    // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+    scrollPage();
+</script>
 </body>
 </html>
