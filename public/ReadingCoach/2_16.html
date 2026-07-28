@@ -1,50 +1,374 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - The Statue of Liberty</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #64b5f6;
+            margin-top: 15px;
+        }
+
+        .answer-area {
+            min-height: 60px;
+            padding: 15px;
+            background-color: white;
+            border: 2px dashed #90caf9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .word-bank {
+            min-height: 80px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-block {
+            background-color: white;
+            color: #1565c0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid #64b5f6;
+            user-select: none;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .word-block:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .game-status {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #c62828 !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 The Statue of Liberty</h1>
-        <a href="2_16_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDlCIYY9KwfSK7DoBbABiSaARwm8A5ErYJX4qLTwD3ZmdA?e=v6XPW4" target="_blank">沈浸式閱讀程式</a>   
+        <a href="2_16_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDlCIYY9KwfSK7DoBbABiSaARwm8A5ErYJX4qLTwD3ZmdA?e=v6XPW4"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -59,6 +383,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -74,27 +399,35 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Statue of Liberty is a statue of a woman. A statue is a piece of art.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>自由女神像是一座女子的雕像。雕像是一種藝術品。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The Statue of Liberty is a statue of a
+                                woman. A statue is a piece of art.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>自由女神像是一座女子的雕像。雕像是一種藝術品。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Statues are made in the shape of humans or animals.</td>
+                            <td style="padding: 10px; vertical-align: top;">Statues are made in the shape of humans or
+                                animals.</td>
                             <td style="padding: 10px; vertical-align: top;">雕像通常被製作成人類或動物的形狀。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The Statue of Liberty has a crown on her head.</td>
+                            <td style="padding: 10px; vertical-align: top;">The Statue of Liberty has a crown on her
+                                head.</td>
                             <td style="padding: 10px; vertical-align: top;">自由女神像頭上戴著一頂皇冠。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She is holding a torch high above her head.</td>
+                            <td style="padding: 10px; vertical-align: top;">She is holding a torch high above her head.
+                            </td>
                             <td style="padding: 10px; vertical-align: top;">她將一把火炬高高舉在頭頂上。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The Statue of Liberty is a symbol of freedom. The word “liberty” means freedom.</td>
+                            <td style="padding: 10px; vertical-align: top;">The Statue of Liberty is a symbol of
+                                freedom. The word “liberty” means freedom.</td>
                             <td style="padding: 10px; vertical-align: top;">自由女神像是自由的象徵。「liberty」這個詞的意思就是自由。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">France gave the United States of America the Statue of Liberty. It was as a gift.</td>
+                            <td style="padding: 10px; vertical-align: top;">France gave the United States of America the
+                                Statue of Liberty. It was as a gift.</td>
                             <td style="padding: 10px; vertical-align: top;">法國將自由女神像送給了美利堅合眾國（美國）。這是作為一份禮物。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
@@ -102,7 +435,8 @@
                             <td style="padding: 10px; vertical-align: top;">法國是歐洲的一個國家。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">France wanted to give the United States this gift to celebrate their friendship.</td>
+                            <td style="padding: 10px; vertical-align: top;">France wanted to give the United States this
+                                gift to celebrate their friendship.</td>
                             <td style="padding: 10px; vertical-align: top;">法國想送給美國這份禮物，以慶祝他們之間的友誼。</td>
                         </tr>
                     </table>
@@ -112,50 +446,318 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">statue</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">雕像</div></div>
-                    <div class="vocab-item"><div class="vocab-word">crown</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">皇冠</div></div>
-                    <div class="vocab-item"><div class="vocab-word">torch</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">火炬，火把</div></div>
-                    <div class="vocab-item"><div class="vocab-word">symbol</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">象徵，標誌</div></div>
-                    <div class="vocab-item"><div class="vocab-word">freedom</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">自由（意思同 liberty）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">celebrate</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">慶祝</div></div>
-                    <div class="vocab-item"><div class="vocab-word">friendship</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">友誼</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">statue</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">雕像</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">crown</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">皇冠</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">torch</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">火炬，火把</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">symbol</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">象徵，標誌</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">freedom</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">自由（意思同 liberty）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">celebrate</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">慶祝</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">friendship</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">友誼</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. 被動語態 are made...</div><div class="example">Statues <span class="highlight">are made in the shape of</span> humans or animals.</div><p>雕像是被人類製作出來的，所以用 be 動詞加上動詞過去分詞 (made)，並用 "in the shape of" 表示做成某種形狀。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. 現在進行式 is holding</div><div class="example">She <span class="highlight">is holding</span> a torch high above her head.</div><p>我們在描述一張圖片或雕像呈現的樣貌時，常用現在進行式來描述「正在進行的狀態」，彷彿畫面是活的。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. 授與動詞 give</div><div class="example">France <span class="highlight">gave</span> the United States of America the Statue of Liberty.</div><p>give 的句型可以有兩個受詞：「give + 給誰 + 什麼東西」。這裡法國給了美國自由女神像。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 被動語態 are made...</div>
+                    <div class="example">Statues <span class="highlight">are made in the shape of</span> humans or
+                        animals.</div>
+                    <p>雕像是被人類製作出來的，所以用 be 動詞加上動詞過去分詞 (made)，並用 "in the shape of" 表示做成某種形狀。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. 現在進行式 is holding</div>
+                    <div class="example">She <span class="highlight">is holding</span> a torch high above her head.
+                    </div>
+                    <p>我們在描述一張圖片或雕像呈現的樣貌時，常用現在進行式來描述「正在進行的狀態」，彷彿畫面是活的。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. 授與動詞 give</div>
+                    <div class="example">France <span class="highlight">gave</span> the United States of America the
+                        Statue of Liberty.</div>
+                    <p>give 的句型可以有兩個受詞：「give + 給誰 + 什麼東西」。這裡法國給了美國自由女神像。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: a piece of + 不可數名詞</strong><div class="example">A statue is <span class="highlight">a piece of</span> art.</div><p>因為藝術（art）是不可數名詞，所以要用「量詞」 a piece of 來表示「一件」。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: as a gift 作為...</strong><div class="example">It was <span class="highlight">as a gift</span>.</div><p>介系詞 as 用來表達某事物的某種身分或是用途，意思是「作為... / 當作...」。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: to + 原形動詞 (表目的)</strong><div class="example">France wanted to give the United States this gift <span class="highlight">to celebrate</span> their friendship.</div><p>這裡的 to celebrate 是不定詞的副詞用法，用來描述做這件事情的「目的」是為了慶祝。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: a piece of + 不可數名詞</strong>
+                    <div class="example">A statue is <span class="highlight">a piece of</span> art.</div>
+                    <p>因為藝術（art）是不可數名詞，所以要用「量詞」 a piece of 來表示「一件」。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: as a gift 作為...</strong>
+                    <div class="example">It was <span class="highlight">as a gift</span>.</div>
+                    <p>介系詞 as 用來表達某事物的某種身分或是用途，意思是「作為... / 當作...」。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: to + 原形動詞 (表目的)</strong>
+                    <div class="example">France wanted to give the United States this gift <span class="highlight">to
+                            celebrate</span> their friendship.</div>
+                    <p>這裡的 to celebrate 是不定詞的副詞用法，用來描述做這件事情的「目的」是為了慶祝。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：介紹著名地標的說明文</strong><p>介紹了美國知名的自由女神像。先解釋什麼是雕像，再具體描述自由女神的外型（皇冠和火把），並說明了 "liberty (自由)" 的含意。最後交代了這個雕像建造的背景和歷史由來（法國為了紀念友誼贈送的禮物）。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What does the Statue of Liberty hold high above her head?</li><li>What does the word “liberty” mean?</li><li>Which country gave the Statue of Liberty to the United States and why?</li></ol></div>
+                <div class="info-box"><strong>文章結構：介紹著名地標的說明文</strong>
+                    <p>介紹了美國知名的自由女神像。先解釋什麼是雕像，再具體描述自由女神的外型（皇冠和火把），並說明了 "liberty (自由)"
+                        的含意。最後交代了這個雕像建造的背景和歷史由來（法國為了紀念友誼贈送的禮物）。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What does the Statue of Liberty hold high above her head?</li>
+                        <li>What does the word “liberty” mean?</li>
+                        <li>Which country gave the Statue of Liberty to the United States and why?</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫的單字，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
+                </div>
+                <div class="game-board">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            11</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `The Statue of Liberty\n\nThe Statue of Liberty is a statue of a woman. A statue is a piece of art. Statues are made in the shape of humans or animals. The Statue of Liberty has a crown on her head. She is holding a torch high above her head. The Statue of Liberty is a symbol of freedom. The word “liberty” means freedom.\n\nFrance gave the United States of America the Statue of Liberty. It was as a gift. France is a country in Europe. France wanted to give the United States this gift to celebrate their friendship.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            { en: "The Statue of Liberty is a statue of a woman.", zh: "自由女神像是一座女子的雕像。" },
+            { en: "A statue is a piece of art.", zh: "雕像是一種藝術品。" },
+            { en: "Statues are made in the shape of humans or animals.", zh: "雕像通常被製作成人類或動物的形狀。" },
+            { en: "The Statue of Liberty has a crown on her head.", zh: "自由女神像頭上戴著一頂皇冠。" },
+            { en: "She is holding a torch high above her head.", zh: "她將一把火炬高高舉在頭頂上。" },
+            { en: "The Statue of Liberty is a symbol of freedom.", zh: "自由女神像是自由的象徵。" },
+            { en: "The word liberty means freedom.", zh: "「liberty」這個詞的意思就是自由。" },
+            { en: "France gave the United States of America the Statue of Liberty.", zh: "法國將自由女神像送給了美利堅合眾國（美國）。" },
+            { en: "It was as a gift.", zh: "這是作為一份禮物。" },
+            { en: "France is a country in Europe.", zh: "法國是歐洲的一個國家。" },
+            { en: "France wanted to give the United States this gift to celebrate their friendship.", zh: "法國想送給美國這份禮物，以慶祝他們之間的友誼。" }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel(); // 確保不會卡語音
+            }
+
+            // 加上 50ms 的延遲，避免 cancel() 吃掉 speak()
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+
+                // 找出系統內的 Google 英文語音 (Chrome 內建) 或預設英文
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) ||
+                    voices.find(v => v.lang === 'en-US');
+
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                // 可以連動原本閱讀器上設定的語速
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
+            transHint.style.display = 'block';
+
+            // 處理單字：轉小寫、濾掉標點符號
+            let rawText = gameSentences[currentGameIndex].en;
+            rawText = rawText.replace(/[.,!?"]/g, ''); // 移除基本標點
+            currentWords = rawText.split(' ').filter(w => w.length > 0).map(w => w.toLowerCase());
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default'; // 放入答案區後不允許再點擊退回
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            // 點擊時發音回饋
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                // 點對了！
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                // 檢查是否整句完成
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    // 將原句顯示在答案區下方（利用已經空出來的單字庫區塊）
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.textContent = gameSentences[currentGameIndex].en;
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en); // 答對了再整句唸一次加強印象
+                    }, 500);
+                }
+            } else {
+                // 點錯了！給予視覺與文字提示
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth; // 觸發 reflow 讓動畫可以重複播放
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
+
+        // 初始化
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
+
 </html>

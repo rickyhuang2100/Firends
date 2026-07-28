@@ -1,50 +1,360 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Soccer Is a Great Game</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 80px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+        }
+
+        .word-block {
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #2196F3;
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #c62828 !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Soccer Is a Great Game</h1>
-        <a href="2_18_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBRPPqlEiEpSrqZYBl8QqcAAd21T5ye32KDSdNpXZy3evE?e=lhjg1V" target="_blank">沈浸式閱讀程式</a>
+        <a href="2_18_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBRPPqlEiEpSrqZYBl8QqcAAd21T5ye32KDSdNpXZy3evE?e=lhjg1V"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -59,6 +369,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -74,27 +385,35 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Soccer is a team sport. Two teams play.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>足球是一項團隊運動。有兩支隊伍一起比賽。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Soccer is a team sport. Two teams play.
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>足球是一項團隊運動。有兩支隊伍一起比賽。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Each team has eleven players. The players try to kick the ball into the other team’s goal.</td>
+                            <td style="padding: 10px; vertical-align: top;">Each team has eleven players. The players
+                                try to kick the ball into the other team’s goal.</td>
                             <td style="padding: 10px; vertical-align: top;">每支隊伍有十一名球員。球員們試著把球踢進對方隊伍的球門裡。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">If the ball goes into the goal, their team gets a point.</td>
+                            <td style="padding: 10px; vertical-align: top;">If the ball goes into the goal, their team
+                                gets a point.</td>
                             <td style="padding: 10px; vertical-align: top;">如果球進了球門，他們的隊伍就能得分。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Soccer players have different jobs. The goalkeeper’s job is to protect the goal.</td>
+                            <td style="padding: 10px; vertical-align: top;">Soccer players have different jobs. The
+                                goalkeeper’s job is to protect the goal.</td>
                             <td style="padding: 10px; vertical-align: top;">足球員有著不同的任務。守門員的任務是保護球門。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Defenders try to get the ball away from the other team.</td>
+                            <td style="padding: 10px; vertical-align: top;">Defenders try to get the ball away from the
+                                other team.</td>
                             <td style="padding: 10px; vertical-align: top;">防守員（後衛）試著從對方球隊那裡把球搶走。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Forwards try to kick the ball into the other team’s goal.</td>
+                            <td style="padding: 10px; vertical-align: top;">Forwards try to kick the ball into the other
+                                team’s goal.</td>
                             <td style="padding: 10px; vertical-align: top;">前鋒則是負責試著把球踢進對方的球門。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
@@ -102,7 +421,8 @@
                             <td style="padding: 10px; vertical-align: top;">比賽通常會持續九十分鐘。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">The team with the most points is the winner!</td>
+                            <td style="padding: 10px; vertical-align: top;">The team with the most points is the winner!
+                            </td>
                             <td style="padding: 10px; vertical-align: top;">得到最多分數的隊伍就是贏家！</td>
                         </tr>
                     </table>
@@ -112,49 +432,293 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">soccer</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">足球，足球運動</div></div>
-                    <div class="vocab-item"><div class="vocab-word">goal</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">球門，目標，進球</div></div>
-                    <div class="vocab-item"><div class="vocab-word">point</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">分數，得分</div></div>
-                    <div class="vocab-item"><div class="vocab-word">goalkeeper</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">守門員</div></div>
-                    <div class="vocab-item"><div class="vocab-word">defender</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">防守員，（足球裡的）後衛</div></div>
-                    <div class="vocab-item"><div class="vocab-word">forward</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">前鋒（負責進攻的球員）</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">soccer</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">足球，足球運動</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">goal</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">球門，目標，進球</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">point</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">分數，得分</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">goalkeeper</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">守門員</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">defender</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">防守員，（足球裡的）後衛</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">forward</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">前鋒（負責進攻的球員）</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. Each + 單數名詞 + 單數動詞</div><div class="example"><span class="highlight">Each</span> team <span class="highlight">has</span> eleven players.</div><p>Each（每一個）用來強調個別。其後的名詞必須是單數形式，後方搭配的動詞也必須要使用單數動詞 (has)。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. try to + V (嘗試做某事)</div><div class="example">The players <span class="highlight">try to kick</span> the ball...</div><p>表示努力去「嘗試、試著做某件事」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. If 條件句</div><div class="example"><span class="highlight">If</span> the ball goes into the goal, their team gets a point.</div><p>用 If 帶出假設的條件。因為是描述客觀的規則與事實，前後兩個句子都是使用現在簡單式。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. Each + 單數名詞 + 單數動詞</div>
+                    <div class="example"><span class="highlight">Each</span> team <span class="highlight">has</span>
+                        eleven players.</div>
+                    <p>Each（每一個）用來強調個別。其後的名詞必須是單數形式，後方搭配的動詞也必須要使用單數動詞 (has)。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. try to + V (嘗試做某事)</div>
+                    <div class="example">The players <span class="highlight">try to kick</span> the ball...</div>
+                    <p>表示努力去「嘗試、試著做某件事」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. If 條件句</div>
+                    <div class="example"><span class="highlight">If</span> the ball goes into the goal, their team gets
+                        a point.</div>
+                    <p>用 If 帶出假設的條件。因為是描述客觀的規則與事實，前後兩個句子都是使用現在簡單式。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: be 動詞 + to V 擔任主詞補語</strong><div class="example">The goalkeeper’s job <span class="highlight">is to protect</span> the goal.</div><p>我們用 to + 動詞原型 (不定詞) 來補充說明守門員的工作「是」什麼。這叫作不定詞的名詞用法。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: away from</strong><div class="example">Defenders try to get the ball <span class="highlight">away from</span> the other team.</div><p>away 有離開的意思。這裡指把球帶離或是從對方那邊搶走離開。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: 介系詞 with 的修飾用法</strong><div class="example">The team <span class="highlight">with the most points</span> is the winner!</div><p>with 在這裡指的是「帶有 / 擁有」。它作為形容詞修飾前面的名詞 The team，意指「擁有最高分的那個隊伍」。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: be 動詞 + to V 擔任主詞補語</strong>
+                    <div class="example">The goalkeeper’s job <span class="highlight">is to protect</span> the goal.
+                    </div>
+                    <p>我們用 to + 動詞原型 (不定詞) 來補充說明守門員的工作「是」什麼。這叫作不定詞的名詞用法。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: away from</strong>
+                    <div class="example">Defenders try to get the ball <span class="highlight">away from</span> the
+                        other team.</div>
+                    <p>away 有離開的意思。這裡指把球帶離或是從對方那邊搶走離開。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: 介系詞 with 的修飾用法</strong>
+                    <div class="example">The team <span class="highlight">with the most points</span> is the winner!
+                    </div>
+                    <p>with 在這裡指的是「帶有 / 擁有」。它作為形容詞修飾前面的名詞 The team，意指「擁有最高分的那個隊伍」。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：介紹特定主題的說明文</strong><p>文章第一段簡單介紹了足球的比賽人數、如何獲得分數的基本規則。第二段深入探討足球員各自不同的職責（守門員負責防守、後衛負責斷球、前鋒負責進攻）。最後一段則統整了比賽時間與獲勝的條件。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>How many players are on each soccer team?</li><li>What is the goalkeeper's job?</li><li>What is the team with the most points called at the end of the game?</li></ol></div>
+                <div class="info-box"><strong>文章結構：介紹特定主題的說明文</strong>
+                    <p>文章第一段簡單介紹了足球的比賽人數、如何獲得分數的基本規則。第二段深入探討足球員各自不同的職責（守門員負責防守、後衛負責斷球、前鋒負責進攻）。最後一段則統整了比賽時間與獲勝的條件。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>How many players are on each soccer team?</li>
+                        <li>What is the goalkeeper's job?</li>
+                        <li>What is the team with the most points called at the end of the game?</li>
+                    </ol>
+                </div>
             </div>
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫的單字，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
+                </div>
+                <div class="game-board">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            1</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+
+                    <div class="game-controls" style="text-align: center; margin-top: 15px;">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Soccer Is a Great Game\n\nSoccer is a team sport. Two teams play. Each team has eleven players. The players try to kick the ball into the other team’s goal. If the ball goes into the goal, their team gets a point.\n\nSoccer players have different jobs. The goalkeeper’s job is to protect the goal. Defenders try to get the ball away from the other team. Forwards try to kick the ball into the other team’s goal.\n\nGames usually last ninety minutes. The team with the most points is the winner!`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        const gameSentences = [
+            { en: "Soccer is a team sport. Two teams play.", zh: "足球是一項團隊運動。有兩支隊伍一起比賽。" },
+            { en: "Each team has eleven players. The players try to kick the ball into the other team’s goal.", zh: "每支隊伍有十一名球員。球員們試著把球踢進對方隊伍的球門裡。" },
+            { en: "If the ball goes into the goal, their team gets a point.", zh: "如果球進了球門，他們的隊伍就能得分。" },
+            { en: "Soccer players have different jobs. The goalkeeper’s job is to protect the goal.", zh: "足球員有著不同的任務。守門員的任務是保護球門。" },
+            { en: "Defenders try to get the ball away from the other team.", zh: "防守員（後衛）試著從對方球隊那裡把球搶走。" },
+            { en: "Forwards try to kick the ball into the other team’s goal.", zh: "前鋒則是負責試著把球踢進對方的球門。" },
+            { en: "Games usually last ninety minutes.", zh: "比賽通常會持續九十分鐘。" },
+            { en: "The team with the most points is the winner!", zh: "得到最多分數的隊伍就是贏家！" }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel(); // 確保不會卡語音
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+                if (googleVoice) u.voice = googleVoice;
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
+            transHint.style.display = 'block';
+
+            let rawText = gameSentences[currentGameIndex].en;
+            rawText = rawText.replace(/[.,!?"]/g, '');
+            currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.textContent = gameSentences[currentGameIndex].en;
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
+
 </html>
