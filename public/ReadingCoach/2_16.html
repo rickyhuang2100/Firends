@@ -539,9 +539,17 @@
             <div id="reconstruction" class="tab-content">
                 <h3>🎧 聽音重組挑戰</h3>
                 <div class="info-box">
-                    <p>點擊下方單字庫的單字，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
                 </div>
                 <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
                     <div style="text-align: center; margin-bottom: 20px;">
                         <span id="gameProgress"
                             style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
@@ -585,23 +593,32 @@
 
         // --- 聽音重組遊戲邏輯 ---
         const gameSentences = [
-            { en: "The Statue of Liberty is a statue of a woman.", zh: "自由女神像是一座女子的雕像。" },
-            { en: "A statue is a piece of art.", zh: "雕像是一種藝術品。" },
-            { en: "Statues are made in the shape of humans or animals.", zh: "雕像通常被製作成人類或動物的形狀。" },
-            { en: "The Statue of Liberty has a crown on her head.", zh: "自由女神像頭上戴著一頂皇冠。" },
-            { en: "She is holding a torch high above her head.", zh: "她將一把火炬高高舉在頭頂上。" },
-            { en: "The Statue of Liberty is a symbol of freedom.", zh: "自由女神像是自由的象徵。" },
-            { en: "The word liberty means freedom.", zh: "「liberty」這個詞的意思就是自由。" },
-            { en: "France gave the United States of America the Statue of Liberty.", zh: "法國將自由女神像送給了美利堅合眾國（美國）。" },
-            { en: "It was as a gift.", zh: "這是作為一份禮物。" },
-            { en: "France is a country in Europe.", zh: "法國是歐洲的一個國家。" },
-            { en: "France wanted to give the United States this gift to celebrate their friendship.", zh: "法國想送給美國這份禮物，以慶祝他們之間的友誼。" }
+            { en: "The Statue of Liberty is a statue of a woman.", zh: "自由女神像是一座女子的雕像。", chunks: ["the statue of liberty", "is a statue", "of a woman"] },
+            { en: "A statue is a piece of art.", zh: "雕像是一種藝術品。", chunks: ["a statue", "is a piece of art"] },
+            { en: "Statues are made in the shape of humans or animals.", zh: "雕像通常被製作成人類或動物的形狀。", chunks: ["statues are made", "in the shape of", "humans or animals"] },
+            { en: "The Statue of Liberty has a crown on her head.", zh: "自由女神像頭上戴著一頂皇冠。", chunks: ["the statue of liberty", "has a crown", "on her head"] },
+            { en: "She is holding a torch high above her head.", zh: "她將一把火炬高高舉在頭頂上。", chunks: ["she is holding", "a torch", "high above her head"] },
+            { en: "The Statue of Liberty is a symbol of freedom.", zh: "自由女神像是自由的象徵。", chunks: ["the statue of liberty", "is a symbol", "of freedom"] },
+            { en: "The word liberty means freedom.", zh: "「liberty」這個詞的意思就是自由。", chunks: ["the word liberty", "means freedom"] },
+            { en: "France gave the United States of America the Statue of Liberty.", zh: "法國將自由女神像送給了美利堅合眾國（美國）。", chunks: ["france gave", "the united states of america", "the statue of liberty"] },
+            { en: "It was as a gift.", zh: "這是作為一份禮物。", chunks: ["it was", "as a gift"] },
+            { en: "France is a country in Europe.", zh: "法國是歐洲的一個國家。", chunks: ["france is a country", "in europe"] },
+            { en: "France wanted to give the United States this gift to celebrate their friendship.", zh: "法國想送給美國這份禮物，以慶祝他們之間的友誼。", chunks: ["france wanted to give", "the united states", "this gift", "to celebrate", "their friendship"] }
         ];
 
         let currentGameIndex = 0;
         let currentWords = [];
         let answerWords = [];
         let bankWords = [];
+        let gameMode = 'chunk'; // 預設使用語塊模式
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
 
         function playGoogleTTS(text) {
             const synth = window.speechSynthesis;
@@ -660,10 +677,13 @@
             transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
             transHint.style.display = 'block';
 
-            // 處理單字：轉小寫、濾掉標點符號
-            let rawText = gameSentences[currentGameIndex].en;
-            rawText = rawText.replace(/[.,!?"]/g, ''); // 移除基本標點
-            currentWords = rawText.split(' ').filter(w => w.length > 0).map(w => w.toLowerCase());
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?"]/g, ''); // 移除基本標點
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
 
             answerWords = [];
             bankWords = [...currentWords];
@@ -730,12 +750,12 @@
 
                     setTimeout(() => {
                         playGoogleTTS(gameSentences[currentGameIndex].en); // 答對了再整句唸一次加強印象
-                    }, 500);
+                    }, 1000);
                 }
             } else {
                 // 點錯了！給予視覺與文字提示
                 const statusDiv = document.getElementById('gameStatus');
-                statusDiv.textContent = "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
                 statusDiv.className = "game-status status-wrong";
 
                 const buttons = document.getElementById('wordBank').children;

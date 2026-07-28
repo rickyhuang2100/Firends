@@ -1,50 +1,360 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Helping Drivers See Safely</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 80px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+        }
+
+        .word-block {
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #2196F3;
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #c62828 !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Helping Drivers See Safely</h1>
-        <a href="2_19_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="https://1drv.ms/w/c/6678322931217c5f/IQC8Vw98fFaERbBhsoaC7Y68Aa9CVWA8g7PUU-Bjjuf2QeE?e=HuOyS2" target="_blank">沈浸式閱讀程式</a> 
+        <a href="2_19_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQC8Vw98fFaERbBhsoaC7Y68Aa9CVWA8g7PUU-Bjjuf2QeE?e=HuOyS2"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -59,6 +369,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -67,22 +378,28 @@
                 <div class="info-box">
                     <h4 style="color: #2196F3; margin-bottom: 15px;">幫助駕駛看清楚以保證安全</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        很久以前，Mary Anderson 搭乘了一輛路面電車。那是一個下雨的天氣。駕駛無法看穿前方的窗戶。他必須停下電車，走到外面去清理車窗。當他回來時，他全身都溼透了。Anderson 想出了一個可以從車內清理車窗的方法。她做了一個末端帶有橡膠片的手柄。駕駛可以從車內轉動這個手柄。轉動手柄會推動橡膠片滑過窗戶。她將她的發明稱為「擋風玻璃雨刷」。現在人們在雨中開車時，能保持安全和乾爽了！
+                        很久以前，Mary Anderson 搭乘了一輛路面電車。那是一個下雨的天氣。駕駛無法看穿前方的窗戶。他必須停下電車，走到外面去清理車窗。當他回來時，他全身都溼透了。Anderson
+                        想出了一個可以從車內清理車窗的方法。她做了一個末端帶有橡膠片的手柄。駕駛可以從車內轉動這個手柄。轉動手柄會推動橡膠片滑過窗戶。她將她的發明稱為「擋風玻璃雨刷」。現在人們在雨中開車時，能保持安全和乾爽了！
                     </p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Long ago, Mary Anderson took a ride in a streetcar. It was a rainy day.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>很久以前，Mary Anderson 搭乘了一輛路面電車。那是一個下雨的天氣。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Long ago, Mary Anderson took a ride in
+                                a streetcar. It was a rainy day.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>很久以前，Mary Anderson 搭乘了一輛路面電車。那是一個下雨的天氣。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The driver could not see through the front window.</td>
+                            <td style="padding: 10px; vertical-align: top;">The driver could not see through the front
+                                window.</td>
                             <td style="padding: 10px; vertical-align: top;">駕駛無法看穿前方的窗戶。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">He had to stop the streetcar and go outside to clean the window.</td>
+                            <td style="padding: 10px; vertical-align: top;">He had to stop the streetcar and go outside
+                                to clean the window.</td>
                             <td style="padding: 10px; vertical-align: top;">他必須停下電車，走到外面去清理車窗。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
@@ -90,27 +407,33 @@
                             <td style="padding: 10px; vertical-align: top;">當他回來時，他全身都溼透了。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Anderson thought of a way to clean the window from inside the car.</td>
+                            <td style="padding: 10px; vertical-align: top;">Anderson thought of a way to clean the
+                                window from inside the car.</td>
                             <td style="padding: 10px; vertical-align: top;">Anderson 想出了一個可以從車內清理車窗的方法。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She made a handle with a rubber blade at the end.</td>
+                            <td style="padding: 10px; vertical-align: top;">She made a handle with a rubber blade at the
+                                end.</td>
                             <td style="padding: 10px; vertical-align: top;">她做了一個末端帶有橡膠片的手柄。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The driver could move the handle from inside a car.</td>
+                            <td style="padding: 10px; vertical-align: top;">The driver could move the handle from inside
+                                a car.</td>
                             <td style="padding: 10px; vertical-align: top;">駕駛可以從車內轉動這個手柄。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The handle pushed the blade across the window.</td>
+                            <td style="padding: 10px; vertical-align: top;">The handle pushed the blade across the
+                                window.</td>
                             <td style="padding: 10px; vertical-align: top;">轉動的手柄會推動推著橡膠片滑過窗戶。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She called her invention the windshield wiper.</td>
+                            <td style="padding: 10px; vertical-align: top;">She called her invention the windshield
+                                wiper.</td>
                             <td style="padding: 10px; vertical-align: top;">她將她的發明稱為「擋風玻璃雨刷」。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Now people stay safe and dry when driving in the rain!</td>
+                            <td style="padding: 10px; vertical-align: top;">Now people stay safe and dry when driving in
+                                the rain!</td>
                             <td style="padding: 10px; vertical-align: top;">現在我們在雨中開車時，能保持安全和乾爽了！</td>
                         </tr>
                     </table>
@@ -120,49 +443,356 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">streetcar</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">路面電車</div></div>
-                    <div class="vocab-item"><div class="vocab-word">handle</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">手柄，把手</div></div>
-                    <div class="vocab-item"><div class="vocab-word">rubber</div><div class="vocab-type">[名詞/形容詞]</div><div class="vocab-meaning">橡膠（作形容詞用指橡膠製的）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">blade</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">刀片（用在這裡指雨刷的橡膠斜片）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">invention</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">發明</div></div>
-                    <div class="vocab-item"><div class="vocab-word">windshield wiper</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">擋風玻璃雨刷</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">streetcar</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">路面電車</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">handle</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">手柄，把手</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">rubber</div>
+                        <div class="vocab-type">[名詞/形容詞]</div>
+                        <div class="vocab-meaning">橡膠（作形容詞用指橡膠製的）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">blade</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">刀片（用在這裡指雨刷的橡膠斜片）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">invention</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">發明</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">windshield wiper</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">擋風玻璃雨刷</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. can 的過去式 could</div><div class="example">The driver <span class="highlight">could not</span> see through the front window.</div><p>因為這是一篇講述過去發生的人物的發明故事，所以情態動詞由 can 改為過去式 could。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. think of a way to + V</div><div class="example">Anderson <span class="highlight">thought of a way to clean</span> the window...</div><p>think of... 指的是「想到了...」。而 a way to + V 則是用來說明這個「方法」是用來做什麼的。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. 連接詞 when 當作「當...的時候」</div><div class="example"><span class="highlight">When he came back</span>, he was all wet.</div><p>when 引導的時間副詞子句在句子中，用來表示「在某個時間點的狀況」。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. can 的過去式 could</div>
+                    <div class="example">The driver <span class="highlight">could not</span> see through the front
+                        window.</div>
+                    <p>因為這是一篇講述過去發生的人物的發明故事，所以情態動詞由 can 改為過去式 could。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. think of a way to + V</div>
+                    <div class="example">Anderson <span class="highlight">thought of a way to clean</span> the window...
+                    </div>
+                    <p>think of... 指的是「想到了...」。而 a way to + V 則是用來說明這個「方法」是用來做什麼的。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. 連接詞 when 當作「當...的時候」</div>
+                    <div class="example"><span class="highlight">When he came back</span>, he was all wet.</div>
+                    <p>when 引導的時間副詞子句在句子中，用來表示「在某個時間點的狀況」。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: have to 必須（過去式）</strong><div class="example">He <span class="highlight">had to</span> stop the streetcar...</div><p>had to 是 have to 的過去式，用在過去的時間點裡表達「不得不、必須」做某件事。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: call + 某物 + 某名稱</strong><div class="example">She <span class="highlight">called her invention</span> the windshield wiper.</div><p>把某個東西（她的發明）取名「稱作為」（擋風玻璃雨刷）。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: when driving 省略動詞用法</strong><div class="example">... stay safe and dry <span class="highlight">when driving</span> in the rain!</div><p>其實這是 "when people are driving" 的縮短寫法，因為主詞相同，且是主動進行，就直接剩下 when + V-ing。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: have to 必須（過去式）</strong>
+                    <div class="example">He <span class="highlight">had to</span> stop the streetcar...</div>
+                    <p>had to 是 have to 的過去式，用在過去的時間點裡表達「不得不、必須」做某件事。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: call + 某物 + 某名稱</strong>
+                    <div class="example">She <span class="highlight">called her invention</span> the windshield wiper.
+                    </div>
+                    <p>把某個東西（她的發明）取名「稱作為」（擋風玻璃雨刷）。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: when driving 省略動詞用法</strong>
+                    <div class="example">... stay safe and dry <span class="highlight">when driving</span> in the rain!
+                    </div>
+                    <p>其實這是 "when people are driving" 的縮短寫法，因為主詞相同，且是主動進行，就直接剩下 when + V-ing。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：介紹發明的記敘文</strong><p>文章第一段描寫發明雨刷之前的困境：駕駛因為下雨看不見，還得下車擦窗戶而全身濕透。第二段開始描寫主角 Anderson 想到的解決方式與構造（用橡膠片的手柄）。最後一段用一句話說明此項發明的成果，帶給現在的人多大的便利。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What did Mary Anderson ride in a long time ago?</li><li>Why did the driver have to go outside the streetcar?</li><li>What did Mary Anderson call her new invention?</li></ol></div>
+                <div class="info-box"><strong>文章結構：介紹發明的記敘文</strong>
+                    <p>文章第一段描寫發明雨刷之前的困境：駕駛因為下雨看不見，還得下車擦窗戶而全身濕透。第二段開始描寫主角 Anderson
+                        想到的解決方式與構造（用橡膠片的手柄）。最後一段用一句話說明此項發明的成果，帶給現在的人多大的便利。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What did Mary Anderson ride in a long time ago?</li>
+                        <li>Why did the driver have to go outside the streetcar?</li>
+                        <li>What did Mary Anderson call her new invention?</li>
+                    </ol>
+                </div>
             </div>
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            1</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+
+                    <div class="game-controls" style="text-align: center; margin-top: 15px;">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Helping Drivers See Safely\n\nLong ago, Mary Anderson took a ride in a streetcar. It was a rainy day. The driver could not see through the front window. He had to stop the streetcar and go outside to clean the window. When he came back, he was all wet.\n\nAnderson thought of a way to clean the window from inside the car. She made a handle with a rubber blade at the end. The driver could move the handle from inside a car. The handle pushed the blade across the window. She called her invention the windshield wiper.\n\nNow people stay safe and dry when driving in the rain!`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        const gameSentences = [
+            {
+                en: "Long ago, Mary Anderson took a ride in a streetcar. It was a rainy day.",
+                zh: "很久以前，Mary Anderson 搭乘了一輛路面電車。那是一個下雨的天氣。",
+                chunks: ["long ago", "mary anderson", "took a ride", "in a streetcar", "it was", "a rainy day"]
+            },
+            {
+                en: "The driver could not see through the front window.",
+                zh: "駕駛無法看穿前方的窗戶。",
+                chunks: ["the driver", "could not see", "through", "the front window"]
+            },
+            {
+                en: "He had to stop the streetcar and go outside to clean the window.",
+                zh: "他必須停下電車，走到外面去清理車窗。",
+                chunks: ["he had to", "stop the streetcar", "and", "go outside", "to clean", "the window"]
+            },
+            {
+                en: "When he came back, he was all wet.",
+                zh: "當他回來時，他全身都溼透了。",
+                chunks: ["when", "he came back", "he was", "all wet"]
+            },
+            {
+                en: "Anderson thought of a way to clean the window from inside the car.",
+                zh: "Anderson 想出了一個可以從車內清理車窗的方法。",
+                chunks: ["anderson", "thought of a way", "to clean the window", "from inside the car"]
+            },
+            {
+                en: "She made a handle with a rubber blade at the end.",
+                zh: "她做了一個末端帶有橡膠片的手柄。",
+                chunks: ["she made", "a handle", "with a rubber blade", "at the end"]
+            },
+            {
+                en: "The driver could move the handle from inside a car.",
+                zh: "駕駛可以從車內轉動這個手柄。",
+                chunks: ["the driver", "could move", "the handle", "from inside a car"]
+            },
+            {
+                en: "The handle pushed the blade across the window.",
+                zh: "轉動的手柄會推動推著橡膠片滑過窗戶。",
+                chunks: ["the handle", "pushed the blade", "across the window"]
+            },
+            {
+                en: "She called her invention the windshield wiper.",
+                zh: "她將她的發明稱為「擋風玻璃雨刷」。",
+                chunks: ["she called", "her invention", "the windshield wiper"]
+            },
+            {
+                en: "Now people stay safe and dry when driving in the rain!",
+                zh: "現在我們在雨中開車時，能保持安全和乾爽了！",
+                chunks: ["now", "people stay", "safe and dry", "when driving", "in the rain"]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk'; // 預設使用語塊模式
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+                if (googleVoice) u.voice = googleVoice;
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?"]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.textContent = gameSentences[currentGameIndex].en;
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1000);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
+
 </html>

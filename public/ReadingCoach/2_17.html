@@ -527,9 +527,17 @@
             <div id="reconstruction" class="tab-content">
                 <h3>🎧 聽音重組挑戰</h3>
                 <div class="info-box">
-                    <p>點擊下方單字庫的單字，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！</p>
                 </div>
                 <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
                     <div style="text-align: center; margin-bottom: 20px;">
                         <span id="gameProgress"
                             style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
@@ -572,21 +580,30 @@
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         const gameSentences = [
-            { en: "In the United States, people celebrate Independence Day on July 4.", zh: "在美國，人們在7月4日慶祝獨立紀念日。" },
-            { en: "Mexico has an Independence Day, too! Mexico celebrates its independence on September 16.", zh: "墨西哥也有獨立紀念日！墨西哥在9月16日慶祝他們的獨立。" },
-            { en: "Mexico was ruled by Spain for around three hundred years.", zh: "墨西哥被西班牙統治了大約三百年。" },
-            { en: "Then, on September 16, 1810, a priest in Mexico spoke up.", zh: "接著，在1810年的9月16日，墨西哥的一位神父站出來發聲。" },
-            { en: "He called for people to go against the Spanish.", zh: "他呼籲人們起身反抗西班牙人。" },
-            { en: "He wanted them to fight for freedom!", zh: "他希望他們能為自由而戰！" },
-            { en: "Mexico didn’t become free from Spain for years.", zh: "墨西哥在接下來的好幾年裡並沒有真正從西班牙獲得自由。" },
-            { en: "But Mexicans celebrate the day the priest called for freedom.", zh: "但墨西哥人依然慶祝這位神父呼籲自由的這一天。" },
-            { en: "Big bands play in the streets. People set off fireworks. And people eat great food!", zh: "大樂隊在街上演奏著。人們施放煙火。而且人們會品嚐美食！" }
+            { en: "In the United States, people celebrate Independence Day on July 4.", zh: "在美國，人們在7月4日慶祝獨立紀念日。", chunks: ["in the united states", "people celebrate", "independence day", "on july 4"] },
+            { en: "Mexico has an Independence Day, too! Mexico celebrates its independence on September 16.", zh: "墨西哥也有獨立紀念日！墨西哥在9月16日慶祝他們的獨立。", chunks: ["mexico has", "an independence day too", "mexico celebrates", "its independence", "on september 16"] },
+            { en: "Mexico was ruled by Spain for around three hundred years.", zh: "墨西哥被西班牙統治了大約三百年。", chunks: ["mexico was ruled", "by spain", "for around", "three hundred years"] },
+            { en: "Then, on September 16, 1810, a priest in Mexico spoke up.", zh: "接著，在1810年的9月16日，墨西哥的一位神父站出來發聲。", chunks: ["then on september 16 1810", "a priest in mexico", "spoke up"] },
+            { en: "He called for people to go against the Spanish.", zh: "他呼籲人們起身反抗西班牙人。", chunks: ["he called for people", "to go against", "the spanish"] },
+            { en: "He wanted them to fight for freedom!", zh: "他希望他們能為自由而戰！", chunks: ["he wanted them", "to fight for freedom"] },
+            { en: "Mexico didn’t become free from Spain for years.", zh: "墨西哥在接下來的好幾年裡並沒有真正從西班牙獲得自由。", chunks: ["mexico didn't become free", "from spain", "for years"] },
+            { en: "But Mexicans celebrate the day the priest called for freedom.", zh: "但墨西哥人依然慶祝這位神父呼籲自由的這一天。", chunks: ["but mexicans celebrate", "the day", "the priest called for freedom"] },
+            { en: "Big bands play in the streets. People set off fireworks. And people eat great food!", zh: "大樂隊在街上演奏著。人們施放煙火。而且人們會品嚐美食！", chunks: ["big bands play", "in the streets", "people set off fireworks", "and people eat", "great food"] }
         ];
 
         let currentGameIndex = 0;
         let currentWords = [];
         let answerWords = [];
         let bankWords = [];
+        let gameMode = 'chunk'; // 預設使用語塊模式
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
 
         function playGoogleTTS(text) {
             const synth = window.speechSynthesis;
@@ -636,9 +653,13 @@
             transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
             transHint.style.display = 'block';
 
-            let rawText = gameSentences[currentGameIndex].en;
-            rawText = rawText.replace(/[.,!?"]/g, '');
-            currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?"]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
 
             answerWords = [];
             bankWords = [...currentWords];
@@ -701,11 +722,11 @@
 
                     setTimeout(() => {
                         playGoogleTTS(gameSentences[currentGameIndex].en);
-                    }, 500);
+                    }, 1000);
                 }
             } else {
                 const statusDiv = document.getElementById('gameStatus');
-                statusDiv.textContent = "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
                 statusDiv.className = "game-status status-wrong";
 
                 const buttons = document.getElementById('wordBank').children;
