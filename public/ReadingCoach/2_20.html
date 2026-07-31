@@ -31,6 +31,21 @@
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
         .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
         .tab-content { display: none; } .tab-content.active { display: block; }
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+        /* 聽音重組遊戲樣式 */
+        .game-board { background-color: #f0f8ff; padding: 20px; border-radius: 8px; border: 2px solid #64b5f6; margin-top: 15px; }
+        .answer-area { min-height: 60px; padding: 15px; background-color: white; border: 2px dashed #90caf9; border-radius: 5px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .word-bank { min-height: 80px; padding: 15px; background-color: #e3f2fd; border-radius: 5px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .word-block { background-color: white; color: #1565c0; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 18px; font-weight: bold; border: 2px solid #64b5f6; user-select: none; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .word-block:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .word-block:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .game-controls { text-align: center; margin: 20px 0; }
+        .game-status { text-align: center; font-size: 18px; font-weight: bold; margin-top: 15px; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #c62828 !important; }
     </style>
 </head>
 <body>
@@ -59,6 +74,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -150,6 +166,32 @@
                 <div class="info-box"><strong>文章結構：作家生平與作品簡介</strong><p>介紹著名美國非裔女性作家 Toni Morrison，講述她作品的主要探討議題（種族歧視、自我認同、社群），以及她的創作風格（融入神話與詩歌）。接著提到她的全球影響力與得獎經歷，最後補充她也曾與兒子共同創作過童書，鼓勵讀者可以去找來閱讀。</p></div>
                 <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Who did Toni Morrison write about in her books?</li><li>What did many of her characters experience in her stories?</li><li>Who did Toni Morrison write children's books with?</li></ol></div>
             </div>
+            
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn" style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn" style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress" style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 / 11</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;" onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div id="reviewArea"></div>
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn" onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint" style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;"></div>
+                </div>
+            </div>
         </div>
     </div>
 <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
@@ -167,7 +209,309 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Toni Morrison was an African American author.",
+                zh: "Toni Morrison 是一位非裔美國作家。",
+                chunks: ["toni morrison was", "an african american", "author"],
+                reviewData: [
+                    { chunk: "an african american", meaning: "一位非裔美國人", collocation: "an African American writer", synonym: "a Black American", pronunciation: "an 的字尾 /n/ 會跟 African 的 /æ/ 連讀，聽起來像 /ə'næfrɪkən/。" }
+                ]
+            },
+            {
+                en: "She wrote about Black Americans and their lives.",
+                zh: "她描寫美國黑人以及他們的生活。",
+                chunks: ["she wrote about", "black americans", "and their lives"],
+                reviewData: [
+                    { chunk: "wrote about", meaning: "描寫、寫關於...", collocation: "write about life / write about love", synonym: "described / discussed", pronunciation: "wrote 的 /t/ 常跟 about 的 /ə/ 連讀，變成類似 D 聲音的閃音 /roʊɾəbaʊt/。" }
+                ]
+            },
+            {
+                en: "Many of her characters experienced racism.",
+                zh: "她的許多角色都經歷過種族歧視。",
+                chunks: ["many of her characters", "experienced racism"],
+                reviewData: [
+                    { chunk: "experienced racism", meaning: "經歷過種族歧視", collocation: "experience difficulties / face racism", synonym: "faced discrimination", pronunciation: "experienced 字尾 /t/ 跟 racism 開頭 /r/ 一起唸，中間不停頓。" }
+                ]
+            },
+            {
+                en: "She wrote about these characters dealing with those struggles.",
+                zh: "她描寫這些角色如何應對那些掙扎（困境）。",
+                chunks: ["she wrote about", "these characters", "dealing with", "those struggles"],
+                reviewData: [
+                    { chunk: "dealing with", meaning: "應對、處理", collocation: "deal with problems / deal with stress", synonym: "handling / coping with", pronunciation: "dealing 的 /ŋ/ 與 with 的 /w/ 緊密連接，自然滑過。" }
+                ]
+            },
+            {
+                en: "She also wrote about people understanding where they belong in their community.",
+                zh: "她也描寫人們如何理解自己在社區（社群）中的歸屬感。",
+                chunks: ["she also wrote about", "people understanding", "where they belong", "in their community"],
+                reviewData: [
+                    { chunk: "where they belong", meaning: "他們的歸屬(地)", collocation: "belong to a group / a sense of belonging", synonym: "their place / where they fit in", pronunciation: "where 的 /r/ (美音) 直接滑入 they 的 /ð/。" }
+                ]
+            },
+            {
+                en: "She used myth and poetry in her books.",
+                zh: "她在她的書中使用了神話和詩歌。",
+                chunks: ["she used", "myth and poetry", "in her books"],
+                reviewData: [
+                    { chunk: "myth and poetry", meaning: "神話和詩歌", collocation: "ancient myth / write poetry", synonym: "legends and poems", pronunciation: "myth 字尾的 /θ/ 接 and，發音時要注意咬舌音。" }
+                ]
+            },
+            {
+                en: "Many people around the world love her writing. She even won many awards for her writing.",
+                zh: "世界各地的許多人都熱愛她的作品。她甚至因為她的寫作贏得了許多獎項。",
+                chunks: ["many people", "around the world", "love her writing", "she even won", "many awards", "for her writing"],
+                reviewData: [
+                    { chunk: "around the world", meaning: "世界各地", collocation: "travel around the world", synonym: "all over the world / worldwide", pronunciation: "around 的 /d/ 常不完全爆破，甚至省略，直接接 the 的 /ð/。" },
+                    { chunk: "won many awards", meaning: "贏得許多獎項", collocation: "win a prize / receive an award", synonym: "received many honors", pronunciation: "won 的 /n/ 跟 many 的 /m/ 都是鼻音，自然過渡。" }
+                ]
+            },
+            {
+                en: "Toni Morrison wrote her whole life.",
+                zh: "Toni Morrison 寫作了一生。",
+                chunks: ["toni morrison wrote", "her whole life"],
+                reviewData: [
+                    { chunk: "her whole life", meaning: "她的一生", collocation: "spend one's whole life", synonym: "her entire life", pronunciation: "her 的 /h/ 在語句中常被弱化，聽起來像 wrote (h)er。" }
+                ]
+            },
+            {
+                en: "Toni Morrison even wrote a few children’s books! She wrote them with her son.",
+                zh: "Toni Morrison 甚至寫了幾本童書！她和她的兒子一起寫了這些書。",
+                chunks: ["toni morrison even wrote", "a few children's books", "she wrote them", "with her son"],
+                reviewData: [
+                    { chunk: "a few", meaning: "幾個、少數幾個", collocation: "a few friends / a few days", synonym: "several / some", pronunciation: "a 跟 few 中間沒有停頓。" },
+                    { chunk: "wrote them", meaning: "寫下它們", collocation: "wrote it / read them", synonym: "authored them", pronunciation: "them 的 /ð/ 有時在快速講話中弱化為 /əm/，變成 /roʊtəm/。" }
+                ]
+            },
+            {
+                en: "One of these books is called Who’s Got Game?: The Ant or the Grasshopper?",
+                zh: "其中一本書名為《Who’s Got Game?: The Ant or the Grasshopper?》。",
+                chunks: ["one of these books", "is called", "who's got game", "the ant or the grasshopper"],
+                reviewData: [
+                    { chunk: "one of these books", meaning: "這些書中的其中一本", collocation: "one of my friends", synonym: "a book among them", pronunciation: "one 的 /n/ 會跟 of 的 /ə/ 連讀，聽起來像 /wʌnəv/。" },
+                    { chunk: "is called", meaning: "名為、被稱為", collocation: "is named / is known as", synonym: "is titled", pronunciation: "called 的 /d/ 常不發出強烈聲音，停頓一下即可。" }
+                ]
+            },
+            {
+                en: "Maybe you can find one of her children’s books in the library!",
+                zh: "也許你可以在圖書館裡找到一本她的童書！",
+                chunks: ["maybe you can find", "one of her", "children's books", "in the library"],
+                reviewData: [
+                    { chunk: "in the library", meaning: "在圖書館裡", collocation: "go to the library", synonym: "at the library", pronunciation: "in 的 /n/ 接 the 的 /ð/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk';
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+                
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('reviewArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?”“:]/g, ''); 
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    finalSentence.textContent = gameSentences[currentGameIndex].en;
+                    wordBank.appendChild(finalSentence);
+
+                    const reviewData = gameSentences[currentGameIndex].reviewData;
+                    if (reviewData && reviewData.length > 0 && gameMode === 'chunk') {
+                        const reviewArea = document.getElementById('reviewArea');
+                        reviewArea.innerHTML = '';
+                        
+                        const reviewContainer = document.createElement('div');
+                        reviewContainer.className = 'post-submit-review';
+                        reviewContainer.style.marginTop = '20px';
+                        reviewContainer.style.textAlign = 'left';
+
+                        const reviewTitle = document.createElement('h4');
+                        reviewTitle.textContent = "📚 語塊精解模式";
+                        reviewTitle.style.color = '#2196F3';
+                        reviewTitle.style.borderBottom = '2px solid #2196F3';
+                        reviewTitle.style.paddingBottom = '5px';
+                        reviewTitle.style.marginBottom = '15px';
+                        reviewTitle.style.fontSize = '18px';
+                        reviewContainer.appendChild(reviewTitle);
+
+                        reviewData.forEach(item => {
+                            const card = document.createElement('div');
+                            card.className = 'chunk-review-card';
+                            card.style.backgroundColor = '#f1f8e9';
+                            card.style.borderLeft = '4px solid #8bc34a';
+                            card.style.padding = '15px';
+                            card.style.marginBottom = '10px';
+                            card.style.borderRadius = '6px';
+                            card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                            card.innerHTML = `
+                                <div style="font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;">📌 語塊範例：${item.chunk}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>中文語意：</strong> ${item.meaning}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>母語者搭配 (Collocations)：</strong> ${item.collocation}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>同義替換 (Synonyms)：</strong> ${item.synonym}</div>
+                                <div style="font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;"><strong>🎧 聽力連讀點：</strong> ${item.pronunciation}</div>
+                            `;
+                            reviewContainer.appendChild(card);
+                        });
+
+                        reviewArea.appendChild(reviewContainer);
+                    }
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 </html>
