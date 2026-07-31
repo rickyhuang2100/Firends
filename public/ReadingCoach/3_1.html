@@ -1,48 +1,385 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Sister Problems</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #64b5f6;
+            margin-top: 15px;
+        }
+
+        .answer-area {
+            min-height: 60px;
+            padding: 15px;
+            background-color: white;
+            border: 2px dashed #90caf9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .word-bank {
+            min-height: 80px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-block {
+            background-color: white;
+            color: #1565c0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid #64b5f6;
+            user-select: none;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .word-block:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .game-status {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #c62828 !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Sister Problems</h1>
+        <a href="3_1_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQAG2vbvj7cwQJy0UWAaLMZrAUCeEI4oyLtrGdxdzeOH99k?e=W25D4z"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -57,6 +394,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧
+                    聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -94,38 +433,106 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">babysitting</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">照顧小孩、看小孩</div></div>
-                    <div class="vocab-item"><div class="vocab-word">stared</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">盯著看、瞪著</div></div>
-                    <div class="vocab-item"><div class="vocab-word">borrowed</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">借（向別人借）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">stained</div><div class="vocab-type">[動詞/形容詞]</div><div class="vocab-meaning">弄髒、染上污漬</div></div>
-                    <div class="vocab-item"><div class="vocab-word">responsibility</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">責任</div></div>
-                    <div class="vocab-item"><div class="vocab-word">calmly</div><div class="vocab-type">[副詞]</div><div class="vocab-meaning">冷靜地</div></div>
-                    <div class="vocab-item"><div class="vocab-word">fault</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">過錯、錯誤</div></div>
-                    <div class="vocab-item"><div class="vocab-word">closet</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">衣櫃</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">babysitting</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">照顧小孩、看小孩</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stared</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">盯著看、瞪著</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">borrowed</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">借（向別人借）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stained</div>
+                        <div class="vocab-type">[動詞/形容詞]</div>
+                        <div class="vocab-meaning">弄髒、染上污漬</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">responsibility</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">責任</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">calmly</div>
+                        <div class="vocab-type">[副詞]</div>
+                        <div class="vocab-meaning">冷靜地</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">fault</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">過錯、錯誤</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">closet</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">衣櫃</div>
+                    </div>
                 </div>
             </div>
 
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. "be supposed to + V" 應該要做某事</div><p>表示某人被期望做某事、應該做某事：</p><div class="example">Maria <span class="highlight">was supposed to be</span> babysitting.<br>→ Maria 本來應該要在照顧小孩。</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "without + V-ing" 沒有先做某事就...</div><p>介係詞 without 後面接動名詞（V-ing），表示在沒有做某動作的情況下：</p><div class="example">She took it <span class="highlight">without asking</span>.<br>→ 她沒有先問就拿走了。</div></div>
-                <div class="grammar-box"><div class="grammar-title">3. "should have + 過去分詞" 當初應該...</div><p>表示過去應該做但沒做的事，帶有後悔的語氣：</p><div class="example">I <span class="highlight">should have asked</span> you.<br>→ 我當初應該先問你的。</div></div>
-                <div class="grammar-box"><div class="grammar-title">4. "It is + one's + responsibility" 那是某人的責任</div><p>表達責任歸屬：</p><div class="example">It is <span class="highlight">your responsibility</span> because you took it.<br>→ 這是你的責任，因為是你拿走了它。</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "be supposed to + V" 應該要做某事</div>
+                    <p>表示某人被期望做某事、應該做某事：</p>
+                    <div class="example">Maria <span class="highlight">was supposed to be</span> babysitting.<br>→ Maria
+                        本來應該要在照顧小孩。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "without + V-ing" 沒有先做某事就...</div>
+                    <p>介係詞 without 後面接動名詞（V-ing），表示在沒有做某動作的情況下：</p>
+                    <div class="example">She took it <span class="highlight">without asking</span>.<br>→ 她沒有先問就拿走了。
+                    </div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "should have + 過去分詞" 當初應該...</div>
+                    <p>表示過去應該做但沒做的事，帶有後悔的語氣：</p>
+                    <div class="example">I <span class="highlight">should have asked</span> you.<br>→ 我當初應該先問你的。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">4. "It is + one's + responsibility" 那是某人的責任</div>
+                    <p>表達責任歸屬：</p>
+                    <div class="example">It is <span class="highlight">your responsibility</span> because you took
+                        it.<br>→ 這是你的責任，因為是你拿走了它。</div>
+                </div>
             </div>
 
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: be supposed to + V（應該要）</strong><div class="example">Maria <span class="highlight">was supposed to be</span> babysitting.<br>→ 表示本來被期望要做某事（但可能沒做或即將做）</div></div>
-                <div class="sentence-pattern"><strong>句型 2: without + V-ing（沒有先...就...）</strong><div class="example">She took it <span class="highlight">without asking</span>, and then she got it stained.<br>→ 用 without + 動名詞表達「省略了某步驟」</div></div>
-                <div class="sentence-pattern"><strong>句型 3: The best way for you to... is to...（最好的方式是...）</strong><div class="example"><span class="highlight">The best way for you to</span> speak to your sister <span class="highlight">is to</span> be calm and talk about what is wrong.<br>→ 建議某人做某事的禮貌句型</div></div>
-                <div class="sentence-pattern"><strong>句型 4: should have + 過去分詞（當初應該...）</strong><div class="example">I <span class="highlight">should have asked</span> you.<br>→ 表示後悔過去沒有做某事</div></div>
-                <div class="sentence-pattern"><strong>句型 5: Isn't it better that + S + V...?（...不是更好嗎？）</strong><div class="example"><span class="highlight">Isn't it better that</span> you spoke about it?<br>→ 反問句，暗示好好說話是更好的選擇</div></div>
-                <div class="info-box"><strong>💡 對話中常用的表達</strong><ul>
-                    <li>"Let's slow down." → 我們慢慢來（緩和氣氛）</li>
-                    <li>"I guess so." → 我想是吧（不情願地承認）</li>
-                    <li>"Go ahead." → 來吧、請開始</li>
-                    <li>"I don't like it when you..." → 我不喜歡你...的時候</li>
-                </ul></div>
+                <div class="sentence-pattern"><strong>句型 1: be supposed to + V（應該要）</strong>
+                    <div class="example">Maria <span class="highlight">was supposed to be</span> babysitting.<br>→
+                        表示本來被期望要做某事（但可能沒做或即將做）</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: without + V-ing（沒有先...就...）</strong>
+                    <div class="example">She took it <span class="highlight">without asking</span>, and then she got it
+                        stained.<br>→ 用 without + 動名詞表達「省略了某步驟」</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: The best way for you to... is to...（最好的方式是...）</strong>
+                    <div class="example"><span class="highlight">The best way for you to</span> speak to your sister
+                        <span class="highlight">is to</span> be calm and talk about what is wrong.<br>→ 建議某人做某事的禮貌句型
+                    </div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 4: should have + 過去分詞（當初應該...）</strong>
+                    <div class="example">I <span class="highlight">should have asked</span> you.<br>→ 表示後悔過去沒有做某事</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 5: Isn't it better that + S + V...?（...不是更好嗎？）</strong>
+                    <div class="example"><span class="highlight">Isn't it better that</span> you spoke about it?<br>→
+                        反問句，暗示好好說話是更好的選擇</div>
+                </div>
+                <div class="info-box"><strong>💡 對話中常用的表達</strong>
+                    <ul>
+                        <li>"Let's slow down." → 我們慢慢來（緩和氣氛）</li>
+                        <li>"I guess so." → 我想是吧（不情願地承認）</li>
+                        <li>"Go ahead." → 來吧、請開始</li>
+                        <li>"I don't like it when you..." → 我不喜歡你...的時候</li>
+                    </ul>
+                </div>
             </div>
 
             <div id="reading" class="tab-content">
@@ -136,37 +543,380 @@
                     <p><strong>調解：</strong>Maria 了解情況後，引導兩人各自承認錯誤</p>
                     <p><strong>解決：</strong>兩人互相道歉，Maria 提出洗襯衫+吃冰淇淋的方案</p>
                 </div>
-                <div class="info-box"><strong>閱讀策略：角色分析</strong><ul>
-                    <li><strong>Maria（姐姐）</strong>：冷靜的調解者，先了解問題再判斷</li>
-                    <li><strong>Anna</strong>：未經同意借了東西，學會為自己的行為負責</li>
-                    <li><strong>Olivia</strong>：情緒化地反應，學會冷靜溝通</li>
-                </ul></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
-                    <li>Why were Anna and Olivia fighting?（Anna 和 Olivia 為什麼在吵架？）</li>
-                    <li>What happened to the green shirt?（那件綠色襯衫怎麼了？）</li>
-                    <li>What did Maria tell Anna about responsibility?（Maria 跟 Anna 說了什麼關於責任的事？）</li>
-                    <li>What advice did Maria give Olivia?（Maria 給了 Olivia 什麼建議？）</li>
-                    <li>How did the sisters solve their problem?（姐妹們怎麼解決了她們的問題？）</li>
-                </ol></div>
+                <div class="info-box"><strong>閱讀策略：角色分析</strong>
+                    <ul>
+                        <li><strong>Maria（姐姐）</strong>：冷靜的調解者，先了解問題再判斷</li>
+                        <li><strong>Anna</strong>：未經同意借了東西，學會為自己的行為負責</li>
+                        <li><strong>Olivia</strong>：情緒化地反應，學會冷靜溝通</li>
+                    </ul>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>Why were Anna and Olivia fighting?（Anna 和 Olivia 為什麼在吵架？）</li>
+                        <li>What happened to the green shirt?（那件綠色襯衫怎麼了？）</li>
+                        <li>What did Maria tell Anna about responsibility?（Maria 跟 Anna 說了什麼關於責任的事？）</li>
+                        <li>What advice did Maria give Olivia?（Maria 給了 Olivia 什麼建議？）</li>
+                        <li>How did the sisters solve their problem?（姐妹們怎麼解決了她們的問題？）</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            10</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div id="reviewArea"></div>
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Sister Problems\n\nMaria's little sisters were fighting. She could hear them from her room. Maria was supposed to be babysitting. She knew that she should go in and check on them. She put her book on the bed, and went down the hall to Anna and Olivia's room.\n\n"What is going on here?" Maria asked.\n\nHer sisters stared angrily at each other. There were clothes all over the floor.\n\n"Tell Anna she is wrong," shouted Olivia. "Tell Olivia she is wrong," shouted Anna.\n\nMaria shook her head. "Let's slow down," she said. "First, I need to have all the information and understand the problem. Then, when I know what is going on, I can tell you what I think. Why are you fighting?"\n\nOlivia took a deep breath. "Well, Anna borrowed my shirt," she said. "My green shirt. It is my favorite one. She took it without asking, and then she got it stained."\n\nOlivia held out a green T-shirt with a brown stain on it.\n\n"It isn't my fault," said Anna. "My friend Greg dropped his chocolate pudding on me. And then Olivia started yelling at me, and she threw all of my clothes out of my closet."\n\n"Okay," said Maria. "Now I know what you are fighting about. I can tell you how we solve this problem."\n\nShe sat the girls down on the bed. "Anna," said Maria, "you took Olivia's shirt without asking, right?"\n\n"I guess so," said Anna.\n\n"You did. And then you got it stained at school," said Maria. "You didn't stain the shirt, but it is your responsibility because you took it."\n\nAnna nodded.\n\n"And Olivia," said Maria, "yelling at your sister and throwing her clothes won't help. The best way for you to speak to your sister is to be calm and talk about what is wrong."\n\nOlivia nodded.\n\n"So go ahead, and talk to each other calmly," Maria said.\n\nOlivia turned to Anna. "I am sorry I threw your clothes around," she said. "I was mad because of the shirt. I don't like it when you take my things without asking. I'll help you put it all away."\n\n"And I am sorry that I took the shirt," said Anna. "I like it, but I should have asked you."\n\n"See?" said Maria. "Isn't it better that you spoke about it?"\n\nThe girls nodded.\n\nMaria smiled. "Okay, so I'll put this shirt into the washing machine. Let's see if we can get this stain out. The three of us can eat some ice cream while we wait."\n\n"Thank you, Maria," said Olivia. "We love it when you babysit!"`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Maria was supposed to be babysitting.",
+                zh: "Maria 本來應該要照顧她們的。",
+                chunks: ["maria was supposed", "to be babysitting"],
+                reviewData: [
+                    { chunk: "was supposed", meaning: "本來應該", collocation: "was supposed to help / was supposed to be here", synonym: "was expected", pronunciation: "was 的 /z/ 跟 supposed 的 /s/ 會連讀成一個 /s/。" }
+                ]
+            },
+            {
+                en: "She knew that she should go in and check on them.",
+                zh: "她知道她應該過去看看。",
+                chunks: ["she knew that", "she should go in", "and check on them"],
+                reviewData: [
+                    { chunk: "check on them", meaning: "看看他們、關心他們的情況", collocation: "check on the kids / check on the food", synonym: "make sure they are okay", pronunciation: "check 的 /k/ 與 on 的 /ɑ/ 連讀，聽起來像 /tʃekɑn/。" }
+                ]
+            },
+            {
+                en: "Her sisters stared angrily at each other.",
+                zh: "她的妹妹們生氣地瞪著對方。",
+                chunks: ["her sisters", "stared angrily", "at each other"],
+                reviewData: [
+                    { chunk: "stared angrily", meaning: "生氣地瞪著", collocation: "stared blankly / stared at me", synonym: "looked with anger", pronunciation: "stared 字尾的 /d/ 跟 angrily 的 /æ/ 連讀。" }
+                ]
+            },
+            {
+                en: "She took it without asking, and then she got it stained.",
+                zh: "她沒有先問就拿走了，然後她把它弄髒了。",
+                chunks: ["she took it", "without asking", "and then", "she got it stained"],
+                reviewData: [
+                    { chunk: "without asking", meaning: "沒有先問就...", collocation: "borrow without asking / leave without asking", synonym: "without permission", pronunciation: "without 的 /t/ 通常不完全爆破，甚至省略，直接發 asking。" },
+                    { chunk: "got it stained", meaning: "把它弄髒了", collocation: "got it dirty", synonym: "ruined it", pronunciation: "got 的 /t/ 在兩個母音間會弱化為閃音 (flap T)，聽起來像 /gɑɾɪt/。" }
+                ]
+            },
+            {
+                en: "It is your responsibility because you took it.",
+                zh: "這是你的責任，因為是你拿走了它。",
+                chunks: ["it is your responsibility", "because you took it"],
+                reviewData: [
+                    { chunk: "your responsibility", meaning: "你的責任", collocation: "take responsibility / my responsibility", synonym: "your fault / your duty", pronunciation: "your 的 /r/ (美音) 接 responsibility 的 /r/，發音時平順滑過。" }
+                ]
+            },
+            {
+                en: "The best way for you to speak to your sister is to be calm and talk about what is wrong.",
+                zh: "跟你姐妹說話最好的方式是冷靜下來，談談問題在哪裡。",
+                chunks: ["the best way", "for you to speak", "to your sister", "is to be calm", "and talk about", "what is wrong"],
+                reviewData: [
+                    { chunk: "talk about", meaning: "談談...", collocation: "talk about the problem / talk about feelings", synonym: "discuss", pronunciation: "talk 的 /k/ 與 about 的 /ə/ 連讀，聽起來像 /tɔkəbaʊt/。" }
+                ]
+            },
+            {
+                en: "I don't like it when you take my things without asking.",
+                zh: "我不喜歡你不先問就拿我的東西。",
+                chunks: ["i don't like it", "when you take my things", "without asking"],
+                reviewData: [
+                    { chunk: "don't like it", meaning: "不喜歡這樣", collocation: "don't like it when / didn't like it", synonym: "dislike it", pronunciation: "like 的 /k/ 與 it 的 /ɪ/ 連讀，聽起來像 /laɪkɪt/。" }
+                ]
+            },
+            {
+                en: "I like it, but I should have asked you.",
+                zh: "我喜歡那件，但我當初應該先問你的。",
+                chunks: ["i like it", "but i should have", "asked you"],
+                reviewData: [
+                    { chunk: "should have", meaning: "當初應該...", collocation: "should have known / should have gone", synonym: "ought to have", pronunciation: "should have 在口語中常縮讀為 should've，甚至 /ʃʊdəv/。" }
+                ]
+            },
+            {
+                en: "Isn't it better that you spoke about it?",
+                zh: "你們好好談一談不是更好嗎？",
+                chunks: ["isn't it better", "that you spoke about it"],
+                reviewData: [
+                    { chunk: "isn't it better", meaning: "不是更好嗎？", collocation: "isn't it great / isn't it true", synonym: "wouldn't it be better", pronunciation: "isn't 的 /t/ 不完全爆破，直接接 it，better 的 tt 弱化為閃音。" }
+                ]
+            },
+            {
+                en: "Let's see if we can get this stain out.",
+                zh: "讓我們看看能不能把這個污漬洗掉。",
+                chunks: ["let's see if", "we can get", "this stain out"],
+                reviewData: [
+                    { chunk: "get this stain out", meaning: "把污漬洗掉", collocation: "get the dirt out / get it out", synonym: "remove this stain", pronunciation: "stain 的 /n/ 跟 out 的 /aʊ/ 連讀，聽起來像 /steɪnaʊt/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk';
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('reviewArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = `💡 提示: ${gameSentences[currentGameIndex].zh}`;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?”“:]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                if (gameMode === 'chunk') {
+                    const reviewArea = document.getElementById('reviewArea');
+                    reviewArea.innerHTML = ''; // 清除舊的卡片
+
+                    const reviewData = gameSentences[currentGameIndex].reviewData;
+                    if (reviewData) {
+                        const chunkReview = reviewData.find(item => word.includes(item.chunk));
+                        if (chunkReview) {
+                            const reviewContainer = document.createElement('div');
+                            reviewContainer.className = 'post-submit-review';
+                            reviewContainer.style.marginTop = '20px';
+                            reviewContainer.style.textAlign = 'left';
+
+                            const reviewTitle = document.createElement('h4');
+                            reviewTitle.textContent = "📚 語塊精解模式";
+                            reviewTitle.style.color = '#2196F3';
+                            reviewTitle.style.borderBottom = '2px solid #2196F3';
+                            reviewTitle.style.paddingBottom = '5px';
+                            reviewTitle.style.marginBottom = '15px';
+                            reviewTitle.style.fontSize = '18px';
+                            reviewContainer.appendChild(reviewTitle);
+
+                            const card = document.createElement('div');
+                            card.className = 'chunk-review-card';
+                            card.style.backgroundColor = '#f1f8e9';
+                            card.style.borderLeft = '4px solid #8bc34a';
+                            card.style.padding = '15px';
+                            card.style.marginBottom = '10px';
+                            card.style.borderRadius = '6px';
+                            card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                            card.innerHTML = `
+                                <div style="font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;">📌 語塊範例：${chunkReview.chunk}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>中文語意：</strong> ${chunkReview.meaning}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>母語者搭配 (Collocations)：</strong> ${chunkReview.collocation}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>同義替換 (Synonyms)：</strong> ${chunkReview.synonym}</div>
+                                <div style="font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;"><strong>🎧 聽力連讀點：</strong> ${chunkReview.pronunciation}</div>
+                            `;
+                            reviewContainer.appendChild(card);
+                            reviewArea.appendChild(reviewContainer);
+                        }
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    finalSentence.innerHTML = `
+                        <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 15px; color: #e8f5e9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            if (typeof initGame === 'function') initGame();
+        };
     </script>
 </body>
+
 </html>

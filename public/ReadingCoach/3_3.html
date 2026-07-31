@@ -1,48 +1,381 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - What Do Plants Need?</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 What Do Plants Need?</h1>
+        <a href="3_3_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQAID6rPWOJPQL088RLVSyLqATB37Bc6qSCFzeBqFLNEFOs?e=OX3lNR"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -57,6 +390,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧
+                    聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -75,20 +410,34 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Plants are living things. They depend on water and light to help them grow. But how do plants find what they need? They get it from the world around them!</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>植物是有生命的東西。它們依靠水和光來幫助生長。但是植物如何找到它們需要的東西呢？它們從周圍的世界中獲取！</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Plants are living things. They depend
+                                on water and light to help them grow. But how do plants find what they need? They get it
+                                from the world around them!</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>植物是有生命的東西。它們依靠水和光來幫助生長。但是植物如何找到它們需要的東西呢？它們從周圍的世界中獲取！
+                            </td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Plants get water from the soil. They get light from the sun.</td>
+                            <td style="padding: 10px; vertical-align: top;">Plants get water from the soil. They get
+                                light from the sun.</td>
                             <td style="padding: 10px; vertical-align: top;">植物從土壤中獲取水分。它們從太陽中獲取光線。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Many plants have roots, stems, and leaves. Roots keep a plant attached to the soil and help the plant take in water. Water moves up the plant's stem to the leaves. The stem also supports the plant so it stays up straight.</td>
-                            <td style="padding: 10px; vertical-align: top;">許多植物有根、莖和葉子。根讓植物固定在土壤中，並幫助植物吸收水分。水沿著植物的莖上升到葉子。莖還支撐著植物，讓它保持直立。</td>
+                            <td style="padding: 10px; vertical-align: top;">Many plants have roots, stems, and leaves.
+                                Roots keep a plant attached to the soil and help the plant take in water. Water moves up
+                                the plant's stem to the leaves. The stem also supports the plant so it stays up
+                                straight.</td>
+                            <td style="padding: 10px; vertical-align: top;">
+                                許多植物有根、莖和葉子。根讓植物固定在土壤中，並幫助植物吸收水分。水沿著植物的莖上升到葉子。莖還支撐著植物，讓它保持直立。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Leaves take in light energy from the sun. The leaves use water, light energy, and a gas called carbon dioxide to make glucose. Glucose is a kind of sugar. It is food for the plant. Yes, plants make their own food! They use it to grow.</td>
-                            <td style="padding: 10px; vertical-align: top;">葉子從太陽吸收光能。葉子利用水、光能和一種叫做二氧化碳的氣體來製造葡萄糖。葡萄糖是一種糖。它是植物的食物。沒錯，植物會自己製造食物！它們用食物來生長。</td>
+                            <td style="padding: 10px; vertical-align: top;">Leaves take in light energy from the sun.
+                                The leaves use water, light energy, and a gas called carbon dioxide to make glucose.
+                                Glucose is a kind of sugar. It is food for the plant. Yes, plants make their own food!
+                                They use it to grow.</td>
+                            <td style="padding: 10px; vertical-align: top;">
+                                葉子從太陽吸收光能。葉子利用水、光能和一種叫做二氧化碳的氣體來製造葡萄糖。葡萄糖是一種糖。它是植物的食物。沒錯，植物會自己製造食物！它們用食物來生長。</td>
                         </tr>
                     </table>
                 </div>
@@ -97,55 +446,467 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">depend on</div><div class="vocab-type">[片語]</div><div class="vocab-meaning">依靠、依賴</div></div>
-                    <div class="vocab-item"><div class="vocab-word">soil</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">土壤</div></div>
-                    <div class="vocab-item"><div class="vocab-word">roots</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">根（植物的根部）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">stems</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">莖（植物的莖部）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">attached</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">附著的、連接的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">carbon dioxide</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">二氧化碳</div></div>
-                    <div class="vocab-item"><div class="vocab-word">glucose</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">葡萄糖</div></div>
-                    <div class="vocab-item"><div class="vocab-word">energy</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">能量</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">depend on</div>
+                        <div class="vocab-type">[片語]</div>
+                        <div class="vocab-meaning">依靠、依賴</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">soil</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">土壤</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">roots</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">根（植物的根部）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stems</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">莖（植物的莖部）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">attached</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">附著的、連接的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">carbon dioxide</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">二氧化碳</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">glucose</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">葡萄糖</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">energy</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">能量</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. "depend on" 依靠某物</div><p>表示需要某物才能做某事：</p><div class="example">They <span class="highlight">depend on</span> water and light to help them grow.<br>→ 它們依靠水和光來幫助生長。</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "a...called..." 一種叫做...的...</div><p>用來介紹/定義新事物的名稱：</p><div class="example">...a gas <span class="highlight">called</span> carbon dioxide.<br>→ 一種叫做二氧化碳的氣體。</div><p>called 在這裡是過去分詞當形容詞用，修飾前面的名詞。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. "keep + 受詞 + 形容詞/過去分詞" 讓...保持某狀態</div><p>表示維持某種狀態：</p><div class="example">Roots <span class="highlight">keep</span> a plant <span class="highlight">attached</span> to the soil.<br>→ 根讓植物固定在土壤中。</div></div>
-                <div class="grammar-box"><div class="grammar-title">4. "so (that)" 所以/以便</div><p>表示目的或結果：</p><div class="example">The stem supports the plant <span class="highlight">so</span> it stays up straight.<br>→ 莖支撐著植物，讓它保持直立。</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "depend on" 依靠某物</div>
+                    <p>表示需要某物才能做某事：</p>
+                    <div class="example">They <span class="highlight">depend on</span> water and light to help them
+                        grow.<br>→ 它們依靠水和光來幫助生長。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "a...called..." 一種叫做...的...</div>
+                    <p>用來介紹/定義新事物的名稱：</p>
+                    <div class="example">...a gas <span class="highlight">called</span> carbon dioxide.<br>→
+                        一種叫做二氧化碳的氣體。</div>
+                    <p>called 在這裡是過去分詞當形容詞用，修飾前面的名詞。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "keep + 受詞 + 形容詞/過去分詞" 讓...保持某狀態</div>
+                    <p>表示維持某種狀態：</p>
+                    <div class="example">Roots <span class="highlight">keep</span> a plant <span
+                            class="highlight">attached</span> to the soil.<br>→ 根讓植物固定在土壤中。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">4. "so (that)" 所以/以便</div>
+                    <p>表示目的或結果：</p>
+                    <div class="example">The stem supports the plant <span class="highlight">so</span> it stays up
+                        straight.<br>→ 莖支撐著植物，讓它保持直立。</div>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: depend on + N + to V</strong><div class="example">They <span class="highlight">depend on</span> water and light <span class="highlight">to</span> help them grow.<br>→ 依靠...來做...</div></div>
-                <div class="sentence-pattern"><strong>句型 2: How do/does + S + V...?</strong><div class="example"><span class="highlight">How do</span> plants <span class="highlight">find</span> what they need?<br>→ 用 How 提問方式或方法</div></div>
-                <div class="sentence-pattern"><strong>句型 3: N + called + 名稱</strong><div class="example">a gas <span class="highlight">called</span> carbon dioxide<br>→ 用 called 來命名或定義事物</div></div>
-                <div class="sentence-pattern"><strong>句型 4: S + use + N + to V</strong><div class="example">The leaves <span class="highlight">use</span> water, light energy, and carbon dioxide <span class="highlight">to make</span> glucose.<br>→ 使用...來做...</div></div>
-                <div class="info-box"><strong>💡 科學文章常用表達</strong><ul><li>"depend on" → 依靠</li><li>"take in" → 吸收</li><li>"a kind of" → 一種</li><li>"make their own" → 自己製造</li></ul></div>
+                <div class="sentence-pattern"><strong>句型 1: depend on + N + to V</strong>
+                    <div class="example">They <span class="highlight">depend on</span> water and light <span
+                            class="highlight">to</span> help them grow.<br>→ 依靠...來做...</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: How do/does + S + V...?</strong>
+                    <div class="example"><span class="highlight">How do</span> plants <span
+                            class="highlight">find</span> what they need?<br>→ 用 How 提問方式或方法</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: N + called + 名稱</strong>
+                    <div class="example">a gas <span class="highlight">called</span> carbon dioxide<br>→ 用 called
+                        來命名或定義事物</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 4: S + use + N + to V</strong>
+                    <div class="example">The leaves <span class="highlight">use</span> water, light energy, and carbon
+                        dioxide <span class="highlight">to make</span> glucose.<br>→ 使用...來做...</div>
+                </div>
+                <div class="info-box"><strong>💡 科學文章常用表達</strong>
+                    <ul>
+                        <li>"depend on" → 依靠</li>
+                        <li>"take in" → 吸收</li>
+                        <li>"a kind of" → 一種</li>
+                        <li>"make their own" → 自己製造</li>
+                    </ul>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：總分結構</strong><p><strong>介紹：</strong>植物是有生命的，需要水和光</p><p><strong>來源：</strong>從土壤和太陽獲取</p><p><strong>部位功能：</strong>根（吸水）→ 莖（輸送水、支撐）→ 葉（吸光、製造食物）</p><p><strong>結論：</strong>植物能自己製造食物來生長</p></div>
-                <div class="info-box"><strong>閱讀策略：因果關係</strong><ul><li>根吸收水分 → 水從莖上升到葉子</li><li>葉子吸收光能 → 利用水+光+CO₂ → 製造葡萄糖</li><li>葡萄糖是食物 → 植物用它來生長</li></ul></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What do plants depend on to grow? (植物依靠什麼來生長？)</li><li>What do roots do for a plant? (根對植物有什麼作用？)</li><li>What is glucose? (什麼是葡萄糖？)</li><li>How do plants make their own food? (植物如何自己製造食物？)</li></ol></div>
+                <div class="info-box"><strong>文章結構：總分結構</strong>
+                    <p><strong>介紹：</strong>植物是有生命的，需要水和光</p>
+                    <p><strong>來源：</strong>從土壤和太陽獲取</p>
+                    <p><strong>部位功能：</strong>根（吸水）→ 莖（輸送水、支撐）→ 葉（吸光、製造食物）</p>
+                    <p><strong>結論：</strong>植物能自己製造食物來生長</p>
+                </div>
+                <div class="info-box"><strong>閱讀策略：因果關係</strong>
+                    <ul>
+                        <li>根吸收水分 → 水從莖上升到葉子</li>
+                        <li>葉子吸收光能 → 利用水+光+CO₂ → 製造葡萄糖</li>
+                        <li>葡萄糖是食物 → 植物用它來生長</li>
+                    </ul>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What do plants depend on to grow? (植物依靠什麼來生長？)</li>
+                        <li>What do roots do for a plant? (根對植物有什麼作用？)</li>
+                        <li>What is glucose? (什麼是葡萄糖？)</li>
+                        <li>How do plants make their own food? (植物如何自己製造食物？)</li>
+                    </ol>
+                </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;"
+                            onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;"
+                            onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)"
+                            style="background-color: #2196F3; padding: 8px 15px;">
+                            🔊 聽整句
+                        </button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint"
+                            style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()"
+                            style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `What Do Plants Need?\n\nPlants are living things. They depend on water and light to help them grow. But how do plants find what they need? They get it from the world around them!\n\nPlants get water from the soil. They get light from the sun.\n\nMany plants have roots, stems, and leaves. Roots keep a plant attached to the soil and help the plant take in water. Water moves up the plant's stem to the leaves. The stem also supports the plant so it stays up straight.\n\nLeaves take in light energy from the sun. The leaves use water, light energy, and a gas called carbon dioxide to make glucose. Glucose is a kind of sugar. It is food for the plant. Yes, plants make their own food! They use it to grow.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "They depend on water and light to help them grow.",
+                zh: "它們依靠水和光來幫助生長。",
+                chunks: ["they depend on", "water and light", "to help them grow"],
+                reviewData: [
+                    { chunk: "depend on", meaning: "依靠、依賴", collocation: "depend on you / depend on water", synonym: "rely on", pronunciation: "depend 的 d 與 on 連讀為 /dɪˈpɛnd ɑn/。" }
+                ]
+            },
+            {
+                en: "But how do plants find what they need?",
+                zh: "但是植物如何找到它們需要的東西呢？",
+                chunks: ["but how do plants find", "what they need"],
+                reviewData: [
+                    { chunk: "what they need", meaning: "他們需要的東西", collocation: "get what they need", synonym: "the things they require", pronunciation: "what 的 t 通常不發音（不完全爆破）。" }
+                ]
+            },
+            {
+                en: "They get it from the world around them!",
+                zh: "它們從周圍的世界中獲取！",
+                chunks: ["they get it", "from the world", "around them"],
+                reviewData: [
+                    { chunk: "get it", meaning: "獲取它", collocation: "get it from / get it now", synonym: "obtain it", pronunciation: "get 的 t 與 it 的 i 連讀成閃音 /gɛɾɪt/。" },
+                    { chunk: "around them", meaning: "在他們周圍", collocation: "the world around them", synonym: "surrounding them", pronunciation: "around 的 d 與 them 的 th 連續發音。" }
+                ]
+            },
+            {
+                en: "Many plants have roots, stems, and leaves.",
+                zh: "許多植物有根、莖和葉子。",
+                chunks: ["many plants have", "roots stems and leaves"],
+                reviewData: [
+                    { chunk: "roots stems and leaves", meaning: "根、莖、葉", collocation: "roots, stems, and leaves", synonym: "plant parts", pronunciation: "名詞複數的 s 幾乎都發 /z/，需注意連讀。" }
+                ]
+            },
+            {
+                en: "Roots keep a plant attached to the soil and help the plant take in water.",
+                zh: "根讓植物固定在土壤中，並幫助植物吸收水分。",
+                chunks: ["roots keep a plant attached", "to the soil", "and help the plant", "take in water"],
+                reviewData: [
+                    { chunk: "keep a plant attached", meaning: "讓植物保持附著", collocation: "keep it attached", synonym: "hold it fast", pronunciation: "keep 的 p 與 a 連讀 /kipə/。" },
+                    { chunk: "take in water", meaning: "吸收水分", collocation: "take in air / take in water", synonym: "absorb water", pronunciation: "take 的 k 與 in 連讀 /teɪkɪn/。" }
+                ]
+            },
+            {
+                en: "Water moves up the plant's stem to the leaves.",
+                zh: "水沿著植物的莖上升到葉子。",
+                chunks: ["water moves up", "the plant's stem", "to the leaves"],
+                reviewData: [
+                    { chunk: "moves up", meaning: "向上移動", collocation: "moves up the stem", synonym: "goes up / travels up", pronunciation: "moves 的 z 與 up 連讀 /muvzʌp/。" }
+                ]
+            },
+            {
+                en: "The stem also supports the plant so it stays up straight.",
+                zh: "莖還支撐著植物，讓它保持直立。",
+                chunks: ["the stem also supports the plant", "so it stays up straight"],
+                reviewData: [
+                    { chunk: "stays up straight", meaning: "保持直立", collocation: "stand up straight / stay up straight", synonym: "remains upright", pronunciation: "stays 的 z 與 up 連讀。" }
+                ]
+            },
+            {
+                en: "Leaves take in light energy from the sun.",
+                zh: "葉子從太陽吸收光能。",
+                chunks: ["leaves take in", "light energy", "from the sun"],
+                reviewData: [
+                    { chunk: "light energy", meaning: "光能", collocation: "use light energy", synonym: "solar energy", pronunciation: "light 的 t 不完全爆破。" }
+                ]
+            },
+            {
+                en: "The leaves use water, light energy, and a gas called carbon dioxide to make glucose.",
+                zh: "葉子利用水、光能和一種叫做二氧化碳的氣體來製造葡萄糖。",
+                chunks: ["the leaves use water", "light energy", "and a gas called carbon dioxide", "to make glucose"],
+                reviewData: [
+                    { chunk: "a gas called carbon dioxide", meaning: "一種叫做二氧化碳的氣體", collocation: "a gas called oxygen", synonym: "CO2 gas", pronunciation: "called 的 d 與 carbon 的 c 之間略有停頓。" }
+                ]
+            },
+            {
+                en: "Glucose is a kind of sugar.",
+                zh: "葡萄糖是一種糖。",
+                chunks: ["glucose is", "a kind of sugar"],
+                reviewData: [
+                    { chunk: "a kind of", meaning: "一種...", collocation: "a kind of plant / a kind of food", synonym: "a type of", pronunciation: "kind of 常弱讀並連音為 kinda /ˈkaɪndə/。" }
+                ]
+            },
+            {
+                en: "Yes, plants make their own food!",
+                zh: "沒錯，植物會自己製造食物！",
+                chunks: ["yes plants make", "their own food"],
+                reviewData: [
+                    { chunk: "make their own food", meaning: "自己製造食物", collocation: "make their own choices", synonym: "produce their own food", pronunciation: "their own 連讀 /ðɛroʊn/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                if (gameMode === 'chunk') {
+                    const reviewArea = document.getElementById('reviewArea');
+                    reviewArea.innerHTML = ''; // 清除舊的卡片
+
+                    const reviewData = gameSentences[currentGameIndex].reviewData;
+                    if (reviewData) {
+                        const chunkReview = reviewData.find(item => word.includes(item.chunk));
+                        if (chunkReview) {
+                            const reviewContainer = document.createElement('div');
+                            reviewContainer.className = 'post-submit-review';
+                            reviewContainer.style.marginTop = '20px';
+                            reviewContainer.style.textAlign = 'left';
+
+                            const reviewTitle = document.createElement('h4');
+                            reviewTitle.textContent = "📚 語塊精解模式";
+                            reviewTitle.style.color = '#2196F3';
+                            reviewTitle.style.borderBottom = '2px solid #2196F3';
+                            reviewTitle.style.paddingBottom = '5px';
+                            reviewTitle.style.marginBottom = '15px';
+                            reviewTitle.style.fontSize = '18px';
+                            reviewContainer.appendChild(reviewTitle);
+
+                            const card = document.createElement('div');
+                            card.className = 'chunk-review-card';
+                            card.style.backgroundColor = '#f1f8e9';
+                            card.style.borderLeft = '4px solid #8bc34a';
+                            card.style.padding = '15px';
+                            card.style.marginBottom = '10px';
+                            card.style.borderRadius = '6px';
+                            card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                            card.innerHTML = `
+                                <div style="font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;">📌 語塊範例：${chunkReview.chunk}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>中文語意：</strong> ${chunkReview.meaning}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>母語者搭配 (Collocations)：</strong> ${chunkReview.collocation}</div>
+                                <div style="font-size: 15px; margin-bottom: 5px; line-height: 1.5;"><strong>同義替換 (Synonyms)：</strong> ${chunkReview.synonym}</div>
+                                <div style="font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;"><strong>🎧 聽力連讀點：</strong> ${chunkReview.pronunciation}</div>
+                            `;
+                            reviewContainer.appendChild(card);
+                            reviewArea.appendChild(reviewContainer);
+                        }
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    finalSentence.innerHTML = `
+                        <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 15px; color: #e8f5e9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const blocks = document.getElementById('wordBank').children;
+                blocks[index].classList.add('error-shake');
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = "❌ 順序不對喔，再試試看！";
+                statusDiv.className = "game-status status-wrong";
+
+                setTimeout(() => {
+                    if (blocks[index]) blocks[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+                alert('恭喜完成所有聽音重組！');
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            if (typeof initGame === 'function') initGame();
+        };
     </script>
 </body>
+
 </html>
