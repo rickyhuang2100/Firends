@@ -1,65 +1,581 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Toni Morrison: An Inspiring Author</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
-        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
-        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
         /* 聽音重組遊戲樣式 */
-        .game-board { background-color: #f0f8ff; padding: 20px; border-radius: 8px; border: 2px solid #64b5f6; margin-top: 15px; }
-        .answer-area { min-height: 60px; padding: 15px; background-color: white; border: 2px dashed #90caf9; border-radius: 5px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        .word-bank { min-height: 80px; padding: 15px; background-color: #e3f2fd; border-radius: 5px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .word-block { background-color: white; color: #1565c0; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 18px; font-weight: bold; border: 2px solid #64b5f6; user-select: none; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .word-block:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
-        .word-block:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .game-controls { text-align: center; margin: 20px 0; }
-        .game-status { text-align: center; font-size: 18px; font-weight: bold; margin-top: 15px; min-height: 27px; }
-        .status-correct { color: #4CAF50; }
-        .status-wrong { color: #f44336; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #c62828 !important; }
+        .game-board {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #64b5f6;
+            margin-top: 15px;
+        }
+
+        .answer-area {
+            min-height: 60px;
+            padding: 15px;
+            background-color: white;
+            border: 2px dashed #90caf9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .word-bank {
+            min-height: 80px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-block {
+            background-color: white;
+            color: #1565c0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid #64b5f6;
+            user-select: none;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .word-block:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .game-status {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #c62828 !important;
+        }
+
+        /* Knowledge Graph / Learning Map Styles */
+        .tab-knowledge {
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab.active.tab-knowledge {
+            box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .kg-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 10px;
+        }
+
+        .kg-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .kg-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kg-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.1);
+        }
+
+        .kg-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .kg-card-blue::before {
+            background: linear-gradient(to bottom, #2196F3, #64b5f6);
+        }
+
+        .kg-card-green::before {
+            background: linear-gradient(to bottom, #4CAF50, #81c784);
+        }
+
+        .kg-card-purple::before {
+            background: linear-gradient(to bottom, #9c27b0, #ba68c8);
+        }
+
+        .kg-card-orange::before {
+            background: linear-gradient(to bottom, #ff9800, #ffb74d);
+        }
+
+        .kg-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #333;
+        }
+
+        .kg-node-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .kg-node-list::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .kg-node {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+            transition: border-color 0.2s;
+        }
+
+        .kg-node:hover {
+            border-color: #bbdefb;
+        }
+
+        .kg-node-icon {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            background: #ccc;
+        }
+
+        .kg-node-past .kg-node-icon {
+            background: #9e9e9e;
+        }
+
+        .kg-node-current .kg-node-icon {
+            background: #4CAF50;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.2);
+        }
+
+        .kg-node-future .kg-node-icon {
+            background: #2196F3;
+        }
+
+        .kg-node-content {
+            flex: 1;
+        }
+
+        .kg-node-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .kg-node-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .kg-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .kg-tag-ai {
+            background: #e8eaf6;
+            color: #3f51b5;
+            border: 1px solid #c5cae9;
+        }
+
+        .kg-ai-box {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px dashed #cfd8dc;
+            text-align: center;
+        }
+
+        .kg-ai-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kg-ai-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Toni Morrison: An Inspiring Author</h1>
-        <a href="2_20_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBtU5FF9DICQLidkXO38x9lAb2bWAi2zytevQ7b82dA1t4?e=cW7QKL" target="_blank">沈浸式閱讀程式</a> 
+        <a href="2_20_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBtU5FF9DICQLidkXO38x9lAb2bWAi2zytevQ7b82dA1t4?e=cW7QKL"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -74,7 +590,10 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
-                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
+                <button type="button" class="tab tab-knowledge" onclick="showTab(event, 'learning-map')">🧠 Learning
+                    Map</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧
+                    聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -83,30 +602,39 @@
                 <div class="info-box">
                     <h4 style="color: #2196F3; margin-bottom: 15px;">Toni Morrison：一位啟發人心的作家</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        Toni Morrison 是一位非裔美國作家。她描寫美國黑人以及他們的生活。她的許多角色都經歷過種族歧視。她描寫這些角色如何應對那些掙扎與困境。她也描寫人們如何理解自己在社區（社群）中的歸屬感。她在她的書中使用了神話和詩歌。世界各地的許多人都熱愛她的作品。她甚至因為她的寫作贏得了許多獎項。Toni Morrison 寫作了一生。Toni Morrison 甚至寫了幾本童書！她和她的兒子一起寫了這些書。其中一本書名為《誰有本事？：螞蟻還是蚱蜢？》。也許你可以在圖書館裡找到一本她的童書！
+                        Toni Morrison
+                        是一位非裔美國作家。她描寫美國黑人以及他們的生活。她的許多角色都經歷過種族歧視。她描寫這些角色如何應對那些掙扎與困境。她也描寫人們如何理解自己在社區（社群）中的歸屬感。她在她的書中使用了神話和詩歌。世界各地的許多人都熱愛她的作品。她甚至因為她的寫作贏得了許多獎項。Toni
+                        Morrison 寫作了一生。Toni Morrison 甚至寫了幾本童書！她和她的兒子一起寫了這些書。其中一本書名為《誰有本事？：螞蟻還是蚱蜢？》。也許你可以在圖書館裡找到一本她的童書！
                     </p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Toni Morrison was an African American author.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>Toni Morrison 是一位非裔美國作家。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Toni Morrison was an African American
+                                author.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>Toni Morrison 是一位非裔美國作家。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She wrote about Black Americans and their lives.</td>
+                            <td style="padding: 10px; vertical-align: top;">She wrote about Black Americans and their
+                                lives.</td>
                             <td style="padding: 10px; vertical-align: top;">她描寫美國黑人以及他們的生活。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Many of her characters experienced racism.</td>
+                            <td style="padding: 10px; vertical-align: top;">Many of her characters experienced racism.
+                            </td>
                             <td style="padding: 10px; vertical-align: top;">她的許多角色都經歷過種族歧視。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She wrote about these characters dealing with those struggles.</td>
+                            <td style="padding: 10px; vertical-align: top;">She wrote about these characters dealing
+                                with those struggles.</td>
                             <td style="padding: 10px; vertical-align: top;">她描寫這些角色如何應對那些掙扎（困境）。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She also wrote about people understanding where they belong in their community.</td>
+                            <td style="padding: 10px; vertical-align: top;">She also wrote about people understanding
+                                where they belong in their community.</td>
                             <td style="padding: 10px; vertical-align: top;">她也描寫人們如何理解自己在社區（社群）中的歸屬感。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
@@ -114,7 +642,8 @@
                             <td style="padding: 10px; vertical-align: top;">她在她的書中使用了神話和詩歌。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Many people around the world love her writing. She even won many awards for her writing.</td>
+                            <td style="padding: 10px; vertical-align: top;">Many people around the world love her
+                                writing. She even won many awards for her writing.</td>
                             <td style="padding: 10px; vertical-align: top;">世界各地的許多人都熱愛她的作品。她甚至因為她的寫作贏得了許多獎項。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
@@ -122,15 +651,19 @@
                             <td style="padding: 10px; vertical-align: top;">Toni Morrison 寫作了一生。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Toni Morrison even wrote a few children’s books! She wrote them with her son.</td>
+                            <td style="padding: 10px; vertical-align: top;">Toni Morrison even wrote a few children’s
+                                books! She wrote them with her son.</td>
                             <td style="padding: 10px; vertical-align: top;">Toni Morrison 甚至寫了幾本童書！她和她的兒子一起寫了這些書。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">One of these books is called Who’s Got Game?: The Ant or the Grasshopper?</td>
-                            <td style="padding: 10px; vertical-align: top;">其中一本書名為《Who’s Got Game?: The Ant or the Grasshopper?》。</td>
+                            <td style="padding: 10px; vertical-align: top;">One of these books is called Who’s Got
+                                Game?: The Ant or the Grasshopper?</td>
+                            <td style="padding: 10px; vertical-align: top;">其中一本書名為《Who’s Got Game?: The Ant or the
+                                Grasshopper?》。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Maybe you can find one of her children’s books in the library!</td>
+                            <td style="padding: 10px; vertical-align: top;">Maybe you can find one of her children’s
+                                books in the library!</td>
                             <td style="padding: 10px; vertical-align: top;">也許你可以在圖書館裡找到一本她的童書！</td>
                         </tr>
                     </table>
@@ -140,33 +673,204 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">inspiring</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">鼓舞人心的，啟發靈感的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">author</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">作者，作家</div></div>
-                    <div class="vocab-item"><div class="vocab-word">character</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">（故事或戲劇中的）角色，人物</div></div>
-                    <div class="vocab-item"><div class="vocab-word">racism</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">種族主義，種族歧視</div></div>
-                    <div class="vocab-item"><div class="vocab-word">struggle</div><div class="vocab-type">[名詞/動詞]</div><div class="vocab-meaning">掙扎，奮鬥，困境</div></div>
-                    <div class="vocab-item"><div class="vocab-word">community</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">社群，社區</div></div>
-                    <div class="vocab-item"><div class="vocab-word">poetry</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">詩，詩歌</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">inspiring</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">鼓舞人心的，啟發靈感的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">author</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">作者，作家</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">character</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">（故事或戲劇中的）角色，人物</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">racism</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">種族主義，種族歧視</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">struggle</div>
+                        <div class="vocab-type">[名詞/動詞]</div>
+                        <div class="vocab-meaning">掙扎，奮鬥，困境</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">community</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">社群，社區</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">poetry</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">詩，詩歌</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. deal with 應付/處理</div><div class="example">She wrote about these characters <span class="highlight">dealing with</span> those struggles.</div><p>deal with 是用來表示面對或處理困難、問題與情況的常見片語。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. where 引導名詞子句</div><div class="example">understanding <span class="highlight">where they belong</span> in their community.</div><p>這裡的 where 引導了一個名詞子句，作為 understanding (理解) 的受詞，表示「他們歸屬在哪裡」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. One of + 複數名詞</div><div class="example"><span class="highlight">One of these books</span> is called...</div><p>表示「很多東西之中的其中一個」。由於主體是 "One" (一個)，因此後方記得要搭配「單數動詞」, 像是 is。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. deal with 應付/處理</div>
+                    <div class="example">She wrote about these characters <span class="highlight">dealing with</span>
+                        those struggles.</div>
+                    <p>deal with 是用來表示面對或處理困難、問題與情況的常見片語。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. where 引導名詞子句</div>
+                    <div class="example">understanding <span class="highlight">where they belong</span> in their
+                        community.</div>
+                    <p>這裡的 where 引導了一個名詞子句，作為 understanding (理解) 的受詞，表示「他們歸屬在哪裡」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. One of + 複數名詞</div>
+                    <div class="example"><span class="highlight">One of these books</span> is called...</div>
+                    <p>表示「很多東西之中的其中一個」。由於主體是 "One" (一個)，因此後方記得要搭配「單數動詞」, 像是 is。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: belong in/to 屬於</strong><div class="example">where they <span class="highlight">belong in</span> their community.</div><p>表示某人或某物在某個環境、社團或團體中的歸屬與存在位置。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: 副詞 even (甚至) </strong><div class="example">She <span class="highlight">even</span> won many awards...</div><p>用來強調出乎預料、令人驚訝或是進一步的資訊，「她甚至贏了滿多獎的」。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: 被動語態 is called</strong><div class="example">One of these books <span class="highlight">is called</span> Who’s Got Game?</div><p>書是被別人取名的，使用被動形式 is called 來表示「被稱呼為... / 名為...」。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: belong in/to 屬於</strong>
+                    <div class="example">where they <span class="highlight">belong in</span> their community.</div>
+                    <p>表示某人或某物在某個環境、社團或團體中的歸屬與存在位置。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: 副詞 even (甚至) </strong>
+                    <div class="example">She <span class="highlight">even</span> won many awards...</div>
+                    <p>用來強調出乎預料、令人驚訝或是進一步的資訊，「她甚至贏了滿多獎的」。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: 被動語態 is called</strong>
+                    <div class="example">One of these books <span class="highlight">is called</span> Who’s Got Game?
+                    </div>
+                    <p>書是被別人取名的，使用被動形式 is called 來表示「被稱呼為... / 名為...」。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：作家生平與作品簡介</strong><p>介紹著名美國非裔女性作家 Toni Morrison，講述她作品的主要探討議題（種族歧視、自我認同、社群），以及她的創作風格（融入神話與詩歌）。接著提到她的全球影響力與得獎經歷，最後補充她也曾與兒子共同創作過童書，鼓勵讀者可以去找來閱讀。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Who did Toni Morrison write about in her books?</li><li>What did many of her characters experience in her stories?</li><li>Who did Toni Morrison write children's books with?</li></ol></div>
+                <div class="info-box"><strong>文章結構：作家生平與作品簡介</strong>
+                    <p>介紹著名美國非裔女性作家 Toni
+                        Morrison，講述她作品的主要探討議題（種族歧視、自我認同、社群），以及她的創作風格（融入神話與詩歌）。接著提到她的全球影響力與得獎經歷，最後補充她也曾與兒子共同創作過童書，鼓勵讀者可以去找來閱讀。
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>Who did Toni Morrison write about in her books?</li>
+                        <li>What did many of her characters experience in her stories?</li>
+                        <li>Who did Toni Morrison write children's books with?</li>
+                    </ol>
+                </div>
             </div>
-            
+
+            <!-- 知識圖譜分頁 -->
+            <div id="learning-map" class="tab-content">
+                <div class="kg-container">
+                    <div class="kg-ai-box">
+                        <h3 style="color: #4a148c; margin-bottom: 10px;">🤖 ReadingCoach Knowledge OS</h3>
+                        <p style="color: #555; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                            這不僅是一篇課文，而是您英語知識網路的其中一個節點。AI 已經自動將本課的觀念與相關的學習歷程連結起來了！
+                        </p>
+                    </div>
+
+                    <div class="kg-row">
+                        <!-- 跨課文關聯 -->
+                        <div class="kg-card kg-card-blue">
+                            <div class="kg-title">🔗 跨課文概念連結 (Topics)</div>
+                            <div class="kg-node-list">
+                                <div class="kg-node kg-node-past">
+                                    <div class="kg-node-icon">1.3</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="1_3.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">A
+                                                Community of People</a></div>
+                                        <div class="kg-node-desc">先備知識：初次探討「社群」的概念與互助。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-current">
+                                    <div class="kg-node-icon">2.20</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title">Toni Morrison (本課)</div>
+                                        <div class="kg-node-desc">深入探討非裔作家的文學貢獻、社群歸屬與種族議題。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-future">
+                                    <div class="kg-node-icon">6.22</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="6_22.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">Rosa
+                                                Parks and the Civil Rights Movement</a></div>
+                                        <div class="kg-node-desc">AI 推薦延伸：了解更宏觀的美國種族奮鬥史，包含 Dr. Martin Luther King Jr.。
+                                        </div>
+                                        <span class="kg-tag kg-tag-ai">✨ AI 推薦進階課程</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 文法追蹤軌跡 -->
+                        <div class="kg-card kg-card-green">
+                            <div class="kg-title">📈 文法追蹤 (Grammar Journey)</div>
+                            <div class="kg-node-list">
+                                <div class="kg-node kg-node-past">
+                                    <div class="kg-node-icon">1.10</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="1_10.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">動名詞做主詞
+                                                (Taking photos)</a></div>
+                                        <div class="kg-node-desc">"Taking photos can be fun!" 初次認識動名詞 (V-ing) 當作名詞的基本型態。
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-current">
+                                    <div class="kg-node-icon">2.20</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title">V-ing 轉化為純名詞 (產物)</div>
+                                        <div class="kg-node-desc">"love her writing." 探討動詞轉化為具體作品或技能的進階用法。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-future">
+                                    <div class="kg-node-icon">4.6</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="4_6.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">動名詞
+                                                (V-ing) 當作主詞</a>
+                                        </div>
+                                        <div class="kg-node-desc">解鎖高階句型，讓寫作更像母語人士。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kg-row">
+                        <!-- 單字語境演化 -->
+                        <div class="kg-card kg-card-purple">
+                            <div class="kg-title">🌱 單字演化 (Vocab Matrix)</div>
+                            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <strong style="color: #6a1b9a; font-size: 16px;">community (名詞)</strong>
+                                <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="font-size: 14px; border-left: 3px solid #ccc; padding-left: 10px;">
+                                        <span style="color: #666; font-size: 12px;"><a href="1_3.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 2px;">課程
+                                                1.3 (實體社區)</a></span><br>
+                                        What is a <strong>community</strong>? (社區)
+                                    </div>
+                                    <div
+                                        style="font-size: 14px; border-left: 3px solid #ab47bc; padding-left: 10px; background: white; padding: 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                        <span style="color: #9c27b0; font-size: 12px; font-weight: bold;">本課 2.20
+                                            (精神歸屬)</span><br>
+                                        Where they belong in their <strong>community</strong>. (社群/族群)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
             <!-- 聽音重組分頁 -->
             <div id="reconstruction" class="tab-content">
                 <h3>🎧 聽音重組挑戰</h3>
@@ -175,38 +879,51 @@
                 </div>
                 <div class="game-board">
                     <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
-                        <button type="button" id="btnChunkMode" class="btn" style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
-                        <button type="button" id="btnWordMode" class="btn" style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
                     </div>
                     <div style="text-align: center; margin-bottom: 20px;">
-                        <span id="gameProgress" style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 / 11</span>
-                        <button type="button" class="btn" style="background-color: #2196F3;" onclick="playCurrentSentence()">🔊 播放此句</button>
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            11</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
                     </div>
                     <div class="answer-area" id="answerArea"></div>
                     <div class="word-bank" id="wordBank"></div>
                     <div id="reviewArea"></div>
                     <div class="game-controls">
-                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn" onclick="nextSentence()">➡️ 下一句</button>
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
                     </div>
                     <div class="game-status" id="gameStatus"></div>
-                    <div id="translationHint" style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Toni Morrison: An Inspiring Author\n\nToni Morrison was an African American author. She wrote about Black Americans and their lives. Many of her characters experienced racism. She wrote about these characters dealing with those struggles. She also wrote about people understanding where they belong in their community. She used myth and poetry in her books.\n\nMany people around the world love her writing. She even won many awards for her writing. Toni Morrison wrote her whole life.\n\nToni Morrison even wrote a few children’s books! She wrote them with her son. One of these books is called Who’s Got Game?: The Ant or the Grasshopper? Maybe you can find one of her children’s books in the library!`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         // --- 聽音重組遊戲邏輯 ---
@@ -328,7 +1045,7 @@
                 const u = new SpeechSynthesisUtterance(text);
                 const voices = synth.getVoices();
                 const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
-                
+
                 if (googleVoice) {
                     u.voice = googleVoice;
                 }
@@ -376,7 +1093,7 @@
                 currentWords = [...gameSentences[currentGameIndex].chunks];
             } else {
                 let rawText = gameSentences[currentGameIndex].en;
-                rawText = rawText.replace(/[.,!?”“:]/g, ''); 
+                rawText = rawText.replace(/[.,!?”“:]/g, '');
                 currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
             }
 
@@ -447,7 +1164,7 @@
                     if (reviewData && reviewData.length > 0 && gameMode === 'chunk') {
                         const reviewArea = document.getElementById('reviewArea');
                         reviewArea.innerHTML = '';
-                        
+
                         const reviewContainer = document.createElement('div');
                         reviewContainer.className = 'post-submit-review';
                         reviewContainer.style.marginTop = '20px';
@@ -514,4 +1231,5 @@
         };
     </script>
 </body>
+
 </html>

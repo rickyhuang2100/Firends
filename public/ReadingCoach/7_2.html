@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Beat of Cree Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 The Beat of Cree Music</h1>
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+        <div class="text-content" id="storyContainer"></div>
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The Cree are one of the largest
+                                Indigenous peoples in North America.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>克里族（Cree）是北美最大的原住民族群之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>They mostly live in Canada and
+                                parts of the United States.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>他們主要居住在加拿大以及美國的部分地區。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>One important aspect of Cree
+                                culture is drumming.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>克里族文化的一個重要面向是打鼓。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>For the Cree, like for many other
+                                Indigenous peoples, drumming is a sacred activity.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>對克里族而言，就像對許多其他原住民族一樣，打鼓是一種神聖的活動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Drums are used in Cree ceremonies
+                                and rituals.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>鼓被用於克里族的儀式和禮典中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Especially in certain Plains Cree
+                                rituals, drum beats symbolize the heartbeat of Earth and the circle of life.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>尤其是在某些平原克里族的儀式中，鼓聲象徵著大地的心跳與生命的循環。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The Cree use different kinds of
+                                drums for different purposes.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>克里族為了不同的目的使用不同種類的鼓。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>One important kind of drum is the
+                                frame drum.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>框架鼓（frame drum）是一種重要的鼓。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Frame drums are small drums with
+                                one head, or drumming surface.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>框架鼓是小型鼓，只有一個鼓面（即敲擊面）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>These drums are used by one
+                                individual player in ceremonies and rituals.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這些鼓在儀式和禮典中由單一演奏者使用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>To make these drums, the Cree use
+                                birch wood to create a frame for the drum.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>製作這些鼓時，克里族人用樺木製作鼓的框架，</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Then, they stretch deer hide
+                                tightly around the frame.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>然後把鹿皮緊繃地包覆在框架上，</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>This creates a taut surface for
+                                drumming.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>形成一個緊繃的敲擊面。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>One special feature of these types
+                                of Cree drums is their tuning strings.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這類克里族鼓有一個特殊之處，就是它們的調音弦。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Cree drum-makers attach special
+                                twisted rawhide strings under the drum's surface.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>克里族的製鼓師會在鼓面下方固定特殊的扭轉生皮弦。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>These strings change the sounds
+                                that the drum can make.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這些弦能改變鼓所發出的聲音。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The drummer can vibrate these
+                                strings to create different sounds while drumming.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>鼓手可以讓這些弦振動，在打鼓時產生不同的音效。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Another important type of drum used
+                                by Cree and other Plains Indigenous peoples is the powwow drum.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>克里族和其他平原原住民族使用的另一種重要鼓是「戰舞鼓」（powwow
+                                drum）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Powwow drums are large.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>戰舞鼓體型較大。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Sometimes, they are one very large
+                                surface that multiple people can drum on.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>有時，它是一個非常大的鼓面，可以讓多人同時敲打。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Sometimes they have two heads, like
+                                a long tube with a drum head at each end.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>有時它有兩個鼓面，就像一根長管兩端各有一個鼓面。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Powwow drums are often used in
+                                powwows and other ceremonies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>戰舞鼓常被用於戰舞集會和其他儀式中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>One important ritual of some Cree
+                                ceremonies is the Round Dance.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>「圓圈舞」（Round Dance）是一些克里族儀式中的重要傳統。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>In the past, the Round Dance was a
+                                way for Cree people to honor their deceased ancestors.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>過去，圓圈舞是克里族人紀念已故先祖的一種方式。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Special songs were sung along with
+                                the drumming.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>人們會伴隨著鼓聲演唱特殊歌謠，</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>People gave offerings to divine
+                                forces and prayed for their deceased ancestors.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>並向神聖力量獻上供品，為已故的祖先祈禱。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Today, the Round Dance has evolved
+                                into an important spiritual and social gathering.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>如今，圓圈舞已演化為一種重要的精神性與社交性聚會。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Many Indigenous peoples have their
+                                own versions of the Round Dance.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>許多原住民族都有他們自己版本的圓圈舞。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>At a modern Cree Round Dance, Cree
+                                people of all ages gather.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在現代的克里族圓圈舞中，各個年齡層的克里族人齊聚一堂，</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>There, they play the drums and
+                                listen to traditional Cree songs sung in the Cree language.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>敲擊鼓聲、聆聽以克里語演唱的傳統克里族歌曲。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>These gatherings are important ways
+                                to keep celebrating Cree culture.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這些聚會是持續慶祝克里族文化的重要方式。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Some musical groups today are
+                                bringing Cree traditional drumming to the rest of the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>今日，一些音樂團體正在將克里族傳統鼓樂帶向世界各地。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>One musical group, called Northern
+                                Cree, is well known around the world for their drumming and singing.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>其中一個名為「北方克里族」（Northern
+                                Cree）的音樂團體，以其鼓藝和歌唱在世界各地享有盛名。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The musical group uses Cree
+                                traditional drumming to connect with a wider audience.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這個音樂團體用克里族傳統鼓藝與更廣泛的觀眾建立連結。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>They have performed at the Grammys
+                                and have been nominated for many awards.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>他們曾在葛萊美獎上表演，並獲得多項獎項提名。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>They also view traditional Cree
+                                songs as an important way to keep practicing the Cree language.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>他們也將傳統克里族歌曲視為持續練習克里語的重要方式。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>In this way, Northern Cree has
+                                joined a long heritage of cultural expression through drumming.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>透過這樣的努力，北方克里族加入了透過打鼓進行文化表達的悠久傳承。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="vocabulary" class="tab-content">
+            <h3>📖 重點單字與片語</h3>
+            <div class="vocab-grid">
+                <div class="vocab-item">
+                    <div class="vocab-word">sacred</div>
+                    <div class="vocab-type">adj. 形容詞</div>
+                    <div class="vocab-meaning">神聖的</div>
+                    <div class="example">Drumming is a <span class='highlight'>sacred</span> activity for the Cree.
+                    </div>
+                </div>
+                <div class="vocab-item">
+                    <div class="vocab-word">ritual</div>
+                    <div class="vocab-type">n. 名詞</div>
+                    <div class="vocab-meaning">儀式，禮典</div>
+                    <div class="example">Drums are used in Cree ceremonies and <span class='highlight'>rituals</span>.
+                    </div>
+                </div>
+                <div class="vocab-item">
+                    <div class="vocab-word">symbolize</div>
+                    <div class="vocab-type">v. 動詞</div>
+                    <div class="vocab-meaning">象徵</div>
+                    <div class="example">Drum beats <span class='highlight'>symbolize</span> the heartbeat of Earth.
+                    </div>
+                </div>
+                <div class="vocab-item">
+                    <div class="vocab-word">taut</div>
+                    <div class="vocab-type">adj. 形容詞</div>
+                    <div class="vocab-meaning">繃緊的，拉緊的</div>
+                    <div class="example">They stretch deer hide tightly to create a <span class='highlight'>taut</span>
+                        surface.</div>
+                </div>
+                <div class="vocab-item">
+                    <div class="vocab-word">deceased</div>
+                    <div class="vocab-type">adj. 形容詞</div>
+                    <div class="vocab-meaning">已故的，已逝的</div>
+                    <div class="example">They prayed for their <span class='highlight'>deceased</span> ancestors.
+                    </div>
+                </div>
+                <div class="vocab-item">
+                    <div class="vocab-word">heritage</div>
+                    <div class="vocab-type">n. 名詞</div>
+                    <div class="vocab-meaning">遺產，傳承</div>
+                    <div class="example">They joined a long <span class='highlight'>heritage</span> of cultural
+                        expression.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="grammar" class="tab-content">
+            <h3>✏️ 文法重點解析</h3>
+            <div class="grammar-box">
+                <div class="grammar-title">be used in / for + N (被用於……)</div>
+                <p>被動語態表示某物被用在特定的場合或用途。注意 <strong>in</strong> 接場合，<strong>for</strong> 接目的。</p>
+                <div class="example">Drums <span class='highlight'>are used in</span> Cree ceremonies and rituals.
+                </div>
+                <div class="example">These drums <span class='highlight'>are used</span> by one individual player
+                    <span class='highlight'>in</span> ceremonies.
+                </div>
+                <div class="example">Powwow drums <span class='highlight'>are often used in</span> powwows and other
+                    ceremonies.</div>
+            </div>
+            <div class="grammar-box">
+                <div class="grammar-title">have evolved into...（已演化成……）</div>
+                <p>現在完成式表示從過去某個時點持續至今的變化。<strong>evolve into</strong> 表示「演化/演變成」，常用於描述文化或事物的轉變。</p>
+                <div class="example">The Round Dance <span class='highlight'>has evolved into</span> an important
+                    spiritual and social gathering.</div>
+                <div class="example">The small company <span class='highlight'>has evolved into</span> a global
+                    brand.</div>
+            </div>
+        </div>
+
+        <div id="sentences" class="tab-content">
+            <h3>💬 重要句型分析</h3>
+            <div class="sentence-pattern">
+                <strong>To + V, S + V... (目的狀語，以不定詞開頭)</strong>
+                <p>以不定詞 (To + 動詞) 開頭的句型，用來說明做某事的目的，等同於 "In order to..."。</p>
+                <div class="example"><span class='highlight'>To make</span> these drums, the Cree use birch wood to
+                    create a frame.</div>
+                <div class="example"><span class='highlight'>To improve</span> his score, he studied every day.
+                </div>
+            </div>
+            <div class="sentence-pattern">
+                <strong>S + view + O + as + N/adj. (將……視為……)</strong>
+                <p>表示某人如何看待或評價某件事物，是說明立場或觀點的常見句型。</p>
+                <div class="example">They also <span class='highlight'>view</span> traditional Cree songs <span
+                        class='highlight'>as</span> an important way to keep practicing the Cree language.</div>
+                <div class="example">Many people <span class='highlight'>view</span> this change <span
+                        class='highlight'>as</span> a positive development.</div>
+            </div>
+        </div>
+
+        <div id="reading" class="tab-content">
+            <h3>🎯 閱讀理解</h3>
+            <div class="grammar-box">
+                <div class="grammar-title">理解測驗</div>
+                <ol>
+                    <li style="margin-bottom: 15px;">克里族框架鼓（frame drum）鼓面下方的扭轉生皮弦有什麼功能？
+                        <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                            <li>A) 讓鼓更容易攜帶</li>
+                            <li>B) 裝飾鼓的外觀</li>
+                            <li>C) 改變鼓所能發出的聲音</li>
+                            <li>D) 固定鹿皮不讓它鬆脫</li>
+                        </ul>
+                        <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                    </li>
+                    <li style="margin-bottom: 15px;">根據文章，過去「圓圈舞」的主要目的是什麼？
+                        <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                            <li>A) 慶祝豐收</li>
+                            <li>B) 紀念已故的祖先</li>
+                            <li>C) 訓練年輕的鼓手</li>
+                            <li>D) 迎接外來訪客</li>
+                        </ul>
+                        <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                    </li>
+                    <li style="margin-bottom: 15px;">「北方克里族」（Northern Cree）音樂團體如何看待傳統克里族歌曲？
+                        <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                            <li>A) 一種賺錢的商業手段</li>
+                            <li>B) 一種過時的文化傳統</li>
+                            <li>C) 一種持續練習克里語的重要方式</li>
+                            <li>D) 一種只適合在葛萊美獎演出的音樂</li>
+                        </ul>
+                        <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script>
+        const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
+        const storyText = `The Cree are one of the largest Indigenous peoples in North America. They mostly live in Canada and parts of the United States. One important aspect of Cree culture is drumming. For the Cree, like for many other Indigenous peoples, drumming is a sacred activity. Drums are used in Cree ceremonies and rituals. Especially in certain Plains Cree rituals, drum beats symbolize the heartbeat of Earth and the circle of life.
+
+The Cree use different kinds of drums for different purposes. One important kind of drum is the frame drum. Frame drums are small drums with one head, or drumming surface. These drums are used by one individual player in ceremonies and rituals. To make these drums, the Cree use birch wood to create a frame for the drum. Then, they stretch deer hide tightly around the frame. This creates a taut surface for drumming. One special feature of these types of Cree drums is their tuning strings. Cree drum-makers attach special twisted rawhide strings under the drum's surface. These strings change the sounds that the drum can make. The drummer can vibrate these strings to create different sounds while drumming.
+
+Another important type of drum used by Cree and other Plains Indigenous peoples is the powwow drum. Powwow drums are large. Sometimes, they are one very large surface that multiple people can drum on. Sometimes they have two heads, like a long tube with a drum head at each end. Powwow drums are often used in powwows and other ceremonies.
+
+One important ritual of some Cree ceremonies is the Round Dance. In the past, the Round Dance was a way for Cree people to honor their deceased ancestors. Special songs were sung along with the drumming. People gave offerings to divine forces and prayed for their deceased ancestors. Today, the Round Dance has evolved into an important spiritual and social gathering. Many Indigenous peoples have their own versions of the Round Dance. At a modern Cree Round Dance, Cree people of all ages gather. There, they play the drums and listen to traditional Cree songs sung in the Cree language. These gatherings are important ways to keep celebrating Cree culture.
+
+Some musical groups today are bringing Cree traditional drumming to the rest of the world. One musical group, called Northern Cree, is well known around the world for their drumming and singing. The musical group uses Cree traditional drumming to connect with a wider audience. They have performed at the Grammys and have been nominated for many awards. They also view traditional Cree songs as an important way to keep practicing the Cree language. In this way, Northern Cree has joined a long heritage of cultural expression through drumming.`;
+        function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
+        function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('en-US')) select.selectedIndex = i; }); }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
+        function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
+        window.onload = initText;
+    </script>
+</body>
+
+</html>
