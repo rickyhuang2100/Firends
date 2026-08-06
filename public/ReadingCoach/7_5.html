@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Mighty Semiconductor and the Rise of Silicon Valley</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 The Mighty Semiconductor and the Rise of Silicon Valley</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>For thousands of years, people lived in
+                                a world without computers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>數千年來，人們生活在一個沒有電腦的世界。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>There were no video games and no
+                                smartphones.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>那裡沒有電子遊戲，也沒有智慧型手機。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Now computers are part of the daily
+                                life of many people, and it's hard to imagine a world without them.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>現在，電腦已成為許多人日常生活的一部分，很難想像一個沒有它們的世界。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>What is it that makes a computer work?
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>到底是什麼讓電腦運作的？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Inside every computer is a tiny circuit
+                                called a semiconductor.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>每台電腦內部都有一個微小的電路，稱為半導體。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Often, a semiconductor is essentially a
+                                couple wires attached to a piece of silicon (a mineral like quartz).</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>通常，半導體本質上就是幾根連接到一塊矽（一種類似石英的礦物）上的導線。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Though semiconductors are very small,
+                                they are important.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>雖然半導體非常微小，但它們很重要。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Semiconductors are what make many
+                                electronics work, from car radios to the systems that pilots use to fly airplanes.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>半導體是許多電子設備運作的關鍵，從汽車收音機到飛行員用來駕駛飛機的系統都是如此。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>For a computer to work, it needs
+                                electricity.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>電腦要運作就需要電力。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Semiconductors carry the electric
+                                signals in computers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>半導體在電腦中傳遞電子訊號。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>In the United States, almost all
+                                semiconductors are made in a place called Silicon Valley.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在美國，幾乎所有的半導體都是在一個叫做「矽谷」的地方製造的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Silicon Valley is just outside of San
+                                Francisco and is home to some of the country’s smartest scientists.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>矽谷就在舊金山郊外，是該國一些最聰明科學家的所在地。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The history of Silicon Valley is tied
+                                to the history of the semiconductor.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>矽谷的歷史與半導體的歷史息息相關。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The first mass-produced semiconductor
+                                was designed in the 1950s in Silicon Valley by a company called Fairchild Semiconductor.
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>第一批大量生產的半導體是 1950 年代在矽谷由一家名為「快捷半導體（Fairchild
+                                Semiconductor）」的公司設計的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The engineers at Fairchild were
+                                interested in finding ways to make machines faster and smaller.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>快捷半導體的工程師們致力於尋找讓機器變得更快、更小的方法。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Before Fairchild, people knew how to
+                                make semiconductors, but they didn’t know how to make large batches of them.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在快捷半導體之前，人們知道如何製造半導體，但他們不知道如何大批量生產。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>In those early years, Robert Noyce was
+                                the boss at Fairchild.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在早些年，羅伯特·諾伊斯（Robert Noyce）是快捷半導體的老闆。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>He was in charge of making sure the
+                                company built cutting-edge products the world had never seen before.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>他負責確保公司製造出世界上前所未見的尖端產品。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Robert wanted his company to be a
+                                community where everyone was equal.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>羅伯特希望他的公司能成為一個每個人都平等的社群。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>At Fairchild, an engineer could rise to
+                                the top quickly, as long as he or she had a good idea.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在快捷半導體，工程師只要有好點子，就能很快晉升到高層。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Everyone pitched in to help with
+                                problems, and everyone celebrated when a problem was solved.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>大家齊心協力解決問題，當問題解決時，每個人都會一起慶祝。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Engineers loved working at Fairchild,
+                                and the company grew quickly.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>工程師們喜歡在快捷半導體工作，公司也發展得很快。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>NASA needed semiconductors for the
+                                computers in their new spaceships.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>美國太空總署（NASA）需要半導體來用於他們新太空船中的電腦。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The United States Department of Defense
+                                needed semiconductors for planes and other military vehicles.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>美國國防部需要半導體來用於飛機和其他軍用車輛。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Computer systems were being put into
+                                all kinds of devices, and every single computer needed semiconductors.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>電腦系統被應用在各種設備中，而每一台電腦都需要半導體。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Soon engineers at Fairchild began
+                                quitting.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>很快地，快捷半導體的工程師們開始辭職。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>They had exciting ideas and wanted to
+                                start their own companies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>他們有令人興奮的想法，並想創立自己的公司。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>More than 50 other semiconductor
+                                companies were started by former employees at Fairchild.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>超過 50 家其他的半導體公司是由快捷半導體的前員工所創立的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Most of these companies stayed in
+                                Silicon Valley.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這些公司大多數都留在矽谷。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Soon it made sense for other high-tech
+                                companies to move to Silicon Valley, since there were already so many talented engineers
+                                in the area.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>很快地，其他高科技公司搬到矽谷是很合理的，因為該地區已經有這麼多才華洋溢的工程師了。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>In the 1970s the area began to be
+                                called “Silicon Valley,” after the mineral that was the backbone of the semiconductor.
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在 1970 年代，該地區開始被稱為「矽谷（Silicon
+                                Valley）」，這是以作為半導體骨幹的礦物（矽）來命名的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>As computers spread throughout the
+                                country, Silicon Valley grew along with the industry.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>隨著電腦普及到全國，矽谷也隨著產業共同成長。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Soon it wasn’t just semiconductor
+                                companies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>很快地，那裡不僅僅只有半導體公司了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>There were companies that made personal
+                                computers, printers, software… the list went on and on.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>出現了製造個人電腦、印表機、軟體的公司......名單不斷增加。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Apple, the maker of the first personal
+                                computer, had headquarters close to Silicon Valley.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>製造第一台個人電腦的蘋果公司，其總部就靠近矽谷。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Years later, Google’s headquarters were
+                                set in Mountain View, in the exact same city as Fairchild Semiconductor’s first
+                                building.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>多年後，Google 的總部設在山景城（Mountain
+                                View），與快捷半導體第一棟建築位在同一個城市。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Companies like Apple and Google have
+                                been attracting thousands of engineers from all over the world, making Silicon Valley a
+                                wealthy and thriving area.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>像蘋果和 Google
+                                這樣的公司不斷吸引來自世界各地成千上萬的工程師，使矽谷成為一個富裕且繁榮的地區。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Investors have also followed engineers
+                                to Silicon Valley looking for promising companies with big futures.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>投資者也跟隨工程師來到矽谷，尋找前途光明、大有可為的公司。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>These new investors—known as venture
+                                capital firms—give a company the money it needs to start a business.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這些新的投資者被稱為創業投資公司（創投公司），他們提供公司創業所需的資金。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Then if the company becomes big, a
+                                large chunk of the money it makes goes back to the investors.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>然後如果公司變大了，它賺取的一大筆錢就會回饋給投資者。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>But it isn’t just the money that draws
+                                workers to Silicon Valley—it’s also the opportunity.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>但吸引員工來到矽谷的不僅僅是金錢，還有機會。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>In Silicon Valley, there are new
+                                companies being created every week.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在矽谷，每週都有新的公司成立。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>There is money to invest in new
+                                companies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>有資金可以投資新公司。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Silicon Valley has become a new global
+                                center of technology.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>矽谷已成為一個新的全球科技中心。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>As of 2013, Silicon Valley is home to
+                                more than 3 million people.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>截至 2013 年，矽谷的居民超過 300 萬人。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Many of them came from other countries,
+                                and in over half of the homes in Silicon Valley, families speak another language besides
+                                English.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>他們之中有許多人來自其他國家，在超過半數的矽谷家庭中，除了英語之外還會說另一種語言。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Both immigrants from other countries
+                                and people who move to Silicon Valley from other parts of the United States bring new
+                                ideas to Silicon Valley.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>來自其他國家的移民，以及從美國其他地方搬到矽谷的人，都為矽谷帶來了新點子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Soon these people may start their own
+                                companies, and those new companies may attract more engineers from other parts of the
+                                world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>不久後，這些人可能會創立自己的公司，而這些新公司可能會吸引更多來自世界各地的工程師。
+                            </td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>And so, Silicon Valley will continue to
+                                grow.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>因此，矽谷將會繼續成長茁壯。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">semiconductor</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">半導體</div>
+                        <div class="example">Inside every computer is a tiny circuit called a <span
+                                class='highlight'>semiconductor</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">essentially</div>
+                        <div class="vocab-type">adv. 副詞</div>
+                        <div class="vocab-meaning">本質上，基本上</div>
+                        <div class="example">A semiconductor is <span class='highlight'>essentially</span> a couple
+                            wires attached to a piece of silicon.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">mass-produced</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">大量生產的</div>
+                        <div class="example">The first <span class='highlight'>mass-produced</span> semiconductor was
+                            designed in the 1950s.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">cutting-edge</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">尖端的，最先進的</div>
+                        <div class="example">He was in charge of making sure the company built <span
+                                class='highlight'>cutting-edge</span> products.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">thriving</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">繁榮的，蓬勃發展的</div>
+                        <div class="example">Companies have been making Silicon Valley a wealthy and <span
+                                class='highlight'>thriving</span> area.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">venture capital</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">創業投資（創投）</div>
+                        <div class="example">These new investors—known as <span class='highlight'>venture capital</span>
+                            firms—give a company the money it needs.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">it’s hard to + V（很難去...）</div>
+                    <p>使用虛主詞 it 來代替後面真正的主詞 (to + V)，表示做某件事情是困難的。</p>
+                    <div class="example">Now computers are part of the daily life... and <span class='highlight'>it’s
+                            hard to imagine</span> a world without them.</div>
+                    <div class="example"><span class='highlight'>It's hard to believe</span> that he actually won the
+                        game.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">be tied to（與...密切相關，與...綁在一起）</div>
+                    <p>表示兩件事情有很深的連結或關聯性。</p>
+                    <div class="example">The history of Silicon Valley <span class='highlight'>is tied to</span> the
+                        history of the semiconductor.</div>
+                    <div class="example">Her success <span class='highlight'>is closely tied to</span> her hard work.
+                    </div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>as long as + S + V（只要...）</strong>
+                    <p>引導條件子句，表示在某個前提或條件下，另一件事就會發生或成立。</p>
+                    <div class="example">An engineer could rise to the top quickly, <span class='highlight'>as long as
+                            he or she had</span> a good idea.</div>
+                    <div class="example">You can stay here <span class='highlight'>as long as you keep</span> quiet.
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>not just A, but also B（不僅是A，也是B / 還有B）</strong>
+                    <p>這是一個強調兩者的句型，原文使用了變形 "But it isn’t just... it’s also..." 來表達相同的概念。</p>
+                    <div class="example">But <span class='highlight'>it isn’t just the money</span> that draws workers
+                        to Silicon Valley—<span class='highlight'>it’s also the opportunity</span>.</div>
+                    <div class="example">He is <span class='highlight'>not just</span> my colleague, <span
+                            class='highlight'>but also</span> my best friend.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">半導體在電腦中的主要功用是什麼？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 提供電力</li>
+                                <li>B) 傳遞電子訊號</li>
+                                <li>C) 讓螢幕發光</li>
+                                <li>D) 儲存照片</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">第一批大量生產的半導體是哪家公司設計的？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) Google</li>
+                                <li>B) Apple</li>
+                                <li>C) NASA</li>
+                                <li>D) Fairchild Semiconductor</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：D</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼矽谷（Silicon Valley）會被命名為這個名字？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 因為這裡是一座山谷</li>
+                                <li>B) 因為當地盛產「矽」這項農產品</li>
+                                <li>C) 以半導體的骨幹礦物「矽」來命名</li>
+                                <li>D) 創辦人的名字叫 Silicon</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+        </script>
+    <script>
+        const storyText = `For thousands of years, people lived in a world without computers. There were no video games and no smartphones. Now computers are part of the daily life of many people, and it's hard to imagine a world without them. What is it that makes a computer work? Inside every computer is a tiny circuit called a semiconductor. Often, a semiconductor is essentially a couple wires attached to a piece of silicon (a mineral like quartz). Though semiconductors are very small, they are important. Semiconductors are what make many electronics work, from car radios to the systems that pilots use to fly airplanes. For a computer to work, it needs electricity. Semiconductors carry the electric signals in computers. In the United States, almost all semiconductors are made in a place called Silicon Valley. Silicon Valley is just outside of San Francisco and is home to some of the country's smartest scientists. The history of Silicon Valley is tied to the history of the semiconductor. The first mass-produced semiconductor was designed in the 1950s in Silicon Valley by a company called Fairchild Semiconductor. The engineers at Fairchild were interested in finding ways to make machines faster and smaller. Before Fairchild, people knew how to make semiconductors, but they didn't know how to make large batches of them. In those early years, Robert Noyce was the boss at Fairchild. He was in charge of making sure the company built cutting-edge products the world had never seen before. Robert wanted his company to be a community where everyone was equal. At Fairchild, an engineer could rise to the top quickly, as long as he or she had a good idea. Everyone pitched in to help with problems, and everyone celebrated when a problem was solved. Engineers loved working at Fairchild, and the company grew quickly. NASA needed semiconductors for the computers in their new spaceships. The United States Department of Defense needed semiconductors for planes and other military vehicles. Computer systems were being put into all kinds of devices, and every single computer needed semiconductors. Soon engineers at Fairchild began quitting. They had exciting ideas and wanted to start their own companies. More than 50 other semiconductor companies were started by former employees at Fairchild. Most of these companies stayed in Silicon Valley. Soon it made sense for other high-tech companies to move to Silicon Valley, since there were already so many talented engineers in the area. In the 1970s the area began to be called “Silicon Valley,” after the mineral that was the backbone of the semiconductor. As computers spread throughout the country, Silicon Valley grew along with the industry. Soon it wasn’t just semiconductor companies. There were companies that made personal computers, printers, software… the list went on and on. Apple, the maker of the first personal computer, had headquarters close to Silicon Valley. Years later, Google’s headquarters were set in Mountain View, in the exact same city as Fairchild Semiconductor’s first building. Companies like Apple and Google have been attracting thousands of engineers from all over the world, making Silicon Valley a wealthy and thriving area. Investors have also followed engineers to Silicon Valley looking for promising companies with big futures. These new investors—known as venture capital firms—give a company the money it needs to start a business. Then if the company becomes big, a large chunk of the money it makes goes back to the investors. But it isn’t just the money that draws workers to Silicon Valley—it’s also the opportunity. In Silicon Valley, there are new companies being created every week. There is money to invest in new companies. Silicon Valley has become a new global center of technology. As of 2013, Silicon Valley is home to more than 3 million people. Many of them came from other countries, and in over half of the homes in Silicon Valley, families speak another language besides English. Both immigrants from other countries and people who move to Silicon Valley from other parts of the United States bring new ideas to Silicon Valley. Soon these people may start their own companies, and those new companies may attract more engineers from other parts of the world. And so, Silicon Valley will continue to grow.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        // Populate voices
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Initialize text
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            // split keeping punctuation
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-\${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            // 重置
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            // 提取從目前位置開始的文字
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            // Apple devices need rate adjustment
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            // 在某些瀏覽器中 onboundary 可能不可靠，特別是處理大量文字時
+            // 所以我們使用備用方案：結合時間估算
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                // 模擬進度追蹤 (如果 onboundary 不觸發)
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    // 估算：平均每個字約 300ms (1x速度)
+                    // 根據速率調整
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    // 確保不超過總字數
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        // 更新目前的進度索引，這樣暫停後可以從大約正確的位置恢復
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            // 優先使用 onboundary 如果瀏覽器支援
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    // 使用 charIndex 來找到對應的單字
+                    // 這裡的邏輯需要非常精確才能與原始文本對應
+                    // 為簡單起見，我們繼續使用計時器估算，因為它更穩健
+                }
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            // 記錄停止時的文字索引
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        // 點擊文字可以從那裡開始唸
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    // 點選後直接標記該單字
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
