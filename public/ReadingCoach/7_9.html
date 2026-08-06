@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - From the Earth to Outer Space</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 From the Earth to Outer Space</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Many years ago, people here on Earth decided that they wanted to go into outer space.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>許多年前，地球上的人們決定他們想要進入外太空。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is something people had imagined for a very long time, in books and movies and stories grandparents told to their grandchildren.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這是人們想像了很長一段時間的事情，出現在書籍、電影以及祖父母講給孫子們聽的故事中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, in the 1950s, people decided they really wanted to do it.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，在 1950 年代，人們決定他們真的想這麼做。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>There was just one problem: how would they get there?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>只有一個問題：他們要怎麼去那裡？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of the earliest movies about flying to the moon was made by Georges Méliès and released in 1902.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最早關於飛向月球的電影之一是由喬治·梅力愛（Georges Méliès）製作並於 1902 年上映的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was called A Trip to the Moon.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它被稱為《月球旅行記》。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In this movie, the moon was made up of a man’s face, covered in cream, and a whole tribe of angry natives lived there.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在這部電影中，月球是由一張塗滿鮮奶油的人臉組成，上面住著一整群憤怒的土著。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>That part was not very realistic.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>那部分並不是很寫實。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, the spaceship didn’t seem too far-fetched: it was a small capsule, shaped like a bullet, that the astronauts loaded into a giant cannon and aimed at the moon.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，太空船似乎並沒有太牽強：它是一個形狀像子彈的小太空艙，太空人們把它裝進一個巨大的大砲裡，瞄準月球。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This movie was based on a book that came out many years earlier by an author named Jules Verne.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這部電影是改編自多年前由一位名叫儒勒·凡爾納（Jules Verne）的作家出版的一本書。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of the fans of the book was a Russian man, Konstantin Tsiolkovsky.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這本書的其中一位粉絲是一位俄羅斯人，康斯坦丁·齊奧爾科夫斯基（Konstantin Tsiolkovsky）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The book made him think.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這本書引發了他的思考。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Could you really shoot people out of a cannon and have them get safely to the moon?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你真的能用大砲把人射出去，讓他們安全抵達月球嗎？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He decided you couldn’t, but it got him thinking of other ways you could get people to the moon.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他認為不行，但這讓他開始思考可以把人送上月球的其他方法。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He spent his life considering this problem and came up with many solutions.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他花了一生在思考這個問題，並想出了許多解決方案。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Some of Tsiolkovsky’s solutions gave scientists in America and Russia (where Tsiolkovsky lived) ideas when they began to think about space travel.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當美國和俄羅斯（齊奧爾科夫斯基居住的地方）的科學家開始思考太空旅行時，齊奧爾科夫斯基的一些解決方案給了他們靈感。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They also thought about airplanes they and other people had made, and even big bombs that could fly themselves very long distances.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們也考慮了自己和其他人製造的飛機，甚至是可以自己飛行很長距離的大炸彈。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>How could they take all these ideas and make them into one thing that would safely get astronauts into space?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們如何才能將所有這些想法結合起來，變成一個能安全將太空人送入太空的東西？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Many scientists spent years working together to solve the problem.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>許多科學家花了數年時間一起合作解決這個問題。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They drew and discussed different designs until they agreed on the ones that were the best.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們繪製並討論了不同的設計，直到他們在最好的設計上達成共識。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Then, they built small models of those designs, and tested and tested them until they felt ready to build even bigger models.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然後，他們建造了這些設計的小模型，並不斷進行測試，直到他們覺得準備好建造更大的模型為止。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They made full-scale rockets, which they launched without any people inside, to test for safety.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們製造了全尺寸的火箭，在裡面沒有人的情況下發射，以測試安全性。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Often the rockets weren’t safe, and they exploded right there on the launch pad, or shot off in crazy directions like a balloon that you blow up and release without tying it first.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>通常火箭並不安全，它們會在發射台上直接爆炸，或者像一顆你吹好卻沒綁就放開的氣球一樣，朝著瘋狂的方向飛去。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>After many, many tests, they started to send small animals into space.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在經過非常非常多次的測試後，他們開始將小動物送入太空。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Only after a long time did they ever put a person inside a rocket and shoot him into space.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>直到過了很長一段時間，他們才真的把人放進火箭裡發射到太空。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Even after they began sending people into space, during the Gemini program in the 1960s, scientists were still trying to improve the shape of the rockets.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>即使在他們開始將人送入太空之後，在 1960 年代的雙子星計畫期間，科學家們仍在努力改良火箭的形狀。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The design changed many times, and eventually ended up looking like a half-rocket and half-airplane.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>設計更改了很多次，最終看起來像一半火箭、一半飛機。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This rocket, called the space shuttle, was used for many years.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這種被稱為太空梭的火箭，被使用了許多年。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Now, the government lets private companies try their own designs for spaceships, and they have come up with many different, crazy-looking machines.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>現在，政府讓私人公司嘗試他們自己的太空船設計，而他們已經想出了許多不同、外觀瘋狂的機器。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>There is no single solution for sending a person into space.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>將人送入太空並沒有單一的解決方案。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Thanks to the imaginations of people like Jules Verne and Konstantin Tsiolkovsky, and the hard work of the scientists who built and tested rockets over the years, humanity has developed reliable technology for space travel.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>多虧了像儒勒·凡爾納和康斯坦丁·齊奧爾科夫斯基這樣的人的想像力，以及多年來建造和測試火箭的科學家們的辛勤工作，人類已經發展出可靠的太空旅行科技。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Still, the work continues.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>儘管如此，工作仍在繼續。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Every day, the people who work on this problem share new designs, build test models, and try to imagine better ways to explore the vast deep mystery that is outer space.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>每一天，致力於這個問題的人們都會分享新設計，建立測試模型，並嘗試想像更好的方法來探索外太空這個浩瀚深邃的謎團。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">realistic</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">寫實的；逼真的</div>
+                        <div class="example">That part was not very <span class='highlight'>realistic</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">far-fetched</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">牽強的；難以置信的</div>
+                        <div class="example">The spaceship didn’t seem too <span class='highlight'>far-fetched</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">capsule</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">太空艙；膠囊</div>
+                        <div class="example">It was a small <span class='highlight'>capsule</span>, shaped like a bullet.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">full-scale</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">原尺寸的；全面性的</div>
+                        <div class="example">They made <span class='highlight'>full-scale</span> rockets.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">reliable</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">可靠的</div>
+                        <div class="example">Humanity has developed <span class='highlight'>reliable</span> technology for space travel.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">vast</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">廣闊的；浩瀚的</div>
+                        <div class="example">Explore the <span class='highlight'>vast</span> deep mystery that is outer space.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">Only after... did they... (倒裝句)</div>
+                    <p>當 Only + 片語/子句放在句首強調時，後面的主要句子要形成「倒裝句」，即助動詞移到主詞前面。</p>
+                    <div class="example"><span class='highlight'>Only after a long time did they</span> ever put a person inside a rocket.</div>
+                    <div class="example"><span class='highlight'>Only when it rained did he</span> realize he forgot his umbrella.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">be used for + N / V-ing (被用來...)</div>
+                    <p>被動語態，表示某物體的用途或目的。</p>
+                    <div class="example">This rocket <span class='highlight'>was used for</span> many years.</div>
+                    <div class="example">This tool <span class='highlight'>is used for</span> cutting wood.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>come up with (想出；提出)</strong>
+                    <p>通常用在想出一個點子、解決方案或計畫。</p>
+                    <div class="example">He <span class='highlight'>came up with</span> many solutions.</div>
+                    <div class="example">They have <span class='highlight'>come up with</span> many different, crazy-looking machines.</div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>thanks to (多虧了；由於)</strong>
+                    <p>用來表示對某人或某事的感激，或說明某個好結果的原因。</p>
+                    <div class="example"><span class='highlight'>Thanks to</span> the imaginations of people like Jules Verne...</div>
+                    <div class="example"><span class='highlight'>Thanks to</span> your help, we finished the project on time.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">在 1902 年的電影《月球旅行記》中，太空船看起來像什麼？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 一半火箭、一半飛機</li>
+                                <li>B) 一架太空梭</li>
+                                <li>C) 一個形狀像子彈的小太空艙</li>
+                                <li>D) 一顆大氣球</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">康斯坦丁·齊奧爾科夫斯基是誰？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 儒勒·凡爾納書籍的俄國粉絲，他思考了太空旅行的解決方案</li>
+                                <li>B) 製造出第一枚火箭的美國科學家</li>
+                                <li>C) 《月球旅行記》的導演</li>
+                                <li>D) 第一位太空人</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：A</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">在讓人乘坐之前，科學家如何測試全尺寸的火箭？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 他們立刻讓人坐進去。</li>
+                                <li>B) 他們在裡面沒有人的情況下發射火箭。</li>
+                                <li>C) 他們從不測試。</li>
+                                <li>D) 他們只在游泳池裡測試。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `Many years ago, people here on Earth decided that they wanted to go into outer space. This is something people had imagined for a very long time, in books and movies and stories grandparents told to their grandchildren. However, in the 1950s, people decided they really wanted to do it. There was just one problem: how would they get there? One of the earliest movies about flying to the moon was made by Georges Méliès and released in 1902. It was called A Trip to the Moon. In this movie, the moon was made up of a man’s face, covered in cream, and a whole tribe of angry natives lived there. That part was not very realistic. However, the spaceship didn’t seem too far-fetched: it was a small capsule, shaped like a bullet, that the astronauts loaded into a giant cannon and aimed at the moon. This movie was based on a book that came out many years earlier by an author named Jules Verne. One of the fans of the book was a Russian man, Konstantin Tsiolkovsky. The book made him think. Could you really shoot people out of a cannon and have them get safely to the moon? He decided you couldn’t, but it got him thinking of other ways you could get people to the moon. He spent his life considering this problem and came up with many solutions. Some of Tsiolkovsky’s solutions gave scientists in America and Russia (where Tsiolkovsky lived) ideas when they began to think about space travel. They also thought about airplanes they and other people had made, and even big bombs that could fly themselves very long distances. How could they take all these ideas and make them into one thing that would safely get astronauts into space? Many scientists spent years working together to solve the problem. They drew and discussed different designs until they agreed on the ones that were the best. Then, they built small models of those designs, and tested and tested them until they felt ready to build even bigger models. They made full-scale rockets, which they launched without any people inside, to test for safety. Often the rockets weren’t safe, and they exploded right there on the launch pad, or shot off in crazy directions like a balloon that you blow up and release without tying it first. After many, many tests, they started to send small animals into space. Only after a long time did they ever put a person inside a rocket and shoot him into space. Even after they began sending people into space, during the Gemini program in the 1960s, scientists were still trying to improve the shape of the rockets. The design changed many times, and eventually ended up looking like a half-rocket and half-airplane. This rocket, called the space shuttle, was used for many years. Now, the government lets private companies try their own designs for spaceships, and they have come up with many different, crazy-looking machines. There is no single solution for sending a person into space. Thanks to the imaginations of people like Jules Verne and Konstantin Tsiolkovsky, and the hard work of the scientists who built and tested rockets over the years, humanity has developed reliable technology for space travel. Still, the work continues. Every day, the people who work on this problem share new designs, build test models, and try to imagine better ways to explore the vast deep mystery that is outer space.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

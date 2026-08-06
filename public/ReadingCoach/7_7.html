@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Chimamanda Ngozi Adichie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 Chimamanda Ngozi Adichie</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Chimamanda Ngozi Adichie was born on September 15, 1977, in Enugu, Nigeria.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>奇瑪曼達·恩戈齊·阿迪奇於 1977 年 9 月 15 日出生在奈及利亞的埃努古。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>From an early age, Chimamanda was an avid reader, especially of books written by fellow Nigerian author, Chinua Achebe.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>從很小的時候起，奇瑪曼達就是一個狂熱的讀者，特別喜歡讀同為奈及利亞作家的奇努阿·阿切貝（Chinua Achebe）所寫的書。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Despite her early passion for literature, she did not initially want to be a writer.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>儘管她早期對文學充滿熱情，但她最初並不想成為一名作家。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>At first, she studied medicine in Nigeria and then decided to move to the United States to study communication and political science.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>起初，她在奈及利亞學醫，然後決定搬到美國學習傳播學和政治學。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was not until attending graduate school that Chimamanda majored in creative writing.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>直到上了研究所，奇瑪曼達才主修創意寫作。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Chimamanda Ngozi Adichie is now a famous author.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>奇瑪曼達·恩戈齊·阿迪奇現在是一位著名的作家。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of her most popular novels is called Half of a Yellow Sun, which was published in 2006.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她最受歡迎的小說之一名為《半輪黃日》（Half of a Yellow Sun），於 2006 年出版。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It has since been adapted into a movie.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>自那以後，它已被改編成電影。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This novel tells the story of three characters before and during Nigeria's Biafran War.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這部小說講述了奈及利亞比夫拉戰爭（Biafran War）之前和期間三個角色的故事。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This was a civil war that caused horrible famine throughout the country.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這是一場造成全國可怕飢荒的內戰。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of Chimamanda's more recent novels called Americanah focuses on a Nigerian girl's experience studying at an American college.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>奇瑪曼達較近期的一部名為《美國佬》（Americanah）的小說，主要講述一名奈及利亞女孩在美國大學求學的經歷。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While the protagonist's journey seems similar to Chimamanda's own journey, the author denies that she was writing about her own experience.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然主角的旅程似乎與奇瑪曼達自己的旅程相似，但作者否認她寫的是自己的經歷。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Chimamanda Ngozi Adichie has already won numerous awards for her writing.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>奇瑪曼達·恩戈齊·阿迪奇的寫作已經贏得了無數獎項。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Currently, she lives part of the year in Nigeria and part of the year in the United States.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>目前，她一年中有一部分時間住在奈及利亞，一部分時間住在美國。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">avid</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">狂熱的；熱衷的</div>
+                        <div class="example">Chimamanda was an <span class='highlight'>avid</span> reader.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">passion</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">熱情</div>
+                        <div class="example">Despite her early <span class='highlight'>passion</span> for literature...</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">adapt</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">改編；適應</div>
+                        <div class="example">It has since been <span class='highlight'>adapted</span> into a movie.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">famine</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">飢荒</div>
+                        <div class="example">This civil war caused horrible <span class='highlight'>famine</span> throughout the country.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">protagonist</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">主角</div>
+                        <div class="example">While the <span class='highlight'>protagonist's</span> journey seems similar...</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">numerous</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">許多的；無數的</div>
+                        <div class="example">She has already won <span class='highlight'>numerous</span> awards for her writing.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">It was not until... that... (直到...才...)</div>
+                    <p>強調句型，用來強調直到某個時間點或事件發生之後，另一件事情才開始發生。</p>
+                    <div class="example"><span class='highlight'>It was not until</span> attending graduate school <span class='highlight'>that</span> Chimamanda majored in creative writing.</div>
+                    <div class="example"><span class='highlight'>It was not until</span> yesterday <span class='highlight'>that</span> I realized the truth.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">Despite + N/V-ing (儘管...)</div>
+                    <p>介系詞，表示雖然有某種情況，但結果卻出乎意料，後面接名詞或動名詞。</p>
+                    <div class="example"><span class='highlight'>Despite</span> her early passion for literature, she did not initially want to be a writer.</div>
+                    <div class="example"><span class='highlight'>Despite</span> raining heavily, they went out for a walk.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>focus on... (專注於...；以...為重點)</strong>
+                    <p>表示將注意力或重點放在某個人事物上。</p>
+                    <div class="example">One of her more recent novels <span class='highlight'>focuses on</span> a Nigerian girl's experience.</div>
+                    <div class="example">You should <span class='highlight'>focus on</span> your studies.</div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>part of the year (一年中的一部分時間)</strong>
+                    <p>用來描述某段不特定的時間長度，與另一段時間相對應。</p>
+                    <div class="example">She lives <span class='highlight'>part of the year</span> in Nigeria and <span class='highlight'>part of the year</span> in the United States.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">在去美國之前，奇瑪曼達在奈及利亞學了什麼專業？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 創意寫作</li>
+                                <li>B) 醫學</li>
+                                <li>C) 政治學</li>
+                                <li>D) 傳播學</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">哪一部小說講述了一名奈及利亞女孩在美國大學求學的經歷？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) Half of a Yellow Sun</li>
+                                <li>B) Americanah</li>
+                                <li>C) Things Fall Apart</li>
+                                <li>D) Purple Hibiscus</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">根據文章描述，作者承認《美國佬》的主角是基於她自己的真實經歷。這句話是正確的還是錯誤的？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 正確 (True)</li>
+                                <li>B) 錯誤 (False)</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `Chimamanda Ngozi Adichie was born on September 15, 1977, in Enugu, Nigeria. From an early age, Chimamanda was an avid reader, especially of books written by fellow Nigerian author, Chinua Achebe. Despite her early passion for literature, she did not initially want to be a writer. At first, she studied medicine in Nigeria and then decided to move to the United States to study communication and political science. It was not until attending graduate school that Chimamanda majored in creative writing. Chimamanda Ngozi Adichie is now a famous author. One of her most popular novels is called Half of a Yellow Sun, which was published in 2006. It has since been adapted into a movie. This novel tells the story of three characters before and during Nigeria's Biafran War. This was a civil war that caused horrible famine throughout the country. One of Chimamanda's more recent novels called Americanah focuses on a Nigerian girl's experience studying at an American college. While the protagonist's journey seems similar to Chimamanda's own journey, the author denies that she was writing about her own experience. Chimamanda Ngozi Adichie has already won numerous awards for her writing. Currently, she lives part of the year in Nigeria and part of the year in the United States.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

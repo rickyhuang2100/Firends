@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Heat, Energy, and Bicycling in New York City</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 Heat, Energy, and Bicycling in New York City</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>New York City is one of the densest cities in the world, with millions of people squeezed into a mere 303 square miles.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>紐約市是世界上人口最密集的城市之一，數百萬人擠在僅僅303平方英里的土地上。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although it has the world’s largest subway system, traffic can still be quite bad, particularly at rush hour.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然它擁有世界上最大的地鐵系統，但交通有時還是會非常糟糕，尤其是在尖峰時刻。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The city decided that it would be a good idea to encourage more people to use bicycles.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>市政府決定鼓勵更多人騎腳踏車是個好主意。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>If more people rode bicycles, the roads would be less clogged with cars.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果更多人騎腳踏車，道路就不會被汽車塞得那麼滿。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Also, when you ride a bicycle, you are exercising, which makes you healthy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>而且，當你騎腳踏車時，你也在運動，這會讓你變得健康。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But how can you encourage people to ride more bikes?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但你要如何鼓勵人們多騎腳踏車呢？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The city came up with an innovative solution.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>市政府提出了一個創新的解決方案。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 2013, city workers began installing long racks of bicycles in different neighborhoods.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在2013年，市政府工作人員開始在不同社區安裝一排排長長的腳踏車架。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These bicycles were, for a small fee, available for anyone to use.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些腳踏車只需支付少量費用，任何人都可以使用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A person could ride the bicycle from one bike rack to another bike rack and park it there.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>人們可以騎著腳踏車從一個車架到另一個車架，然後停放在那裡。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This system was ideal for people who did not own bikes or who wanted to take a bicycle on a short ride without having to return it to the place they took it from.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這個系統對於沒有腳踏車的人，或是想要短途騎行而不必將車還回原處的人來說是理想的選擇。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This also made it possible to move quickly between areas that did not connect easily by the subway.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這也讓在那些無法透過地鐵輕鬆連接的區域之間快速移動成為可能。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The city hoped that people would start using these bicycles instead of taxis or other kinds of cars.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>市政府希望人們會開始使用這些腳踏車，而不是計程車或其他種類的汽車。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While the city installed the bikes in part because of concerns about traffic, it was also interested in another question: how we use and spend energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然市政府安裝腳踏車部分是出於對交通的擔憂，但它也對另一個問題感興趣：我們如何使用和消耗能量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Any time an object is in motion, it is both producing energy and, in many cases, expending energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>任何時候一個物體在運動中，它既在產生能量，在許多情況下也在消耗能量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>For example, a car does not just move because we want it to move.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>例如，一輛汽車並不僅僅是因為我們想讓它動它就會動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It is powered by a special kind of engine, called an internal combustion engine that burns fuel.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它是由一種稱為內燃機的特殊引擎驅動的，這種引擎會燃燒燃料。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When this fuel is burned, it causes a cylinder to spin in circles.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當這種燃料燃燒時，它會導致圓柱體（汽缸）旋轉。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This cylinder is connected to the wheels of the car.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這個汽缸連接著汽車的輪子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As the cylinder spins, so do the wheels.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當汽缸旋轉時，輪子也會跟著旋轉。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>So, one type of energy — fuel — is transformed into another type of energy — forward motion.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>所以，一種形式的能量——燃料——被轉化為另一種形式的能量——向前的運動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Energy contained in the motion of an object is called “motion energy.”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>包含在物體運動中的能量被稱為「動能」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Just as cars can be considered a kind of energy conversion device, converting fuel to forward motion, so can bicycles.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>就像汽車可以被認為是一種將燃料轉化為向前運動的能量轉換裝置一樣，腳踏車也是如此。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When you step on the pedals of a bicycle, it causes the wheels of the bicycle to spin, pushing the bicycle forward.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當你踩下腳踏車的踏板時，它會使腳踏車的輪子旋轉，推動腳踏車向前。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The energy of your foot pressing down is converted into energy that propels the bicycle.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你腳部向下壓的能量被轉化為推動腳踏車前進的能量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Nearly all transportation — airplanes, trains, pogo sticks — can be thought of as devices that take one form of energy and make it into another form of energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾乎所有的交通工具——飛機、火車、彈簧單高蹺——都可以被看作是將一種形式的能量轉化為另一種形式的能量的裝置。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When there is a change in one of the forms of energy used to power modes of transportation, then the energy generated by these devices changes as well.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當用來驅動交通工具的一種能量形式發生變化時，這些裝置產生的能量也會跟著改變。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Let’s say you’re pedaling very fast on a bicycle.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>假設你在腳踏車上踩得非常快。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>You are exerting a lot of energy as you do this.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你在做這件事的時候消耗了大量的能量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>You can tell because your heart rate may increase, you may breathe harder, and you may begin to sweat — a sign that your body is trying to cool itself.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你可以感覺得出來，因為你的心率可能會增加，你可能會呼吸得更急促，而且你可能會開始流汗——這是你的身體試圖讓自己降溫的跡象。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is producing a lot of motion energy in the bicycle because you are causing it to move very fast.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這在腳踏車中產生了大量的動能，因為你讓它移動得非常快。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But if you stop pedaling, then the bicycle will begin to slow down, and the motion energy in the bicycle will decrease.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但如果你停止踩踏板，那麼腳踏車就會開始減速，腳踏車中的動能也會減少。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>You will also be expending less energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你消耗的能量也會減少。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Your heart rate and your breathing will slow down, too.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你的心跳和呼吸也會變慢。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The decline in your own motion energy — the movement of your feet — is causing the motion energy of another object — the bicycle — to fall at about the same rate.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你自己動能的下降——也就是你腳部的運動——導致另一個物體（腳踏車）的動能也以大約相同的速度下降。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In the early days of the program, the bike racks were only moderately popular.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在這個計畫的初期，腳踏車架只受到中等程度的歡迎。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>People were still getting used to the idea of borrowing a bike for a short time at one location, riding it, and then leaving it in another location.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>人們還在習慣這種在一個地點短時間借一輛腳踏車，騎著它，然後把它留在另一個地點的想法。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Perhaps another reason that people were initially reluctant to use the bike racks is that they were introduced during a very hot week, at the beginning of summer.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>也許人們起初不願意使用腳踏車架的另一個原因是，它們是在初夏一個非常炎熱的星期引進的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As discussed above, when you ride a bicycle, you often sweat.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如上所述，當你騎腳踏車時，你經常會流汗。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is particularly true when the temperature is high, because your body produces sweat as a way of trying to keep your body cool.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當溫度很高時尤其如此，因為你的身體會產生汗水，以此來試圖保持身體涼爽。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>If your body gets too hot, you can get sick, so it’s in your body’s interest to maintain a constant temperature.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果你的身體變得太熱，你可能會生病，所以保持恆定的溫度對你的身體是有益的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>How much the temperature of a body increases when it gets warm depends on a number of different factors.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>身體變暖時溫度會升高多少，取決於許多不同的因素。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While it makes sense that one person in 100-degree heat will get hotter than a person in 75-degree heat, even if two people are exposed to the same temperature, their bodies may react differently.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然在華氏100度高溫下的人比在華氏75度的人變得更熱是合理的，但即使兩個人暴露在相同的溫度下，他們的身體反應也可能不同。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In fact, one person may get much hotter than the other.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>事實上，其中一個人可能會比另一個人熱得多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is because the amount of heat — which is a form of energy — needed to change the temperature of another object depends on the properties of that object.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這是因為改變另一個物體溫度所需的熱量（它是一種能量形式）取決於該物體的特性。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>For example, a person who is wearing a sweatshirt in summer is likely to get much hotter than a person who is wearing a t-shirt.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>例如，在夏天穿著運動衫的人很可能會比穿著T恤的人熱得多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is because the sweatshirt insulates the person, trapping heat inside.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這是因為運動衫有隔熱作用，把熱量困在裡面。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The t-shirt, which is more open, lets the heat escape.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>較為寬鬆的T恤則讓熱量可以散發。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>So, even if the amount of heat energy directed at the person is the same, the temperatures of different people will react differently.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因此，即使指向人的熱能數量相同，不同人的溫度反應也會不同。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>That raises another question: why does sweat makes people colder?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這引發了另一個問題：為什麼流汗會讓人變冷？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This has to do with a special property of heat.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這與熱的一種特殊性質有關。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Heat is a kind of energy, and energy moves spontaneously from hotter regions or objects to colder ones.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>熱是一種能量，而且能量會自發地從較熱的區域或物體移動到較冷的區域或物體。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>So, consider what happens when your body releases sweat.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>那麼，考慮一下當你的身體排汗時會發生什麼事。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When it is released, sweat is colder than your body’s temperature.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當汗水排出時，它的溫度比你的體溫還要低。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When it is on the surface of your skin, it draws the heat from your skin into the water, because heat migrates from warm areas to cold ones.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當它在你的皮膚表面時，它會將皮膚的熱量吸收到水中，因為熱量會從溫暖的區域遷移到寒冷的區域。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This causes the sweat to warm up.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這會導致汗水變暖。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Then the sweat rises into the air and takes some of your body heat with it, cooling the body down.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然後汗水蒸發到空氣中（並帶走了一些身體的熱量），從而使身體降溫。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Your body is constantly monitoring its own temperature.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你的身體持續在監控它自己的溫度。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Many of the buildings in New York have air conditioning in the summer.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在夏天，紐約許多建築物都有空調。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When you walk from the hot street outside to the cool lobby of a tall office building, you can feel the change immediately.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當你從外面炎熱的街道走進高聳辦公大樓涼爽的大廳時，你可以立刻感受到這種變化。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>After a while, your body temperature will go down.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>過一會兒，你的體溫就會下降。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is because, just as the heat from your body moves to the sweat on your skin, it will also move to the cool air produced by the air conditioning.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這是因為，就像你身體的熱量會轉移到皮膚上的汗水一樣，它也會轉移到空調產生的冷空氣中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When your body gets cool enough, it will no longer need to produce sweat to cool you down.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當你的身體變得夠涼爽時，它就不再需要產生汗水來為你降溫了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As people continue to ride bicycles, you can expect their collective body temperatures to rise, as their bodies produce energy to power the bicycles and they spend more time outdoors in the hot sun.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>隨著人們繼續騎腳踏車，你可以預期他們的集體體溫會升高，因為他們的身體會產生能量來驅動腳踏車，而且他們花更多時間在炎熱的太陽下在戶外活動。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>If the city chooses to install more bikes, then it may also want to install more air conditioning — or pass out more sticks of deodorant.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果市政府選擇安裝更多腳踏車，那麼它可能也會想要安裝更多空調——或是分發更多止汗劑。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">dense</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">密集的；稠密的</div>
+                        <div class="example">New York City is one of the <span class='highlight'>densest</span> cities.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">clogged</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">阻塞的</div>
+                        <div class="example">The roads would be less <span class='highlight'>clogged</span> with cars.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">expend</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">消耗；花費</div>
+                        <div class="example">An object is <span class='highlight'>expending</span> energy when in motion.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">combustion</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">燃燒</div>
+                        <div class="example">It is powered by an internal <span class='highlight'>combustion</span> engine.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">propel</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">推進；驅使</div>
+                        <div class="example">Energy <span class='highlight'>propels</span> the bicycle forward.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">exert</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">施加；盡力</div>
+                        <div class="example">You are <span class='highlight'>exerting</span> a lot of energy as you do this.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">insulate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">使隔絕；使隔熱</div>
+                        <div class="example">The sweatshirt <span class='highlight'>insulates</span> the person.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">spontaneously</div>
+                        <div class="vocab-type">adv. 副詞</div>
+                        <div class="vocab-meaning">自發地</div>
+                        <div class="example">Energy moves <span class='highlight'>spontaneously</span> from hotter regions.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">in one's interest (對某人有利的)</div>
+                    <p>表示做某事對自己有好處或有益。</p>
+                    <div class="example">It’s <span class='highlight'>in your body’s interest</span> to maintain a constant temperature.</div>
+                    <div class="example">It is <span class='highlight'>in your interest</span> to study hard for the exam.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">have to do with (與...有關)</div>
+                    <p>表示某事與另一件事有連結或相關性。</p>
+                    <div class="example">This <span class='highlight'>has to do with</span> a special property of heat.</div>
+                    <div class="example">My question <span class='highlight'>has to do with</span> our upcoming project.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>Just as... so can/does... (正如...一樣，...也...)</strong>
+                    <p>用來比較兩件事物，說明它們具有相同的情況或特點。</p>
+                    <div class="example"><span class='highlight'>Just as</span> cars can be considered a kind of energy conversion device, <span class='highlight'>so can</span> bicycles.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">根據文章，內燃機 (internal combustion engine) 的作用是什麼？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 它為汽車降溫。</li>
+                                <li>B) 它燃燒燃料以產生向前的動力。</li>
+                                <li>C) 它轉動踏板以移動車輪。</li>
+                                <li>D) 它為建築物製造冷氣。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼在夏天穿運動衫 (sweatshirt) 會比穿T恤更熱？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 運動衫會自己產生熱量。</li>
+                                <li>B) 運動衫通常都是黑色的。</li>
+                                <li>C) 運動衫能隔熱並把熱量困在裡面。</li>
+                                <li>D) T恤會吸收更多來自太陽的熱量。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">流汗是如何讓身體降溫的？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 藉由在皮膚上結冰。</li>
+                                <li>B) 藉由阻擋陽光。</li>
+                                <li>C) 藉由從皮膚吸收熱量，並在蒸發到空氣中時將其帶走。</li>
+                                <li>D) 藉由增加身體的動能。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `New York City is one of the densest cities in the world, with millions of people squeezed into a mere 303 square miles. Although it has the world’s largest subway system, traffic can still be quite bad, particularly at rush hour. The city decided that it would be a good idea to encourage more people to use bicycles. If more people rode bicycles, the roads would be less clogged with cars. Also, when you ride a bicycle, you are exercising, which makes you healthy. But how can you encourage people to ride more bikes? The city came up with an innovative solution. In 2013, city workers began installing long racks of bicycles in different neighborhoods. These bicycles were, for a small fee, available for anyone to use. A person could ride the bicycle from one bike rack to another bike rack and park it there. This system was ideal for people who did not own bikes or who wanted to take a bicycle on a short ride without having to return it to the place they took it from. This also made it possible to move quickly between areas that did not connect easily by the subway. The city hoped that people would start using these bicycles instead of taxis or other kinds of cars. While the city installed the bikes in part because of concerns about traffic, it was also interested in another question: how we use and spend energy. Any time an object is in motion, it is both producing energy and, in many cases, expending energy. For example, a car does not just move because we want it to move. It is powered by a special kind of engine, called an internal combustion engine that burns fuel. When this fuel is burned, it causes a cylinder to spin in circles. This cylinder is connected to the wheels of the car. As the cylinder spins, so do the wheels. So, one type of energy — fuel — is transformed into another type of energy — forward motion. Energy contained in the motion of an object is called “motion energy.” Just as cars can be considered a kind of energy conversion device, converting fuel to forward motion, so can bicycles. When you step on the pedals of a bicycle, it causes the wheels of the bicycle to spin, pushing the bicycle forward. The energy of your foot pressing down is converted into energy that propels the bicycle. Nearly all transportation — airplanes, trains, pogo sticks — can be thought of as devices that take one form of energy and make it into another form of energy. When there is a change in one of the forms of energy used to power modes of transportation, then the energy generated by these devices changes as well. Let’s say you’re pedaling very fast on a bicycle. You are exerting a lot of energy as you do this. You can tell because your heart rate may increase, you may breathe harder, and you may begin to sweat — a sign that your body is trying to cool itself. This is producing a lot of motion energy in the bicycle because you are causing it to move very fast. But if you stop pedaling, then the bicycle will begin to slow down, and the motion energy in the bicycle will decrease. You will also be expending less energy. Your heart rate and your breathing will slow down, too. The decline in your own motion energy — the movement of your feet — is causing the motion energy of another object — the bicycle — to fall at about the same rate. In the early days of the program, the bike racks were only moderately popular. People were still getting used to the idea of borrowing a bike for a short time at one location, riding it, and then leaving it in another location. Perhaps another reason that people were initially reluctant to use the bike racks is that they were introduced during a very hot week, at the beginning of summer. As discussed above, when you ride a bicycle, you often sweat. This is particularly true when the temperature is high, because your body produces sweat as a way of trying to keep your body cool. If your body gets too hot, you can get sick, so it’s in your body’s interest to maintain a constant temperature. How much the temperature of a body increases when it gets warm depends on a number of different factors. While it makes sense that one person in 100-degree heat will get hotter than a person in 75-degree heat, even if two people are exposed to the same temperature, their bodies may react differently. In fact, one person may get much hotter than the other. This is because the amount of heat — which is a form of energy — needed to change the temperature of another object depends on the properties of that object. For example, a person who is wearing a sweatshirt in summer is likely to get much hotter than a person who is wearing a t-shirt. This is because the sweatshirt insulates the person, trapping heat inside. The t-shirt, which is more open, lets the heat escape. So, even if the amount of heat energy directed at the person is the same, the temperatures of different people will react differently. That raises another question: why does sweat makes people colder? This has to do with a special property of heat. Heat is a kind of energy, and energy moves spontaneously from hotter regions or objects to colder ones. So, consider what happens when your body releases sweat. When it is released, sweat is colder than your body’s temperature. When it is on the surface of your skin, it draws the heat from your skin into the water, because heat migrates from warm areas to cold ones. This causes the sweat to warm up. Then the sweat rises into the air and takes some of your body heat with it, cooling the body down. Your body is constantly monitoring its own temperature. Many of the buildings in New York have air conditioning in the summer. When you walk from the hot street outside to the cool lobby of a tall office building, you can feel the change immediately. After a while, your body temperature will go down. This is because, just as the heat from your body moves to the sweat on your skin, it will also move to the cool air produced by the air conditioning. When your body gets cool enough, it will no longer need to produce sweat to cool you down. As people continue to ride bicycles, you can expect their collective body temperatures to rise, as their bodies produce energy to power the bicycles and they spend more time outdoors in the hot sun. If the city chooses to install more bikes, then it may also want to install more air conditioning — or pass out more sticks of deodorant.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

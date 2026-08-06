@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Borobudur, the World’s Largest Buddhist Temple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 Borobudur, the World’s Largest Buddhist Temple</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Borobudur is one of the most remarkable Buddhist monuments in the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>婆羅浮屠是世界上最非凡的佛教紀念碑之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This temple is made from volcanic rock, and contains 504 statues of Buddha and thousands of other sculptures that share the Buddha’s teachings, life, and wisdom.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這座寺廟由火山岩建成，包含504尊佛像和數千件其他雕塑，分享著佛陀的教誨、生平和智慧。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Borobudur is located in the Kedu valley of central Java, a large Indonesian island.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>婆羅浮屠位於印尼大島爪哇中部的克杜谷地。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It lies between two volcanoes and two rivers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它位於兩座火山和兩條河流之間。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The ancient Javanese considered the Kedu Valley to be one of the most sacred sites in Java because of its fertile land and high agricultural production.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>古代爪哇人認為克杜谷地是爪哇最神聖的地點之一，因為它有肥沃的土地和很高的農業產量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Historians believe that Borobudur was completed around the year 800 CE.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>歷史學家認為婆羅浮屠大約在西元800年完工。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Several centuries earlier, Hindu and Buddhist merchants from India had settled in the region.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾個世紀前，來自印度的印度教和佛教商人已經在該地區定居。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Javanese incorporated parts of the culture and religions of ancient India into their own.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>爪哇人將古印度文化和宗教的一部分融入了自己的文化和宗教中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Borobudur’s architecture is an example of this blending of cultures because it contains both ancient Indian and Javanese influences.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>婆羅浮屠的建築就是這種文化融合的例子，因為它包含了古印度和爪哇的影響。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Buddhists among the Javanese population made pilgrimages and performed rituals at this holy site up until the 15th century.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>爪哇人口中的佛教徒直到15世紀都在這個聖地朝聖並舉行儀式。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>After the 15th century, the temple was abandoned.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>15世紀之後，這座寺廟被廢棄了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Some historians believe Borobudur was abandoned because many Javanese converted to Islam during this time.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一些歷史學家認為婆羅浮屠被廢棄是因為這段期間許多爪哇人皈依了伊斯蘭教。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Others argue that volcanic eruptions near Borobudur may have stopped people from visiting this site.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>其他人則認為，婆羅浮屠附近的火山爆發可能阻止了人們參觀這個地點。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, much mystery remains about why this site was abandoned.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，關於這個地點為何被廢棄，仍然存在許多謎團。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As time went by, the temple was covered in volcanic ash and vegetation.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>隨著時間流逝，這座寺廟被火山灰和植被所覆蓋。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was no longer visible.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它不再可見。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although local people knew of this temple from legends, the site was no longer used.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然當地人從傳說中知道這座寺廟，但這個地點已不再被使用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 1814, an English lieutenant governor heard these legends from the islanders.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>1814年，一位英國副總督從島民那裡聽說了這些傳說。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He traveled to the place the local people had talked about and uncovered the temple from under layers of volcanic ash.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他前往當地人談論的那個地方，並從層層火山灰下挖掘出這座寺廟。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Archaeologists worked with the Indonesian government to restore the temple from 1907 to 1911 and again in the 1970s.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>考古學家與印尼政府合作，在1907年到1911年之間，以及在1970年代再次修復了這座寺廟。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although the full history of this temple remains unclear, historians have uncovered certain facts about the structure’s symbolism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然這座寺廟的完整歷史仍然不清楚，但歷史學家已經揭露了關於其建築象徵意義的一些事實。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The structure of Borobudur symbolizes the Buddhist path to enlightenment.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>婆羅浮屠的結構象徵著佛教的開悟之路。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Borobudur is a stepped pyramid that has three main levels.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>婆羅浮屠是一座階梯式的金字塔，有三個主要樓層。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These main levels represent the three spheres of the universe, according to Buddhist understanding.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>根據佛教的理解，這三個主要樓層代表了宇宙的三個界。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They symbolize the spiritual journey through which individuals try to achieve “formlessness,” or full detachment from the physical world and earthly desires.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它們象徵著一趟精神旅程，個人透過這趟旅程試圖達到「無色」，即完全超脫物質世界和世俗慾望。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The temple’s first level is a square base that represents kamadhatu.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>寺廟的第一層是一個方形的基座，代表「欲界 (kamadhatu)」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is the Sphere of Desire, or the lowest sphere of the Buddhist universe.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這就是欲界，或佛教宇宙中最低的界。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>On this first level, there are sculptures of earthly desires and pleasures.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在這第一層，有描繪世俗慾望和歡樂的雕塑。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The second level represents rupadhatu, the Sphere of Forms.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>第二層代表「色界 (rupadhatu)」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It consists of five square terraces.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它由五個方形露台組成。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>On this level, sculptures of events from the Buddha’s life line the passageways.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在這一層，描繪佛陀生平事件的雕塑排列在通道兩側。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The highest level contains three circular terraces.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最高層包含三個圓形露台。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It represents arupadhatu, the Sphere of Formlessness.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它代表「無色界 (arupadhatu)」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is the highest sphere of existence in Buddhist ideology and the last step on the path to enlightenment.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這是佛教意識形態中存在的最高境界，也是通往開悟之路的最後一步。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>On the highest level of the temple, there are dome-shaped shrines to the Buddha called stupas.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在寺廟的最高層，有圓頂狀的佛龕，稱為「佛塔 (stupas)」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These stupas symbolize the enlightened mind, a mind free of earthly desires and attachments.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些佛塔象徵著開悟的心靈，一個擺脫了世俗慾望和執著的心靈。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The temple’s three levels are connected by open-air passageways.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>寺廟的三個樓層由露天通道連接。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The passageways circle around a central point.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>通道圍繞著一個中心點。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Buddhists who visit this site travel clockwise through these passageways until they reach the top level.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>參觀這個地點的佛教徒會順時針穿過這些通道，直到他們到達頂層。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In Buddhist philosophy, individuals work towards enlightenment by developing concentration, morality, and wisdom.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在佛教哲學中，個人透過培養定力、道德和智慧來努力達到開悟。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Over the centuries, walking the paths of Borobudur has allowed Buddhists to meditate on their spiritual journey.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾個世紀以來，走在婆羅浮屠的道路上，讓佛教徒能夠反思他們的精神旅程。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Historians have also learned about the history of the Javanese people through this architectural marvel.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>歷史學家也透過這座建築奇蹟，了解了爪哇人民的歷史。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">remarkable</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">非凡的；引人注目的</div>
+                        <div class="example">Borobudur is one of the most <span class='highlight'>remarkable</span> monuments.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">monument</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">紀念碑；歷史遺跡</div>
+                        <div class="example">It is a famous Buddhist <span class='highlight'>monument</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">fertile</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">肥沃的</div>
+                        <div class="example">The valley is known for its <span class='highlight'>fertile</span> land.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">incorporate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">包含；將...融入</div>
+                        <div class="example">The Javanese <span class='highlight'>incorporated</span> Indian culture into their own.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">pilgrimage</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">朝聖</div>
+                        <div class="example">Buddhists made <span class='highlight'>pilgrimages</span> to this holy site.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">enlightenment</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">開悟；啟蒙</div>
+                        <div class="example">The structure symbolizes the path to <span class='highlight'>enlightenment</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">detachment</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">超脫；不執著</div>
+                        <div class="example">They try to achieve full <span class='highlight'>detachment</span> from earthly desires.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">meditate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">冥想；深思</div>
+                        <div class="example">Walking the paths allows Buddhists to <span class='highlight'>meditate</span>.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">convert to (皈依；轉變為)</div>
+                    <p>表示從一種信仰、觀點或狀態轉變為另一種。</p>
+                    <div class="example">Many Javanese <span class='highlight'>converted to</span> Islam during this time.</div>
+                    <div class="example">He <span class='highlight'>converted to</span> Buddhism.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">work towards (努力達成)</div>
+                    <p>表示為了實現某個目標或結果而努力。</p>
+                    <div class="example">Individuals <span class='highlight'>work towards</span> enlightenment by developing concentration.</div>
+                    <div class="example">We are <span class='highlight'>working towards</span> a better future.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>as time goes by (隨著時間流逝)</strong>
+                    <p>表示時間的推移。在過去式中為 as time went by。</p>
+                    <div class="example"><span class='highlight'>As time went by</span>, the temple was covered in volcanic ash.</div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>free of (免於...的；沒有...的)</strong>
+                    <p>表示不受某事物影響或牽絆。</p>
+                    <div class="example">These stupas symbolize a mind <span class='highlight'>free of</span> earthly desires.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">婆羅浮屠寺廟是由什麼材料建成的？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 大理石 (Marble)</li>
+                                <li>B) 火山岩 (Volcanic rock)</li>
+                                <li>C) 木頭 (Wood)</li>
+                                <li>D) 石灰岩 (Limestone)</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">根據佛教的理解，婆羅浮屠的三個主要樓層代表什麼？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 人類生命的三個階段</li>
+                                <li>B) 宇宙的三個界 (The three spheres of the universe)</li>
+                                <li>C) 爪哇最神聖的三條河流</li>
+                                <li>D) 古印度的三個主要影響</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼歷史學家認為婆羅浮屠在15世紀後被廢棄了？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 寺廟被地震摧毀了。</li>
+                                <li>B) 當地人對佛教失去了興趣。</li>
+                                <li>C) 許多爪哇人皈依了伊斯蘭教或發生了火山爆發。</li>
+                                <li>D) 建築正在沉入肥沃的土地中。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `Borobudur is one of the most remarkable Buddhist monuments in the world. This temple is made from volcanic rock, and contains 504 statues of Buddha and thousands of other sculptures that share the Buddha’s teachings, life, and wisdom. Borobudur is located in the Kedu valley of central Java, a large Indonesian island. It lies between two volcanoes and two rivers. The ancient Javanese considered the Kedu Valley to be one of the most sacred sites in Java because of its fertile land and high agricultural production. Historians believe that Borobudur was completed around the year 800 CE. Several centuries earlier, Hindu and Buddhist merchants from India had settled in the region. The Javanese incorporated parts of the culture and religions of ancient India into their own. Borobudur’s architecture is an example of this blending of cultures because it contains both ancient Indian and Javanese influences. Buddhists among the Javanese population made pilgrimages and performed rituals at this holy site up until the 15th century. After the 15th century, the temple was abandoned. Some historians believe Borobudur was abandoned because many Javanese converted to Islam during this time. Others argue that volcanic eruptions near Borobudur may have stopped people from visiting this site. However, much mystery remains about why this site was abandoned. As time went by, the temple was covered in volcanic ash and vegetation. It was no longer visible. Although local people knew of this temple from legends, the site was no longer used. In 1814, an English lieutenant governor heard these legends from the islanders. He traveled to the place the local people had talked about and uncovered the temple from under layers of volcanic ash. Archaeologists worked with the Indonesian government to restore the temple from 1907 to 1911 and again in the 1970s. Although the full history of this temple remains unclear, historians have uncovered certain facts about the structure’s symbolism. The structure of Borobudur symbolizes the Buddhist path to enlightenment. Borobudur is a stepped pyramid that has three main levels. These main levels represent the three spheres of the universe, according to Buddhist understanding. They symbolize the spiritual journey through which individuals try to achieve “formlessness,” or full detachment from the physical world and earthly desires. The temple’s first level is a square base that represents kamadhatu. This is the Sphere of Desire, or the lowest sphere of the Buddhist universe. On this first level, there are sculptures of earthly desires and pleasures. The second level represents rupadhatu, the Sphere of Forms. It consists of five square terraces. On this level, sculptures of events from the Buddha’s life line the passageways. The highest level contains three circular terraces. It represents arupadhatu, the Sphere of Formlessness. This is the highest sphere of existence in Buddhist ideology and the last step on the path to enlightenment. On the highest level of the temple, there are dome-shaped shrines to the Buddha called stupas. These stupas symbolize the enlightened mind, a mind free of earthly desires and attachments. The temple’s three levels are connected by open-air passageways. The passageways circle around a central point. Buddhists who visit this site travel clockwise through these passageways until they reach the top level. In Buddhist philosophy, individuals work towards enlightenment by developing concentration, morality, and wisdom. Over the centuries, walking the paths of Borobudur has allowed Buddhists to meditate on their spiritual journey. Historians have also learned about the history of the Javanese people through this architectural marvel.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

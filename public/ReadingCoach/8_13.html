@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - School Bus Strike Hurt Kids With Disabilities Most</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 School Bus Strike Hurt Kids With Disabilities Most</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In January 2013, the four-week school bus drivers’ strike in New York City affected many people, especially students with serious disabilities.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>2013年1月，紐約市為期四週的校車司機罷工影響了許多人，尤其是患有嚴重身心障礙的學生。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These children weren’t able to get to school without buses.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>沒有了校車，這些孩子無法到校。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Since many disabled students could not make it to school, the contract therapists who worked with them didn’t have enough students to work with and were being sent home early.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>由於許多身心障礙學生無法到校，與他們一起工作的合約治療師沒有足夠的學生可教，被迫提早回家。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As a result, they had to scramble to make up for lost pay.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>結果，他們不得不拼命想辦法來彌補損失的工資。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Students with disabilities were especially hurt by the school bus strike, as special buses were the only way for many of them to get to school.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>身心障礙學生受校車罷工的傷害特別大，因為特殊校車是他們許多人上學的唯一途徑。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Public transport and regular taxis couldn’t accommodate their wheelchairs, and the more seriously disabled students needed a nurse to go with them on the commute.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>公共交通工具和一般計程車無法容納他們的輪椅，而障礙程度更嚴重的學生在通勤時還需要護理人員隨行。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Bridget Wilson works as a contract speech therapist at a New York City school for children with special needs.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>布莉姬特·威爾遜 (Bridget Wilson) 在紐約市一所特殊需求兒童學校擔任合約語言治療師。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Interviewed before the end of the strike, she said that only a handful of her 15 students had made it to school since the strike had started on January 16th, 2013.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在罷工結束前接受採訪時，她表示自2013年1月16日罷工開始以來，她的15名學生中只有少數幾人能夠到校。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although Wilson did her best to make up hours with other kids who were able to get to school, it got harder as the strike continued, she said.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她說，儘管她盡了最大努力，把時間用在其他能到校的孩子身上來彌補工時，但隨著罷工的持續，這變得越來越困難。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Wilson was worried about her students who needed constant work to maintain certain skills such as drinking from a straw, which helps strengthen mouth muscles and limits drooling.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>威爾遜很擔心她那些需要持續練習以維持某些技能的學生，例如用吸管喝水（這有助於增強口腔肌肉並減少流口水）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>With too much time off, some students would have to start over again when they returned.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>由於休息了太長時間，一些學生在回來時將不得不從頭開始。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It may take a long time for some students to regain the skills they had been working on.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>有些學生可能需要很長時間才能重新掌握他們一直在練習的技能。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“I’m holding my breath to see where my little guys are when they get back to school,” Wilson said at the time.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「我屏住呼吸等待，看看當我的小傢伙們回到學校時，他們的狀況會在哪裡（退步到什麼程度），」威爾遜當時說道。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Jessica Seldman, a speech therapist in Brooklyn, was also worried about her students.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>布魯克林的語言治療師潔西卡·塞爾德曼 (Jessica Seldman) 也對她的學生感到擔憂。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>She said that in the past, there had been snowstorms that have prevented children from getting to school, but it had never lasted that long.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她說，過去曾有過暴風雪阻礙孩子們上學，但從來沒有持續這麼久。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“We’ve never experienced something like this, where it’s so prolonged,” she said during the strike.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「我們從來沒有經歷過這樣的事情，拖了這麼長時間，」她在罷工期間說道。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As of January 30th, 2013, almost three-quarters of students with disabilities were back in school as some parents found other types of transportation such as carpooling, according to the Department of Education.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>根據教育部的數據，截至2013年1月30日，近四分之三的身心障礙學生已經回到學校，因為一些家長找到了共乘 (carpooling) 等其他交通方式。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Across the whole city, 91 percent of students were back in classes despite the strike by January 30th.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在整個城市中，儘管有罷工，到1月30日仍有91%的學生回到教室上課。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, at a school called United Cerebral Palsy in Brooklyn, where Wilson worked, only 37 of the 108 special needs students were back in school on January 31st, according to Marianne Giordano, Assistant Executive Director of the school.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，根據該校助理執行主任瑪麗安·喬達諾 (Marianne Giordano) 的說法，在威爾遜工作的那所名為「布魯克林聯合腦性麻痺」的學校，在1月31日，108名特殊需求學生中只有37名回到學校。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As a result, the school’s therapists were losing work hours.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>結果，該校的治療師正在流失工作時數。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The school had been trying to help, offering them make-up work with students, but that only stretched so far.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>學校一直試圖提供幫助，為他們提供與學生補課的工作，但能做的也很有限。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>To cut back on expenses, Wilson was spending less money on groceries and going out to dinner with her husband less than she used to.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>為了削減開支，威爾遜在買雜貨上花的錢變少了，和丈夫外出吃晚餐的次數也比以前少了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Three-quarters of the school’s clinicians were contract employees.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>該校四分之三的臨床醫生是合約員工。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Each one played an important role in a student’s physical, mental, and emotional development.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們每個人在學生的身體、心理和情感發展中都扮演著重要角色。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“If a child comes back after the strike and has a new therapist, or doesn’t have one at all, that would be a horror,” said Giordano.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「如果一個孩子在罷工後回來，換了一個新的治療師，或者根本沒有治療師，那將是一件可怕的事情，」喬達諾說。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While many clinicians wanted to stay in their current positions for the sake of their students, they had their own responsibilities and families to support as well.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然許多臨床醫生為了學生著想希望留在目前的職位上，但他們自己也有責任和家庭需要養活。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“There is a tremendous financial impact to them,” said Lillian Borsa, whose company helped connect contract therapists with jobs, and who works with therapists at the Brooklyn school.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「這對他們產生了巨大的財務影響，」莉莉安·博爾薩 (Lillian Borsa) 說，她的公司幫助安排合約治療師的工作，而且她也與布魯克林這所學校的治療師合作。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Borsa worried, “If there is no end in sight in a couple of weeks, then we’re really going to have to look at some changes. Everyone is trying to hang in there right now; no one wants to leave.”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>博爾薩擔心地說：「如果幾週內還看不到結束的跡象，那麼我們真的不得不考慮做出一些改變。每個人現在都在努力堅持下去；沒有人想離開。」</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Some therapists from Borsa’s company worked to bear the weight of the strike together and took turns leaving early, said Borsa.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>博爾薩說，她公司的一些治療師努力共同承受罷工的重擔，並輪流提早下班。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Still, they were nervous because they didn’t know how long the strike would last.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>儘管如此，他們還是很緊張，因為他們不知道罷工會持續多久。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Many therapists considered leaving their jobs to be the worst-case scenario.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>許多治療師認為離職是最壞的情況。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>If they left, it could mean emotional, as well as developmental, setbacks for students.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果他們離開，可能意味著學生在情感和發展上的退步。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“When you have someone you are dealing with, who is really in tune with where the child is—a vulnerable, vulnerable child—it’s hard to put into words how difficult it could be,” said Borsa, “It’s hard to even know how hard it is since they can’t communicate it, but we can feel it.”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「當你面對的是一個真正了解這個孩子狀況的人——一個非常非常脆弱的孩子——很難用言語來形容這有多困難，」博爾薩說，「由於他們無法溝通，我們甚至很難知道這有多艱難，但我們能感受得到。」</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Fourteen-year-old Camille Clarke had not attended a single day of school since the strike began, said her mother, Bernadette Tobierre.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>十四歲的卡蜜兒·克拉克 (Camille Clarke) 的母親伯納黛特·托比埃 (Bernadette Tobierre) 說，自罷工開始以來，卡蜜兒沒有上過一天學。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A special ambulette service took Clarke to an afterschool program each day, but it wasn’t able to take her to school.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一項特殊的殘疾人專車 (ambulette) 服務每天帶克拉克去參加課後輔導計畫，但卻無法帶她去上學。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Tobierre, who is a nanny, couldn’t afford other options.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>身為保姆的托比埃負擔不起其他選擇。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Interviewed before the end of the strike, Tobierre was increasingly frustrated.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在罷工結束前接受採訪時，托比埃感到越來越沮喪。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>She had to ask for more hours at work to help afford the extra care for her daughter.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她不得不要求增加工作時數，以幫助支付女兒額外照顧的費用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Even though Clarke was 14 years old, she could not feed herself, something the clinicians at school helped her with.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>儘管克拉克已經14歲了，但她無法自己進食，這通常是學校的臨床醫生幫助她的事情。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“I feel sorry that right now she is sitting at home, and she is supposed to be in school working with a one-on-one therapist,” said Tobierre, a single mother.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「我感到很難過，現在她只能坐在家裡，而她本應該在學校與一對一的治療師一起學習，」身為單親媽媽的托比埃說。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>She noticed that her normally happy, active daughter had been more quiet than usual.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她注意到，平時快樂活潑的女兒變得比平常更安靜了。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“I’m getting to that point. It’s very emotional.”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「我都快崩潰了。這非常令人激動（情緒化）。」</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">strike</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">罷工</div>
+                        <div class="example">The four-week school bus drivers’ <span class='highlight'>strike</span> affected many people.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">therapist</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">治療師</div>
+                        <div class="example">Contract <span class='highlight'>therapists</span> didn’t have enough students.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">scramble</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">倉促行動；爭搶</div>
+                        <div class="example">They had to <span class='highlight'>scramble</span> to make up for lost pay.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">accommodate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">容納；提供空間</div>
+                        <div class="example">Regular taxis couldn’t <span class='highlight'>accommodate</span> their wheelchairs.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">prolong</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">延長；拖延</div>
+                        <div class="example">We’ve never experienced something where it’s so <span class='highlight'>prolonged</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">carpool</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">共乘</div>
+                        <div class="example">Some parents found other transportation such as <span class='highlight'>carpooling</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">clinician</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">臨床醫生/治療師</div>
+                        <div class="example">Three-quarters of the school’s <span class='highlight'>clinicians</span> were contract employees.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">tremendous</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">巨大的；極好的</div>
+                        <div class="example">There is a <span class='highlight'>tremendous</span> financial impact to them.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">vulnerable</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">脆弱的；易受傷害的</div>
+                        <div class="example">She is really in tune with a <span class='highlight'>vulnerable</span> child.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">ambulette</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">殘疾人專車</div>
+                        <div class="example">A special <span class='highlight'>ambulette</span> service took Clarke to a program.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">make up for (彌補；補償)</div>
+                    <p>表示用某種方式補足失去的事物或造成的損失。</p>
+                    <div class="example">They had to scramble to <span class='highlight'>make up for</span> lost pay.</div>
+                    <div class="example">He bought her flowers to <span class='highlight'>make up for</span> being late.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">for the sake of (為了...的緣故/利益)</div>
+                    <p>表示為了某人或某事的利益而採取行動。</p>
+                    <div class="example">Many clinicians wanted to stay <span class='highlight'>for the sake of</span> their students.</div>
+                    <div class="example">They stayed together <span class='highlight'>for the sake of</span> the children.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>Even though... (儘管.../雖然...)</strong>
+                    <p>用來引導讓步狀語子句，表示雖然有某種情況，但結果還是如此。</p>
+                    <div class="example"><span class='highlight'>Even though</span> Clarke was 14 years old, she could not feed herself.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">在罷工期間，為什麼合約治療師會被提早送回家？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 他們也跟著罷工了。</li>
+                                <li>B) 因為發生了暴風雪。</li>
+                                <li>C) 因為學生無法到校，他們沒有足夠的學生可教。</li>
+                                <li>D) 因為學校大樓關閉了。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">在罷工期間，布莉姬特·威爾遜 (Bridget Wilson) 如何試圖省錢？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 搭乘地鐵代替開車。</li>
+                                <li>B) 在買雜貨上少花錢，並減少外出吃晚餐的次數。</li>
+                                <li>C) 要求她丈夫找第二份工作。</li>
+                                <li>D) 搬到一個較小的公寓。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼公共交通工具和一般計程車無法解決這些學生的交通問題？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 它們太貴了。</li>
+                                <li>B) 司機拒絕搭載他們。</li>
+                                <li>C) 它們無法容納輪椅，而且有些學生需要護理人員隨行。</li>
+                                <li>D) 它們不會經過特殊需求學校的附近。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `In January 2013, the four-week school bus drivers’ strike in New York City affected many people, especially students with serious disabilities. These children weren’t able to get to school without buses. Since many disabled students could not make it to school, the contract therapists who worked with them didn’t have enough students to work with and were being sent home early. As a result, they had to scramble to make up for lost pay. Students with disabilities were especially hurt by the school bus strike, as special buses were the only way for many of them to get to school. Public transport and regular taxis couldn’t accommodate their wheelchairs, and the more seriously disabled students needed a nurse to go with them on the commute. Bridget Wilson works as a contract speech therapist at a New York City school for children with special needs. Interviewed before the end of the strike, she said that only a handful of her 15 students had made it to school since the strike had started on January 16th, 2013. Although Wilson did her best to make up hours with other kids who were able to get to school, it got harder as the strike continued, she said. Wilson was worried about her students who needed constant work to maintain certain skills such as drinking from a straw, which helps strengthen mouth muscles and limits drooling. With too much time off, some students would have to start over again when they returned. It may take a long time for some students to regain the skills they had been working on. “I’m holding my breath to see where my little guys are when they get back to school,” Wilson said at the time. Jessica Seldman, a speech therapist in Brooklyn, was also worried about her students. She said that in the past, there had been snowstorms that have prevented children from getting to school, but it had never lasted that long. “We’ve never experienced something like this, where it’s so prolonged,” she said during the strike. As of January 30th, 2013, almost three-quarters of students with disabilities were back in school as some parents found other types of transportation such as carpooling, according to the Department of Education. Across the whole city, 91 percent of students were back in classes despite the strike by January 30th. However, at a school called United Cerebral Palsy in Brooklyn, where Wilson worked, only 37 of the 108 special needs students were back in school on January 31st, according to Marianne Giordano, Assistant Executive Director of the school. As a result, the school’s therapists were losing work hours. The school had been trying to help, offering them make-up work with students, but that only stretched so far. To cut back on expenses, Wilson was spending less money on groceries and going out to dinner with her husband less than she used to. Three-quarters of the school’s clinicians were contract employees. Each one played an important role in a student’s physical, mental, and emotional development. “If a child comes back after the strike and has a new therapist, or doesn’t have one at all, that would be a horror,” said Giordano. While many clinicians wanted to stay in their current positions for the sake of their students, they had their own responsibilities and families to support as well. “There is a tremendous financial impact to them,” said Lillian Borsa, whose company helped connect contract therapists with jobs, and who works with therapists at the Brooklyn school. Borsa worried, “If there is no end in sight in a couple of weeks, then we’re really going to have to look at some changes. Everyone is trying to hang in there right now; no one wants to leave.” Some therapists from Borsa’s company worked to bear the weight of the strike together and took turns leaving early, said Borsa. Still, they were nervous because they didn’t know how long the strike would last. Many therapists considered leaving their jobs to be the worst-case scenario. If they left, it could mean emotional, as well as developmental, setbacks for students. “When you have someone you are dealing with, who is really in tune with where the child is—a vulnerable, vulnerable child—it’s hard to put into words how difficult it could be,” said Borsa, “It’s hard to even know how hard it is since they can’t communicate it, but we can feel it.” Fourteen-year-old Camille Clarke had not attended a single day of school since the strike began, said her mother, Bernadette Tobierre. A special ambulette service took Clarke to an afterschool program each day, but it wasn’t able to take her to school. Tobierre, who is a nanny, couldn’t afford other options. Interviewed before the end of the strike, Tobierre was increasingly frustrated. She had to ask for more hours at work to help afford the extra care for her daughter. Even though Clarke was 14 years old, she could not feed herself, something the clinicians at school helped her with. “I feel sorry that right now she is sitting at home, and she is supposed to be in school working with a one-on-one therapist,” said Tobierre, a single mother. She noticed that her normally happy, active daughter had been more quiet than usual. “I’m getting to that point. It’s very emotional.”`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

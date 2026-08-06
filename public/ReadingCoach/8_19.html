@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - An Empire Built on Paper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 An Empire Built on Paper</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>the edge of China itself.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>中國本身的邊緣。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Legend has it that two Chinese papermakers were captured during the battle and brought to Samarkand, where they were ordered to establish a paper manufacturing center in the heart of the Muslim empire.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>傳說有兩名中國造紙工匠在戰鬥中被俘，並被帶到撒馬爾罕，在那裡他們被命令在穆斯林帝國的中心建立一個造紙中心。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Whether or not this was wholly true, it is probable that Muslim warriors encountered papermaking during their battles with China.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>無論這是否完全真實，穆斯林戰士在與中國的戰鬥中很可能接觸到了造紙術。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Seeing its usefulness immediately, they returned home with the technology to share with their scribes.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們立即看到了它的用處，帶著這項技術回到家鄉與他們的抄寫員分享。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Muslim empire was a culture that placed great importance on words.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>穆斯林帝國是一個非常重視文字的文化。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Muslims’ holy book, the Qur’an, was a great poetic work, and devout Muslims were expected to memorize parts of it to be recited during religious ceremonies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>穆斯林的聖書《古蘭經》是一部偉大的詩歌作品，虔誠的穆斯林被期望記住其中的一部分，以便在宗教儀式中背誦。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of their most famous art forms was calligraphy, a style of decorative writing, and their great mosques were decorated not with images of people, but the words of the Qur’an itself.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們最著名的藝術形式之一是書法，一種裝飾性的寫作風格，他們偉大的清真寺不是用人物圖像裝飾的，而是用《古蘭經》本身的文字。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It is no surprise that a society which so valued words would fall in love with paper.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一個如此重視文字的社會會愛上紙張，這並不奇怪。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Compared to parchment and papyrus, even rudimentary paper—much rougher and thicker than the pages of a book today—was a great improvement.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>與羊皮紙和莎草紙相比，即使是粗糙的紙張——比今天書本的書頁粗糙和厚得多——也是一個巨大的進步。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Unlike parchment, which could only be made from the skins of animals, paper could be manufactured relatively cheaply and easily.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>與只能用動物皮製成的羊皮紙不同，紙張的製造相對便宜和容易。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Unlike papyrus, paper did not crack when it was bent.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>與莎草紙不同，紙張彎曲時不會破裂。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was also thinner, which made the binding of books much simpler than it had been before.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它也更薄，這使得書籍的裝訂比以前簡單得多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Perhaps most importantly, paper absorbed ink, which meant that anything written on paper could not be erased.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>也許最重要的是，紙張會吸收墨水，這意味著寫在紙上的任何東西都無法被擦除。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>That's not very useful when you're trying to solve a math problem, but when writing official government documents, permanence is crucial.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當你試圖解決數學問題時這不是很有用，但是當撰寫官方政府文件時，持久性（不可更改性）是至關重要的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Just as it had been in China, paper was originally used mainly by the Arab government.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>就像在中國一樣，紙張最初主要被阿拉伯政府使用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>At a time when Europe was broken into a number of disorganized kingdoms, the Abbasid Caliphate, which stretched from Afghanistan to North Africa, might have been the greatest power on Earth.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在歐洲分裂為許多雜亂無章的王國的時期，從阿富汗延伸到北非的阿拔斯哈里發國（阿拔斯王朝），可能是地球上最大的強權。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This sprawling empire contained dozens of great cities, millions of people, and several different, often conflicting, cultures.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這個龐大的帝國包含了幾十個偉大的城市、數百萬人口，以及幾種不同、常常相互衝突的文化。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although the empire's official language was Arabic, its people spoke many different languages—from Persian in the East to Berber in the West.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然帝國的官方語言是阿拉伯語，但其人民說著許多不同的語言——從東方的波斯語到西方的柏柏爾語。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Now those disparate regions could be united by the written word.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>現在那些不同的地區可以透過文字統一起來了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Paper's use spread quickly.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>紙張的使用迅速傳播開來。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>By the end of the 8th century, a paper mill had been set up in Baghdad.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>到8世紀末，巴格達已經建立了一家造紙廠。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Over the next 200 years, the technology spread to Syria, North Africa, and even Spain—which was partially ruled by Muslims from 711 to 1492.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在接下來的200年裡，這項技術傳播到了敘利亞、北非，甚至西班牙——從711年到1492年，西班牙部分地區由穆斯林統治。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although the Abbasid Caliphate and other ruling houses of the Arab empire were skilled in war, they prized learning above all else.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然阿拔斯哈里發國和阿拉伯帝國的其他統治家族擅長戰爭，但他們最重視學習。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Abbasids took inspiration from a well-known saying, "The ink of a scholar is holier than the blood of a martyr."</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>阿拔斯人從一句名言中獲得靈感：「學者的墨水比烈士的鮮血更神聖。」</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>To this end, the Abbasids did everything they could to encourage scientific achievement.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>為此，阿拔斯人盡一切可能鼓勵科學成就。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As Europe languished in the Dark Ages, when even literacy was limited mainly to monks, the Muslim world entered a scientific golden age.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當歐洲在黑暗時代苦苦掙扎、識字率主要局限於僧侶時，穆斯林世界進入了科學的黃金時代。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Building on the knowledge of the ancient Greeks, Muslim scholars made great advances in geometry, astronomy, and mathematics.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在古希臘人知識的基礎上，穆斯林學者在幾何學、天文學和數學方面取得了巨大進步。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As paper became more widespread, so did knowledge.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>隨著紙張變得越來越普及，知識也隨之普及。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The tedious process of writing books by hand was made easier by an adoption of assembly-line-style techniques, which allowed a group of scribes to produce finished books faster than ever before.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>透過採用裝配線式的技術，手工寫書的繁瑣過程變得更容易了，這使得一群抄寫員能比以往更快地生產出成品書籍。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Great libraries were established across the Muslim world, and in capitals like Baghdad and Cairo, booksellers flourished.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>偉大的圖書館在整個穆斯林世界建立起來，在巴格達和開羅等首都，書商蓬勃發展。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Scholars and poets were supported by the government, and for perhaps the first time in history, it became possible to make a living by reading and writing alone.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>學者和詩人受到政府的支持，這也許是歷史上第一次，單靠閱讀和寫作就能謀生。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Even as paper became widespread, there was one place where its dominance was resisted: religion.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>儘管紙張變得普及，但在一個地方它的主導地位受到了抵制：宗教。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Because paper was less expensive than parchment, it was initially considered unfit to bear the holy words of the Qur’an.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因為紙比羊皮紙便宜，最初它被認為不適合用來承載《古蘭經》的神聖文字。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, the demand for copies of the Qur’an grew along with the population's literacy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，對《古蘭經》副本的需求隨著人口識字率的提高而增長。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Eventually, that demand, along with the improved quality of the paper, made the new material considered suitable for religious use.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最終，這種需求加上紙張品質的提高，使得這種新材料被認為適合宗教用途。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The oldest known Qur’an written on paper dates from 971-972.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>已知最古老的寫在紙上的《古蘭經》可追溯到971-972年。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The western spread of paper didn’t end in the Arab empire.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>紙張向西傳播並沒有在阿拉伯帝國結束。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>From there, the technology to manufacture paper made its way through Europe.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>從那裡，製造紙張的技術傳遍了整個歐洲。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was not until the middle of the 15th century that a German blacksmith named Johannes Gutenberg invented a printing press that allowed for mass production of the Christian Bible.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>直到15世紀中葉，一位名叫約翰尼斯·谷登堡 (Johannes Gutenberg) 的德國鐵匠發明了印刷機，這使得基督教聖經的大規模生產成為可能。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Most of Gutenberg's Bibles were printed on paper, becoming one of the most famous early works on paper in history.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>谷登堡的大多數聖經都是印在紙上的，成為歷史上最著名的早期紙本作品之一。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">devout</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">虔誠的</div>
+                        <div class="example"><span class='highlight'>Devout</span> Muslims were expected to memorize parts of it.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">recite</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">背誦；朗誦</div>
+                        <div class="example">To be <span class='highlight'>recited</span> during religious ceremonies.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">calligraphy</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">書法</div>
+                        <div class="example">One of their most famous art forms was <span class='highlight'>calligraphy</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">rudimentary</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">基本的；初步的；粗糙的</div>
+                        <div class="example">Even <span class='highlight'>rudimentary</span> paper was a great improvement.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sprawling</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">蔓延的；廣大的</div>
+                        <div class="example">This <span class='highlight'>sprawling</span> empire contained dozens of great cities.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">disparate</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">迥然不同的；異類的</div>
+                        <div class="example">Now those <span class='highlight'>disparate</span> regions could be united.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">languish</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">衰弱；受苦；被迫滯留</div>
+                        <div class="example">As Europe <span class='highlight'>languished</span> in the Dark Ages.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">tedious</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">乏味的；冗長乏味的</div>
+                        <div class="example">The <span class='highlight'>tedious</span> process of writing books by hand.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dominance</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">主導地位；優勢</div>
+                        <div class="example">There was one place where its <span class='highlight'>dominance</span> was resisted.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">unfit</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">不適合的</div>
+                        <div class="example">It was initially considered <span class='highlight'>unfit</span> to bear the holy words.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">Legend has it that... (傳說...)</div>
+                    <p>用來引述一個沒有確鑿證據的古老故事或傳說。</p>
+                    <div class="example"><span class='highlight'>Legend has it that</span> two Chinese papermakers were captured.</div>
+                    <div class="example"><span class='highlight'>Legend has it that</span> a ghost haunts this castle.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">make a living (謀生)</div>
+                    <p>指賺取足夠的錢來支付生活必需品。</p>
+                    <div class="example">It became possible to <span class='highlight'>make a living</span> by reading and writing alone.</div>
+                    <div class="example">He <span class='highlight'>makes a living</span> as a freelance writer.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>It is no surprise that... (...並不奇怪)</strong>
+                    <p>用來表示某件事是非常合乎邏輯或可以預期的。</p>
+                    <div class="example"><span class='highlight'>It is no surprise that</span> a society which so valued words would fall in love with paper.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">為什麼紙張比羊皮紙和莎草紙進步？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 它的製作難度更高。</li>
+                                <li>B) 彎曲時容易破裂。</li>
+                                <li>C) 它比較便宜，彎曲時不會破裂，而且能永久吸收墨水。</li>
+                                <li>D) 它更重、更厚。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">阿拔斯王朝如何看待學習和科學？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 他們試圖阻止人們閱讀。</li>
+                                <li>B) 他們最重視學習並支持學者。</li>
+                                <li>C) 他們認為只有戰爭才是重要的。</li>
+                                <li>D) 他們認為科學是危險的。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼紙張最初在穆斯林帝國被抵制用於宗教？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 在上面寫字太難了。</li>
+                                <li>B) 大家都認為這太貴了。</li>
+                                <li>C) 因為它比羊皮紙便宜，被認為不適合承載神聖的文字。</li>
+                                <li>D) 因為它是在中國發明的。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `the edge of China itself. Legend has it that two Chinese papermakers were captured during the battle and brought to Samarkand, where they were ordered to establish a paper manufacturing center in the heart of the Muslim empire. Whether or not this was wholly true, it is probable that Muslim warriors encountered papermaking during their battles with China. Seeing its usefulness immediately, they returned home with the technology to share with their scribes. The Muslim empire was a culture that placed great importance on words. The Muslims’ holy book, the Qur’an, was a great poetic work, and devout Muslims were expected to memorize parts of it to be recited during religious ceremonies. One of their most famous art forms was calligraphy, a style of decorative writing, and their great mosques were decorated not with images of people, but the words of the Qur’an itself. It is no surprise that a society which so valued words would fall in love with paper. Compared to parchment and papyrus, even rudimentary paper—much rougher and thicker than the pages of a book today—was a great improvement. Unlike parchment, which could only be made from the skins of animals, paper could be manufactured relatively cheaply and easily. Unlike papyrus, paper did not crack when it was bent. It was also thinner, which made the binding of books much simpler than it had been before. Perhaps most importantly, paper absorbed ink, which meant that anything written on paper could not be erased. That's not very useful when you're trying to solve a math problem, but when writing official government documents, permanence is crucial. Just as it had been in China, paper was originally used mainly by the Arab government. At a time when Europe was broken into a number of disorganized kingdoms, the Abbasid Caliphate, which stretched from Afghanistan to North Africa, might have been the greatest power on Earth. This sprawling empire contained dozens of great cities, millions of people, and several different, often conflicting, cultures. Although the empire's official language was Arabic, its people spoke many different languages—from Persian in the East to Berber in the West. Now those disparate regions could be united by the written word. Paper's use spread quickly. By the end of the 8th century, a paper mill had been set up in Baghdad. Over the next 200 years, the technology spread to Syria, North Africa, and even Spain—which was partially ruled by Muslims from 711 to 1492. Although the Abbasid Caliphate and other ruling houses of the Arab empire were skilled in war, they prized learning above all else. The Abbasids took inspiration from a well-known saying, "The ink of a scholar is holier than the blood of a martyr." To this end, the Abbasids did everything they could to encourage scientific achievement. As Europe languished in the Dark Ages, when even literacy was limited mainly to monks, the Muslim world entered a scientific golden age. Building on the knowledge of the ancient Greeks, Muslim scholars made great advances in geometry, astronomy, and mathematics. As paper became more widespread, so did knowledge. The tedious process of writing books by hand was made easier by an adoption of assembly-line-style techniques, which allowed a group of scribes to produce finished books faster than ever before. Great libraries were established across the Muslim world, and in capitals like Baghdad and Cairo, booksellers flourished. Scholars and poets were supported by the government, and for perhaps the first time in history, it became possible to make a living by reading and writing alone. Even as paper became widespread, there was one place where its dominance was resisted: religion. Because paper was less expensive than parchment, it was initially considered unfit to bear the holy words of the Qur’an. However, the demand for copies of the Qur’an grew along with the population's literacy. Eventually, that demand, along with the improved quality of the paper, made the new material considered suitable for religious use. The oldest known Qur’an written on paper dates from 971-972. The western spread of paper didn’t end in the Arab empire. From there, the technology to manufacture paper made its way through Europe. It was not until the middle of the 15th century that a German blacksmith named Johannes Gutenberg invented a printing press that allowed for mass production of the Christian Bible. Most of Gutenberg's Bibles were printed on paper, becoming one of the most famous early works on paper in history.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

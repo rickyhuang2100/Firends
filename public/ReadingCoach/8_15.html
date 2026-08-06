@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Everyday Energy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 Everyday Energy</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The pitcher gets into her set.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>投手準備就緒。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Her glove and pitching hand come together by her chin, and she then lowers them to her belt.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她的手套和投球的手在下巴旁邊合攏，然後她將它們降到腰帶處。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>She looks at the catcher and nods.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她看著捕手並點了點頭。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>She brings her front leg up and pauses, standing perfectly balanced on her back leg.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她抬起前腿並停頓了一下，完美地用後腿保持平衡站立著。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Then, in an instant, she steps forward with her front leg.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然後，在瞬間，她用前腿向前邁出一步。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Her whole body lurches toward home plate and her pitching arm swings out after it like a whip.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>她的整個身體向本壘板猛衝，她投球的手臂像鞭子一樣在後面揮出。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>At the furthest point, when a whip would crack, she lets the ball fly toward the catcher’s mitt.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在最遠的一點，也就是鞭子會發出清脆響聲的時候，她讓球飛向捕手的手套。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The batter steps forward with her front leg and rotates her torso, swinging the bat with her eyes fixed on the incoming fastball.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>打者前腿向前邁出，轉動軀幹，揮動球棒，眼睛緊盯著飛來的快速球。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“STRIKE THREE! BATTER’S OUT!”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「好球三次！打者出局！」</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Moments like these happen all across the physical world, whether on the molecular or cosmic level.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>像這樣的時刻在整個物理世界中都在發生，無論是在分子層面還是宇宙層面。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Potential energy is the energy, chemical or physical, stored within an object, atom or molecule.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>位能 (Potential energy) 是一種儲存在物體、原子或分子內的化學或物理能量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Think about a car at the top of a roller-coaster, pausing just before it plunges into the next turn.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>想像一下停在雲霄飛車頂端的車子，就在它俯衝進入下一個轉彎前停頓的那一刻。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A log resting in a fireplace just before it is about to be lit, is a treasure trove of potential energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一根放在壁爐裡剛要被點燃的木頭，就是一個位能的寶庫。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As the log burns, the connections between carbon atoms that make up the wood are being broken down, and the potential energy stored within those connections is being released as heat and light.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當木頭燃燒時，構成木材的碳原子之間的連結正在被破壞，儲存在這些連結中的位能正以熱和光的形式釋放出來。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As a comet approaches a planet or star, it slows, momentarily affected by the larger body’s gravity.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當彗星接近行星或恆星時，它會減速，短暫地受到較大天體重力的影響。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The potential energy builds and then reaches a breaking point, as the comet accelerates around the larger body and is slingshotted out the other side.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當彗星加速繞過較大的天體並像彈弓一樣從另一邊被彈射出去時，位能不斷累積並達到臨界點。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Sports showcase countless examples every day of potential energy being converted into kinetic energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>體育運動每天都展示了無數位能轉化為動能 (kinetic energy) 的例子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Kinetic energy is the energy of movement.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>動能是運動的能量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When an archer draws and holds her arrow, her bow is brimming with stored potential energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當弓箭手拉弓並握住箭時，她的弓充滿了儲存的位能。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When she releases the bowstring, all the potential energy is quickly converted into kinetic energy, which is transferred to the arrow that takes flight.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當她釋放弓弦時，所有的位能都會迅速轉化為動能，轉移到飛行的箭上。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The transfer of kinetic energy from the bow to the arrow is not a perfectly efficient process.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>動能從弓轉移到箭的過程並非完美高效。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>What this means is that some of the energy does not make it to the arrow.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這意味著有些能量並沒有到達箭上。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Instead, the energy might be absorbed by the archer’s arm, causing it to jerk to the side when the bow twangs.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>相反，能量可能會被弓箭手的手臂吸收，導致在弓弦發出「嗡嗡」聲時手臂猛然向旁邊抽動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The most important thing to remember is that although the transfer of energy between objects may be inefficient, the energy still exists.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最重要的是要記住，儘管物體之間的能量轉移可能是無效的（不完全的），但能量仍然存在。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It has simply been transferred along a different pathway.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它只是沿著不同的路徑被轉移了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Therefore, the total sum of energy is still conserved.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因此，能量的總和仍然是守恆的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The conversion of stored potential energy into kinetic energy can also be harnessed to power homes, factories and entire cities.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>將儲存的位能轉化為動能，也可以被用來為家庭、工廠和整個城市供電。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The most notable example is the Hoover Dam.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最著名的例子就是胡佛水壩 (Hoover Dam)。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Hoover Dam is an arch-gravity dam by design.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>胡佛水壩在設計上是一座拱重力壩。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This design name is the first clue as to how exactly the dam harnesses energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這個設計名稱是水壩究竟如何利用能量的第一個線索。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Located in the Black Canyon of the Colorado River, the Hoover Dam formed, and now holds back, Lake Mead—the largest reservoir in the United States.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>位於科羅拉多河黑峽谷的胡佛水壩形成並攔截了米德湖 (Lake Mead)——美國最大的水庫。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The dam was built toward the beginning of the Great Depression.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這座水壩建於經濟大蕭條初期。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Constructed between 1931 and 1936, the dam had been the subject of planning and design sessions since 1900.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>該水壩建於1931年至1936年之間，自1900年以來一直是規劃和設計會議的主題。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Deliberations included discussions of potential catastrophes, should the dam fail or the lake grow beyond expectations.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>審議內容包括討論潛在的災難，以防大壩崩塌或湖水增長超出預期。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Gravity acts as a force upon Lake Mead.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>重力作為一種力量作用於米德湖上。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Held at bay by the Hoover Dam, the waters of Lake Mead and the Colorado River gain greater potential energy with each passing moment.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>被胡佛水壩攔截住的米德湖和科羅拉多河的河水，每過一刻都獲得更大的位能。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Arizona and Nevada spillways are two means by which the waters of Lake Mead can escape the dam.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>亞利桑那和內華達溢洪道是米德湖水可以排出水壩的兩種方式。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As the lake water tumbles over the walls into a spillway, potential energy is instantly converted into kinetic energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當湖水翻過壩體進入溢洪道時，位能會瞬間轉化為動能。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The channels through which the water normally escapes every day are the four intake towers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>水每天通常排出的通道是四座進水塔。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These towers funnel the water through sluices, or passageways, to the powerhouse and hydroelectric generators.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些塔透過水閘或通道，將水匯集到發電廠和水力發電機中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When the water reaches the intake towers and is allowed to flow down through the sluices, all the stored potential energy created by the force of gravity acting upon the water is converted into kinetic energy, just as when water flows over the wall into a spillway.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當水到達進水塔並被允許向下流過水閘時，重力作用於水所產生的所有儲存位能都會轉化為動能，就像水翻過壩體進入溢洪道時一樣。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>By harnessing the converted potential energy of Lake Mead, the Hoover Dam provides power to California, Nevada and Arizona.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>透過利用米德湖轉化後的位能，胡佛水壩為加州、內華達州和亞利桑那州提供電力。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Well over a dozen turbines are housed within the power plant at the base of the dam.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在水壩底部的發電廠內，安置了十幾台渦輪機 (turbines)。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Electricity production varies annually depending on how much water is required downriver from the dam and the water levels of Lake Mead.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>發電量每年都會變化，具體取決於水壩下游需要多少水以及米德湖的水位。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The greatest amount of energy was produced during 1984; a year after floods brought the lake to its highest levels.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>發電量最多的是在1984年；這是在洪水使湖水達到最高水位的下一年。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As of 2009 the American Southwest has entered a prolonged period of seasonal droughts.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>自2009年以來，美國西南部進入了長期的季節性乾旱。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As a result, compared to its peak periods of energy production, the Hoover Dam has been recently generating much less energy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因此，與能源生產的高峰期相比，胡佛水壩最近產生的能源要少得多。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">lurch</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">突然傾斜；蹣跚</div>
+                        <div class="example">Her whole body <span class='highlight'>lurches</span> toward home plate.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">plunge</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">投入；跳進；俯衝</div>
+                        <div class="example">Pausing just before it <span class='highlight'>plunges</span> into the next turn.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">trove</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">寶庫</div>
+                        <div class="example">The log is a treasure <span class='highlight'>trove</span> of potential energy.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">slingshot</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">彈射</div>
+                        <div class="example">The comet is <span class='highlight'>slingshotted</span> out the other side.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">brim</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">充滿；滿溢</div>
+                        <div class="example">Her bow is <span class='highlight'>brimming</span> with stored potential energy.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">twang</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">發出撥弦聲/嗡嗡聲</div>
+                        <div class="example">It causes the arm to jerk when the bow <span class='highlight'>twangs</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">harness</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">利用；控制(以產生動力)</div>
+                        <div class="example">This energy can be <span class='highlight'>harnessed</span> to power homes.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">deliberation</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">審議；深思熟慮</div>
+                        <div class="example"><span class='highlight'>Deliberations</span> included discussions of potential catastrophes.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">spillway</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">溢洪道</div>
+                        <div class="example">The water tumbles over the walls into a <span class='highlight'>spillway</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sluice</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">水閘；引水槽</div>
+                        <div class="example">These towers funnel the water through <span class='highlight'>sluices</span>.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">hold at bay (牽制；抵擋住)</div>
+                    <p>表示阻止某人或某物靠近或造成傷害。</p>
+                    <div class="example"><span class='highlight'>Held at bay</span> by the Hoover Dam, the waters gain potential energy.</div>
+                    <div class="example">The soldiers <span class='highlight'>held</span> the enemy <span class='highlight'>at bay</span>.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">well over (遠多於；遠超過)</div>
+                    <p>用來強調數量大大超過某個數值。</p>
+                    <div class="example"><span class='highlight'>Well over</span> a dozen turbines are housed within the power plant.</div>
+                    <div class="example">It cost <span class='highlight'>well over</span> a thousand dollars.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>Should... (要是...的話/萬一...)</strong>
+                    <p>這是 if 條件句的一種倒裝形式，將 if 省略，並把 should 移到主詞前面，用來表示不太可能發生但仍有機會的假設情況。</p>
+                    <div class="example">Discussions of potential catastrophes, <span class='highlight'>should the dam fail</span>. (相當於 ...if the dam should fail.)</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">什麼是動能 (kinetic energy)？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 儲存在原子中的能量。</li>
+                                <li>B) 運動的能量。</li>
+                                <li>C) 在真空中守恆的能量。</li>
+                                <li>D) 黑洞的能量。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">胡佛水壩是如何發電的？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 透過在水壩內部燃燒煤炭。</li>
+                                <li>B) 透過利用黑峽谷的風力。</li>
+                                <li>C) 透過使用渦輪機將向下流動的水的位能轉化為動能。</li>
+                                <li>D) 透過在湖面上捕捉太陽能。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼胡佛水壩最近（截至2009年）產生的能源較少？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 因為美國西南部出現季節性乾旱。</li>
+                                <li>B) 因為渦輪機損壞了。</li>
+                                <li>C) 因為1984年的一場洪水損壞了水壩。</li>
+                                <li>D) 因為加州不再需要電力。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：A</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `The pitcher gets into her set. Her glove and pitching hand come together by her chin, and she then lowers them to her belt. She looks at the catcher and nods. She brings her front leg up and pauses, standing perfectly balanced on her back leg. Then, in an instant, she steps forward with her front leg. Her whole body lurches toward home plate and her pitching arm swings out after it like a whip. At the furthest point, when a whip would crack, she lets the ball fly toward the catcher’s mitt. The batter steps forward with her front leg and rotates her torso, swinging the bat with her eyes fixed on the incoming fastball. “STRIKE THREE! BATTER’S OUT!” Moments like these happen all across the physical world, whether on the molecular or cosmic level. Potential energy is the energy, chemical or physical, stored within an object, atom or molecule. Think about a car at the top of a roller-coaster, pausing just before it plunges into the next turn. A log resting in a fireplace just before it is about to be lit, is a treasure trove of potential energy. As the log burns, the connections between carbon atoms that make up the wood are being broken down, and the potential energy stored within those connections is being released as heat and light. As a comet approaches a planet or star, it slows, momentarily affected by the larger body’s gravity. The potential energy builds and then reaches a breaking point, as the comet accelerates around the larger body and is slingshotted out the other side. Sports showcase countless examples every day of potential energy being converted into kinetic energy. Kinetic energy is the energy of movement. When an archer draws and holds her arrow, her bow is brimming with stored potential energy. When she releases the bowstring, all the potential energy is quickly converted into kinetic energy, which is transferred to the arrow that takes flight. The transfer of kinetic energy from the bow to the arrow is not a perfectly efficient process. What this means is that some of the energy does not make it to the arrow. Instead, the energy might be absorbed by the archer’s arm, causing it to jerk to the side when the bow twangs. The most important thing to remember is that although the transfer of energy between objects may be inefficient, the energy still exists. It has simply been transferred along a different pathway. Therefore, the total sum of energy is still conserved. The conversion of stored potential energy into kinetic energy can also be harnessed to power homes, factories and entire cities. The most notable example is the Hoover Dam. The Hoover Dam is an arch-gravity dam by design. This design name is the first clue as to how exactly the dam harnesses energy. Located in the Black Canyon of the Colorado River, the Hoover Dam formed, and now holds back, Lake Mead—the largest reservoir in the United States. The dam was built toward the beginning of the Great Depression. Constructed between 1931 and 1936, the dam had been the subject of planning and design sessions since 1900. Deliberations included discussions of potential catastrophes, should the dam fail or the lake grow beyond expectations. Gravity acts as a force upon Lake Mead. Held at bay by the Hoover Dam, the waters of Lake Mead and the Colorado River gain greater potential energy with each passing moment. The Arizona and Nevada spillways are two means by which the waters of Lake Mead can escape the dam. As the lake water tumbles over the walls into a spillway, potential energy is instantly converted into kinetic energy. The channels through which the water normally escapes every day are the four intake towers. These towers funnel the water through sluices, or passageways, to the powerhouse and hydroelectric generators. When the water reaches the intake towers and is allowed to flow down through the sluices, all the stored potential energy created by the force of gravity acting upon the water is converted into kinetic energy, just as when water flows over the wall into a spillway. By harnessing the converted potential energy of Lake Mead, the Hoover Dam provides power to California, Nevada and Arizona. Well over a dozen turbines are housed within the power plant at the base of the dam. Electricity production varies annually depending on how much water is required downriver from the dam and the water levels of Lake Mead. The greatest amount of energy was produced during 1984; a year after floods brought the lake to its highest levels. As of 2009 the American Southwest has entered a prolonged period of seasonal droughts. As a result, compared to its peak periods of energy production, the Hoover Dam has been recently generating much less energy.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

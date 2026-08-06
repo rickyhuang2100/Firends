@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Judaism and Monotheistic Morality</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 Judaism and Monotheistic Morality</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Judaism has been around for over 3,000 years, starting in the Middle East and eventually spreading all across the globe.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太教已經存在了3000多年，起源於中東，最終傳遍全球。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Today it is a major world religion practiced by millions of people.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>今天，它是世界主要宗教之一，有數百萬人信奉。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Judaism is a monotheistic faith, believing in only one god, as opposed to many.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太教是一神論信仰，只相信一個神，而不是多個神。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Though there had been other faiths approaching monotheism, Judaism is considered to be the first true monotheistic religion.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然曾有其他信仰接近一神論，但猶太教被認為是第一個真正的一神論宗教。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The morality of Judaism was influenced by this belief in one god.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太教的道德觀受到這種對單一神信仰的影響。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The system of Judaic ethics has had a large impact on Western ideas of morality and justice.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太倫理體系對西方道德和正義觀念產生了巨大影響。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Throughout history, there has been much internal debate and disagreement between different sects of Jewish believers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>縱觀歷史，在不同的猶太教派信徒之間一直存在著許多內部辯論和分歧。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Some of these sects broke off and became their own religion, like Christianity, which started off as a small group of Jews worshipping in their own unique way.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>其中一些教派脫離出來，成為他們自己的宗教，就像基督教一樣，它最初是一小群以自己獨特方式做禮拜的猶太人。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In discovering and articulating their own beliefs, namely worshipping Jesus Christ as the promised savior from the Hebrew Bible, these early Christians began to grow distinct from Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在發現並闡明他們自己的信仰時，即崇拜耶穌基督作為希伯來聖經中應許的救世主，這些早期的基督徒開始變得與猶太教不同。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They eventually formed the powerful religion known today as Christianity.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們最終形成了今天被稱為基督教的強大宗教。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Similarly, Islam was birthed from Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>同樣地，伊斯蘭教也脫胎於猶太教。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of the major theological questions amongst the early Jews was about monotheism; some sects did not mind the idea of the Jewish god being worshipped alongside other local deities.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>早期猶太人中的主要神學問題之一是關於一神論；一些教派並不介意猶太神與其他當地神明一起被崇拜的想法。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But this did not last long.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但這並沒有持續太久。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Eventually, the idea of the Jewish god being the one and only god became central.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最終，猶太神是唯一真神的觀念成為了核心。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The bulk of the claims for this belief are contained in the holy texts of Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>支持這種信仰的大部分主張都包含在猶太教的聖典中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Hebrew Bible is the central text of the faith.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>《希伯來聖經》是該信仰的核心文本。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It consists of a number of books, beginning with the Torah, which is the same as the Christian Old Testament.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它由多卷書組成，以《妥拉》(Torah) 開始，這與基督教的《舊約聖經》相同。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These books assert repeatedly that the Jewish god is the one god, and that all the other gods that other religions believe or have believed in are not real.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些書反覆斷言猶太神是唯一的神，而其他宗教信仰或曾經信仰的所有其他神都不是真實的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is told over and over from the revelation of God to Abraham in the Book of Genesis and the revelation to the Israelites on Mount Sinai.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>從《創世記》中神對亞伯拉罕的啟示，到在西奈山上對以色列人的啟示，這被一遍又一遍地講述。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This belief is also upheld in today's Jewish theological discussion.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這種信仰在今天的猶太神學討論中也得到堅持。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The case for monotheism was reinforced outside the faith as well.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一神論的理由在信仰之外也得到了強化。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As different political and tribal forces gained and lost influence, so did their particular interpretation of Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>隨著不同政治和部落勢力影響力的增減，他們對猶太教的特定解釋也隨之起伏。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Certain elements of Judaism also became more emphasized because of practical matters.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>由於實際問題，猶太教的某些要素也變得更加被強調。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>For example, kings and rulers would use Judaism to solidify and legitimize their power and authority over their subjects.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>例如，國王和統治者會利用猶太教來鞏固和使他們對臣民的權力和權威合法化。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The idea of one central all-powerful god was particularly useful for this purpose.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一個核心的、全能的神的觀念對這個目的特別有用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The idea of one god influenced the morality of Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一個神的觀念影響了猶太教的道德觀。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Hebrew Bible and the authority of Jewish leaders crafted a morality and code of ethics that slowly became standardized for the faith.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>《希伯來聖經》和猶太領袖的權威塑造了一種道德和倫理準則，這種準則慢慢成為該信仰的標準。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Morality is extremely important in Judaism; the rules and laws teaching how to live a good and moral life are a large part of the practice of Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>道德在猶太教中極其重要；教導如何過上美好和道德生活的規則與律法是猶太教實踐的重要組成部分。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This emphasis is particularly true because of the belief that the Jewish god is an active and personal force in people's lives.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這種強調之所以特別真實，是因為人們相信猶太神是人們生活中一種積極的、個人化的力量。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Jewish god is very present.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太神是非常真實存在的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Jewish faith does not believe in the Enlightenment idea of the Divine Watchmaker.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太信仰不相信啟蒙運動中「神聖鐘錶匠」的觀念。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is the idea that God is like a watchmaker who builds a watch and then lets it run on its own, not touching, changing, or affecting it as it runs.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這個觀念認為，神就像一個鐘錶匠，他製造了一隻手錶，然後讓它自己運轉，在它運轉時不去觸碰、改變或影響它。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>That is, God created the universe and then let it run its own course without personally interfering.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>也就是說，神創造了宇宙，然後讓它按自己的規律運轉，而沒有親自干預。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Judaism rejects this, saying that God is actively and personally involved in the universe at all times.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太教拒絕這種觀點，認為神在任何時候都積極且親自地參與宇宙。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Therefore, morality is important to practitioners of Judaism because God is paying attention to the actions of humans.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因此，道德對猶太教實踐者很重要，因為神正在關注人類的行為。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The authority of these morals comes from another belief about the Jewish god.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些道德的權威來自於對猶太神的另一種信仰。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Hebrew Bible says that God is good and rules the universe with pure and correct morality.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>《希伯來聖經》說神是善良的，並以純潔和正確的道德統治宇宙。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This gives God the authority to dictate to humans which morals to live by.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這賦予了神規定人類應依循何種道德生活的權威。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Since the Bible says God is the one and only god, and that God is wholly good, then God's morals are therefore the only set of right and good morals.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>既然聖經說神是唯一的神，而且神是完全善良的，那麼神的道德因此就是唯一一套正確且善良的道德標準。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>There are many morals and ethical rules in Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>猶太教中有許多道德和倫理規則。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Torah lays out many of these ethics.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>《妥拉》列出了許多這些倫理。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These have been discussed, debated, added to and considered over the thousands of years of Jewish thought.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在數千年的猶太思想中，這些一直被討論、辯論、補充和思考。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The greatest and most well known example of morality as dictated by the Jewish god is the Ten Commandments.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>由猶太神所規定的最偉大、最著名的道德例子就是「十誡」。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The commandments appear in the Torah book of Exodus, when Moses is given stone tablets upon which the commandments are carved.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些誡命出現在《妥拉》的《出埃及記》中，當時摩西獲得了刻有這些誡命的石板。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These form the basis of all Jewish morality, dictating people to act decently.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些構成了所有猶太道德的基礎，規定人們要行為端正。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While the ethics in Judaism touch on many aspects of life and human existence, they do have some basic themes and common threads.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然猶太教的倫理涉及生活和人類存在的許多方面，但它們確實有一些基本主題和共同點。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Most broadly, Jewish morality dictates that people live righteous lives.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最廣泛地說，猶太道德規定人們要過正義的生活。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Kindness, compassion, peace and goodwill are all important traits for a faithful Jewish practitioner.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>仁慈、同情心、和平和善意都是一個忠實猶太教實踐者的重要特質。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Benevolence and the kind treatment of fellow human beings are essential to being a successful and pious practitioner of Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>仁慈和善待同胞是成為一個成功且虔誠的猶太教實踐者所必不可少的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As the first monotheistic form of morality, Judaic morality has been very influential.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>作為第一種一神論形式的道德，猶太道德一直非常有影響力。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The other Abrahamic faiths of Islam and Christianity have very similar moral codes that demand the same strict adherence and emphasis on a good and benevolent god.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>伊斯蘭教和基督教等其他亞伯拉罕信仰具有非常相似的道德準則，同樣要求嚴格遵守並強調一位善良仁慈的神。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Beyond the religious realm though, Jewish morality influenced secular life.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，除了宗教領域之外，猶太道德也影響了世俗生活。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Some scholars see its influence in the way we relate to laws and governments today.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一些學者在我們今天與法律和政府的關係中看到了它的影響。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The idea that a ruler or government has our best interests at heart and therefore has the authority to dictate laws, and enforce that they are followed, is heavily indebted to codes of morality starting with Judaism.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>統治者或政府將我們的最大利益放在心上，因此有權制定法律並強制執行的觀念，很大程度上受惠於始於猶太教的道德準則。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The idea of morality stemming from one supreme god was a revolutionary development in human thought.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>道德源於一位至高無上之神的觀念，是人類思想上的一項革命性發展。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Many thousands of years ago, when the Israelites embraced their god and their morals, they had no idea how widespread and influential it would become.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>數千年前，當以色列人信奉他們的神和他們的道德時，他們並不知道它會變得多麼廣泛和有影響力。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">monotheistic</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">一神論的</div>
+                        <div class="example">Judaism is a <span class='highlight'>monotheistic</span> faith.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">articulate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">清楚地表達/闡明</div>
+                        <div class="example">In discovering and <span class='highlight'>articulating</span> their own beliefs.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">theology</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">神學</div>
+                        <div class="example">This is also upheld in Jewish <span class='highlight'>theological</span> discussion.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">deity</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">神明</div>
+                        <div class="example">Worshipped alongside other local <span class='highlight'>deities</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">legitimize</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">使合法化；使合理化</div>
+                        <div class="example">Kings would use Judaism to <span class='highlight'>legitimize</span> their power.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dictate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">規定；指令</div>
+                        <div class="example">The authority to <span class='highlight'>dictate</span> to humans which morals to live by.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">righteous</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">正義的；公正的</div>
+                        <div class="example">Jewish morality dictates that people live <span class='highlight'>righteous</span> lives.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">benevolence</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">仁慈；善意</div>
+                        <div class="example"><span class='highlight'>Benevolence</span> and kind treatment are essential.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">pious</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">虔誠的</div>
+                        <div class="example">A successful and <span class='highlight'>pious</span> practitioner of Judaism.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">secular</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">世俗的</div>
+                        <div class="example">Jewish morality influenced <span class='highlight'>secular</span> life.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stem from</div>
+                        <div class="vocab-type">phr v. 片語動詞</div>
+                        <div class="vocab-meaning">源自於</div>
+                        <div class="example">The idea of morality <span class='highlight'>stemming from</span> one supreme god.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">indebted to</div>
+                        <div class="vocab-type">phr. 片語</div>
+                        <div class="vocab-meaning">受惠於；感激</div>
+                        <div class="example">It is heavily <span class='highlight'>indebted to</span> codes of morality starting with Judaism.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">as opposed to (與...相對；而不是...)</div>
+                    <p>用來對比兩件事物，強調前者而非後者。</p>
+                    <div class="example">Believing in only one god, <span class='highlight'>as opposed to</span> many.</div>
+                    <div class="example">I prefer staying home, <span class='highlight'>as opposed to</span> going out.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">at heart (在心裡；本質上)</div>
+                    <p>通常用在 have sb's best interests at heart，表示真心為某人的最大利益著想。</p>
+                    <div class="example">A ruler has our best interests <span class='highlight'>at heart</span>.</div>
+                    <div class="example">He is a good person <span class='highlight'>at heart</span>.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>The bulk of... (大部分的...)</strong>
+                    <p>bulk 指的是某物的主要部分或絕大部分，常用來修飾不可數名詞或複數可數名詞。</p>
+                    <div class="example"><span class='highlight'>The bulk of</span> the claims for this belief are contained in the holy texts.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">「一神論的 (monotheistic)」這個詞是什麼意思？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 相信許多神。</li>
+                                <li>B) 只相信一個神。</li>
+                                <li>C) 相信神不與人類互動。</li>
+                                <li>D) 相信國王就是神。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">猶太信仰如何看待神參與宇宙的方式？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 像一個不干涉的神聖鐘錶匠。</li>
+                                <li>B) 作為一種積極和個人化的力量，在任何時候都參與其中。</li>
+                                <li>C) 只在主要的宗教節日參與。</li>
+                                <li>D) 作為一種只關心國王和統治者行為的力量。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">什麼被認為是由猶太神規定的最偉大、最著名的道德例子？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 神聖鐘錶匠。</li>
+                                <li>B) 啟蒙運動。</li>
+                                <li>C) 十誡。</li>
+                                <li>D) 世俗生活的概念。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `Judaism has been around for over 3,000 years, starting in the Middle East and eventually spreading all across the globe. Today it is a major world religion practiced by millions of people. Judaism is a monotheistic faith, believing in only one god, as opposed to many. Though there had been other faiths approaching monotheism, Judaism is considered to be the first true monotheistic religion. The morality of Judaism was influenced by this belief in one god. The system of Judaic ethics has had a large impact on Western ideas of morality and justice. Throughout history, there has been much internal debate and disagreement between different sects of Jewish believers. Some of these sects broke off and became their own religion, like Christianity, which started off as a small group of Jews worshipping in their own unique way. In discovering and articulating their own beliefs, namely worshipping Jesus Christ as the promised savior from the Hebrew Bible, these early Christians began to grow distinct from Judaism. They eventually formed the powerful religion known today as Christianity. Similarly, Islam was birthed from Judaism. One of the major theological questions amongst the early Jews was about monotheism; some sects did not mind the idea of the Jewish god being worshipped alongside other local deities. But this did not last long. Eventually, the idea of the Jewish god being the one and only god became central. The bulk of the claims for this belief are contained in the holy texts of Judaism. The Hebrew Bible is the central text of the faith. It consists of a number of books, beginning with the Torah, which is the same as the Christian Old Testament. These books assert repeatedly that the Jewish god is the one god, and that all the other gods that other religions believe or have believed in are not real. This is told over and over from the revelation of God to Abraham in the Book of Genesis and the revelation to the Israelites on Mount Sinai. This belief is also upheld in today's Jewish theological discussion. The case for monotheism was reinforced outside the faith as well. As different political and tribal forces gained and lost influence, so did their particular interpretation of Judaism. Certain elements of Judaism also became more emphasized because of practical matters. For example, kings and rulers would use Judaism to solidify and legitimize their power and authority over their subjects. The idea of one central all-powerful god was particularly useful for this purpose. The idea of one god influenced the morality of Judaism. The Hebrew Bible and the authority of Jewish leaders crafted a morality and code of ethics that slowly became standardized for the faith. Morality is extremely important in Judaism; the rules and laws teaching how to live a good and moral life are a large part of the practice of Judaism. This emphasis is particularly true because of the belief that the Jewish god is an active and personal force in people's lives. The Jewish god is very present. The Jewish faith does not believe in the Enlightenment idea of the Divine Watchmaker. This is the idea that God is like a watchmaker who builds a watch and then lets it run on its own, not touching, changing, or affecting it as it runs. That is, God created the universe and then let it run its own course without personally interfering. Judaism rejects this, saying that God is actively and personally involved in the universe at all times. Therefore, morality is important to practitioners of Judaism because God is paying attention to the actions of humans. The authority of these morals comes from another belief about the Jewish god. The Hebrew Bible says that God is good and rules the universe with pure and correct morality. This gives God the authority to dictate to humans which morals to live by. Since the Bible says God is the one and only god, and that God is wholly good, then God's morals are therefore the only set of right and good morals. There are many morals and ethical rules in Judaism. The Torah lays out many of these ethics. These have been discussed, debated, added to and considered over the thousands of years of Jewish thought. The greatest and most well known example of morality as dictated by the Jewish god is the Ten Commandments. The commandments appear in the Torah book of Exodus, when Moses is given stone tablets upon which the commandments are carved. These form the basis of all Jewish morality, dictating people to act decently. While the ethics in Judaism touch on many aspects of life and human existence, they do have some basic themes and common threads. Most broadly, Jewish morality dictates that people live righteous lives. Kindness, compassion, peace and goodwill are all important traits for a faithful Jewish practitioner. Benevolence and the kind treatment of fellow human beings are essential to being a successful and pious practitioner of Judaism. As the first monotheistic form of morality, Judaic morality has been very influential. The other Abrahamic faiths of Islam and Christianity have very similar moral codes that demand the same strict adherence and emphasis on a good and benevolent god. Beyond the religious realm though, Jewish morality influenced secular life. Some scholars see its influence in the way we relate to laws and governments today. The idea that a ruler or government has our best interests at heart and therefore has the authority to dictate laws, and enforce that they are followed, is heavily indebted to codes of morality starting with Judaism. The idea of morality stemming from one supreme god was a revolutionary development in human thought. Many thousands of years ago, when the Israelites embraced their god and their morals, they had no idea how widespread and influential it would become.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

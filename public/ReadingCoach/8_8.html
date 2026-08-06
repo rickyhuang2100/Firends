@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - People Who Built America: Morgan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 People Who Built America: Morgan</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>John Pierpont Morgan was born on April 17, 1837 into a wealthy family in Hartford, Connecticut.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>約翰·皮爾龐特·摩根 (John Pierpont Morgan) 於1837年4月17日出生在康乃狄克州哈特福的一個富裕家庭。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>His father was a banker, and young J.P., as he came to be known, lived in fancy houses and went to the best schools.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他的父親是一位銀行家，而後來被稱為 J.P. 的年輕摩根，住在豪華的房子裡，並就讀於最好的學校。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Education was prized in the Morgan family.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>教育在摩根家族中備受重視。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Indeed, one of Morgan’s relatives, James Pierpont, helped to found Yale University in New Haven, Connecticut, not far from the family’s home.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>事實上，摩根的一位親戚詹姆斯·皮爾龐特 (James Pierpont) 協助在康乃狄克州紐黑文市（離他們家不遠）創辦了耶魯大學。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Young J.P. graduated from high school in Boston.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>年輕的 J.P. 在波士頓高中畢業。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He then studied French and German in Europe before returning home in 1857 to follow in his father’s footsteps and begin a career in banking and finance.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然後他在歐洲學習了法語和德語，之後在1857年回國，跟隨父親的腳步，開始了銀行和金融業的職業生涯。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In time, J.P. Morgan would become one of the most successful and famous bankers in the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>久而久之，J.P. 摩根成為世界上最成功和著名的銀行家之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As a banker, Morgan often helped to finance, or loan money to, different businesses and enterprises.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>身為銀行家，摩根經常協助資助（或貸款給）不同的企業和公司。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But he came to dominate two industries in particular: the railroad and steel industries.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但他後來特別主導了兩個產業：鐵路和鋼鐵業。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In the late 1800s, railroad companies were expanding at a rapid pace, connecting areas of the country that had been isolated and opening new opportunities for commerce and travel.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在1800年代末，鐵路公司正以驚人的速度擴張，連接了該國曾經孤立的地區，並為商業和旅遊開闢了新機會。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But some of the railroad companies grew too quickly and didn’t create good business plans.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但一些鐵路公司發展太快，沒有制定良好的商業計畫。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The railroad industry was in danger of falling apart just when the country’s economy needed it most.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>就在國家經濟最需要鐵路業的時候，它正面臨著崩潰的危險。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Amidst the chaos, J.P. Morgan saw a financial opportunity.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在混亂之中，J.P. 摩根看到了一個金融機會。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He stepped in, helped to reorganize the failing railroads and to fund them in exchange for a share, or stock, in the companies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他介入其中，協助重組這些苦苦掙扎的鐵路公司，並為它們提供資金，以換取這些公司的股份（或股票）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Eventually, he controlled about one sixth of the nation’s railroads and their profits.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最終，他控制了全國約六分之一的鐵路及其利潤。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>J.P. Morgan had become one of the wealthiest men in the nation and the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>J.P. 摩根已經成為全國乃至全世界最富有的人之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 1901, Morgan had shifted his interest from railroads to the steel industry.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在1901年，摩根已經將他的興趣從鐵路轉移到鋼鐵業。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>That year, another extraordinarily wealthy man, Andrew Carnegie, decided to sell his vast holdings in the steel industry.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>那一年，另一位極其富有的人，安德魯·卡內基 (Andrew Carnegie)，決定出售他在鋼鐵業的龐大資產。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The price was steep, but Morgan was eager.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>價格非常高，但摩根很渴望。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He bought the Carnegie Steel Company for about $480 million and merged it with his other steel companies, creating U.S. Steel, the first billion-dollar corporation in the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他以約4.8億美元的價格買下了卡內基鋼鐵公司，並將其與他擁有的其他鋼鐵公司合併，創建了美國鋼鐵公司 (U.S. Steel)，這是世界上第一家資產達十億美元的企業。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But Morgan did not stop there.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但摩根並沒有就此止步。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He helped to create or finance other major American companies, including General Electric and American Telephone and Telegraph, now known as AT&T.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他協助創建或資助了其他美國主要公司，包括通用電氣 (General Electric) 和美國電話電報公司（現稱為 AT&T）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Morgan’s formula for making money was to buy struggling companies, cut costs, reorganize how they were structured, and find new customers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>摩根賺錢的公式是買下苦苦掙扎的公司，削減成本，重組它們的結構，並尋找新客戶。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He was so successful that businessmen sought him out for advice and to invest in their companies.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他是如此成功，以至於商人們紛紛找他尋求建議，並請他投資他們的公司。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Despite his extensive wealth, Morgan did not only use his money and power for personal gain.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>儘管他擁有巨額財富，摩根並沒有把他的金錢和權力僅僅用於個人利益。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Several times Morgan stepped in to help the United States government when it faced financial disaster.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>好幾次，當美國政府面臨金融災難時，摩根都介入提供協助。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 1895, for example, he was the leader of a group of bankers who loaned the federal government around $60 million.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>例如，在1895年，他領導了一群銀行家，向聯邦政府貸款了約6000萬美元。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 1907, as several major American financial institutions faced imminent failure that could jeopardize the entire nation, Morgan held a meeting of the nation’s leading bankers and financiers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在1907年，當幾家美國主要金融機構面臨即將倒閉的危險，並可能危及整個國家時，摩根召集了全國主要的銀行家和金融家開會。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He persuaded them to bail out the failing companies for the sake of the country as a whole.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他為了整個國家的利益，說服他們去紓困這些快要倒閉的公司。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Although he was praised for his patriotism, some people criticized Morgan for having too much control over the country’s finances.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然他因愛國主義而受到讚揚，但有些人批評摩根對國家財政的控制過多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They accused him of using his influence in the government, and the goodwill he generated by helping out during different crises, to make more money for himself.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們指責他利用在政府中的影響力，以及透過在不同危機中提供幫助所產生的善意，來為自己賺更多的錢。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These critics feared that in amassing such wealth and control over so much of the country’s natural resources and businesses, J.P. Morgan could exercise too much control over the country’s leaders and its future.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些批評者擔心，由於累積了如此龐大的財富，並控制了國家這麼多的自然資源和企業，J.P. 摩根可能會對國家領導人及其未來施加過多的控制。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>J.P. Morgan also had many interests outside of business.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>J.P. 摩根在商業之外也有許多興趣。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He loved art and books, and collected both with enthusiasm.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他熱愛藝術和書籍，並充滿熱情地收集兩者。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He accumulated one of the largest, most prestigious, and most valuable art collections in the world, filled with masterpiece paintings and sculptures.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他積累了世界上最大、最享有盛譽、也最有價值的藝術收藏之一，其中充滿了名畫和雕塑。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He also collected rare books and manuscripts, which today are housed in the Morgan Library and Museum in New York City.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他也收集珍稀書籍和手稿，今天這些藏品都收藏在紐約市的摩根圖書館與博物館中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Morgan’s influence on New York and the world included the media, as he had a hand in molding perhaps the greatest newspaper in the country or the world, The New York Times.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>摩根對紐約和世界的影響也包括媒體，因為他參與塑造了這也許是全國（甚至全世界）最偉大的報紙——《紐約時報》。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 1896, Adolph Ochs, who owned the Chattanooga Times, borrowed money from Morgan to purchase The New York Times, which was then financially unstable and failing.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在1896年，擁有《查塔努加時報》的阿道夫·奧克斯 (Adolph Ochs) 向摩根借錢，買下了當時財務不穩且面臨倒閉的《紐約時報》。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>With Morgan’s backing, Ochs reorganized the paper’s finances and newsroom, building what is still a newspaper of the highest reporting and writing standards.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在摩根的支持下，奧克斯重組了該報的財務和新聞編輯室，建立了一份至今仍維持最高報導和寫作標準的報紙。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>J.P. Morgan died on March 31, 1913 while on a trip to Rome, Italy.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>J.P. 摩根於1913年3月31日在義大利羅馬旅行時去世。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The New York Stock Exchange was closed until noon on the morning of his funeral.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在他葬禮那天早上，紐約證券交易所關閉直到中午。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The family business that was begun by J.P. Morgan’s father and passed on to him then passed on to J.P. Morgan’s son, J.P. Morgan, Jr.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>由 J.P. 摩根的父親開始並傳給他的家族企業，隨後又傳給了 J.P. 摩根的兒子，小 J.P. 摩根。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The family dynasty continued.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這個家族王朝延續了下去。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">finance</div>
+                        <div class="vocab-type">v. 動詞 / n. 名詞</div>
+                        <div class="vocab-meaning">提供資金；財務</div>
+                        <div class="example">Morgan often helped to <span class='highlight'>finance</span> different businesses.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dominate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">主導；控制</div>
+                        <div class="example">He came to <span class='highlight'>dominate</span> the railroad and steel industries.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">steep</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">價格過高的；陡峭的</div>
+                        <div class="example">The price was <span class='highlight'>steep</span>, but Morgan was eager.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">imminent</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">逼近的；即將發生的</div>
+                        <div class="example">Several institutions faced <span class='highlight'>imminent</span> failure.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">jeopardize</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">危及；使處於危險之中</div>
+                        <div class="example">The failure could <span class='highlight'>jeopardize</span> the entire nation.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">bail out</div>
+                        <div class="vocab-type">phr. 片語動詞</div>
+                        <div class="vocab-meaning">紓困；幫助擺脫困境</div>
+                        <div class="example">He persuaded them to <span class='highlight'>bail out</span> the failing companies.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">patriotism</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">愛國主義</div>
+                        <div class="example">He was praised for his <span class='highlight'>patriotism</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">amass</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">累積；積聚</div>
+                        <div class="example">He was <span class='highlight'>amassing</span> such wealth and control.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">follow in someone's footsteps (跟隨某人的腳步)</div>
+                    <p>表示效法某人的行為或選擇相同的職業道路（特別是家族成員）。</p>
+                    <div class="example">He returned home to <span class='highlight'>follow in his father’s footsteps</span>.</div>
+                    <div class="example">She <span class='highlight'>followed in her mother's footsteps</span> and became a doctor.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">for the sake of (為了...的緣故)</div>
+                    <p>表示為了某人或某事的好處、利益或目的。</p>
+                    <div class="example">He bailed out the companies <span class='highlight'>for the sake of</span> the country.</div>
+                    <div class="example">I did it <span class='highlight'>for the sake of</span> my family.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>have a hand in (參與...)</strong>
+                    <p>表示參與某事的發生或對某事有影響力。</p>
+                    <div class="example">He <span class='highlight'>had a hand in</span> molding perhaps the greatest newspaper.</div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>step in (介入)</strong>
+                    <p>指涉入某個情況以幫忙解決問題。</p>
+                    <div class="example">Several times Morgan <span class='highlight'>stepped in</span> to help the United States government.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">J.P. 摩根建立的世界上第一家資產達十億美元的企業是哪一家？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 通用電氣 (General Electric)</li>
+                                <li>B) 美國電話電報公司 (AT&T)</li>
+                                <li>C) 美國鋼鐵公司 (U.S. Steel)</li>
+                                <li>D) 紐約時報 (The New York Times)</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">摩根經常如何從苦苦掙扎的公司中賺錢？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 把他們賣給政府。</li>
+                                <li>B) 買下他們，削減成本並重組他們。</li>
+                                <li>C) 把他們捐給慈善機構。</li>
+                                <li>D) 把他們與外國公司合併。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">儘管J.P. 摩根在金融危機期間提供了幫助，為什麼有些人還是批評他？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 他們認為他的藝術收藏是浪費錢。</li>
+                                <li>B) 他們擔心他對國家財政和領導人的控制過多。</li>
+                                <li>C) 他們不喜歡他支持紐約時報。</li>
+                                <li>D) 他們認為他應該買更多的鐵路。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `John Pierpont Morgan was born on April 17, 1837 into a wealthy family in Hartford, Connecticut. His father was a banker, and young J.P., as he came to be known, lived in fancy houses and went to the best schools. Education was prized in the Morgan family. Indeed, one of Morgan’s relatives, James Pierpont, helped to found Yale University in New Haven, Connecticut, not far from the family’s home. Young J.P. graduated from high school in Boston. He then studied French and German in Europe before returning home in 1857 to follow in his father’s footsteps and begin a career in banking and finance. In time, J.P. Morgan would become one of the most successful and famous bankers in the world. As a banker, Morgan often helped to finance, or loan money to, different businesses and enterprises. But he came to dominate two industries in particular: the railroad and steel industries. In the late 1800s, railroad companies were expanding at a rapid pace, connecting areas of the country that had been isolated and opening new opportunities for commerce and travel. But some of the railroad companies grew too quickly and didn’t create good business plans. The railroad industry was in danger of falling apart just when the country’s economy needed it most. Amidst the chaos, J.P. Morgan saw a financial opportunity. He stepped in, helped to reorganize the failing railroads and to fund them in exchange for a share, or stock, in the companies. Eventually, he controlled about one sixth of the nation’s railroads and their profits. J.P. Morgan had become one of the wealthiest men in the nation and the world. In 1901, Morgan had shifted his interest from railroads to the steel industry. That year, another extraordinarily wealthy man, Andrew Carnegie, decided to sell his vast holdings in the steel industry. The price was steep, but Morgan was eager. He bought the Carnegie Steel Company for about $480 million and merged it with his other steel companies, creating U.S. Steel, the first billion-dollar corporation in the world. But Morgan did not stop there. He helped to create or finance other major American companies, including General Electric and American Telephone and Telegraph, now known as AT&T. Morgan’s formula for making money was to buy struggling companies, cut costs, reorganize how they were structured, and find new customers. He was so successful that businessmen sought him out for advice and to invest in their companies. Despite his extensive wealth, Morgan did not only use his money and power for personal gain. Several times Morgan stepped in to help the United States government when it faced financial disaster. In 1895, for example, he was the leader of a group of bankers who loaned the federal government around $60 million. In 1907, as several major American financial institutions faced imminent failure that could jeopardize the entire nation, Morgan held a meeting of the nation’s leading bankers and financiers. He persuaded them to bail out the failing companies for the sake of the country as a whole. Although he was praised for his patriotism, some people criticized Morgan for having too much control over the country’s finances. They accused him of using his influence in the government, and the goodwill he generated by helping out during different crises, to make more money for himself. These critics feared that in amassing such wealth and control over so much of the country’s natural resources and businesses, J.P. Morgan could exercise too much control over the country’s leaders and its future. J.P. Morgan also had many interests outside of business. He loved art and books, and collected both with enthusiasm. He accumulated one of the largest, most prestigious, and most valuable art collections in the world, filled with masterpiece paintings and sculptures. He also collected rare books and manuscripts, which today are housed in the Morgan Library and Museum in New York City. Morgan’s influence on New York and the world included the media, as he had a hand in molding perhaps the greatest newspaper in the country or the world, The New York Times. In 1896, Adolph Ochs, who owned the Chattanooga Times, borrowed money from Morgan to purchase The New York Times, which was then financially unstable and failing. With Morgan’s backing, Ochs reorganized the paper’s finances and newsroom, building what is still a newspaper of the highest reporting and writing standards. J.P. Morgan died on March 31, 1913 while on a trip to Rome, Italy. The New York Stock Exchange was closed until noon on the morning of his funeral. The family business that was begun by J.P. Morgan’s father and passed on to him then passed on to J.P. Morgan’s son, J.P. Morgan, Jr. The family dynasty continued.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

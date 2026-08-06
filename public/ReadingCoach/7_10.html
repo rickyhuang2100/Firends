@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Vegetal Patterns in Islamic Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 Vegetal Patterns in Islamic Art</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>The typical depiction of nature in
+                                Islamic art is abstract.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>伊斯蘭藝術中對自然的典型描繪是抽象的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>This approach departs from Europe’s
+                                naturalistic approach, which traditionally aimed to portray nature in a realistic way.
+                            </td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>這種方法有別於歐洲的自然主義方法，後者傳統上旨在以寫實的方式描繪自然。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Plants and flowers looked exactly like
+                                real plants and flowers in European art, while in Islamic art, these natural objects
+                                would often be more geometric and linear.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>在歐洲藝術中，植物和花卉看起來完全像真實的植物和花卉，而在伊斯蘭藝術中，這些自然物體通常更具幾何形狀和線條感。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Islamic art is known for being
+                                geometric, so geometric vegetal art fit into the prominent aesthetic.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>伊斯蘭藝術以幾何圖形著稱，因此幾何植物藝術融入了這種顯著的審美觀中。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Vegetal patterns can be found
+                                everywhere in Islamic art and often serve an ornamental function.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>植物圖案在伊斯蘭藝術中無處不在，且通常具有裝飾功能。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>One of the reasons for their popular
+                                usage is that some sects of Islam forbid artists from representing the natural world in
+                                any of its living forms.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>它們被廣泛使用的原因之一是，伊斯蘭教的一些教派禁止藝術家以任何生命形式來表現自然界。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Consequently, artists were not allowed
+                                to represent plants or flowers in their artwork.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>因此，藝術家不被允許在他們的藝術作品中描繪植物或花卉。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Another reason can be attributed to
+                                their origin.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>另一個原因可以歸因於它們的起源。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Art historians believe that the rulers
+                                of the early Islamic empire encouraged artists to focus on creating impressive
+                                quantities of high-scale objects.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>藝術史學家認為，早期伊斯蘭帝國的統治者鼓勵藝術家專注於創作大量令人印象深刻的大型物品。
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>As a result, artists did not focus
+                                their energy on inventing new designs, and instead relied on the artistic practices of
+                                Rome, Egypt, and the Byzantine empire.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>結果，藝術家沒有把精力集中在發明新設計上，而是依賴羅馬、埃及和拜占庭帝國的藝術實踐。
+                            </td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Over time, however, Islamic artists
+                                departed from these established artistic traditions and Islamic vegetal patterns became
+                                highly stylized and geometric.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>然而，隨著時間推移，伊斯蘭藝術家背離了這些既定的藝術傳統，伊斯蘭植物圖案變得高度風格化和幾何化。
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">depiction</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">描繪；描述</div>
+                        <div class="example">The typical <span class='highlight'>depiction</span> of nature in Islamic
+                            art is abstract.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">abstract</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">抽象的</div>
+                        <div class="example">The art is often <span class='highlight'>abstract</span> rather than
+                            realistic.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">ornamental</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">裝飾的</div>
+                        <div class="example">Vegetal patterns often serve an <span class='highlight'>ornamental</span>
+                            function.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">forbid</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">禁止</div>
+                        <div class="example">Some sects of Islam <span class='highlight'>forbid</span> artists from
+                            representing the natural world.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stylize</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">使風格化；使其具特定風格</div>
+                        <div class="example">Islamic vegetal patterns became highly <span
+                                class='highlight'>stylized</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">depart from</div>
+                        <div class="vocab-type">phr. 片語</div>
+                        <div class="vocab-meaning">背離；偏離</div>
+                        <div class="example">This approach <span class='highlight'>departs from</span> Europe’s
+                            naturalistic approach.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">forbid + sb + from + V-ing (禁止某人做某事)</div>
+                    <p>表示不允許某人進行某個動作。</p>
+                    <div class="example">Some sects of Islam <span class='highlight'>forbid artists from
+                            representing</span> the natural world.</div>
+                    <div class="example">The school <span class='highlight'>forbids students from bringing</span> their
+                        phones to class.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">while (然而；而)</div>
+                    <p>連接詞，用來引導兩個對比或相反的情況。</p>
+                    <div class="example">Plants and flowers looked exactly like real plants in European art, <span
+                            class='highlight'>while</span> in Islamic art, these natural objects would often be more
+                        geometric.</div>
+                    <div class="example">I like coffee, <span class='highlight'>while</span> my brother prefers tea.
+                    </div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>be known for (以...聞名)</strong>
+                    <p>表示因為某種特色或事物而廣為人知。</p>
+                    <div class="example">Islamic art <span class='highlight'>is known for</span> being geometric.</div>
+                    <div class="example">Paris <span class='highlight'>is known for</span> its beautiful architecture.
+                    </div>
+                </div>
+                <div class="sentence-pattern">
+                    <strong>attribute... to... / be attributed to (將...歸因於...)</strong>
+                    <p>表示認為某事物的發生是因為另一個原因。</p>
+                    <div class="example">Another reason can <span class='highlight'>be attributed to</span> their
+                        origin.</div>
+                    <div class="example">She <span class='highlight'>attributes</span> her success <span
+                            class='highlight'>to</span> hard work.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">伊斯蘭藝術通常如何描繪自然？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 以高度寫實的方式</li>
+                                <li>B) 透過動物的詳細畫作</li>
+                                <li>C) 以抽象和幾何的方式</li>
+                                <li>D) 完全像真實的植物和花朵</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">根據文章，為什麼伊斯蘭藝術家有時被禁止描繪生命形式？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 因為他們缺乏技巧</li>
+                                <li>B) 因為伊斯蘭教的一些教派禁止這樣做</li>
+                                <li>C) 因為他們找不到任何植物</li>
+                                <li>D) 因為他們更喜歡畫建築物</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">當早期統治者要求伊斯蘭藝術家快速創作大量藝術品時，他們依賴什麼？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 新的原創設計</li>
+                                <li>B) 羅馬、埃及和拜占庭帝國的藝術實踐</li>
+                                <li>C) 歐洲的自然主義方法</li>
+                                <li>D) 現代幾何軟體</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+        </script>
+    <script>
+        const storyText = `The typical depiction of nature in Islamic art is abstract. This approach departs from Europe’s naturalistic approach, which traditionally aimed to portray nature in a realistic way. Plants and flowers looked exactly like real plants and flowers in European art, while in Islamic art, these natural objects would often be more geometric and linear. Islamic art is known for being geometric, so geometric vegetal art fit into the prominent aesthetic. Vegetal patterns can be found everywhere in Islamic art and often serve an ornamental function. One of the reasons for their popular usage is that some sects of Islam forbid artists from representing the natural world in any of its living forms. Consequently, artists were not allowed to represent plants or flowers in their artwork. Another reason can be attributed to their origin. Art historians believe that the rulers of the early Islamic empire encouraged artists to focus on creating impressive quantities of high-scale objects. As a result, artists did not focus their energy on inventing new designs, and instead relied on the artistic practices of Rome, Egypt, and the Byzantine empire. Over time, however, Islamic artists departed from these established artistic traditions and Islamic vegetal patterns became highly stylized and geometric.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') { }
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

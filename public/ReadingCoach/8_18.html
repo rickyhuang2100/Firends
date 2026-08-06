@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Sounds of Baseball</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 The Sounds of Baseball</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Human beings hear sounds constantly.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>人類不斷地聽到聲音。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Sounds are the result of vibrations.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>聲音是振動的結果。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When an object vibrates, it sets off a chain reaction of events that might end up inside a person’s ear.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當物體振動時，它會引發一連串的連鎖反應，最終可能進入人的耳朵。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>After a vibration of any kind, the molecules of the object knock into the molecules of air that surround it, or possibly the molecules of another object next to it.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在任何形式的振動之後，物體的分子會撞擊周圍空氣的分子，或者可能撞擊旁邊另一個物體的分子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Air molecules bash into each other like millions of microscopic Ping-Pong balls, transporting the sound through what becomes a sound wave.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>空氣分子像數以百萬計的微小乒乓球一樣互相碰撞，透過形成聲波的東西傳遞聲音。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Depending on how strong or soft the vibrations are, the sound’s volume and tone will vary.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>根據振動的強弱，聲音的音量和音調會有所不同。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Eventually, a human’s ears hear the vibrations.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最終，人類的耳朵聽到了這些振動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A person’s ears pick up vibrations everywhere they go, but there might not be many places that offer as many different sounds coming from so many different sources as a baseball game.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一個人的耳朵無論走到哪裡都能接收到振動，但可能沒有多少地方能像一場棒球比賽那樣，提供來自如此多不同來源、如此多不同的聲音。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While sitting in a seat at a game, one of the first sounds someone might hear would be that of a hot dog vendor.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>坐在比賽座位的同時，有人可能聽到的第一個聲音就是熱狗小販的聲音。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>“Hot dogs here! Get your hot dogs here!” they might yell.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「這裡有熱狗！來這裡買熱狗！」他們可能會這樣大叫。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The sound of their high-pitched voice begins in their voice boxes.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他們高亢聲音的聲音開始於他們的發聲匣 (喉部)。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Inside people’s throats are wiry looking parts that vibrate when a person wants to make a sound and communicate their thoughts to others.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在人們的喉嚨裡有看起來像金屬絲的部位，當一個人想要發出聲音並與他人交流思想時，它們就會振動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The voice box vibrates and the beginnings of sound waves that shoot through the stadium’s air are rooted there.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>發聲匣振動，穿梭在體育場空氣中的聲波起點就植根於此。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The energy created by the vibrations sends the air molecules into unrest.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>振動產生的能量使空氣分子陷入不安（劇烈運動）。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In turn, this creates air pressure from all that wild movement of the molecules smashing into one another, that nobody can see, but they can certainly hear.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>反過來，這從所有這些分子互相碰撞的狂野運動中產生了空氣壓力，這壓力沒有人能看到，但他們絕對聽得見。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Finally, those sound waves of vibrations make a connection inside a person’s ear.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最後，那些振動的聲波在人的耳朵內建立連結。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The brain then recognizes the waves as a person’s voice, offering a warm, yummy traditional baseball game treat.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>大腦接著將這些波識別為一個人的聲音，正在提供一種溫暖、美味的傳統棒球比賽點心。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Once that happens, a person might almost have no choice but to yell back at the salesman using their own voice boxes, “I’ll have a hot dog, please!”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一旦發生這種情況，一個人可能幾乎別無選擇，只能用他們自己的發聲匣對著推銷員大喊：「請給我一個熱狗！」</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Later in the game, if the home team has some men on base, what is known as a “rally” is beginning.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在比賽的後期，如果主場球隊有人在壘包上，這就稱為「反攻 (rally)」的開始。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The team that just about everyone is there to cheer on might be close to scoring some runs.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾乎所有人在那裡為其歡呼的球隊，可能快要得分了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Inside the stadium, there is an organ player, waiting for a chance to get the crowd riled up.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>體育場內有一位風琴手，正在等待機會讓人群沸騰起來。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The start of a rally is the perfect time for him or her to do just that.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>反攻的開始正是他或她這樣做的完美時機。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of the most popular and recognizable little tunes that an organ player might use to get all of the fans to cheer is the jingle that signals everyone to yell “Charge!” at its conclusion.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>風琴手可能用來讓所有球迷歡呼的，最受歡迎和最容易辨認的小曲調之一，就是在結尾時暗示每個人大喊「衝鋒 (Charge)！」的短歌。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Some quick, deep notes in a rhythm that gets faster and faster, and higher and higher are played.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>會彈奏一些快速、低沉的音符，節奏越來越快，音調也越來越高。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>For a moment, the music stops completely, but comes right back with a high-pitched, racy tune, which everyone hears and just knows to shout “Charge!” at the end of.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>有那麼一刻，音樂完全停止，但隨即伴隨著高亢、活潑的曲調再次響起，每個人聽到後就知道要在最後大喊「衝鋒！」</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>With any luck, the home team will do so and score a run or two.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果運氣好的話，主場球隊會照做並得個一兩分。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The organ located somewhere inside the building is hooked up electronically to tremendous speakers that are usually built next to the scoreboard.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>位於建築物內某處的風琴透過電子設備連接到通常建在計分板旁邊的巨大揚聲器。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Though they might be hard to see, behind the front of the speakers’ covering are large circular parts called “cones.”</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然它們可能很難看到，但在揚聲器外罩的正面後面，有被稱為「錐盆 (cones)」的大型圓形零件。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The cones receive pulses from the organ electrically that began when the organist hit the keys.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些錐盆透過電子方式接收來自風琴的脈衝，這些脈衝始於風琴手敲擊琴鍵的時候。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The cones can transmit the sounds because they are able to vibrate in just the right way for the sound waves to be created accurately.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>錐盆可以傳輸聲音，因為它們能以恰到好處的方式振動，從而精確地產生聲波。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The cones are different sizes so that they can properly send out different pitches, with the smaller ones vibrating quicker, making high tones, while the big cones create low sounds.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些錐盆大小不一，這樣它們就可以適當地發出不同的音高，較小的錐盆振動得更快，發出高音，而大錐盆則產生低音。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The combination of just the right vibrations create sound waves that enter the atmosphere and reach the ears of the fans, making them happy and ready to cheer.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>恰到好處的振動組合產生了聲波，進入大氣並傳到球迷的耳朵，讓他們開心並準備好歡呼。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One other favorite sound of many people at a baseball game is the crack of the bat when it hits a ball.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在棒球比賽中，許多人另一個最喜歡的聲音是球棒擊中球時發出的「喀啦」聲。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Usually, fans recognize that sound as something good happening for their team: a base hit, or maybe even a home run.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>通常，球迷會將這種聲音識別為對他們球隊來說有好事發生：安打，或者甚至是一支全壘打。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The pitcher throws his baseball towards home plate.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>投手將棒球投向本壘板。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The batter quickly decides if he should swing or not.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>打者迅速決定是否應該揮棒。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>If he does and times everything perfectly, he will place his bat in front of the ball, making a connection between the two.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果他揮棒並且完美地掌握了所有時機，他會將球棒放在球的前方，使兩者接觸。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Because the ball was traveling in one direction and the bat forces it back the other way, rapid vibrations in both the bat and the ball occur when they smack into each other.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因為球原本是朝著一個方向行進，而球棒迫使它向另一個方向返回，所以當它們互相猛撞時，球棒和球都會發生快速的振動。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Those vibrations quickly cause the air molecules to vibrate too and the sound waves are created.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些振動很快地也導致空氣分子振動，從而產生聲波。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Microseconds later, the fans in the seats hear the hit, and use their vocal chords to start new vibrations of cheer!</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾微秒後，座位上的球迷聽到了擊球聲，並使用他們的聲帶開始發出新的歡呼振動！</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">vibration</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">振動</div>
+                        <div class="example">Sounds are the result of <span class='highlight'>vibrations</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">microscopic</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">微小的</div>
+                        <div class="example">Air molecules bash into each other like <span class='highlight'>microscopic</span> Ping-Pong balls.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">vendor</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">攤販；小販</div>
+                        <div class="example">You might hear the sound of a hot dog <span class='highlight'>vendor</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">vocal chord / voice box</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">聲帶 / 喉部發聲匣</div>
+                        <div class="example">They use their <span class='highlight'>vocal chords</span> to start new vibrations of cheer!</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">riled up</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">被激起的；情緒高漲的</div>
+                        <div class="example">Waiting for a chance to get the crowd <span class='highlight'>riled up</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">jingle</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">短歌；叮噹聲</div>
+                        <div class="example">The <span class='highlight'>jingle</span> that signals everyone to yell "Charge!".</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">racy</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">活潑的；生動的</div>
+                        <div class="example">It comes right back with a high-pitched, <span class='highlight'>racy</span> tune.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">transmit</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">傳輸</div>
+                        <div class="example">The cones can <span class='highlight'>transmit</span> the sounds.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">pitch</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">音高</div>
+                        <div class="example">They can properly send out different <span class='highlight'>pitches</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">smack</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">猛擊；砰然作響</div>
+                        <div class="example">Vibrations occur when they <span class='highlight'>smack</span> into each other.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">microsecond</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">微秒</div>
+                        <div class="example"><span class='highlight'>Microseconds</span> later, the fans hear the hit.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">set off (引發；觸發)</div>
+                    <p>表示引起或觸發一系列事件或反應。</p>
+                    <div class="example">When an object vibrates, it <span class='highlight'>sets off</span> a chain reaction of events.</div>
+                    <div class="example">The loud noise <span class='highlight'>set off</span> the car alarm.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">have no choice but to V (別無選擇只能...)</div>
+                    <p>表示除了做某事之外沒有其他辦法。</p>
+                    <div class="example">A person might almost <span class='highlight'>have no choice but to</span> yell back.</div>
+                    <div class="example">I <span class='highlight'>had no choice but to</span> agree with him.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>Depending on... (根據.../取決於...)</strong>
+                    <p>用來表示某事會因為另一個條件的改變而有所不同。</p>
+                    <div class="example"><span class='highlight'>Depending on</span> how strong or soft the vibrations are, the sound’s volume and tone will vary.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">是什麼產生了聲音？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 在太空中傳播的光波。</li>
+                                <li>B) 在空氣分子中產生波浪的振動。</li>
+                                <li>C) 來自太陽的熱浪。</li>
+                                <li>D) 真空中的寂靜。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">風琴手如何讓人群沸騰起來？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 透過彈奏一首非常緩慢、安靜的歌。</li>
+                                <li>B) 透過向球迷分發熱狗。</li>
+                                <li>C) 透過彈奏一首容易辨認的曲調，並以球迷大喊「衝鋒！」結束。</li>
+                                <li>D) 透過用球棒擊打棒球。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼揚聲器裡的錐盆大小不同？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 為了看起來很酷。</li>
+                                <li>B) 因為他們相同尺寸的用完了。</li>
+                                <li>C) 這樣它們就可以適當地發出不同的音高，較小的發出高音，大的產生低音。</li>
+                                <li>D) 這樣他們就可以在計分板上安裝更多的揚聲器。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `Human beings hear sounds constantly. Sounds are the result of vibrations. When an object vibrates, it sets off a chain reaction of events that might end up inside a person’s ear. After a vibration of any kind, the molecules of the object knock into the molecules of air that surround it, or possibly the molecules of another object next to it. Air molecules bash into each other like millions of microscopic Ping-Pong balls, transporting the sound through what becomes a sound wave. Depending on how strong or soft the vibrations are, the sound’s volume and tone will vary. Eventually, a human’s ears hear the vibrations. A person’s ears pick up vibrations everywhere they go, but there might not be many places that offer as many different sounds coming from so many different sources as a baseball game. While sitting in a seat at a game, one of the first sounds someone might hear would be that of a hot dog vendor. “Hot dogs here! Get your hot dogs here!” they might yell. The sound of their high-pitched voice begins in their voice boxes. Inside people’s throats are wiry looking parts that vibrate when a person wants to make a sound and communicate their thoughts to others. The voice box vibrates and the beginnings of sound waves that shoot through the stadium’s air are rooted there. The energy created by the vibrations sends the air molecules into unrest. In turn, this creates air pressure from all that wild movement of the molecules smashing into one another, that nobody can see, but they can certainly hear. Finally, those sound waves of vibrations make a connection inside a person’s ear. The brain then recognizes the waves as a person’s voice, offering a warm, yummy traditional baseball game treat. Once that happens, a person might almost have no choice but to yell back at the salesman using their own voice boxes, “I’ll have a hot dog, please!” Later in the game, if the home team has some men on base, what is known as a “rally” is beginning. The team that just about everyone is there to cheer on might be close to scoring some runs. Inside the stadium, there is an organ player, waiting for a chance to get the crowd riled up. The start of a rally is the perfect time for him or her to do just that. One of the most popular and recognizable little tunes that an organ player might use to get all of the fans to cheer is the jingle that signals everyone to yell “Charge!” at its conclusion. Some quick, deep notes in a rhythm that gets faster and faster, and higher and higher are played. For a moment, the music stops completely, but comes right back with a high-pitched, racy tune, which everyone hears and just knows to shout “Charge!” at the end of. With any luck, the home team will do so and score a run or two. The organ located somewhere inside the building is hooked up electronically to tremendous speakers that are usually built next to the scoreboard. Though they might be hard to see, behind the front of the speakers’ covering are large circular parts called “cones.” The cones receive pulses from the organ electrically that began when the organist hit the keys. The cones can transmit the sounds because they are able to vibrate in just the right way for the sound waves to be created accurately. The cones are different sizes so that they can properly send out different pitches, with the smaller ones vibrating quicker, making high tones, while the big cones create low sounds. The combination of just the right vibrations create sound waves that enter the atmosphere and reach the ears of the fans, making them happy and ready to cheer. One other favorite sound of many people at a baseball game is the crack of the bat when it hits a ball. Usually, fans recognize that sound as something good happening for their team: a base hit, or maybe even a home run. The pitcher throws his baseball towards home plate. The batter quickly decides if he should swing or not. If he does and times everything perfectly, he will place his bat in front of the ball, making a connection between the two. Because the ball was traveling in one direction and the bat forces it back the other way, rapid vibrations in both the bat and the ball occur when they smack into each other. Those vibrations quickly cause the air molecules to vibrate too and the sound waves are created. Microseconds later, the fans in the seats hear the hit, and use their vocal chords to start new vibrations of cheer!`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

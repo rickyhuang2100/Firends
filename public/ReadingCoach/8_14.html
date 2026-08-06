@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - When Fish First Walked</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 When Fish First Walked</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A few hundred million years ago, the competition for food between fishes was fierce.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾億年前，魚類之間對食物的競爭非常激烈。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>So much so that gradually, some fish developed the ability to get out of the water and reach food sources that none of the other fish could get to.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>激烈到以至於漸漸地，一些魚類發展出離開水面、接觸到其他魚類都無法獲得的食物來源的能力。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>They survived long enough to successfully reproduce, and passed this characteristic on to future generations.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>牠們存活的時間夠長，成功繁殖，並將這項特徵傳給了後代。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In fact, from these fish eventually originated the animals with two pairs of limbs, including human beings.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>事實上，最終演化出包括人類在內、擁有兩對四肢的動物，就是源自於這些魚類。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This is an example of natural selection.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這就是天擇 (natural selection) 的一個例子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>An organism that develops a trait that helps it survive in its environment will have a better chance of reproducing and passing that trait on to the next generation.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一個發展出有助於在環境中生存的特徵的生物，將有更好的機會繁殖並將該特徵傳給下一代。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As a consequence, organisms with this helpful trait will become more prominent while other organisms of the same species die out.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>結果，擁有這種有益特徵的生物會變得更加突出（數量增加），而同物種中的其他生物則會滅絕。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Why do giraffes have long necks?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>為什麼長頸鹿有長脖子？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Why do rabbits produce so many offspring?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>為什麼兔子會產生這麼多後代？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Natural selection can help us understand why some species are the way they are.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>天擇可以幫助我們了解為什麼有些物種會是現在這個樣子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The term “natural selection” was coined by Charles Darwin, who developed the scientific theory of evolution.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「天擇」(natural selection) 這個詞是由查爾斯·達爾文創造的，他發展了科學上的演化論。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Darwin was born in England in 1809 and spent his life observing animals and plants from around the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>達爾文於1809年出生在英國，他一生都在觀察世界各地的動植物。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>He explained the theory in his landmark book On the Origin of Species.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>他在其具有里程碑意義的著作《物種起源》中解釋了這個理論。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Sometimes, the changes that occur among a group of organisms will seem very small but still play an important role in their survival.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>有時候，在一群生物中發生的變化看起來可能非常小，但對牠們的生存仍然起著重要作用。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Take, for example, the peppered moth.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>以胡椒蛾為例。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The peppered moth was light in color and had speckled wings.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>胡椒蛾顏色較淺，翅膀上有斑點。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was hard to pick out against many of the trees and buildings in England and could camouflage itself easily.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在英國的許多樹木和建築物背景下，很難把它挑出來，而且它可以很容易地偽裝自己。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>But during the Industrial Revolution, London became polluted, and the smog turned everything black.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>但在工業革命期間，倫敦受到污染，霧霾把一切都變黑了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Now the moths could be seen more easily by predators; they had nowhere to hide.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>現在，捕食者更容易看到這些飛蛾；牠們無處可藏。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Around this time, dark-colored peppered moths, which are almost invisible against a dark background, began to appear and soon became widespread.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>大約在這個時候，深色的胡椒蛾開始出現，牠們在黑暗的背景下幾乎是隱形的，並很快變得普遍起來。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The lighter moths, on the other hand, became scarce in these sooty industrial areas.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>另一方面，顏色較淺的飛蛾在這些佈滿煤灰的工業區變得稀少。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Another case that has to do with survival through camouflage involves the little deer mouse.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>另一個與透過偽裝生存有關的案例是小鹿鼠。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Typically, deer mice are dark brown, which makes it easier for them to hide from owls and other predators in the dark soil of the woods.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>通常，鹿鼠是深棕色的，這使得牠們更容易在樹林黑暗的土壤中躲避貓頭鷹和其他捕食者。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The deer mouse that lives in Nebraska’s light-colored Sand Hills, however, has gone from brunette to blonde so it can blend in and have a better chance at survival.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，生活在內布拉斯加州淺色沙丘中的鹿鼠，其毛色已經從深褐色變成淺金色，這樣牠就能融入環境並有更好的生存機會。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It took thousands of years for these mice to change the color of their coats, which may sound like a long time, but when it comes to evolution, that’s pretty quick!</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些老鼠花了好幾千年的時間來改變毛色，這聽起來可能很長，但就演化而言，那是相當快的！</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One interesting case study is that of the Galápagos finches, about 14 species of bird that were studied by Darwin on the Galápagos Islands.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>一個有趣的案例研究是加拉巴哥雀，這是達爾文在加拉巴哥群島上研究的大約14種鳥類。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Often referred to as “Darwin’s finches,” these birds look very much alike.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些鳥通常被稱為「達爾文雀」，牠們看起來非常相似。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The most significant difference among them is the size and shape of their beaks.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>牠們之間最顯著的區別在於鳥喙的大小和形狀。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Every different beak evolved the way it did so as to be suited to a particular feeding task.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>每一種不同的鳥喙之所以演化成那個樣子，是為了適應特定的覓食任務。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When, in 1977, a drought hit the island, vegetation withered and the only seeds left were large and tough.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當1977年一場乾旱襲擊該島時，植被枯萎，剩下的只有大而堅硬的種子。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The finches with deeper, stronger beaks were able to crack through these seeds, and many more of them survived than their smaller-beaked brothers.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>擁有更深、更強壯鳥喙的雀鳥能夠咬碎這些種子，牠們存活下來的數量比牠們那些鳥喙較小的兄弟要多得多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, in the mid-1980s, during an especially rainy time, smaller, softer seeds flourished.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，在1980年代中期，在一個特別多雨的時期，較小、較軟的種子大量生長。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The birds best adapted to eat them had smaller beaks and they fared much better.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>最適應吃這些種子的鳥類有著較小的鳥喙，牠們過得好得多。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Where have all the dull male peafowl (peacocks) gone?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>那些羽色暗淡的雄孔雀 (peacocks) 都去哪裡了？</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Well, female peafowl (peahens) choose their mates based on the color and brightness of their plumage.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>嗯，雌孔雀 (peahens) 是根據羽毛的顏色和亮度來選擇伴侶的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This means that peacocks with impressive tail feathers are able to find mates more easily.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這意味著擁有令人印象深刻的尾羽的雄孔雀更容易找到伴侶。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A few thousand years ago, there were many more males with dull feathers, but they kept getting passed over by the females and did not reproduce.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾千年前，有更多羽毛暗淡的雄性，但牠們不斷被雌性忽略 (passed over)，沒有繁衍後代。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Their numbers therefore began to dwindle.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>因此，牠們的數量開始減少。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>These days, they’re quite rare.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如今，牠們相當罕見。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Darwin’s theory teaches us that an animal or plant that adapts to its environment and remains alive long enough to procreate will thrive.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>達爾文的理論告訴我們，適應環境並存活夠長的時間來繁衍後代的動植物將會繁榮興旺。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The dodo bird, which has gone extinct, was not lucky in this respect.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>已經滅絕的渡渡鳥在這方面並不幸運。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A lack of predators for thousands, and maybe even millions, of years meant that the dodos never learned to fly.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>幾千年、甚至幾百萬年來缺乏捕食者，這意味著渡渡鳥從未學會飛行。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>When humans finally arrived to their home on the island of Mauritius, the dodos had no way of protecting themselves and, in the 17th century, were wiped out.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>當人類終於抵達牠們在模里西斯島的家園時，渡渡鳥無法保護自己，並在17世紀被滅絕 (wiped out) 了。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It isn’t easy being on the wrong side of natural selection.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>站在天擇錯誤的一邊並不容易。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Fortunately for us humans, the fish with the fleshy, leg-like fins came out on top.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>對我們人類來說幸運的是，那些擁有肉質、類似腿部鰭的魚類脫穎而出 (came out on top)。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">organism</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">生物；有機體</div>
+                        <div class="example">An <span class='highlight'>organism</span> that develops a trait that helps it survive will have a better chance.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">prominent</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">突出的；顯著的</div>
+                        <div class="example">Organisms with this helpful trait will become more <span class='highlight'>prominent</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">camouflage</div>
+                        <div class="vocab-type">v./n. 動詞/名詞</div>
+                        <div class="vocab-meaning">偽裝</div>
+                        <div class="example">It could <span class='highlight'>camouflage</span> itself easily.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">scarce</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">缺乏的；稀少的</div>
+                        <div class="example">The lighter moths became <span class='highlight'>scarce</span> in these areas.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">brunette</div>
+                        <div class="vocab-type">n./adj. 名詞/形容詞</div>
+                        <div class="vocab-meaning">淺黑膚色/深褐色頭髮的</div>
+                        <div class="example">The mouse has gone from <span class='highlight'>brunette</span> to blonde.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">wither</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">枯萎；凋謝</div>
+                        <div class="example">During the drought, vegetation <span class='highlight'>withered</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">flourish</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">繁茂；興旺</div>
+                        <div class="example">Smaller, softer seeds <span class='highlight'>flourished</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">plumage</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">(鳥的)全身羽毛</div>
+                        <div class="example">They choose mates based on the brightness of their <span class='highlight'>plumage</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dwindle</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">減少；縮小</div>
+                        <div class="example">Their numbers therefore began to <span class='highlight'>dwindle</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">procreate</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">生育；繁殖</div>
+                        <div class="example">An animal that remains alive long enough to <span class='highlight'>procreate</span> will thrive.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">pass over (忽略；忽視)</div>
+                    <p>表示不予考慮或忽略某人/某事。</p>
+                    <div class="example">They kept getting <span class='highlight'>passed over</span> by the females and did not reproduce.</div>
+                    <div class="example">He was <span class='highlight'>passed over</span> for the promotion.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">come out on top (勝出；脫穎而出)</div>
+                    <p>表示在比賽或困難的情況中獲勝。</p>
+                    <div class="example">Fortunately for us humans, the fish with the fleshy, leg-like fins <span class='highlight'>came out on top</span>.</div>
+                    <div class="example">Despite the challenges, our team <span class='highlight'>came out on top</span>.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>so much so that... (到如此程度以至於...)</strong>
+                    <p>用來強調某事物的程度非常高，以至於導致了後面的結果。</p>
+                    <div class="example"><span class='highlight'>So much so that</span> gradually, some fish developed the ability to get out of the water.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">根據文章，天擇 (natural selection) 是什麼意思？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 學會飛翔的動物就能存活。</li>
+                                <li>B) 發展出有助於生存特徵的生物會繁殖並將特徵傳下去。</li>
+                                <li>C) 所有物種最終都會滅絕。</li>
+                                <li>D) 魚類最終會變成人類。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼在工業革命期間深色胡椒蛾變得更加突出？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 淺色飛蛾飛到了鄉下。</li>
+                                <li>B) 深色飛蛾比較強壯，吃掉了淺色飛蛾。</li>
+                                <li>C) 污染把樹木變黑了，使得深色飛蛾能夠偽裝並躲避捕食者。</li>
+                                <li>D) 霧霾導致所有飛蛾永久改變了顏色。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">為什麼羽色暗淡的雄孔雀現在很罕見？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 牠們被捕食者獵殺了。</li>
+                                <li>B) 雌孔雀選擇羽毛更鮮豔的雄性作為伴侶，所以羽色暗淡的雄性沒有繁衍後代。</li>
+                                <li>C) 牠們演化成了渡渡鳥。</li>
+                                <li>D) 牠們在乾旱中失去了尾羽。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `A few hundred million years ago, the competition for food between fishes was fierce. So much so that gradually, some fish developed the ability to get out of the water and reach food sources that none of the other fish could get to. They survived long enough to successfully reproduce, and passed this characteristic on to future generations. In fact, from these fish eventually originated the animals with two pairs of limbs, including human beings. This is an example of natural selection. An organism that develops a trait that helps it survive in its environment will have a better chance of reproducing and passing that trait on to the next generation. As a consequence, organisms with this helpful trait will become more prominent while other organisms of the same species die out. Why do giraffes have long necks? Why do rabbits produce so many offspring? Natural selection can help us understand why some species are the way they are. The term “natural selection” was coined by Charles Darwin, who developed the scientific theory of evolution. Darwin was born in England in 1809 and spent his life observing animals and plants from around the world. He explained the theory in his landmark book On the Origin of Species. Sometimes, the changes that occur among a group of organisms will seem very small but still play an important role in their survival. Take, for example, the peppered moth. The peppered moth was light in color and had speckled wings. It was hard to pick out against many of the trees and buildings in England and could camouflage itself easily. But during the Industrial Revolution, London became polluted, and the smog turned everything black. Now the moths could be seen more easily by predators; they had nowhere to hide. Around this time, dark-colored peppered moths, which are almost invisible against a dark background, began to appear and soon became widespread. The lighter moths, on the other hand, became scarce in these sooty industrial areas. Another case that has to do with survival through camouflage involves the little deer mouse. Typically, deer mice are dark brown, which makes it easier for them to hide from owls and other predators in the dark soil of the woods. The deer mouse that lives in Nebraska’s light-colored Sand Hills, however, has gone from brunette to blonde so it can blend in and have a better chance at survival. It took thousands of years for these mice to change the color of their coats, which may sound like a long time, but when it comes to evolution, that’s pretty quick! One interesting case study is that of the Galápagos finches, about 14 species of bird that were studied by Darwin on the Galápagos Islands. Often referred to as “Darwin’s finches,” these birds look very much alike. The most significant difference among them is the size and shape of their beaks. Every different beak evolved the way it did so as to be suited to a particular feeding task. When, in 1977, a drought hit the island, vegetation withered and the only seeds left were large and tough. The finches with deeper, stronger beaks were able to crack through these seeds, and many more of them survived than their smaller-beaked brothers. However, in the mid-1980s, during an especially rainy time, smaller, softer seeds flourished. The birds best adapted to eat them had smaller beaks and they fared much better. Where have all the dull male peafowl (peacocks) gone? Well, female peafowl (peahens) choose their mates based on the color and brightness of their plumage. This means that peacocks with impressive tail feathers are able to find mates more easily. A few thousand years ago, there were many more males with dull feathers, but they kept getting passed over by the females and did not reproduce. Their numbers therefore began to dwindle. These days, they’re quite rare. Darwin’s theory teaches us that an animal or plant that adapts to its environment and remains alive long enough to procreate will thrive. The dodo bird, which has gone extinct, was not lucky in this respect. A lack of predators for thousands, and maybe even millions, of years meant that the dodos never learned to fly. When humans finally arrived to their home on the island of Mauritius, the dodos had no way of protecting themselves and, in the 17th century, were wiped out. It isn’t easy being on the wrong side of natural selection. Fortunately for us humans, the fish with the fleshy, leg-like fins came out on top.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

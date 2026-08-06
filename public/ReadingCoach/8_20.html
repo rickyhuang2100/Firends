@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - The Tang and Song Dynasties in China</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📖 The Tang and Song Dynasties in China</h1>
+
+        <div class="settings">
+            <h3>語音設定</h3>
+            <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+        </div>
+
+        <div class="controls">
+            <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
+            <button type="button" class="btn btn-stop" onclick="stopSpeaking()">⏹️ 停止</button>
+        </div>
+
+        <div class="text-content" id="storyContainer"></div>
+
+        <div class="learning-section">
+            <h2>📚 英文學習資訊</h2>
+
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showTab(event, 'translation')">中文翻譯</button>
+                <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
+                <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
+                <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+            </div>
+
+            <div id="translation" class="tab-content active">
+                <h3>🌏 中文翻譯</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">逐句對照</div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>China is one of the world’s oldest civilizations.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>中國是世界上最古老的文明之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Historians know that Chinese history dates back to at least 2000 B.C.—nearly 4000 years before the United States became a country!</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>歷史學家知道，中國歷史至少可以追溯到西元前2000年——這比美國建國早了將近4000年！</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, China has not always been the country we know today.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，中國並不總是我們今天所知道的國家。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In fact, throughout its history, parts of the country were under the control of various kingdoms and warlords, and the different parts of the country were not united, but rather fought against each other for land.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>事實上，在整個歷史中，該國的部分地區處於各個王國和軍閥的控制之下，該國的不同部分並未統一，而是為爭奪土地而相互交戰。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It wasn’t until 221 B.C. that an emperor united various kingdoms to form the first Chinese empire.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>直到西元前221年，一位皇帝才統一了各個王國，建立了第一個中華帝國。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This began the reign of the Qin Dynasty, which only lasted until 206 B.C.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這開始了秦朝的統治，該朝代僅持續到西元前206年。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>A “dynasty” is a sequence of rulers from the same family.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>「朝代 (dynasty)」是一系列來自同一個家族的統治者。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Eras in Chinese history are named by the dynasty that ruled over the country during that period.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>中國歷史上的時代是以該時期統治該國的朝代來命名的。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Since China was unified, it was ruled by more than a dozen dynasties, each of which helped China grow and advance to become the country we know today.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>自中國統一以來，它被十多個朝代統治，每個朝代都幫助中國發展和進步，成為我們今天所認識的國家。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Two of the most important dynasties were the Tang Dynasty and the Song Dynasty.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>其中兩個最重要的朝代是唐朝和宋朝。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Under the rule of these two dynasties, China saw significant technological and commercial developments which helped the country prosper and grow.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在這兩個朝代的統治下，中國見證了重大的技術和商業發展，這幫助了國家繁榮和成長。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Many of these developments made an impact outside China’s borders as well, helping civilizations around the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這些發展中的許多也在中國境外產生了影響，幫助了世界各地的文明。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Tang Dynasty started ruling in 618 A.D.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>唐朝於西元618年開始統治。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Scholars generally believe the Tang Dynasty was one of the high points of Chinese civilization.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>學者通常認為唐朝是中華文明的高峰之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>One of the most influential technological innovations of the Tang Dynasty was woodblock printing.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>唐朝最具影響力的技術創新之一是雕版印刷。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Woodblock printing is a technique for printing text, images or patterns.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雕版印刷是一種印刷文字、圖像或圖案的技術。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It involves cutting away at a block of wood until a pattern is created.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它涉及在木塊上切削，直到創造出圖案。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The block could then be covered with ink, and applied to a paper or cloth to create the print.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然後可以在木塊上塗上墨水，並將其壓印在紙張或布料上以創建印刷品。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Woodblock printing made it possible for books to be more widely available to the general public.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雕版印刷使書籍有可能更廣泛地為大眾所取得。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Literacy rates and social mobility increased, and more people from the lower classes were able to pass the examinations to gain entrance into the civil service.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>識字率和社會流動性提高，更多來自下層階級的人能夠通過考試進入公務員體系 (科舉)。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Woodblock printing was the most widely used form of printing in East Asia until the 19th century, when the European mechanical printing press became more popular.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>直到19世紀歐洲機械印刷機變得更加普及之前，雕版印刷是東亞最廣泛使用的印刷形式。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Tang Dynasty was also a high point for China for trade with the outside world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>唐朝也是中國與外界貿易的高峰。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>During this period, the Chinese conducted trade by land using the Silk Road, and maritime trade at sea.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在此期間，中國人利用絲綢之路進行陸上貿易，並在海上進行海運貿易。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Silk Road is the name of an ancient trading route that extended from Europe, through many countries in Asia, all the way to China.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>絲路是一條古代貿易路線的名稱，它從歐洲延伸，穿過亞洲許多國家，一直到中國。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was named the Silk Road because silk was the main item traded along the route from China.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>它被命名為絲路，因為絲綢是從中國沿該路線交易的主要物品。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>While the trading route was established centuries before the Tang Dynasty, it had been closed at some point, until the Tang Dynasty reopened it.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>雖然這條貿易路線在唐朝之前幾個世紀就已建立，但它曾在某個時候被關閉，直到唐朝重新開放。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>During this period, the Chinese also increased their maritime presence in the Persian Gulf and the Red Sea.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在此期間，中國人也增加了在波斯灣和紅海的海上影響力。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Thanks to the increased trade, the Chinese gained many new technologies, cultural practices, and luxury items from the 70 (or more!) countries it traded with.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>得益於貿易的增加，中國人從與之交易的70多個國家那裡獲得了許多新技術、文化習俗和奢侈品。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Buddhism and Islam also came to China through trade with India and the Middle East, and Buddhism became an especially important and influential religion during this period.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>佛教和伊斯蘭教也透過與印度和中東的貿易傳入中國，佛教在這一時期成為一個特別重要和有影響力的宗教。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>At this height of trade and culture, China also attracted thousands of people from foreign countries who wanted to live and trade in China, bringing diverse culture and wealth to the country.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在這種貿易和文化的高度下，中國還吸引了成千上萬想在中國生活和貿易的外國人，為該國帶來了多元文化和財富。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The period after the fall of the Tang Dynasty was filled with chaos, and the country rapidly changed hands between several different regimes.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>唐朝覆滅後的時期充滿了混亂，國家在幾個不同的政權之間迅速易手。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In 960 A.D., the Song Dynasty took power.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>西元960年，宋朝掌權。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>In the eyes of scholars, the Song Dynasty also ranks with the Tang Dynasty in terms of economic growth, artistic and intellectual achievement.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在學者眼中，宋朝在經濟成長、藝術和學術成就方面與唐朝並列。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The time under the Song Dynasty is sometimes regarded as the start of the industrial revolution in China.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>宋朝統治時期有時被視為中國工業革命的開始。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The economy of China during this period was one of the most prosperous and advanced in the entire world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這一時期中國的經濟是全世界最繁榮、最先進的經濟之一。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The iron industry grew more than six fold during this period, and China continued to be an important figure in world trade, bringing iron, silk, porcelain, textiles and much more to its trading partners.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在此期間，鋼鐵工業成長了六倍多，中國繼續在世界貿易中扮演重要角色，為其貿易夥伴帶來鋼鐵、絲綢、瓷器、紡織品等更多物品。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, the most important advancement during this time was the establishment of the world’s first government-issued paper money.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，這段時期最重要的進步是建立了世界上第一種由政府發行的紙幣。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Song rulers created factories in several cities, employing thousands of workers just to print paper money.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>宋朝統治者在幾個城市建立了工廠，雇用了數千名工人只為了印製紙幣。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Today, paper currency can be seen in countries all around the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>今天，世界各國都可以看到紙幣。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>During this period, the Chinese also made progress in weapons technology.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在此期間，中國人也在武器技術方面取得了進展。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>According to scholars, the Chinese may have invented gunpowder during an earlier dynasty, but it was during the Song dynasty that it really came to prominence.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>根據學者的說法，中國人可能在早期的朝代發明了火藥，但它真正在宋朝嶄露頭角。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Chinese used gunpowder to create flamethrowers, grenades, cannons, firearms and land mines.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>中國人使用火藥來製造火焰噴射器、手榴彈、大砲、槍械和地雷。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>By the thirteenth century, these developments had reached Europe, India and the Middle East.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>到十三世紀，這些發展已經傳到了歐洲、印度和中東。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>There were also significant developments in mathematics, astronomy, cartography, architecture, and virtually every other field of study during this golden age of the Chinese empire.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>在中華帝國的這個黃金時代，在數學、天文學、製圖學、建築學以及幾乎所有其他研究領域也取得了重大發展。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>It was also during this period that the Chinese discovered a compass could be used to discern which way was north.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>也是在這段時期，中國人發現指南針可以用來辨別哪邊是北方。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>This discovery became crucial in maritime navigation, and it is still important to us today.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>這項發現在海上航行中變得至關重要，而且對今天的我們仍然很重要。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>The Song Dynasty struggled with Mongol invaders during its reign, and ultimately fell to invading forces in 1279 A.D.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>宋朝在其統治期間與蒙古入侵者鬥爭，最終在西元1279年淪陷於入侵軍隊。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Combined, the Tang and Song Dynasties span just a little more than 600 years.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>總的來說，唐宋兩朝跨越了600多年。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Considering how long Chinese civilization has existed, this is just a small fraction of that time.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>考慮到中華文明存在了多久，這只是那段時間的一小部分。</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>However, during these two eras, Chinese civilization made enormous technological and commercial advancements.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>然而，在這兩個時代，中華文明取得了巨大的技術和商業進步。</td>
+                        </tr>
+                        <tr style="">
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Without many of these advancements, the world we know today might be quite different.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>如果沒有這些進步中的許多部分，我們今天所知的世界可能會有很大不同。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+                    <div class="vocab-item">
+                        <div class="vocab-word">warlord</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">軍閥</div>
+                        <div class="example">Under the control of various kingdoms and <span class='highlight'>warlords</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sequence</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">一連串；順序</div>
+                        <div class="example">A "dynasty" is a <span class='highlight'>sequence</span> of rulers from the same family.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">maritime</div>
+                        <div class="vocab-type">adj. 形容詞</div>
+                        <div class="vocab-meaning">海運的；海上的</div>
+                        <div class="example">The Chinese also increased their <span class='highlight'>maritime</span> presence in the Persian Gulf.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">prominence</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">顯著；傑出</div>
+                        <div class="example">It was during the Song dynasty that it really came to <span class='highlight'>prominence</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">flamethrower</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">火焰噴射器</div>
+                        <div class="example">The Chinese used gunpowder to create <span class='highlight'>flamethrowers</span>.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">grenade</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">手榴彈</div>
+                        <div class="example">They created flamethrowers, <span class='highlight'>grenades</span>, cannons...</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">cartography</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">製圖學</div>
+                        <div class="example">There were significant developments in astronomy, <span class='highlight'>cartography</span>, architecture.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">discern</div>
+                        <div class="vocab-type">v. 動詞</div>
+                        <div class="vocab-meaning">辨別；看出</div>
+                        <div class="example">A compass could be used to <span class='highlight'>discern</span> which way was north.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">fraction</div>
+                        <div class="vocab-type">n. 名詞</div>
+                        <div class="vocab-meaning">一小部分；分數</div>
+                        <div class="example">This is just a small <span class='highlight'>fraction</span> of that time.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">It wasn't until... that... (直到...才...)</div>
+                    <p>這是一個強調句型，用來強調某事在特定時間之前一直沒有發生。</p>
+                    <div class="example"><span class='highlight'>It wasn’t until</span> 221 B.C. <span class='highlight'>that</span> an emperor united various kingdoms.</div>
+                    <div class="example"><span class='highlight'>It wasn’t until</span> yesterday <span class='highlight'>that</span> I realized the truth.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">rank with (與...並列)</div>
+                    <p>表示在重要性、品質或地位上與某人/事物處於同一水平。</p>
+                    <div class="example">The Song Dynasty also <span class='highlight'>ranks with</span> the Tang Dynasty in terms of economic growth.</div>
+                    <div class="example">His new novel <span class='highlight'>ranks with</span> his best work.</div>
+                </div>
+            </div>
+
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>Without..., ... might... (如果沒有...，...可能...)</strong>
+                    <p>這是一種與過去或現在事實相反的假設語氣，表達如果沒有某個條件，結果就會不同。</p>
+                    <div class="example"><span class='highlight'>Without</span> many of these advancements, the world we know today <span class='highlight'>might</span> be quite different.</div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li style="margin-bottom: 15px;">唐朝最重要的技術創新之一是什麼？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 紙幣。</li>
+                                <li>B) 雕版印刷。</li>
+                                <li>C) 機械印刷機。</li>
+                                <li>D) 指南針。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：B</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">哪一個朝代被認為建立了世界上第一種由政府發行的紙幣？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 秦朝。</li>
+                                <li>B) 漢朝。</li>
+                                <li>C) 唐朝。</li>
+                                <li>D) 宋朝。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：D</p>
+                        </li>
+                        <li style="margin-bottom: 15px;">根據文章，宋朝期間發現的什麼東西在海上航行中變得至關重要？
+                            <ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;">
+                                <li>A) 火藥。</li>
+                                <li>B) 絲綢之路。</li>
+                                <li>C) 指南針可以用來辨別北方。</li>
+                                <li>D) 製圖學。</li>
+                            </ul>
+                            <p style="color: #4CAF50; font-weight: bold;">正確答案：C</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
+        crossorigin="anonymous" async>
+    </script>
+    <script>
+        const storyText = `China is one of the world’s oldest civilizations. Historians know that Chinese history dates back to at least 2000 B.C.—nearly 4000 years before the United States became a country! However, China has not always been the country we know today. In fact, throughout its history, parts of the country were under the control of various kingdoms and warlords, and the different parts of the country were not united, but rather fought against each other for land. It wasn’t until 221 B.C. that an emperor united various kingdoms to form the first Chinese empire. This began the reign of the Qin Dynasty, which only lasted until 206 B.C. A “dynasty” is a sequence of rulers from the same family. Eras in Chinese history are named by the dynasty that ruled over the country during that period. Since China was unified, it was ruled by more than a dozen dynasties, each of which helped China grow and advance to become the country we know today. Two of the most important dynasties were the Tang Dynasty and the Song Dynasty. Under the rule of these two dynasties, China saw significant technological and commercial developments which helped the country prosper and grow. Many of these developments made an impact outside China’s borders as well, helping civilizations around the world. The Tang Dynasty started ruling in 618 A.D. Scholars generally believe the Tang Dynasty was one of the high points of Chinese civilization. One of the most influential technological innovations of the Tang Dynasty was woodblock printing. Woodblock printing is a technique for printing text, images or patterns. It involves cutting away at a block of wood until a pattern is created. The block could then be covered with ink, and applied to a paper or cloth to create the print. Woodblock printing made it possible for books to be more widely available to the general public. Literacy rates and social mobility increased, and more people from the lower classes were able to pass the examinations to gain entrance into the civil service. Woodblock printing was the most widely used form of printing in East Asia until the 19th century, when the European mechanical printing press became more popular. The Tang Dynasty was also a high point for China for trade with the outside world. During this period, the Chinese conducted trade by land using the Silk Road, and maritime trade at sea. The Silk Road is the name of an ancient trading route that extended from Europe, through many countries in Asia, all the way to China. It was named the Silk Road because silk was the main item traded along the route from China. While the trading route was established centuries before the Tang Dynasty, it had been closed at some point, until the Tang Dynasty reopened it. During this period, the Chinese also increased their maritime presence in the Persian Gulf and the Red Sea. Thanks to the increased trade, the Chinese gained many new technologies, cultural practices, and luxury items from the 70 (or more!) countries it traded with. Buddhism and Islam also came to China through trade with India and the Middle East, and Buddhism became an especially important and influential religion during this period. At this height of trade and culture, China also attracted thousands of people from foreign countries who wanted to live and trade in China, bringing diverse culture and wealth to the country. The period after the fall of the Tang Dynasty was filled with chaos, and the country rapidly changed hands between several different regimes. In 960 A.D., the Song Dynasty took power. In the eyes of scholars, the Song Dynasty also ranks with the Tang Dynasty in terms of economic growth, artistic and intellectual achievement. The time under the Song Dynasty is sometimes regarded as the start of the industrial revolution in China. The economy of China during this period was one of the most prosperous and advanced in the entire world. The iron industry grew more than six fold during this period, and China continued to be an important figure in world trade, bringing iron, silk, porcelain, textiles and much more to its trading partners. However, the most important advancement during this time was the establishment of the world’s first government-issued paper money. The Song rulers created factories in several cities, employing thousands of workers just to print paper money. Today, paper currency can be seen in countries all around the world. During this period, the Chinese also made progress in weapons technology. According to scholars, the Chinese may have invented gunpowder during an earlier dynasty, but it was during the Song dynasty that it really came to prominence. The Chinese used gunpowder to create flamethrowers, grenades, cannons, firearms and land mines. By the thirteenth century, these developments had reached Europe, India and the Middle East. There were also significant developments in mathematics, astronomy, cartography, architecture, and virtually every other field of study during this golden age of the Chinese empire. It was also during this period that the Chinese discovered a compass could be used to discern which way was north. This discovery became crucial in maritime navigation, and it is still important to us today. The Song Dynasty struggled with Mongol invaders during its reign, and ultimately fell to invading forces in 1279 A.D. Combined, the Tang and Song Dynasties span just a little more than 600 years. Considering how long Chinese civilization has existed, this is just a small fraction of that time. However, during these two eras, Chinese civilization made enormous technological and commercial advancements. Without many of these advancements, the world we know today might be quite different.`;
+
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let words = [];
+        let speechUtterance = null;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let accumulatedTime = 0;
+        let checkInterval = null;
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                setTimeout(loadVoices, 100);
+                return;
+            }
+
+            voiceSelect.innerHTML = '';
+            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
+            if (isAppleDevice) {
+                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
+                macVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
+                if (windowsVoices.length > 0) {
+                    windowsVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                } else {
+                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        voiceSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function initializeText() {
+            const container = document.getElementById('storyContainer');
+            container.innerHTML = '';
+
+            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+
+            let html = '';
+            let currentWordCount = 0;
+
+            for (let i = 0; i < words.length; i++) {
+                const token = words[i];
+                if (/^[a-zA-Z0-9]/.test(token)) {
+                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
+                    currentWordCount++;
+                } else {
+                    html += token;
+                }
+
+                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
+                    html += ' ';
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        initializeText();
+
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
+                if (e.target.id === 'rateSlider' && isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 100);
+                }
+            });
+        });
+
+        function clearWordHighlight() {
+            document.querySelectorAll('.word').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function highlightWord(index) {
+            clearWordHighlight();
+            if (index >= 0) {
+                const el = document.getElementById(`word-${index}`);
+                if (el) {
+                    el.classList.add('active');
+                    el.classList.add('completed');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function speakText() {
+            if (isPlaying) return;
+
+            if (currentWordIndex >= document.querySelectorAll('.word').length) {
+                currentWordIndex = 0;
+                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            }
+
+            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
+            let textToSpeak = "";
+            let wordCount = 0;
+
+            for (let i = 0; i < allTokens.length; i++) {
+                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
+                    if (wordCount >= currentWordIndex) {
+                        textToSpeak += allTokens[i] + ' ';
+                    }
+                    wordCount++;
+                } else if (wordCount >= currentWordIndex) {
+                    textToSpeak += allTokens[i] + ' ';
+                }
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            const selectedVoiceName = document.getElementById('voiceSelect').value;
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoiceName);
+            if (voice) {
+                speechUtterance.voice = voice;
+            }
+
+            const rawRate = parseFloat(document.getElementById('rateSlider').value);
+            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+                speechUtterance.rate = rawRate * 0.5;
+            } else {
+                speechUtterance.rate = rawRate;
+            }
+
+            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let startTime = 0;
+            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
+            let wordCountForTracking = currentWordIndex;
+
+            speechUtterance.onstart = () => {
+                isPlaying = true;
+                startTime = Date.now();
+                accumulatedTime = 0;
+
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(() => {
+                    if (!isPlaying) return;
+
+                    const estimatedWordDuration = 300 / rawRate * timingFactor;
+                    const elapsed = Date.now() - startTime;
+                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+
+                    const maxWord = document.querySelectorAll('.word').length - 1;
+                    if (estimatedWordIndex <= maxWord) {
+                        highlightWord(estimatedWordIndex);
+                        wordCountForTracking = estimatedWordIndex;
+                    }
+                }, 200);
+            };
+
+            speechUtterance.onboundary = (event) => {
+                if (event.name === 'word') {}
+            };
+
+            speechUtterance.onend = () => {
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+                clearWordHighlight();
+                currentWordIndex = 0;
+            };
+
+            speechUtterance.onerror = (e) => {
+                console.error("Speech error", e);
+                isPlaying = false;
+                if (checkInterval) clearInterval(checkInterval);
+            };
+
+            speechSynthesis.speak(speechUtterance);
+        }
+
+        function stopSpeaking() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            if (checkInterval) clearInterval(checkInterval);
+
+            const activeEl = document.querySelector('.word.active');
+            if (activeEl) {
+                const id = activeEl.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+            }
+            clearWordHighlight();
+        }
+
+        document.getElementById('storyContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('word')) {
+                const id = e.target.id.split('-')[1];
+                currentWordIndex = parseInt(id);
+                if (isPlaying) {
+                    stopSpeaking();
+                    setTimeout(speakText, 200);
+                } else {
+                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+                    for (let i = 0; i < currentWordIndex; i++) {
+                        document.getElementById(`word-${i}`).classList.add('completed');
+                    }
+                    highlightWord(currentWordIndex);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
