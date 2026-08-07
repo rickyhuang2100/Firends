@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【無牆之屋】塞米諾爾人生存智慧 x 零基礎英文對話</title>
+    <style>
+        :root {
+            --bg-color: #fcfbf9;
+            --text-color: #2c3e50;
+            --primary: #c25934;
+            /* Terracotta/Warm */
+            --secondary: #245852;
+            /* Deep swamp green */
+            --light-accent: #eef2f1;
+            --border: #e0dcd3;
+            --host-a-bg: #fdfdfd;
+            --host-b-bg: #f4f6f5;
+        }
+
+        body.dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --primary: #e88665;
+            --secondary: #4ea89d;
+            --light-accent: #2c3231;
+            --border: #333333;
+            --host-a-bg: #222222;
+            --host-b-bg: #2a2e2d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        header {
+            background-color: var(--secondary);
+            color: #ffffff;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--light-accent);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .section-title {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin: 3rem 0 1.5rem 0;
+            font-size: 1.6rem;
+        }
+
+        /* Dialogue Styles */
+        .dialogue-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bubble {
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .speaker-a {
+            background-color: var(--host-a-bg);
+            border-left: 5px solid var(--primary);
+        }
+
+        .speaker-b {
+            background-color: var(--host-b-bg);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .speaker-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .speaker-a .speaker-name {
+            color: var(--primary);
+        }
+
+        .speaker-b .speaker-name {
+            color: var(--secondary);
+        }
+
+        .en-quote {
+            background-color: rgba(194, 89, 52, 0.1);
+            color: var(--primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+        }
+
+        /* Summary Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: var(--host-a-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+        }
+
+        .vocab-list {
+            list-style: none;
+        }
+
+        .vocab-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .vocab-item:last-child {
+            border-bottom: none;
+        }
+
+        .vocab-word {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>The Seminoles with No Walls</h1>
+        <p>塞米諾爾人「無牆之屋」：從歷史生存智慧到極速英語學習</p>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <div>
+                <strong>閱讀模式：</strong>
+                <button onclick="toggleDarkMode()">切換深色模式</button>
+            </div>
+            <div>
+                <strong>字體大小：</strong>
+                <button onclick="changeFontSize(1)">A+</button>
+                <button onclick="changeFontSize(-1)">A-</button>
+            </div>
+        </div>
+
+        <h2 class="section-title">精華導讀與歷史背景</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>🛡️ 歷史危機</h3>
+                <p>1800年代，佛羅里達州的塞米諾爾人面臨美軍追捕的滅族危機，必須不斷往沼澤深處遷移。</p>
+            </div>
+            <div class="card">
+                <h3>🏠 建築革新</h3>
+                <p>放棄堅固厚實的「圓木小屋 (Log Cabins)」，改建能極速拆除且無牆壁的「高腳茅草屋 (Chickees)」。</p>
+            </div>
+            <div class="card">
+                <h3>💡 核心思維</h3>
+                <p>放棄防禦固守，換取極致的機動性。沒有牆壁，反而成為最強的護身符。</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">核心單字與片語庫 (Vocabulary)</h2>
+        <div class="bubble speaker-a" style="margin-bottom:2rem; border-left-color:var(--border);">
+            <ul class="vocab-list">
+                <li class="vocab-item">
+                    <div class="vocab-word">Native American tribe</div>
+                    <div><strong>意思：</strong>美國原住民部落。 (native: 原生的 / tribe: 部落)</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">log cabins</div>
+                    <div><strong>意思：</strong>粗圓木小屋。代表著厚實、永久性與防禦。</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">at war with</div>
+                    <div><strong>意思：</strong>與...交戰。例: They were at war with the United States.</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">had to be able to</div>
+                    <div><strong>意思：</strong>必須能夠...。表達毫無退路的絕境壓力與生存必要條件。</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">take down</div>
+                    <div><strong>意思：</strong>拆卸、拆除、下架。例: They were easy to take down.</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">keep out</div>
+                    <div><strong>意思：</strong>擋在外面、隔絕。例: keep out rain (把雨水擋在外面)。</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">cypress / sturdy</div>
+                    <div><strong>意思：</strong>柏樹 (cypress) / 堅固耐用的 (sturdy)。沼澤中天然抗腐朽的神奇木材。</div>
+                </li>
+                <li class="vocab-item">
+                    <div class="vocab-word">haven't forgotten</div>
+                    <div><strong>意思：</strong>(現在完成式) 一直沒有忘記。代表歷史記憶至今仍在血脈中延續，未曾斷裂。</div>
+                </li>
+            </ul>
+        </div>
+
+        <h2 class="section-title">對話逐字稿 (Transcript)</h2>
+        <div class="dialogue-container" id="dialogue">
+            <!-- Dialogue will be dynamically inserted here by reading script -->
+        </div>
+
+        <h2 class="section-title">心靈反思 (Reflection)</h2>
+        <div class="bubble speaker-b">
+            <p>在我們現代人的生活裡，或者說在我們學習新事物的過程中，是不是也有許多我們自己建起來的「無形的牆壁」？</p>
+            <br>
+            <p>可能是我們不敢開口說英文的恐懼，或是我們固執的學習習慣。我們總以為這些牆壁能讓我們免於挫折、給我們安全感。但有沒有可能，就像 1800
+                年代的那場危機一樣，這些保護我們的牆壁，反而正在限制我們應對改變的能力，讓我們停滯不前了呢？</p>
+            <br>
+            <p><strong>「最極致的生存智慧，最快的成長方式就是勇敢地拆除牆壁，讓自己保持絕對的靈活與開放。」</strong></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 英文學習雙人廣播逐字稿 ｜ 保持好奇心，勇敢拆掉眼前的牆。</p>
+    </footer>
+
+    <script>
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Adjust Font Size
+        let currentFontSize = 16;
+        function changeFontSize(step) {
+            currentFontSize += step;
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 24) currentFontSize = 24;
+            document.body.style.fontSize = currentFontSize + 'px';
+        }
+
+        // Transcript Data Processing & Injection
+        const rawData = [
+            { speaker: "A", text: "那個你先想像一下這個情景哦，就是假設你現在正被一隻火力超強的軍隊追捕。哎，這壓力也太大了吧。" },
+            { speaker: "B", text: "對啊，為了保護家人，你的直覺反應肯定是找一個超級堅固的地方躲起來嘛？" },
+            { speaker: "A", text: "沒錯，最好是蓋移動那個牆壁越厚的堡壘。" },
+            { speaker: "B", text: "對，這是我們的常理對吧，但如果我告訴你，歷史上有一群人他們面對這種生死存亡的危機時，想出來的終極生存策略，居然是蓋一棟完全沒有牆壁的房子呢。" },
+            { speaker: "A", text: "哇，這聽起來其實蠻不合邏輯的耶。" },
+            { speaker: "B", text: "真的超瘋狂的啦，但在歷史上這可是真實發生過的最強求生智慧哦。其實這真的完全顛覆了我們對那個庇護所的嘗試。而且這個決定不止改變了他們的建築結構，更重新定義了他們整個民族的命運，這就是我們這次深度探討的核心文本。<span class='en-quote'>The Seminoles with no walls.</span>" },
+            { speaker: "A", text: "沒錯，而且如果你現在正帶著耳機或者說在螢幕前聽著我們聲音的你，今天的任務其實非常特別哦。" },
+            { speaker: "B", text: "對，因為這不只是一次歷史資料的深度探討而已。" },
+            { speaker: "A", text: "對對對，這更是一場專為那個從零開始學英文的台灣朋友，也就是正在收聽的你啦，量身打造的專屬英文課。" },
+            { speaker: "B", text: "沒錯，我們會把這篇充滿戲劇性轉折的短文，就是一句一句拆解開來。嗯，我會用清晰，然後適中的語速為你朗讀英文的部分，讓你去抓那個最道地的發音。然後呢，我們會一起深挖這些單字背後的邏輯，還有那段驚心動魄的歷史。" },
+            { speaker: "A", text: "其實我覺得這種學習方式是最有效的。因為語言從來都不是那種死板的文法規則嘛。對，語言是活的。沒錯，語言是活生生的生存工具。" },
+            { speaker: "B", text: "當你理解了，也就是 Seminoles，為什麼被迫改變生活方式，你就會發現那些英文單字和句型全都有了畫面跟生命力了。真的我們不會像傳統教科書那樣叫你死硬背，我們要帶你看懂背後的為什麼還要怎麼做。" },
+            { speaker: "A", text: "對，所以準備好跟我們一起拆解這段歷史了嗎？那我們就直接進入文本的第一個句子咯，你聽好了，這是在設定主角跟時代背景。<span class='en-quote'>The Seminoles are a Native American tribe.</span>" },
+            { speaker: "B", text: "這是一個非常乾淨俐落的開場。Seminoles 就是這個民族的名字，塞米諾爾人。那對於開始學英文的你啊，這句話裡有一個絕對要掌握的字詞組合，就是 <span class='en-quote'>Native American tribe</span>。" },
+            { speaker: "A", text: "哦，<span class='en-quote'>Native American Tribe</span>。對，native 的意思是原生的或者說本土的。那 American 是美國人嘛。而 tribe 這個字意思是部落。所以組合起來這句話就在告訴我們塞米諾爾人是一個美國原住民部落。" },
+            { speaker: "B", text: "了解。好，那我們接著看他們的故事是從哪裡開始的。<span class='en-quote'>In the late 1700s they started to live in Florida.</span> 這裡的時間點定在 late 1700s, 也就是那個 1700 年代晚期，大概是 18 世紀末了。" },
+            { speaker: "A", text: "對，文本說他們開始居住在 what is now Florida, 其實這是一個很精準的英文表達方式哦。他的意思是現在被稱為佛羅里達州的地方，因為在那個年代那邊的疆界跟名稱跟現在的美國地圖是完全不一樣的。" },
+            { speaker: "B", text: "哦，原來如此，就是以前還不叫佛羅里達的意思。那接下來這句就很有意思。他埋下了一個很大的伏筆哦。<span class='en-quote'>When they first arrived there, they lived in log cabins.</span>" },
+            { speaker: "A", text: "這裡的關鍵詞是 <span class='en-quote'>log cabins</span>, log 指的是那個沒有經過精細加工的粗大圓木。然後 cabin 是小屋，合在一起就是我們常在拓荒電影裡面看到的那種小木屋。" },
+            { speaker: "B", text: "等一下我們來推理一下。如果你要蓋這種小木屋，你需要砍那些很粗的樹幹，然後去皮，還要把它們一層一層堆起來，甚至填補那些縫隙，這是一種需要耗費超多時間跟體力的建築方式耶。" },
+            { speaker: "A", text: "沒錯，那這代表什麼？這代表當塞米諾爾人最初抵達佛羅里達的時候，他們其實是打算定居下來的吧，他們想要的是一種很安穩，很厚實能完全遮風擋雨的那種傳統生活。" },
+            { speaker: "B", text: "敏銳，其實建築形式真的反映了心理狀態。<span class='en-quote'>Log cabins</span> 代表著一種永久性。有厚實的牆。就意味著有防禦，有隱私，還有對未來的長遠打算。" },
+            { speaker: "A", text: "但這也是這段歷史最讓人心碎的地方，因為這種安穩的假象很快就被無情的撕裂了。時間推進到了下一個世紀，和平的生活結束了。我先讀這兩句哦。<span class='en-quote'>In the 1800s, the Seminoles were at war with the United States. The US Army was trying to move them farther west.</span>" },
+            { speaker: "B", text: "嗯，時間來到了 1800 年代，這裡出現了一個表達衝突狀態的實用片語，叫做 <span class='en-quote'>be at war with</span>, 就是與誰交戰的意思。他們與當時正在擴張的美國發生了戰爭嘛，而下一句就解釋了戰爭的目的。" },
+            { speaker: "A", text: "The US Army, 美國軍隊圖將他們 <span class='en-quote'>move them farther west</span>。Farther west 就是更往西邊嘛，這不就是在說軍隊想要把他們從原本安居樂業的家趕走，逼他們遷到陌生的地方嗎？" },
+            { speaker: "B", text: "正是如此，這在美國歷史上其實是一段非常殘酷的時期了，軍隊擁有那種壓倒性的火力跟人數優勢。" },
+            { speaker: "A", text: "哇，那壓力超大。在這種持續被追擊被包圍的極端壓力下，原本那種厚實的小木屋反而變成了最致命的弱點。因為你搬不走啊！" },
+            { speaker: "B", text: "這就帶出了文本裡最具戲劇張力的一句話了，你聽聽看英文是怎麼表達這種非改不可的壓迫感哦。<span class='en-quote'>They had to be able to move their houses quickly and easily.</span>" },
+            { speaker: "A", text: "這句話簡直把那個生存的急迫感壓縮到了極致。對於初學英文的你，這是一個一定要學會的黃金句型哦。筆記要拿出來了。had 是 have to 的過去式，意思是必須，而且是沒有商量餘地的那種必須。而緊接著的 be able to 意思是能夠。" },
+            { speaker: "B", text: "兩個疊加在一起 <span class='en-quote'>had to be able to</span>, 他們必須能夠做到這件事，不然就是死路一條。做什麼事呢？就是 move their houses quickly and easily, 快速而且輕鬆地移動他們的房子。" },
+            { speaker: "A", text: "所以因為這個致命的壓力，他們做出了那個顛覆常理的決定。這句的因果關係非常強烈哦。<span class='en-quote'>So the Seminoles built houses with no walls.</span> 就是所以塞米諾爾人建造了沒有牆壁的房子。" },
+            { speaker: "B", text: "哎，等一下，我們必須在這裡停下來挑戰一下這個邏輯耶。沒有牆的房子在佛羅里達？要知道佛羅里達有很多沼澤，滿地都是鱷魚，還有毒蛇，還有數不清的蚊蟲耶，而且他們還在打仗。遇到敵人開槍，沒有牆壁擋子彈，這算什麼防禦啦？這在軍事上完全說不通啊！" },
+            { speaker: "A", text: "哈，這是非常合理的質疑了，但是這就是塞米諾爾人展現出頂級戰略智慧的地方。在軍事上啊，當你面對一個火力比你強大百倍的正規軍時，如果你試圖躲在牆壁後面防守，你只會被大砲轟碎或者說被困死在裡面。" },
+            { speaker: "B", text: "啊對吼。在這種游擊戰裡面，防禦力其實是沒有意義的，機動性才是你唯一的護身符。" },
+            { speaker: "A", text: "哦，我懂了，這其實就像是我們現在去露營用的那種客廳帳嘛，如果你在野外遇到暴雨或是危險，你絕對不會想去蓋一棟磚房，你需要的是一個能在三分鐘內打包塞進後車廂，馬上開車逃命的東西。只要你能跑得比危險快，你就存活下來了。" },
+            { speaker: "B", text: "這個比喻非常精準，這就是機制的核心。他們放棄牆壁，換取了極致的速度與隱蔽性。我們來看看文本是怎麼稱呼這種建築的哦。<span class='en-quote'>These houses are called Chickees.</span>" },
+            { speaker: "A", text: "對，這裡請注意發音哦，這個字是由他們自己的語言轉化來的，念 Chickees, 重音在後面。然後文本揭示了 Chickees 的兩大優勢，<span class='en-quote'>Chickees were quick and easy.</span>" },
+            { speaker: "B", text: "第一個優勢是 quick and easy to build, 快速而且容易建造，第二個更關鍵，<span class='en-quote'>they were easy to take down</span>。這裡的 <span class='en-quote'>take down</span> 是一個超級實用的生活片語哦。它不只是用在拆房子，你拆除帳篷或者把牆上的畫拿下來，甚至是你網路上把一篇文章下架，都可以用 take down。" },
+            { speaker: "A", text: "因為容易拆卸，他們才能夠在美軍逼近前，瞬間消失在沼澤深處。哇，這真的是用建築在打游擊戰誒。但是既然必須快速建造，而且容易拆除，他們總不可能帶著一堆磚塊或是很沉重的木材到處跑吧。" },
+            { speaker: "B", text: "當然不可能。這就需要極度依賴當地環境了。我們進入第三個段落看看他們是怎麼就地取材的。<span class='en-quote'>The Seminoles used trees and leaves to make the Chickees.</span> 他們利用了身邊最容易取得的資源就是樹木和樹葉。" },
+            { speaker: "A", text: "具體來說，屋頂也就是 roof 是用什麼做的呢？是 <span class='en-quote'>palm leaves</span>, 棕櫚葉。那邊充滿了棕櫚樹，這材料真的是取之不盡。但是那個樹葉是很脆弱的耶，你如果只是把一堆樹葉丟在頭頂上，下雨的時候水還是會漏下來啊？" },
+            { speaker: "B", text: "你聽這句哦。<span class='en-quote'>They wove the leaves together to keep out rain.</span> 這句話其實藏著非常細緻的工藝機制，關鍵動詞是 wove，它是 weave, 也就是編織的過去式。" },
+            { speaker: "A", text: "對，他們不是隨便堆疊樹葉哦，而是將這些寬大的棕櫚葉 wove together 緊密地編織在一起。透過編織，樹葉形成了一層一層交疊的表面，這其實利用了水的表面張力原理，讓雨水順著葉片的紋理流下去，而不會穿透進去。" },
+            { speaker: "B", text: "原來是這樣，所以這就是後半句 <span class='en-quote'>to keep out rain</span> 的由來，keep out 就是把東西擋在外面，不讓它進來的意思。這個片語很生動誒，就像你在門上掛一個牌子寫著 Keep Out, 閒人勿入，他們用編織的樹葉把雨水拒之門外。" },
+            { speaker: "A", text: "完全正確，那解決了屋頂的問題，屋頂總得有東西支撐吧。文本是這樣說的哦。<span class='en-quote'>The roof was held up by poles made of cypress trees.</span> 這裡有一個很棒的被動語態 was held up by 就是被什麼撐起來的意思，屋頂是被 poles 也就是柱子撐起來的。" },
+            { speaker: "B", text: "那這些柱子是用什麼木頭做的呢？是 cypress trees 柏樹。文本給出的理由是 <span class='en-quote'>because cypress bark is strong and sturdy.</span> Bark 是樹皮，然後 strong and sturdy 是兩個經常黏在一起用的形容詞，意思是堅強而且耐用的。" },
+            { speaker: "A", text: "不過如果我們回到提到的沼澤環境，佛羅里達的沼澤超級潮濕，一般的木頭泡在水裡幾個月就爛了吧，我猜柏樹一定有某種天然的抗腐爛機制對吧。" },
+            { speaker: "B", text: "哇，你完全講到重點了，這就是就地取材的最高境界，其實柏樹是少數能夠在積水的沼澤中生長，而且極度耐腐朽的樹種。大自然就已經幫他們準備好了最堅固的柱子了。單靠幾根深紮沼澤泥地裡的柏樹柱子就能穩穩地頂住厚重的編織屋頂。" },
+            { speaker: "A", text: "這真的太聰明了啦，我們前面說過這就像是古代生存版的組合家具，但當一種為了解決危機的臨時手段被一個民族不斷鑽研發揮到極致的時候，它就不再只是求生而已了，它會變成一種藝術誒。我們來看最後一段的這兩句話哦。<span class='en-quote'>The Seminoles became very good at building Chickees.</span>" },
+            { speaker: "B", text: "這裡的第一句用了一個表達能力進階的句型，<span class='en-quote'>became very good at</span>, 就是變得非常擅長於做某件事。這意味著建造 Chickees 已經不是慌亂中的應急措施了，他們已經將這項技術練到了爐火純青的境界。" },
+            { speaker: "A", text: "絕對是爐火純青啊，因為第二句提到了一個讓我嚇掉下巴的細節，他們甚至會建造 <span class='en-quote'>Chickees with two floors</span>, 兩層樓的 Chickees！厲害吧，沒有沉重的牆，只有幾根柏樹柱子，然後你要在上面蓋第二層樓，還有人在上面活動。" },
+            { speaker: "B", text: "真的，而且這也解決了我們前面提到的野生動物啊，沒有牆怎麼辦？那就把生活空間往上抬嘛，一樓懸空，二樓住人，鱷魚就在下面爬也咬不到你。將生活空間抬高，不僅避開了積水和危險動物，還能讓微風從四面八方吹過沒有牆壁的房子，在悶熱的佛羅里達，這就是最天然的冷氣了。" },
+            { speaker: "A", text: "這證明了什麼？這其實證明了，即使在被軍隊無情驅趕的絕境當中，塞米諾爾人依然沒有放棄對生活品質的追求，他們在夾縫中創造出了完美的適應機制。這句話有一種很深沉的力量，我非常喜歡。<span class='en-quote'>Today, the Seminoles no longer live in Chickees, but they haven't forgotten about these houses with no walls.</span>" },
+            { speaker: "B", text: "在語言的層次上啊，這句話真的是整篇文章的靈魂。前半句說 no longer (不再)，用的是簡單現在式，陳述了一個當下的客觀事實。可是後半句說 <span class='en-quote'>but they haven't forgotten</span>, 這裡的 haven't forgotten 是英文裡面一個非常奇妙的時態哦。" },
+            { speaker: "A", text: "如果他們說 didn't forget, 用過去式的話，那感覺就像是在描述一件放在博物館裡死氣沉沉的往事。但他們用的是 haven't forgotten (現在完成式)，這是一種一直持續到現在這一秒鐘的狀態。" },
+            { speaker: "B", text: "這代表這段為了生存而放棄牆壁，在沼澤中建立起兩層樓高腳屋的歷史記憶，至今依然活在他們的血液裡，活在他們的文化中，從來沒有斷裂。把句型的結構跟歷史的情感結合得這麼緊密，這就是我們希望帶給你的英文學習體驗啦。" },
+            { speaker: "A", text: "當你聽懂了這個故事，那些單字就不再只是一堆陌生的字母了。這是一次非常豐富的語言吸收哦。而且更棒的是我們認識了塞米諾爾人，為了活下去，他們必須打破常理，親手拆掉那層厚實的保護殼。" }
+        ];
+
+        const dialogueContainer = document.getElementById('dialogue');
+
+        rawData.forEach(line => {
+            const bubble = document.createElement('div');
+            bubble.className = `bubble speaker-${line.speaker.toLowerCase()}`;
+
+            const speakerName = document.createElement('div');
+            speakerName.className = 'speaker-name';
+            speakerName.innerHTML = line.speaker === 'A' ? '🎙️ 主講人 A (引言/故事)' : '💡 主講人 B (解析/視角)';
+
+            const textNode = document.createElement('div');
+            textNode.className = 'text-content';
+            textNode.innerHTML = line.text;
+
+            bubble.appendChild(speakerName);
+            bubble.appendChild(textNode);
+            dialogueContainer.appendChild(bubble);
+        });
+    </script>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_8.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>
