@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Bread Around the World</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Bread Around the World</h1>
+        <a href="3_9_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQC0wPdaxMFtTKPcdmk_xgqlAZWfBTfaoNXc3LL_Wm9nHPs?e=5IWyB8"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -75,52 +300,132 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">dough</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">麵團</div></div>
-                    <div class="vocab-item"><div class="vocab-word">crushed</div><div class="vocab-type">[動詞/形容詞]</div><div class="vocab-meaning">磨碎的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">grain</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">穀物</div></div>
-                    <div class="vocab-item"><div class="vocab-word">rise</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">（麵團）發酵膨起</div></div>
-                    <div class="vocab-item"><div class="vocab-word">ovens</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">烤箱</div></div>
-                    <div class="vocab-item"><div class="vocab-word">tortilla</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">玉米薄餅（墨西哥食物）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">braided</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">編成辮子的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">wheat flour</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">小麥麵粉</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dough</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">麵團</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">crushed</div>
+                        <div class="vocab-type">[動詞/形容詞]</div>
+                        <div class="vocab-meaning">磨碎的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">grain</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">穀物</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">rise</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">（麵團）發酵膨起</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">ovens</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">烤箱</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">tortilla</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">玉米薄餅（墨西哥食物）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">braided</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">編成辮子的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">wheat flour</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">小麥麵粉</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. 被動語態 "was/were + 過去分詞"</div><p>描述歷史事件常用被動語態：</p><div class="example">The first bread <span class="highlight">was made</span> thousands of years ago.<br>→ 最早的麵包是在數千年前製作的。</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "Ever since then" 從那以後</div><p>表示從某個時間點開始一直持續：</p><div class="example"><span class="highlight">Ever since then</span>, there have been many kinds of bread.<br>→ 從那以後，就有了很多種類的麵包。</div></div>
-                <div class="grammar-box"><div class="grammar-title">3. "instead" 相反地</div><p>表示對比：</p><div class="example">It is not flat. <span class="highlight">Instead</span>, it's puffy.<br>→ 它不是扁的。相反地，它是蓬鬆的。</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 被動語態 "was/were + 過去分詞"</div>
+                    <p>描述歷史事件常用被動語態：</p>
+                    <div class="example">The first bread <span class="highlight">was made</span> thousands of years
+                        ago.<br>→ 最早的麵包是在數千年前製作的。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "Ever since then" 從那以後</div>
+                    <p>表示從某個時間點開始一直持續：</p>
+                    <div class="example"><span class="highlight">Ever since then</span>, there have been many kinds of
+                        bread.<br>→ 從那以後，就有了很多種類的麵包。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "instead" 相反地</div>
+                    <p>表示對比：</p>
+                    <div class="example">It is not flat. <span class="highlight">Instead</span>, it's puffy.<br>→
+                        它不是扁的。相反地，它是蓬鬆的。</div>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: has been + N + for a long time</strong><div class="example">Bread <span class="highlight">has been</span> an important food <span class="highlight">for</span> a very long time.<br>→ 現在完成式表示長期狀態</div></div>
-                <div class="sentence-pattern"><strong>句型 2: A is very different from B</strong><div class="example">It <span class="highlight">is very different from</span> tortillas and chapatis.<br>→ 比較兩個事物的不同</div></div>
-                <div class="sentence-pattern"><strong>句型 3: can be made from...</strong><div class="example">This bread <span class="highlight">can be made from</span> cornmeal or wheat flour.<br>→ 描述製作材料</div></div>
-                <div class="info-box"><strong>💡 食物文化常用表達</strong><ul><li>"flat bread" → 扁平麵包</li><li>"make...rise" → 讓...發酵膨起</li><li>"eaten and enjoyed" → 被食用和享受</li><li>"What other kinds do you know?" → 你還知道哪些？</li></ul></div>
+                <div class="sentence-pattern"><strong>句型 1: has been + N + for a long time</strong>
+                    <div class="example">Bread <span class="highlight">has been</span> an important food <span
+                            class="highlight">for</span> a very long time.<br>→ 現在完成式表示長期狀態</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: A is very different from B</strong>
+                    <div class="example">It <span class="highlight">is very different from</span> tortillas and
+                        chapatis.<br>→ 比較兩個事物的不同</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: can be made from...</strong>
+                    <div class="example">This bread <span class="highlight">can be made from</span> cornmeal or wheat
+                        flour.<br>→ 描述製作材料</div>
+                </div>
+                <div class="info-box"><strong>💡 食物文化常用表達</strong>
+                    <ul>
+                        <li>"flat bread" → 扁平麵包</li>
+                        <li>"make...rise" → 讓...發酵膨起</li>
+                        <li>"eaten and enjoyed" → 被食用和享受</li>
+                        <li>"What other kinds do you know?" → 你還知道哪些？</li>
+                    </ul>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：時間+分類</strong><p><strong>歷史：</strong>最早的扁麵包 → 埃及人學會發酵</p><p><strong>墨西哥：</strong>tortilla（扁、圓、玉米粉/麵粉）</p><p><strong>印度/南亞：</strong>chapati（扁、圓、麵粉）</p><p><strong>猶太：</strong>challah（蓬鬆、編辮子）</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>How was the first bread made? (最早的麵包是怎麼做的？)</li><li>What did people in Egypt learn to do? (埃及人學會了什麼？)</li><li>What is a tortilla? (什麼是 tortilla？)</li><li>How is challah different from other breads? (Challah 和其他麵包有什麼不同？)</li></ol></div>
+                <div class="info-box"><strong>文章結構：時間+分類</strong>
+                    <p><strong>歷史：</strong>最早的扁麵包 → 埃及人學會發酵</p>
+                    <p><strong>墨西哥：</strong>tortilla（扁、圓、玉米粉/麵粉）</p>
+                    <p><strong>印度/南亞：</strong>chapati（扁、圓、麵粉）</p>
+                    <p><strong>猶太：</strong>challah（蓬鬆、編辮子）</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>How was the first bread made? (最早的麵包是怎麼做的？)</li>
+                        <li>What did people in Egypt learn to do? (埃及人學會了什麼？)</li>
+                        <li>What is a tortilla? (什麼是 tortilla？)</li>
+                        <li>How is challah different from other breads? (Challah 和其他麵包有什麼不同？)</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Bread Around the World\n\nBread has been an important food for people for a very long time. The first bread was made thousands of years ago. People back then made dough with crushed up grain and water. Then they baked the dough on hot stones. This made a flat kind of bread.\n\nFor a long time, flat breads were the only kind of bread. Then, people in Egypt learned how to make bread rise. They also made ovens for baking the bread. Ever since then, there have been many kinds of bread. Some are flat. Some are puffy. All of them are eaten and enjoyed in different cultures! Here are some different breads that are eaten by people around the world:\n\nA tortilla is a popular kind of bread in Mexico. It is flat and round. This bread can be made from cornmeal or wheat flour.\n\nAnother kind of round, flat bread is a chapati. This bread is often eaten in India and other countries in South Asia. It is also made from wheat flour.\n\nChallah bread was first made and eaten by Jewish people. It is very different from tortillas and chapatis. It is not flat. Instead, it's puffy. Also, the dough is braided before it is baked. So the bread has a very special shape!\n\nWhat other kinds of breads do you know about?`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>
