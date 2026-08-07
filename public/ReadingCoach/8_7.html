@@ -660,237 +660,243 @@
         crossorigin="anonymous" async>
         </script>
     <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5; // 時間調整係數，預設 1.5 讓高亮快一點
+
         const storyText = `When 15-year-old Malala Yousafzai stepped onto her school bus on October 9, 2012, she had no idea that her life would change forever. As the bus rolled through her hometown of Swat Valley, Pakistan, she sang songs with her friends. Then, two men approached the bus. They were members of the Taliban—an extremist group that began taking over the valley in 2008. The men boarded the bus, asked who Malala was, and then shot her in the face. From a very young age, Malala had been well known in the region as a fighter for girls’ education. She had the support of her father Ziauddin, who rebelled against the Taliban’s belief that girls should be kept out of school, and had opened a girls’ school in the valley. By age 11, Malala began writing—anonymously—a blog that told the truth about life under Taliban oppression. She wrote fiercely about how the militant group was forcing girls out of school. When Malala was revealed as the author of the blog, the Taliban targeted her. After Malala was shot and critically wounded, her family moved to Birmingham, England, so she could recover in safety. By March 2013, she was well enough to start attending school in England. The attack had only made Malala’s conviction fiercer. She began to speak publicly about what had happened to her. On her sixteenth birthday in 2013, Malala gave a speech at the United Nations focusing on education and women’s rights. Calling on world leaders to act, she reminded people that if half the world is uneducated, everyone loses. “The extremists were, and they are, afraid of books and pens. The power of education frightens them… The power of the voice of women frightens them... Let us pick up our books and pens. They are our most powerful weapons. One child, one teacher, one pen and one book can change the world.” Malala has tirelessly continued her work ever since. In 2013, she and her father created the Malala Fund, which works to ensure that girls everywhere have access to free, quality education. In 2014, at just 17 years old, Malala became the youngest person to receive the Nobel Peace Prize. In 2015, she opened a school for Syrian refugee girls in Lebanon. Two years later, she began studying philosophy, politics, and economics at Oxford University. In June of 2020, Malala graduated from Oxford, and gave a touching virtual commencement address to her fellow graduates. She commiserated about graduating during the COVID-19 pandemic, and reminded her classmates to fight for girls in developing countries who won’t have the privilege of returning to school. Malala consistently reminds us that, as she said in her speech to the U.N., “We cannot succeed when half of us are held back.” In 2020, the Malala Fund released a strategic five-year-plan to get even more girls into school. Now, even though she is still a young woman, Malala’s life has already revealed two very different stories: the horror of what can happen when militant groups of men are scared of the idea of educated women—and the brilliance that educated women bring to the world.`;
 
-        let currentWordIndex = 0;
-        let isPlaying = false;
-        let words = [];
-        let speechUtterance = null;
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let accumulatedTime = 0;
-        let checkInterval = null;
+        // 初始化文字
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
 
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') {
+                    container.appendChild(document.createElement('br'));
+                    return;
+                }
+
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+
+                        // 單字之間加空格
+                        if (wordIndex < words.length - 1) {
+                            container.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+
+                // 行尾換行
+                if (lineIndex < lines.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+
+            console.log('初始化完成，總單字數:', wordElements.length);
+        }
+
+        // 載入語音
         function loadVoices() {
-            const voiceSelect = document.getElementById('voiceSelect');
-            let voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                setTimeout(loadVoices, 100);
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+
+                if (voice.lang.startsWith('zh-TW')) {
+                    select.selectedIndex = i;
+                }
+            });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        // 滑桿更新
+        document.getElementById('rateSlider').oninput = function () {
+            document.getElementById('rateValue').textContent = this.value;
+        };
+        document.getElementById('pitchSlider').oninput = function () {
+            document.getElementById('pitchValue').textContent = this.value;
+        };
+        document.getElementById('volumeSlider').oninput = function () {
+            document.getElementById('volumeValue').textContent = this.value;
+        };
+        document.getElementById('timingSlider').oninput = function () {
+            timingAdjustment = parseFloat(this.value);
+            document.getElementById('timingValue').textContent = this.value;
+        };
+
+        // 高亮單字
+        function highlightWord(index) {
+            // 只允許往前或保持，不允許往回
+            if (index < currentIndex) {
+                console.log('忽略往回的高亮請求:', index, '當前:', currentIndex);
                 return;
             }
 
-            voiceSelect.innerHTML = '';
-            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+            currentIndex = index;
 
-            if (isAppleDevice) {
-                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
-                macVoices.forEach(voice => {
-                    const option = document.createElement('option');
-                    option.value = voice.name;
-                    option.textContent = `${voice.name} (${voice.lang})`;
-                    voiceSelect.appendChild(option);
-                });
-            } else {
-                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
-                if (windowsVoices.length > 0) {
-                    windowsVoices.forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                } else {
-                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                }
-            }
-        }
-
-        speechSynthesis.onvoiceschanged = loadVoices;
-        loadVoices();
-
-        function showTab(event, tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function initializeText() {
-            const container = document.getElementById('storyContainer');
-            container.innerHTML = '';
-
-            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-
-            let html = '';
-            let currentWordCount = 0;
-
-            for (let i = 0; i < words.length; i++) {
-                const token = words[i];
-                if (/^[a-zA-Z0-9]/.test(token)) {
-                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
-                    currentWordCount++;
-                } else {
-                    html += token;
-                }
-
-                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
-                    html += ' ';
-                }
-            }
-            container.innerHTML = html;
-        }
-
-        initializeText();
-
-        document.querySelectorAll('input[type="range"]').forEach(slider => {
-            slider.addEventListener('input', (e) => {
-                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
-                if (e.target.id === 'rateSlider' && isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 100);
+            // 清除所有樣式
+            wordElements.forEach((word, i) => {
+                word.classList.remove('active', 'completed');
+                if (i < index) {
+                    word.classList.add('completed');
                 }
             });
-        });
 
-        function clearWordHighlight() {
-            document.querySelectorAll('.word').forEach(el => {
-                el.classList.remove('active');
-            });
-        }
-
-        function highlightWord(index) {
-            clearWordHighlight();
-            if (index >= 0) {
-                const el = document.getElementById(`word-${index}`);
-                if (el) {
-                    el.classList.add('active');
-                    el.classList.add('completed');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            // 高亮當前單字
+            if (index < wordElements.length) {
+                wordElements[index].classList.add('active');
+                console.log('高亮:', index, wordElements[index].textContent);
             }
         }
 
+        // 朗讀
         function speakText() {
-            if (isPlaying) return;
-
-            if (currentWordIndex >= document.querySelectorAll('.word').length) {
-                currentWordIndex = 0;
-                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            if (synth.speaking) {
+                synth.cancel();
             }
 
-            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-            let textToSpeak = "";
-            let wordCount = 0;
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
 
-            for (let i = 0; i < allTokens.length; i++) {
-                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
-                    if (wordCount >= currentWordIndex) {
-                        textToSpeak += allTokens[i] + ' ';
-                    }
-                    wordCount++;
-                } else if (wordCount >= currentWordIndex) {
-                    textToSpeak += allTokens[i] + ' ';
+            // 重置
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+
+            // 將長文本切割為較短的句子，避免文字過長導致 Web Speech API 停止發音
+            const chunks = storyText.match(/[^.!?。！？]+[.!?。！？]*/g) || [storyText];
+
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            const rate = parseFloat(document.getElementById('rateSlider').value);
+            const pitch = parseFloat(document.getElementById('pitchSlider').value);
+            const volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let boundarySupported = false;
+            let currentOffsetWords = 0;
+            let utterances = [];
+
+            chunks.forEach((chunkText) => {
+                const chunkOffset = currentOffsetWords;
+                // 計算這個 chunk 有幾個有效單字
+                const chunkWords = chunkText.trim().split(/\s+/).filter(w => w.length > 0).length;
+                currentOffsetWords += chunkWords;
+
+                if (chunkWords === 0 && chunkText.trim() === '') return;
+
+                const utterance = new SpeechSynthesisUtterance(chunkText);
+                if (voices[voiceIndex]) {
+                    utterance.voice = voices[voiceIndex];
                 }
-            }
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+                utterance.volume = volume;
 
-            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        boundarySupported = true;
+                        const textBeforeWord = chunkText.substring(0, event.charIndex);
+                        const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0).length;
+                        const wordIndex = chunkOffset + wordsBefore;
 
-            const selectedVoiceName = document.getElementById('voiceSelect').value;
-            const voices = speechSynthesis.getVoices();
-            const voice = voices.find(v => v.name === selectedVoiceName);
-            if (voice) {
-                speechUtterance.voice = voice;
-            }
+                        if (wordIndex < wordElements.length) {
+                            highlightWord(wordIndex);
+                            console.log('Boundary 事件 - 高亮單字:', wordIndex, wordElements[wordIndex]?.textContent);
+                        }
+                    }
+                });
 
-            const rawRate = parseFloat(document.getElementById('rateSlider').value);
-            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
-                speechUtterance.rate = rawRate * 0.5;
+                utterances.push(utterance);
+            });
+
+            if (utterances.length > 0) {
+                utterances[utterances.length - 1].onend = function () {
+                    if (highlightTimer) clearInterval(highlightTimer);
+                    setTimeout(() => {
+                        wordElements.forEach(w => w.classList.remove('active', 'completed'));
+                    }, 500);
+                    console.log('朗讀完成');
+                };
             } else {
-                speechUtterance.rate = rawRate;
+                return;
             }
 
-            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
-            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            // 依序加入佇列朗讀
+            utterances.forEach(u => synth.speak(u));
 
-            let startTime = 0;
-            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
-            let wordCountForTracking = currentWordIndex;
+            // 備用方案：如果 boundary 不支援，使用定時器
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    console.log('使用定時器備用方案，調整係數:', timingAdjustment);
+                    const rateValue = rate;
+                    // 基礎時間計算
+                    const baseMs = 60000 / (150 * rateValue);
+                    // 套用調整係數
+                    const msPerWord = baseMs * timingAdjustment;
 
-            speechUtterance.onstart = () => {
-                isPlaying = true;
-                startTime = Date.now();
-                accumulatedTime = 0;
+                    console.log('每個單字間隔:', msPerWord.toFixed(0), 'ms');
 
-                if (checkInterval) clearInterval(checkInterval);
-                checkInterval = setInterval(() => {
-                    if (!isPlaying) return;
+                    // 立即高亮第一個單字
+                    currentIndex = 0;
+                    highlightWord(0);
 
-                    const estimatedWordDuration = 300 / rawRate * timingFactor;
-                    const elapsed = Date.now() - startTime;
-                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+                    let nextWordIndex = 1;
 
-                    const maxWord = document.querySelectorAll('.word').length - 1;
-                    if (estimatedWordIndex <= maxWord) {
-                        highlightWord(estimatedWordIndex);
-                        wordCountForTracking = estimatedWordIndex;
-                    }
-                }, 200);
-            };
-
-            speechUtterance.onboundary = (event) => {
-                if (event.name === 'word') { }
-            };
-
-            speechUtterance.onend = () => {
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-                clearWordHighlight();
-                currentWordIndex = 0;
-            };
-
-            speechUtterance.onerror = (e) => {
-                console.error("Speech error", e);
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-            };
-
-            speechSynthesis.speak(speechUtterance);
-        }
-
-        function stopSpeaking() {
-            speechSynthesis.cancel();
-            isPlaying = false;
-            if (checkInterval) clearInterval(checkInterval);
-
-            const activeEl = document.querySelector('.word.active');
-            if (activeEl) {
-                const id = activeEl.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-            }
-            clearWordHighlight();
-        }
-
-        document.getElementById('storyContainer').addEventListener('click', (e) => {
-            if (e.target.classList.contains('word')) {
-                const id = e.target.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-                if (isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 200);
-                } else {
-                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
-                    for (let i = 0; i < currentWordIndex; i++) {
-                        document.getElementById(`word-${i}`).classList.add('completed');
-                    }
-                    highlightWord(currentWordIndex);
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) {
+                            if (nextWordIndex >= currentIndex) {
+                                highlightWord(nextWordIndex);
+                            }
+                            nextWordIndex++;
+                        } else if (!synth.speaking) {
+                            clearInterval(highlightTimer);
+                        }
+                    }, msPerWord);
                 }
+            }, 300);
+        }
+
+        // 停止
+        function stopSpeaking() {
+            if (synth.speaking) {
+                synth.cancel();
             }
-        });
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        // 分頁切換
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 頁面載入時初始化
+        window.onload = initText;
     </script>
+
 </body>
 
 </html>

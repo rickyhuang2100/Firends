@@ -644,7 +644,7 @@
                                     style="color: #2196F3;">中文:</strong><br>不久後，這些人可能會創立自己的公司，而這些新公司可能會吸引更多來自世界各地的工程師。
                             </td>
                         </tr>
-                        <tr style="">
+                        <tr style="border-bottom: 1px solid #ddd;">
                             <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
                                     style="color: #4CAF50;">English:</strong><br>And so, Silicon Valley will continue to
                                 grow.</td>
@@ -787,259 +787,243 @@
         crossorigin="anonymous" async>
         </script>
     <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5; // 時間調整係數，預設 1.5 讓高亮快一點
+
         const storyText = `For thousands of years, people lived in a world without computers. There were no video games and no smartphones. Now computers are part of the daily life of many people, and it's hard to imagine a world without them. What is it that makes a computer work? Inside every computer is a tiny circuit called a semiconductor. Often, a semiconductor is essentially a couple wires attached to a piece of silicon (a mineral like quartz). Though semiconductors are very small, they are important. Semiconductors are what make many electronics work, from car radios to the systems that pilots use to fly airplanes. For a computer to work, it needs electricity. Semiconductors carry the electric signals in computers. In the United States, almost all semiconductors are made in a place called Silicon Valley. Silicon Valley is just outside of San Francisco and is home to some of the country's smartest scientists. The history of Silicon Valley is tied to the history of the semiconductor. The first mass-produced semiconductor was designed in the 1950s in Silicon Valley by a company called Fairchild Semiconductor. The engineers at Fairchild were interested in finding ways to make machines faster and smaller. Before Fairchild, people knew how to make semiconductors, but they didn't know how to make large batches of them. In those early years, Robert Noyce was the boss at Fairchild. He was in charge of making sure the company built cutting-edge products the world had never seen before. Robert wanted his company to be a community where everyone was equal. At Fairchild, an engineer could rise to the top quickly, as long as he or she had a good idea. Everyone pitched in to help with problems, and everyone celebrated when a problem was solved. Engineers loved working at Fairchild, and the company grew quickly. NASA needed semiconductors for the computers in their new spaceships. The United States Department of Defense needed semiconductors for planes and other military vehicles. Computer systems were being put into all kinds of devices, and every single computer needed semiconductors. Soon engineers at Fairchild began quitting. They had exciting ideas and wanted to start their own companies. More than 50 other semiconductor companies were started by former employees at Fairchild. Most of these companies stayed in Silicon Valley. Soon it made sense for other high-tech companies to move to Silicon Valley, since there were already so many talented engineers in the area. In the 1970s the area began to be called “Silicon Valley,” after the mineral that was the backbone of the semiconductor. As computers spread throughout the country, Silicon Valley grew along with the industry. Soon it wasn’t just semiconductor companies. There were companies that made personal computers, printers, software… the list went on and on. Apple, the maker of the first personal computer, had headquarters close to Silicon Valley. Years later, Google’s headquarters were set in Mountain View, in the exact same city as Fairchild Semiconductor’s first building. Companies like Apple and Google have been attracting thousands of engineers from all over the world, making Silicon Valley a wealthy and thriving area. Investors have also followed engineers to Silicon Valley looking for promising companies with big futures. These new investors—known as venture capital firms—give a company the money it needs to start a business. Then if the company becomes big, a large chunk of the money it makes goes back to the investors. But it isn’t just the money that draws workers to Silicon Valley—it’s also the opportunity. In Silicon Valley, there are new companies being created every week. There is money to invest in new companies. Silicon Valley has become a new global center of technology. As of 2013, Silicon Valley is home to more than 3 million people. Many of them came from other countries, and in over half of the homes in Silicon Valley, families speak another language besides English. Both immigrants from other countries and people who move to Silicon Valley from other parts of the United States bring new ideas to Silicon Valley. Soon these people may start their own companies, and those new companies may attract more engineers from other parts of the world. And so, Silicon Valley will continue to grow.`;
 
-        let currentWordIndex = 0;
-        let isPlaying = false;
-        let words = [];
-        let speechUtterance = null;
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let accumulatedTime = 0;
-        let checkInterval = null;
+        // 初始化文字
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
 
-        // Populate voices
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') {
+                    container.appendChild(document.createElement('br'));
+                    return;
+                }
+
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+
+                        // 單字之間加空格
+                        if (wordIndex < words.length - 1) {
+                            container.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+
+                // 行尾換行
+                if (lineIndex < lines.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+
+            console.log('初始化完成，總單字數:', wordElements.length);
+        }
+
+        // 載入語音
         function loadVoices() {
-            const voiceSelect = document.getElementById('voiceSelect');
-            let voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                setTimeout(loadVoices, 100);
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+
+                if (voice.lang.startsWith('zh-TW')) {
+                    select.selectedIndex = i;
+                }
+            });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        // 滑桿更新
+        document.getElementById('rateSlider').oninput = function () {
+            document.getElementById('rateValue').textContent = this.value;
+        };
+        document.getElementById('pitchSlider').oninput = function () {
+            document.getElementById('pitchValue').textContent = this.value;
+        };
+        document.getElementById('volumeSlider').oninput = function () {
+            document.getElementById('volumeValue').textContent = this.value;
+        };
+        document.getElementById('timingSlider').oninput = function () {
+            timingAdjustment = parseFloat(this.value);
+            document.getElementById('timingValue').textContent = this.value;
+        };
+
+        // 高亮單字
+        function highlightWord(index) {
+            // 只允許往前或保持，不允許往回
+            if (index < currentIndex) {
+                console.log('忽略往回的高亮請求:', index, '當前:', currentIndex);
                 return;
             }
 
-            voiceSelect.innerHTML = '';
-            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+            currentIndex = index;
 
-            if (isAppleDevice) {
-                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
-                macVoices.forEach(voice => {
-                    const option = document.createElement('option');
-                    option.value = voice.name;
-                    option.textContent = `${voice.name} (${voice.lang})`;
-                    voiceSelect.appendChild(option);
-                });
-            } else {
-                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
-                if (windowsVoices.length > 0) {
-                    windowsVoices.forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                } else {
-                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                }
-            }
-        }
-
-        speechSynthesis.onvoiceschanged = loadVoices;
-        loadVoices();
-
-        function showTab(event, tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        // Initialize text
-        function initializeText() {
-            const container = document.getElementById('storyContainer');
-            container.innerHTML = '';
-
-            // split keeping punctuation
-            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-
-            let html = '';
-            let currentWordCount = 0;
-
-            for (let i = 0; i < words.length; i++) {
-                const token = words[i];
-                if (/^[a-zA-Z0-9]/.test(token)) {
-                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
-                    currentWordCount++;
-                } else {
-                    html += token;
-                }
-
-                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
-                    html += ' ';
-                }
-            }
-            container.innerHTML = html;
-        }
-
-        initializeText();
-
-        document.querySelectorAll('input[type="range"]').forEach(slider => {
-            slider.addEventListener('input', (e) => {
-                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
-                if (e.target.id === 'rateSlider' && isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 100);
+            // 清除所有樣式
+            wordElements.forEach((word, i) => {
+                word.classList.remove('active', 'completed');
+                if (i < index) {
+                    word.classList.add('completed');
                 }
             });
-        });
 
-        function clearWordHighlight() {
-            document.querySelectorAll('.word').forEach(el => {
-                el.classList.remove('active');
-            });
-        }
-
-        function highlightWord(index) {
-            clearWordHighlight();
-            if (index >= 0) {
-                const el = document.getElementById(`word-\${index}`);
-                if (el) {
-                    el.classList.add('active');
-                    el.classList.add('completed');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            // 高亮當前單字
+            if (index < wordElements.length) {
+                wordElements[index].classList.add('active');
+                console.log('高亮:', index, wordElements[index].textContent);
             }
         }
 
+        // 朗讀
         function speakText() {
-            if (isPlaying) return;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
 
             // 重置
-            if (currentWordIndex >= document.querySelectorAll('.word').length) {
-                currentWordIndex = 0;
-                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
-            }
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
 
-            // 提取從目前位置開始的文字
-            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-            let textToSpeak = "";
-            let wordCount = 0;
+            // 將長文本切割為較短的句子，避免文字過長導致 Web Speech API 停止發音
+            const chunks = storyText.match(/[^.!?。！？]+[.!?。！？]*/g) || [storyText];
 
-            for (let i = 0; i < allTokens.length; i++) {
-                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
-                    if (wordCount >= currentWordIndex) {
-                        textToSpeak += allTokens[i] + ' ';
-                    }
-                    wordCount++;
-                } else if (wordCount >= currentWordIndex) {
-                    textToSpeak += allTokens[i] + ' ';
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            const rate = parseFloat(document.getElementById('rateSlider').value);
+            const pitch = parseFloat(document.getElementById('pitchSlider').value);
+            const volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let boundarySupported = false;
+            let currentOffsetWords = 0;
+            let utterances = [];
+
+            chunks.forEach((chunkText) => {
+                const chunkOffset = currentOffsetWords;
+                // 計算這個 chunk 有幾個有效單字
+                const chunkWords = chunkText.trim().split(/\s+/).filter(w => w.length > 0).length;
+                currentOffsetWords += chunkWords;
+
+                if (chunkWords === 0 && chunkText.trim() === '') return;
+
+                const utterance = new SpeechSynthesisUtterance(chunkText);
+                if (voices[voiceIndex]) {
+                    utterance.voice = voices[voiceIndex];
                 }
-            }
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+                utterance.volume = volume;
 
-            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        boundarySupported = true;
+                        const textBeforeWord = chunkText.substring(0, event.charIndex);
+                        const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0).length;
+                        const wordIndex = chunkOffset + wordsBefore;
 
-            const selectedVoiceName = document.getElementById('voiceSelect').value;
-            const voices = speechSynthesis.getVoices();
-            const voice = voices.find(v => v.name === selectedVoiceName);
-            if (voice) {
-                speechUtterance.voice = voice;
-            }
+                        if (wordIndex < wordElements.length) {
+                            highlightWord(wordIndex);
+                            console.log('Boundary 事件 - 高亮單字:', wordIndex, wordElements[wordIndex]?.textContent);
+                        }
+                    }
+                });
 
-            const rawRate = parseFloat(document.getElementById('rateSlider').value);
-            // Apple devices need rate adjustment
-            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
-                speechUtterance.rate = rawRate * 0.5;
+                utterances.push(utterance);
+            });
+
+            if (utterances.length > 0) {
+                utterances[utterances.length - 1].onend = function () {
+                    if (highlightTimer) clearInterval(highlightTimer);
+                    setTimeout(() => {
+                        wordElements.forEach(w => w.classList.remove('active', 'completed'));
+                    }, 500);
+                    console.log('朗讀完成');
+                };
             } else {
-                speechUtterance.rate = rawRate;
+                return;
             }
 
-            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
-            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            // 依序加入佇列朗讀
+            utterances.forEach(u => synth.speak(u));
 
-            let startTime = 0;
-            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
-            let wordCountForTracking = currentWordIndex;
+            // 備用方案：如果 boundary 不支援，使用定時器
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    console.log('使用定時器備用方案，調整係數:', timingAdjustment);
+                    const rateValue = rate;
+                    // 基礎時間計算
+                    const baseMs = 60000 / (150 * rateValue);
+                    // 套用調整係數
+                    const msPerWord = baseMs * timingAdjustment;
 
-            // 在某些瀏覽器中 onboundary 可能不可靠，特別是處理大量文字時
-            // 所以我們使用備用方案：結合時間估算
+                    console.log('每個單字間隔:', msPerWord.toFixed(0), 'ms');
 
-            speechUtterance.onstart = () => {
-                isPlaying = true;
-                startTime = Date.now();
-                accumulatedTime = 0;
+                    // 立即高亮第一個單字
+                    currentIndex = 0;
+                    highlightWord(0);
 
-                // 模擬進度追蹤 (如果 onboundary 不觸發)
-                if (checkInterval) clearInterval(checkInterval);
-                checkInterval = setInterval(() => {
-                    if (!isPlaying) return;
+                    let nextWordIndex = 1;
 
-                    // 估算：平均每個字約 300ms (1x速度)
-                    // 根據速率調整
-                    const estimatedWordDuration = 300 / rawRate * timingFactor;
-                    const elapsed = Date.now() - startTime;
-                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
-
-                    // 確保不超過總字數
-                    const maxWord = document.querySelectorAll('.word').length - 1;
-                    if (estimatedWordIndex <= maxWord) {
-                        highlightWord(estimatedWordIndex);
-                        // 更新目前的進度索引，這樣暫停後可以從大約正確的位置恢復
-                        wordCountForTracking = estimatedWordIndex;
-                    }
-                }, 200);
-            };
-
-            // 優先使用 onboundary 如果瀏覽器支援
-            speechUtterance.onboundary = (event) => {
-                if (event.name === 'word') {
-                    // 使用 charIndex 來找到對應的單字
-                    // 這裡的邏輯需要非常精確才能與原始文本對應
-                    // 為簡單起見，我們繼續使用計時器估算，因為它更穩健
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) {
+                            if (nextWordIndex >= currentIndex) {
+                                highlightWord(nextWordIndex);
+                            }
+                            nextWordIndex++;
+                        } else if (!synth.speaking) {
+                            clearInterval(highlightTimer);
+                        }
+                    }, msPerWord);
                 }
-            };
-
-            speechUtterance.onend = () => {
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-                clearWordHighlight();
-                currentWordIndex = 0;
-            };
-
-            speechUtterance.onerror = (e) => {
-                console.error("Speech error", e);
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-            };
-
-            speechSynthesis.speak(speechUtterance);
+            }, 300);
         }
 
+        // 停止
         function stopSpeaking() {
-            speechSynthesis.cancel();
-            isPlaying = false;
-            if (checkInterval) clearInterval(checkInterval);
-
-            // 記錄停止時的文字索引
-            const activeEl = document.querySelector('.word.active');
-            if (activeEl) {
-                const id = activeEl.id.split('-')[1];
-                currentWordIndex = parseInt(id);
+            if (synth.speaking) {
+                synth.cancel();
             }
-            clearWordHighlight();
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
         }
 
-        // 點擊文字可以從那裡開始唸
-        document.getElementById('storyContainer').addEventListener('click', (e) => {
-            if (e.target.classList.contains('word')) {
-                const id = e.target.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-                if (isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 200);
-                } else {
-                    // 點選後直接標記該單字
-                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
-                    for (let i = 0; i < currentWordIndex; i++) {
-                        document.getElementById(`word-${i}`).classList.add('completed');
-                    }
-                    highlightWord(currentWordIndex);
-                }
-            }
-        });
+        // 分頁切換
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 頁面載入時初始化
+        window.onload = initText;
     </script>
+
 </body>
 
 </html>

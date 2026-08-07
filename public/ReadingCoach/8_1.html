@@ -1125,243 +1125,247 @@
             </div>
         </div>
     </div>
-
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
-        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
-        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
-        crossorigin="anonymous" async>
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async>
         </script>
     <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5; // 時間調整係數，預設 1.5 讓高亮快一點
+
         const storyText = `I exercise a lot and try to keep healthy. Last year, I ran a marathon with my mom. Recently, I learned about something called Obstacle Course Racing. This is like a marathon, but they have all these different types of obstacles for you to overcome. You have to climb over walls and slide down ropes. You even crawl through the mud. They also have a “fun run” called the Zombie 5K. It’s a three-mile race during which you are chased by people dressed like zombies! When I found out about the Zombie 5K, I knew I had to train for this race and win it. I went to the park and found an area where the city has built some free exercise equipment. They have a little jungle gym and some benches to do push-ups on. Every day after school, I’d go home and change into my gym clothes. I’d ride my bike over to the park and lock it up real tight with a chain. Then, I’d spend about an hour doing pull-ups on the monkey bars and jumping over blocks of wood. As I did this, I pretended that zombies were chasing me. Sometimes I would scream and run wildly around in a circle. This generally resulted in people looking at me sideways. People would start laughing and pointing. I didn’t care. I had a race to prepare for. The only problem was, I didn’t actually know what it would feel like to run while being chased by zombies. So I called my friends Jeff, Amy, and Kristen. I asked if they wanted to have some fun helping me train. Since it was close to Halloween, a lot of them had monster makeup lying around their homes. A zombie costume isn’t that hard—it’s mostly just old clothes that you were going to throw out anyway! The next day, we waited until dusk. I went to the park as planned. I don’t know how Jeff and the gang got there. Maybe they changed into their zombie costumes behind a tree. Maybe they got dressed at home and then rode their bikes there (now that would have been funny!). All I know is that I was running along the track when all of a sudden I heard a loud roar coming from behind me. I turned around, and there was Zombie Amy running full speed in my direction. “BRAAAAINS!” she said. “Aw, Amy, come on! That’s so cliché! No real zombie says ‘brains’!” I said. She wasn’t stopping, though. In fact, she was getting faster. And she seemed to be foaming at the mouth. I noticed other families start to scream and scatter. I guess they believed she was really a zombie. Amy was obviously really getting into the part, so I decided to play along. I ran as fast as I could until I got to the gate. I jumped over the gate and got the side of my shorts stuck on a prong. Amy wasn’t slowing down. “Come on, Amy, it’s just a game!” I yelled. I struggled to free myself from the gate as she got closer and closer. Her eyes looked black, and I could smell her breath. We started running. I could hear her close behind me now. I could still almost smell her. We built up speed, and I ran faster than I ever thought I was capable of. Amy was doubling back around now, having gotten in front of us somehow. That’s when I saw Jeff grab his neck and start convulsing. “Amy… she bit me a little bit,” he said. “Just a little.” His eyes were getting dark, and he started foaming at the mouth. I knew I had to get to a place they couldn’t follow me: the outdoor gym. I’d been training there for months. I knew the course backwards and forwards. I leaped over the sit-up planks and the balance beams. The zombies were falling all over themselves. They tripped on the grass and couldn’t stand up straight on the beam. Since it had rained last night, there was a puddle of mud surrounding the monkey bars. I looked behind me to see my former friends were slowly gaining on me. I figured they’d fall in the mud puddle, but so would I! So I got my footing on a balance beam and jumped high into the air. I grabbed onto the first monkey bar and swung as hard as I could. The next thing I knew, I was all the way across on the other side. My zombified friends were slipping around in the mud. They couldn’t even stand up straight. Panic was setting in. I knew I could keep running, but where was I running to? Where would I hide? That’s when I saw Kristen. She didn’t appear to be a zombie… yet. She was waving her arms frantically. Could I trust her? I decided that I had to. I had no choice. I noticed Kristen appeared to be sobbing on the ground. But wait—no. She was laughing. Our friends are monsters trying to murder us and she was laughing? She pointed back towards Jeff and Amy, and they were on the ground laughing, too. “We got you… so… good!” Amy said, laughing so hard she could barely finish speaking. “You did what? Are you kidding me?” “It’s a joke!” she said. I was so incredibly angry. I mean, I was really livid! My face felt hot and flushed. “What’s wrong with you?” I asked them. Amy came toward me, wiping away the fake foam from her mouth. Jeff was removing contact lenses. “You smell horrible!” I said. “Yeah, uh. We kind of rubbed some spoiled milk on our clothes before we came. You know, to get the full effect,” Amy said. “You’ve got to admit it was pretty brilliant,” Jeff said. “You really tricked me, you guys.” “We’re sorry,” Kristen said. “But I watched the whole thing. You owned that obstacle course, and you did it under pressure!” “Well, I guess that’s true. I’m not nervous about the race any more!” “You’re going to be amazing, and we’ll be there to cheer you on! In zombie makeup, of course.” I started to laugh a little bit. I was still fuming mad and didn’t want to laugh. I just couldn’t help it. “I knew real zombies didn’t say BRAINS!” I said. “You guys are hacks!” “BRAAAAINS!” said Amy, holding out her arms to my neck. I couldn’t hold in the laughter any more.`;
 
-        let currentWordIndex = 0;
-        let isPlaying = false;
-        let words = [];
-        let speechUtterance = null;
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let accumulatedTime = 0;
-        let checkInterval = null;
+        // 初始化文字
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
 
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') {
+                    container.appendChild(document.createElement('br'));
+                    return;
+                }
+
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+
+                        // 單字之間加空格
+                        if (wordIndex < words.length - 1) {
+                            container.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+
+                // 行尾換行
+                if (lineIndex < lines.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+
+            console.log('初始化完成，總單字數:', wordElements.length);
+        }
+
+        // 載入語音
         function loadVoices() {
-            const voiceSelect = document.getElementById('voiceSelect');
-            let voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                setTimeout(loadVoices, 100);
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+
+                if (voice.lang.startsWith('zh-TW')) {
+                    select.selectedIndex = i;
+                }
+            });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        // 滑桿更新
+        document.getElementById('rateSlider').oninput = function () {
+            document.getElementById('rateValue').textContent = this.value;
+        };
+        document.getElementById('pitchSlider').oninput = function () {
+            document.getElementById('pitchValue').textContent = this.value;
+        };
+        document.getElementById('volumeSlider').oninput = function () {
+            document.getElementById('volumeValue').textContent = this.value;
+        };
+        document.getElementById('timingSlider').oninput = function () {
+            timingAdjustment = parseFloat(this.value);
+            document.getElementById('timingValue').textContent = this.value;
+        };
+
+        // 高亮單字
+        function highlightWord(index) {
+            // 只允許往前或保持，不允許往回
+            if (index < currentIndex) {
+                console.log('忽略往回的高亮請求:', index, '當前:', currentIndex);
                 return;
             }
 
-            voiceSelect.innerHTML = '';
-            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+            currentIndex = index;
 
-            if (isAppleDevice) {
-                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
-                macVoices.forEach(voice => {
-                    const option = document.createElement('option');
-                    option.value = voice.name;
-                    option.textContent = `${voice.name} (${voice.lang})`;
-                    voiceSelect.appendChild(option);
-                });
-            } else {
-                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
-                if (windowsVoices.length > 0) {
-                    windowsVoices.forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                } else {
-                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                }
-            }
-        }
-
-        speechSynthesis.onvoiceschanged = loadVoices;
-        loadVoices();
-
-        function showTab(event, tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function initializeText() {
-            const container = document.getElementById('storyContainer');
-            container.innerHTML = '';
-
-            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-
-            let html = '';
-            let currentWordCount = 0;
-
-            for (let i = 0; i < words.length; i++) {
-                const token = words[i];
-                if (/^[a-zA-Z0-9]/.test(token)) {
-                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
-                    currentWordCount++;
-                } else {
-                    html += token;
-                }
-
-                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
-                    html += ' ';
-                }
-            }
-            container.innerHTML = html;
-        }
-
-        initializeText();
-
-        document.querySelectorAll('input[type="range"]').forEach(slider => {
-            slider.addEventListener('input', (e) => {
-                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
-                if (e.target.id === 'rateSlider' && isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 100);
+            // 清除所有樣式
+            wordElements.forEach((word, i) => {
+                word.classList.remove('active', 'completed');
+                if (i < index) {
+                    word.classList.add('completed');
                 }
             });
-        });
 
-        function clearWordHighlight() {
-            document.querySelectorAll('.word').forEach(el => {
-                el.classList.remove('active');
-            });
-        }
-
-        function highlightWord(index) {
-            clearWordHighlight();
-            if (index >= 0) {
-                const el = document.getElementById(`word-${index}`);
-                if (el) {
-                    el.classList.add('active');
-                    el.classList.add('completed');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            // 高亮當前單字
+            if (index < wordElements.length) {
+                wordElements[index].classList.add('active');
+                console.log('高亮:', index, wordElements[index].textContent);
             }
         }
 
+        // 朗讀
         function speakText() {
-            if (isPlaying) return;
-
-            if (currentWordIndex >= document.querySelectorAll('.word').length) {
-                currentWordIndex = 0;
-                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            if (synth.speaking) {
+                synth.cancel();
             }
 
-            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-            let textToSpeak = "";
-            let wordCount = 0;
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
 
-            for (let i = 0; i < allTokens.length; i++) {
-                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
-                    if (wordCount >= currentWordIndex) {
-                        textToSpeak += allTokens[i] + ' ';
-                    }
-                    wordCount++;
-                } else if (wordCount >= currentWordIndex) {
-                    textToSpeak += allTokens[i] + ' ';
+            // 重置
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+
+            // 將長文本切割為較短的句子，避免文字過長導致 Web Speech API 停止發音
+            const chunks = storyText.match(/[^.!?。！？]+[.!?。！？]*/g) || [storyText];
+
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            const rate = parseFloat(document.getElementById('rateSlider').value);
+            const pitch = parseFloat(document.getElementById('pitchSlider').value);
+            const volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let boundarySupported = false;
+            let currentOffsetWords = 0;
+            let utterances = [];
+
+            chunks.forEach((chunkText) => {
+                const chunkOffset = currentOffsetWords;
+                // 計算這個 chunk 有幾個有效單字
+                const chunkWords = chunkText.trim().split(/\s+/).filter(w => w.length > 0).length;
+                currentOffsetWords += chunkWords;
+
+                if (chunkWords === 0 && chunkText.trim() === '') return;
+
+                const utterance = new SpeechSynthesisUtterance(chunkText);
+                if (voices[voiceIndex]) {
+                    utterance.voice = voices[voiceIndex];
                 }
-            }
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+                utterance.volume = volume;
 
-            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        boundarySupported = true;
+                        const textBeforeWord = chunkText.substring(0, event.charIndex);
+                        const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0).length;
+                        const wordIndex = chunkOffset + wordsBefore;
 
-            const selectedVoiceName = document.getElementById('voiceSelect').value;
-            const voices = speechSynthesis.getVoices();
-            const voice = voices.find(v => v.name === selectedVoiceName);
-            if (voice) {
-                speechUtterance.voice = voice;
-            }
+                        if (wordIndex < wordElements.length) {
+                            highlightWord(wordIndex);
+                            console.log('Boundary 事件 - 高亮單字:', wordIndex, wordElements[wordIndex]?.textContent);
+                        }
+                    }
+                });
 
-            const rawRate = parseFloat(document.getElementById('rateSlider').value);
-            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
-                speechUtterance.rate = rawRate * 0.5;
+                utterances.push(utterance);
+            });
+
+            if (utterances.length > 0) {
+                utterances[utterances.length - 1].onend = function () {
+                    if (highlightTimer) clearInterval(highlightTimer);
+                    setTimeout(() => {
+                        wordElements.forEach(w => w.classList.remove('active', 'completed'));
+                    }, 500);
+                    console.log('朗讀完成');
+                };
             } else {
-                speechUtterance.rate = rawRate;
+                return;
             }
 
-            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
-            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            // 依序加入佇列朗讀
+            utterances.forEach(u => synth.speak(u));
 
-            let startTime = 0;
-            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
-            let wordCountForTracking = currentWordIndex;
+            // 備用方案：如果 boundary 不支援，使用定時器
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    console.log('使用定時器備用方案，調整係數:', timingAdjustment);
+                    const rateValue = rate;
+                    // 基礎時間計算
+                    const baseMs = 60000 / (150 * rateValue);
+                    // 套用調整係數
+                    const msPerWord = baseMs * timingAdjustment;
 
-            speechUtterance.onstart = () => {
-                isPlaying = true;
-                startTime = Date.now();
-                accumulatedTime = 0;
+                    console.log('每個單字間隔:', msPerWord.toFixed(0), 'ms');
 
-                if (checkInterval) clearInterval(checkInterval);
-                checkInterval = setInterval(() => {
-                    if (!isPlaying) return;
+                    // 立即高亮第一個單字
+                    currentIndex = 0;
+                    highlightWord(0);
 
-                    const estimatedWordDuration = 300 / rawRate * timingFactor;
-                    const elapsed = Date.now() - startTime;
-                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+                    let nextWordIndex = 1;
 
-                    const maxWord = document.querySelectorAll('.word').length - 1;
-                    if (estimatedWordIndex <= maxWord) {
-                        highlightWord(estimatedWordIndex);
-                        wordCountForTracking = estimatedWordIndex;
-                    }
-                }, 200);
-            };
-
-            speechUtterance.onboundary = (event) => {
-                if (event.name === 'word') { }
-            };
-
-            speechUtterance.onend = () => {
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-                clearWordHighlight();
-                currentWordIndex = 0;
-            };
-
-            speechUtterance.onerror = (e) => {
-                console.error("Speech error", e);
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-            };
-
-            speechSynthesis.speak(speechUtterance);
-        }
-
-        function stopSpeaking() {
-            speechSynthesis.cancel();
-            isPlaying = false;
-            if (checkInterval) clearInterval(checkInterval);
-
-            const activeEl = document.querySelector('.word.active');
-            if (activeEl) {
-                const id = activeEl.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-            }
-            clearWordHighlight();
-        }
-
-        document.getElementById('storyContainer').addEventListener('click', (e) => {
-            if (e.target.classList.contains('word')) {
-                const id = e.target.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-                if (isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 200);
-                } else {
-                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
-                    for (let i = 0; i < currentWordIndex; i++) {
-                        document.getElementById(`word-${i}`).classList.add('completed');
-                    }
-                    highlightWord(currentWordIndex);
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) {
+                            if (nextWordIndex >= currentIndex) {
+                                highlightWord(nextWordIndex);
+                            }
+                            nextWordIndex++;
+                        } else if (!synth.speaking) {
+                            clearInterval(highlightTimer);
+                        }
+                    }, msPerWord);
                 }
+            }, 300);
+        }
+
+        // 停止
+        function stopSpeaking() {
+            if (synth.speaking) {
+                synth.cancel();
             }
-        });
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        // 分頁切換
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 頁面載入時初始化
+        window.onload = initText;
     </script>
 </body>
 

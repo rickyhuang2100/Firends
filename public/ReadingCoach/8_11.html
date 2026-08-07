@@ -724,237 +724,243 @@
         crossorigin="anonymous" async>
         </script>
     <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5; // 時間調整係數，預設 1.5 讓高亮快一點
+
         const storyText = `Mamie Kennedy is practicing her boxing skills, furiously slamming her fists at a punching bag until it whips so hard that it’s a blur. Kennedy is only 14 years old, but her focus and concentration are remarkable. By the time Kennedy is done warming up and steps into the ring, others have gathered to watch, in awe of Kennedy’s speed and skill. She knows that everyone, including the boys, are afraid to fight her. Her coach, Frank Kipp, calls Kennedy “ferocious” and thinks she could be an Olympian. In fact, Kennedy’s skills won her a spot at the 2018 Junior Olympic Boxing Nationals. But Mamie Kennedy and the other girls at Frank’s gym aren’t boxing for the sport of it. These girls are literally fighting to survive. They’re part of the Blackfeet Nation Boxing Club on the Blackfeet Reservation in Montana—where there’s an epidemic of violence against women. In 2012, the U.S. Department of Justice released a harrowing statistic: Native American women in some tribal communities face murder rates more than ten times the national average. In Montana alone, more than 100 indigenous women and girls have gone missing or been murdered since 2018. Serenity Youngrunningcrane, 13 years old, is another boxer at the Blackfeet club. She says that she has been scared to walk around the reservation ever since one of her siblings was assaulted. Youngrunningcrane hopes that learning to box will help her defend herself. Why does that reservation—and others—seem so unsafe? Misty LaPlant, a former Blackfeet Police Officer, suggests many reasons: systemic poverty, alcohol and drug abuse, domestic violence, child abduction, and human trafficking. Added to this, critics charge, perpetrators of violence against indigenous women are rarely held accountable by law enforcement. Because the attackers so often get away with these crimes, LaPlant says, the girls are left to fend for themselves. That’s where Frank Kipp comes in. A gentle man and a powerful coach, Kipp is a boxer himself, and was once a probation officer on the Blackfeet Reservation. He decided to form the Blackfeet Nation Boxing Club in 2003 to help kids stay away from drugs and alcohol. But over time, Kipp realized that the club had become much more; it was serving as a safe haven for the community’s girls and women. In a place that felt dangerous, Kipp became convinced that girls needed to learn how to defend themselves. Kipp noticed that some girls who come to the club have low self-esteem. Boxing, he believes, has helped them gain confidence. He offers the girls emotional guidance as well as training tips, and advises them that the first step they should take if they feel threatened is to approach authority figures (coaches, teachers, etc.). But Kipp also urges the young women to tell everyone that they box for the Blackfeet Nation—and they won’t let anybody bully them. Frank’s daughter, Donna Kipp, also trains at the club, and has had her share of boxing achievements, having won a bronze medal at the 2015 Junior Olympic Nationals. Prior to taking up boxing, she was quiet and shy in the face of her bullies. But ever since stepping into the ring, boxing has helped her feel fearless and confident. She is one of the many young women whose lives have been changed by the Blackfeet Boxing Club. Before Donna fights, she always writes four letters on the wraps around her wrist and hand—MMIW. It stands for Missing and Murdered Indigenous Women, a powerful reminder of what these girls face. Frank Kipp estimates that he has taught more than 500 young people how to box. His work is getting noticed: in 2020, an ESPN documentary, Blackfeet Boxing: Not Invisible, featured Frank and his crew of young female fighters. The documentary has gotten international attention, highlighting the reality of life on the Blackfeet Reservation. Seeing the ferocity, power, and determination on these female boxer’s faces is a bold reminder of the lost girls they’re fighting for—and the future they hope to change.`;
 
-        let currentWordIndex = 0;
-        let isPlaying = false;
-        let words = [];
-        let speechUtterance = null;
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let accumulatedTime = 0;
-        let checkInterval = null;
+        // 初始化文字
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
 
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') {
+                    container.appendChild(document.createElement('br'));
+                    return;
+                }
+
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+
+                        // 單字之間加空格
+                        if (wordIndex < words.length - 1) {
+                            container.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+
+                // 行尾換行
+                if (lineIndex < lines.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+
+            console.log('初始化完成，總單字數:', wordElements.length);
+        }
+
+        // 載入語音
         function loadVoices() {
-            const voiceSelect = document.getElementById('voiceSelect');
-            let voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                setTimeout(loadVoices, 100);
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+
+                if (voice.lang.startsWith('zh-TW')) {
+                    select.selectedIndex = i;
+                }
+            });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        // 滑桿更新
+        document.getElementById('rateSlider').oninput = function () {
+            document.getElementById('rateValue').textContent = this.value;
+        };
+        document.getElementById('pitchSlider').oninput = function () {
+            document.getElementById('pitchValue').textContent = this.value;
+        };
+        document.getElementById('volumeSlider').oninput = function () {
+            document.getElementById('volumeValue').textContent = this.value;
+        };
+        document.getElementById('timingSlider').oninput = function () {
+            timingAdjustment = parseFloat(this.value);
+            document.getElementById('timingValue').textContent = this.value;
+        };
+
+        // 高亮單字
+        function highlightWord(index) {
+            // 只允許往前或保持，不允許往回
+            if (index < currentIndex) {
+                console.log('忽略往回的高亮請求:', index, '當前:', currentIndex);
                 return;
             }
 
-            voiceSelect.innerHTML = '';
-            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+            currentIndex = index;
 
-            if (isAppleDevice) {
-                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
-                macVoices.forEach(voice => {
-                    const option = document.createElement('option');
-                    option.value = voice.name;
-                    option.textContent = `${voice.name} (${voice.lang})`;
-                    voiceSelect.appendChild(option);
-                });
-            } else {
-                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
-                if (windowsVoices.length > 0) {
-                    windowsVoices.forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                } else {
-                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                }
-            }
-        }
-
-        speechSynthesis.onvoiceschanged = loadVoices;
-        loadVoices();
-
-        function showTab(event, tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function initializeText() {
-            const container = document.getElementById('storyContainer');
-            container.innerHTML = '';
-
-            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-
-            let html = '';
-            let currentWordCount = 0;
-
-            for (let i = 0; i < words.length; i++) {
-                const token = words[i];
-                if (/^[a-zA-Z0-9]/.test(token)) {
-                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
-                    currentWordCount++;
-                } else {
-                    html += token;
-                }
-
-                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
-                    html += ' ';
-                }
-            }
-            container.innerHTML = html;
-        }
-
-        initializeText();
-
-        document.querySelectorAll('input[type="range"]').forEach(slider => {
-            slider.addEventListener('input', (e) => {
-                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
-                if (e.target.id === 'rateSlider' && isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 100);
+            // 清除所有樣式
+            wordElements.forEach((word, i) => {
+                word.classList.remove('active', 'completed');
+                if (i < index) {
+                    word.classList.add('completed');
                 }
             });
-        });
 
-        function clearWordHighlight() {
-            document.querySelectorAll('.word').forEach(el => {
-                el.classList.remove('active');
-            });
-        }
-
-        function highlightWord(index) {
-            clearWordHighlight();
-            if (index >= 0) {
-                const el = document.getElementById(`word-${index}`);
-                if (el) {
-                    el.classList.add('active');
-                    el.classList.add('completed');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            // 高亮當前單字
+            if (index < wordElements.length) {
+                wordElements[index].classList.add('active');
+                console.log('高亮:', index, wordElements[index].textContent);
             }
         }
 
+        // 朗讀
         function speakText() {
-            if (isPlaying) return;
-
-            if (currentWordIndex >= document.querySelectorAll('.word').length) {
-                currentWordIndex = 0;
-                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            if (synth.speaking) {
+                synth.cancel();
             }
 
-            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-            let textToSpeak = "";
-            let wordCount = 0;
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
 
-            for (let i = 0; i < allTokens.length; i++) {
-                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
-                    if (wordCount >= currentWordIndex) {
-                        textToSpeak += allTokens[i] + ' ';
-                    }
-                    wordCount++;
-                } else if (wordCount >= currentWordIndex) {
-                    textToSpeak += allTokens[i] + ' ';
+            // 重置
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+
+            // 將長文本切割為較短的句子，避免文字過長導致 Web Speech API 停止發音
+            const chunks = storyText.match(/[^.!?。！？]+[.!?。！？]*/g) || [storyText];
+
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            const rate = parseFloat(document.getElementById('rateSlider').value);
+            const pitch = parseFloat(document.getElementById('pitchSlider').value);
+            const volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let boundarySupported = false;
+            let currentOffsetWords = 0;
+            let utterances = [];
+
+            chunks.forEach((chunkText) => {
+                const chunkOffset = currentOffsetWords;
+                // 計算這個 chunk 有幾個有效單字
+                const chunkWords = chunkText.trim().split(/\s+/).filter(w => w.length > 0).length;
+                currentOffsetWords += chunkWords;
+
+                if (chunkWords === 0 && chunkText.trim() === '') return;
+
+                const utterance = new SpeechSynthesisUtterance(chunkText);
+                if (voices[voiceIndex]) {
+                    utterance.voice = voices[voiceIndex];
                 }
-            }
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+                utterance.volume = volume;
 
-            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        boundarySupported = true;
+                        const textBeforeWord = chunkText.substring(0, event.charIndex);
+                        const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0).length;
+                        const wordIndex = chunkOffset + wordsBefore;
 
-            const selectedVoiceName = document.getElementById('voiceSelect').value;
-            const voices = speechSynthesis.getVoices();
-            const voice = voices.find(v => v.name === selectedVoiceName);
-            if (voice) {
-                speechUtterance.voice = voice;
-            }
+                        if (wordIndex < wordElements.length) {
+                            highlightWord(wordIndex);
+                            console.log('Boundary 事件 - 高亮單字:', wordIndex, wordElements[wordIndex]?.textContent);
+                        }
+                    }
+                });
 
-            const rawRate = parseFloat(document.getElementById('rateSlider').value);
-            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
-                speechUtterance.rate = rawRate * 0.5;
+                utterances.push(utterance);
+            });
+
+            if (utterances.length > 0) {
+                utterances[utterances.length - 1].onend = function () {
+                    if (highlightTimer) clearInterval(highlightTimer);
+                    setTimeout(() => {
+                        wordElements.forEach(w => w.classList.remove('active', 'completed'));
+                    }, 500);
+                    console.log('朗讀完成');
+                };
             } else {
-                speechUtterance.rate = rawRate;
+                return;
             }
 
-            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
-            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            // 依序加入佇列朗讀
+            utterances.forEach(u => synth.speak(u));
 
-            let startTime = 0;
-            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
-            let wordCountForTracking = currentWordIndex;
+            // 備用方案：如果 boundary 不支援，使用定時器
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    console.log('使用定時器備用方案，調整係數:', timingAdjustment);
+                    const rateValue = rate;
+                    // 基礎時間計算
+                    const baseMs = 60000 / (150 * rateValue);
+                    // 套用調整係數
+                    const msPerWord = baseMs * timingAdjustment;
 
-            speechUtterance.onstart = () => {
-                isPlaying = true;
-                startTime = Date.now();
-                accumulatedTime = 0;
+                    console.log('每個單字間隔:', msPerWord.toFixed(0), 'ms');
 
-                if (checkInterval) clearInterval(checkInterval);
-                checkInterval = setInterval(() => {
-                    if (!isPlaying) return;
+                    // 立即高亮第一個單字
+                    currentIndex = 0;
+                    highlightWord(0);
 
-                    const estimatedWordDuration = 300 / rawRate * timingFactor;
-                    const elapsed = Date.now() - startTime;
-                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+                    let nextWordIndex = 1;
 
-                    const maxWord = document.querySelectorAll('.word').length - 1;
-                    if (estimatedWordIndex <= maxWord) {
-                        highlightWord(estimatedWordIndex);
-                        wordCountForTracking = estimatedWordIndex;
-                    }
-                }, 200);
-            };
-
-            speechUtterance.onboundary = (event) => {
-                if (event.name === 'word') { }
-            };
-
-            speechUtterance.onend = () => {
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-                clearWordHighlight();
-                currentWordIndex = 0;
-            };
-
-            speechUtterance.onerror = (e) => {
-                console.error("Speech error", e);
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-            };
-
-            speechSynthesis.speak(speechUtterance);
-        }
-
-        function stopSpeaking() {
-            speechSynthesis.cancel();
-            isPlaying = false;
-            if (checkInterval) clearInterval(checkInterval);
-
-            const activeEl = document.querySelector('.word.active');
-            if (activeEl) {
-                const id = activeEl.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-            }
-            clearWordHighlight();
-        }
-
-        document.getElementById('storyContainer').addEventListener('click', (e) => {
-            if (e.target.classList.contains('word')) {
-                const id = e.target.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-                if (isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 200);
-                } else {
-                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
-                    for (let i = 0; i < currentWordIndex; i++) {
-                        document.getElementById(`word-${i}`).classList.add('completed');
-                    }
-                    highlightWord(currentWordIndex);
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) {
+                            if (nextWordIndex >= currentIndex) {
+                                highlightWord(nextWordIndex);
+                            }
+                            nextWordIndex++;
+                        } else if (!synth.speaking) {
+                            clearInterval(highlightTimer);
+                        }
+                    }, msPerWord);
                 }
+            }, 300);
+        }
+
+        // 停止
+        function stopSpeaking() {
+            if (synth.speaking) {
+                synth.cancel();
             }
-        });
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        // 分頁切換
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 頁面載入時初始化
+        window.onload = initText;
     </script>
+
 </body>
 
 </html>

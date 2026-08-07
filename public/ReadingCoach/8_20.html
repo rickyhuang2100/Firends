@@ -824,237 +824,243 @@
         crossorigin="anonymous" async>
         </script>
     <script>
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let wordElements = [];
+        let currentIndex = 0;
+        let highlightTimer = null;
+        let timingAdjustment = 1.5; // 時間調整係數，預設 1.5 讓高亮快一點
+
         const storyText = `China is one of the world’s oldest civilizations. Historians know that Chinese history dates back to at least 2000 B.C.—nearly 4000 years before the United States became a country! However, China has not always been the country we know today. In fact, throughout its history, parts of the country were under the control of various kingdoms and warlords, and the different parts of the country were not united, but rather fought against each other for land. It wasn’t until 221 B.C. that an emperor united various kingdoms to form the first Chinese empire. This began the reign of the Qin Dynasty, which only lasted until 206 B.C. A “dynasty” is a sequence of rulers from the same family. Eras in Chinese history are named by the dynasty that ruled over the country during that period. Since China was unified, it was ruled by more than a dozen dynasties, each of which helped China grow and advance to become the country we know today. Two of the most important dynasties were the Tang Dynasty and the Song Dynasty. Under the rule of these two dynasties, China saw significant technological and commercial developments which helped the country prosper and grow. Many of these developments made an impact outside China’s borders as well, helping civilizations around the world. The Tang Dynasty started ruling in 618 A.D. Scholars generally believe the Tang Dynasty was one of the high points of Chinese civilization. One of the most influential technological innovations of the Tang Dynasty was woodblock printing. Woodblock printing is a technique for printing text, images or patterns. It involves cutting away at a block of wood until a pattern is created. The block could then be covered with ink, and applied to a paper or cloth to create the print. Woodblock printing made it possible for books to be more widely available to the general public. Literacy rates and social mobility increased, and more people from the lower classes were able to pass the examinations to gain entrance into the civil service. Woodblock printing was the most widely used form of printing in East Asia until the 19th century, when the European mechanical printing press became more popular. The Tang Dynasty was also a high point for China for trade with the outside world. During this period, the Chinese conducted trade by land using the Silk Road, and maritime trade at sea. The Silk Road is the name of an ancient trading route that extended from Europe, through many countries in Asia, all the way to China. It was named the Silk Road because silk was the main item traded along the route from China. While the trading route was established centuries before the Tang Dynasty, it had been closed at some point, until the Tang Dynasty reopened it. During this period, the Chinese also increased their maritime presence in the Persian Gulf and the Red Sea. Thanks to the increased trade, the Chinese gained many new technologies, cultural practices, and luxury items from the 70 (or more!) countries it traded with. Buddhism and Islam also came to China through trade with India and the Middle East, and Buddhism became an especially important and influential religion during this period. At this height of trade and culture, China also attracted thousands of people from foreign countries who wanted to live and trade in China, bringing diverse culture and wealth to the country. The period after the fall of the Tang Dynasty was filled with chaos, and the country rapidly changed hands between several different regimes. In 960 A.D., the Song Dynasty took power. In the eyes of scholars, the Song Dynasty also ranks with the Tang Dynasty in terms of economic growth, artistic and intellectual achievement. The time under the Song Dynasty is sometimes regarded as the start of the industrial revolution in China. The economy of China during this period was one of the most prosperous and advanced in the entire world. The iron industry grew more than six fold during this period, and China continued to be an important figure in world trade, bringing iron, silk, porcelain, textiles and much more to its trading partners. However, the most important advancement during this time was the establishment of the world’s first government-issued paper money. The Song rulers created factories in several cities, employing thousands of workers just to print paper money. Today, paper currency can be seen in countries all around the world. During this period, the Chinese also made progress in weapons technology. According to scholars, the Chinese may have invented gunpowder during an earlier dynasty, but it was during the Song dynasty that it really came to prominence. The Chinese used gunpowder to create flamethrowers, grenades, cannons, firearms and land mines. By the thirteenth century, these developments had reached Europe, India and the Middle East. There were also significant developments in mathematics, astronomy, cartography, architecture, and virtually every other field of study during this golden age of the Chinese empire. It was also during this period that the Chinese discovered a compass could be used to discern which way was north. This discovery became crucial in maritime navigation, and it is still important to us today. The Song Dynasty struggled with Mongol invaders during its reign, and ultimately fell to invading forces in 1279 A.D. Combined, the Tang and Song Dynasties span just a little more than 600 years. Considering how long Chinese civilization has existed, this is just a small fraction of that time. However, during these two eras, Chinese civilization made enormous technological and commercial advancements. Without many of these advancements, the world we know today might be quite different.`;
 
-        let currentWordIndex = 0;
-        let isPlaying = false;
-        let words = [];
-        let speechUtterance = null;
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let accumulatedTime = 0;
-        let checkInterval = null;
+        // 初始化文字
+        function initText() {
+            const container = document.getElementById('storyContainer');
+            const lines = storyText.split('\n');
 
+            lines.forEach((line, lineIndex) => {
+                if (line.trim() === '') {
+                    container.appendChild(document.createElement('br'));
+                    return;
+                }
+
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    if (word.trim()) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = word;
+                        container.appendChild(span);
+                        wordElements.push(span);
+
+                        // 單字之間加空格
+                        if (wordIndex < words.length - 1) {
+                            container.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+
+                // 行尾換行
+                if (lineIndex < lines.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+
+            console.log('初始化完成，總單字數:', wordElements.length);
+        }
+
+        // 載入語音
         function loadVoices() {
-            const voiceSelect = document.getElementById('voiceSelect');
-            let voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                setTimeout(loadVoices, 100);
+            voices = synth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                select.appendChild(option);
+
+                if (voice.lang.startsWith('zh-TW')) {
+                    select.selectedIndex = i;
+                }
+            });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        // 滑桿更新
+        document.getElementById('rateSlider').oninput = function () {
+            document.getElementById('rateValue').textContent = this.value;
+        };
+        document.getElementById('pitchSlider').oninput = function () {
+            document.getElementById('pitchValue').textContent = this.value;
+        };
+        document.getElementById('volumeSlider').oninput = function () {
+            document.getElementById('volumeValue').textContent = this.value;
+        };
+        document.getElementById('timingSlider').oninput = function () {
+            timingAdjustment = parseFloat(this.value);
+            document.getElementById('timingValue').textContent = this.value;
+        };
+
+        // 高亮單字
+        function highlightWord(index) {
+            // 只允許往前或保持，不允許往回
+            if (index < currentIndex) {
+                console.log('忽略往回的高亮請求:', index, '當前:', currentIndex);
                 return;
             }
 
-            voiceSelect.innerHTML = '';
-            const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+            currentIndex = index;
 
-            if (isAppleDevice) {
-                const macVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Alex') || v.name.includes('Daniel') || v.name.includes('Victoria') || v.name.includes('Fred')));
-                macVoices.forEach(voice => {
-                    const option = document.createElement('option');
-                    option.value = voice.name;
-                    option.textContent = `${voice.name} (${voice.lang})`;
-                    voiceSelect.appendChild(option);
-                });
-            } else {
-                const windowsVoices = voices.filter(v => v.lang.includes('en') && (v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Mark')));
-                if (windowsVoices.length > 0) {
-                    windowsVoices.forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                } else {
-                    voices.filter(v => v.lang.startsWith('en')).forEach(voice => {
-                        const option = document.createElement('option');
-                        option.value = voice.name;
-                        option.textContent = `${voice.name} (${voice.lang})`;
-                        voiceSelect.appendChild(option);
-                    });
-                }
-            }
-        }
-
-        speechSynthesis.onvoiceschanged = loadVoices;
-        loadVoices();
-
-        function showTab(event, tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function initializeText() {
-            const container = document.getElementById('storyContainer');
-            container.innerHTML = '';
-
-            words = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-
-            let html = '';
-            let currentWordCount = 0;
-
-            for (let i = 0; i < words.length; i++) {
-                const token = words[i];
-                if (/^[a-zA-Z0-9]/.test(token)) {
-                    html += `<span class="word" id="word-${currentWordCount}">${token}</span>`;
-                    currentWordCount++;
-                } else {
-                    html += token;
-                }
-
-                if (i < words.length - 1 && !/^[.,!?]/.test(words[i + 1])) {
-                    html += ' ';
-                }
-            }
-            container.innerHTML = html;
-        }
-
-        initializeText();
-
-        document.querySelectorAll('input[type="range"]').forEach(slider => {
-            slider.addEventListener('input', (e) => {
-                document.getElementById(e.target.id.replace('Slider', 'Value')).textContent = e.target.value;
-                if (e.target.id === 'rateSlider' && isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 100);
+            // 清除所有樣式
+            wordElements.forEach((word, i) => {
+                word.classList.remove('active', 'completed');
+                if (i < index) {
+                    word.classList.add('completed');
                 }
             });
-        });
 
-        function clearWordHighlight() {
-            document.querySelectorAll('.word').forEach(el => {
-                el.classList.remove('active');
-            });
-        }
-
-        function highlightWord(index) {
-            clearWordHighlight();
-            if (index >= 0) {
-                const el = document.getElementById(`word-${index}`);
-                if (el) {
-                    el.classList.add('active');
-                    el.classList.add('completed');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            // 高亮當前單字
+            if (index < wordElements.length) {
+                wordElements[index].classList.add('active');
+                console.log('高亮:', index, wordElements[index].textContent);
             }
         }
 
+        // 朗讀
         function speakText() {
-            if (isPlaying) return;
-
-            if (currentWordIndex >= document.querySelectorAll('.word').length) {
-                currentWordIndex = 0;
-                document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
+            if (synth.speaking) {
+                synth.cancel();
             }
 
-            const allTokens = storyText.match(/[a-zA-Z0-9]+['’]?[a-zA-Z0-9]*|[^a-zA-Z0-9\s]+/g) || [];
-            let textToSpeak = "";
-            let wordCount = 0;
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
 
-            for (let i = 0; i < allTokens.length; i++) {
-                if (/^[a-zA-Z0-9]/.test(allTokens[i])) {
-                    if (wordCount >= currentWordIndex) {
-                        textToSpeak += allTokens[i] + ' ';
-                    }
-                    wordCount++;
-                } else if (wordCount >= currentWordIndex) {
-                    textToSpeak += allTokens[i] + ' ';
+            // 重置
+            currentIndex = 0;
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+
+            // 將長文本切割為較短的句子，避免文字過長導致 Web Speech API 停止發音
+            const chunks = storyText.match(/[^.!?。！？]+[.!?。！？]*/g) || [storyText];
+
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            const rate = parseFloat(document.getElementById('rateSlider').value);
+            const pitch = parseFloat(document.getElementById('pitchSlider').value);
+            const volume = parseFloat(document.getElementById('volumeSlider').value);
+
+            let boundarySupported = false;
+            let currentOffsetWords = 0;
+            let utterances = [];
+
+            chunks.forEach((chunkText) => {
+                const chunkOffset = currentOffsetWords;
+                // 計算這個 chunk 有幾個有效單字
+                const chunkWords = chunkText.trim().split(/\s+/).filter(w => w.length > 0).length;
+                currentOffsetWords += chunkWords;
+
+                if (chunkWords === 0 && chunkText.trim() === '') return;
+
+                const utterance = new SpeechSynthesisUtterance(chunkText);
+                if (voices[voiceIndex]) {
+                    utterance.voice = voices[voiceIndex];
                 }
-            }
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+                utterance.volume = volume;
 
-            speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.addEventListener('boundary', (event) => {
+                    if (event.name === 'word') {
+                        boundarySupported = true;
+                        const textBeforeWord = chunkText.substring(0, event.charIndex);
+                        const wordsBefore = textBeforeWord.trim().split(/\s+/).filter(w => w.length > 0).length;
+                        const wordIndex = chunkOffset + wordsBefore;
 
-            const selectedVoiceName = document.getElementById('voiceSelect').value;
-            const voices = speechSynthesis.getVoices();
-            const voice = voices.find(v => v.name === selectedVoiceName);
-            if (voice) {
-                speechUtterance.voice = voice;
-            }
+                        if (wordIndex < wordElements.length) {
+                            highlightWord(wordIndex);
+                            console.log('Boundary 事件 - 高亮單字:', wordIndex, wordElements[wordIndex]?.textContent);
+                        }
+                    }
+                });
 
-            const rawRate = parseFloat(document.getElementById('rateSlider').value);
-            if (isMobile || /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
-                speechUtterance.rate = rawRate * 0.5;
+                utterances.push(utterance);
+            });
+
+            if (utterances.length > 0) {
+                utterances[utterances.length - 1].onend = function () {
+                    if (highlightTimer) clearInterval(highlightTimer);
+                    setTimeout(() => {
+                        wordElements.forEach(w => w.classList.remove('active', 'completed'));
+                    }, 500);
+                    console.log('朗讀完成');
+                };
             } else {
-                speechUtterance.rate = rawRate;
+                return;
             }
 
-            speechUtterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
-            speechUtterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            // 依序加入佇列朗讀
+            utterances.forEach(u => synth.speak(u));
 
-            let startTime = 0;
-            const timingFactor = parseFloat(document.getElementById('timingSlider').value);
-            let wordCountForTracking = currentWordIndex;
+            // 備用方案：如果 boundary 不支援，使用定時器
+            setTimeout(() => {
+                if (!boundarySupported) {
+                    console.log('使用定時器備用方案，調整係數:', timingAdjustment);
+                    const rateValue = rate;
+                    // 基礎時間計算
+                    const baseMs = 60000 / (150 * rateValue);
+                    // 套用調整係數
+                    const msPerWord = baseMs * timingAdjustment;
 
-            speechUtterance.onstart = () => {
-                isPlaying = true;
-                startTime = Date.now();
-                accumulatedTime = 0;
+                    console.log('每個單字間隔:', msPerWord.toFixed(0), 'ms');
 
-                if (checkInterval) clearInterval(checkInterval);
-                checkInterval = setInterval(() => {
-                    if (!isPlaying) return;
+                    // 立即高亮第一個單字
+                    currentIndex = 0;
+                    highlightWord(0);
 
-                    const estimatedWordDuration = 300 / rawRate * timingFactor;
-                    const elapsed = Date.now() - startTime;
-                    const estimatedWordIndex = currentWordIndex + Math.floor(elapsed / estimatedWordDuration);
+                    let nextWordIndex = 1;
 
-                    const maxWord = document.querySelectorAll('.word').length - 1;
-                    if (estimatedWordIndex <= maxWord) {
-                        highlightWord(estimatedWordIndex);
-                        wordCountForTracking = estimatedWordIndex;
-                    }
-                }, 200);
-            };
-
-            speechUtterance.onboundary = (event) => {
-                if (event.name === 'word') { }
-            };
-
-            speechUtterance.onend = () => {
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-                clearWordHighlight();
-                currentWordIndex = 0;
-            };
-
-            speechUtterance.onerror = (e) => {
-                console.error("Speech error", e);
-                isPlaying = false;
-                if (checkInterval) clearInterval(checkInterval);
-            };
-
-            speechSynthesis.speak(speechUtterance);
-        }
-
-        function stopSpeaking() {
-            speechSynthesis.cancel();
-            isPlaying = false;
-            if (checkInterval) clearInterval(checkInterval);
-
-            const activeEl = document.querySelector('.word.active');
-            if (activeEl) {
-                const id = activeEl.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-            }
-            clearWordHighlight();
-        }
-
-        document.getElementById('storyContainer').addEventListener('click', (e) => {
-            if (e.target.classList.contains('word')) {
-                const id = e.target.id.split('-')[1];
-                currentWordIndex = parseInt(id);
-                if (isPlaying) {
-                    stopSpeaking();
-                    setTimeout(speakText, 200);
-                } else {
-                    document.querySelectorAll('.word').forEach(el => el.classList.remove('completed'));
-                    for (let i = 0; i < currentWordIndex; i++) {
-                        document.getElementById(`word-${i}`).classList.add('completed');
-                    }
-                    highlightWord(currentWordIndex);
+                    highlightTimer = setInterval(() => {
+                        if (nextWordIndex < wordElements.length && synth.speaking) {
+                            if (nextWordIndex >= currentIndex) {
+                                highlightWord(nextWordIndex);
+                            }
+                            nextWordIndex++;
+                        } else if (!synth.speaking) {
+                            clearInterval(highlightTimer);
+                        }
+                    }, msPerWord);
                 }
+            }, 300);
+        }
+
+        // 停止
+        function stopSpeaking() {
+            if (synth.speaking) {
+                synth.cancel();
             }
-        });
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+            }
+            wordElements.forEach(w => w.classList.remove('active', 'completed'));
+        }
+
+        // 分頁切換
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 頁面載入時初始化
+        window.onload = initText;
     </script>
+
 </body>
 
 </html>
