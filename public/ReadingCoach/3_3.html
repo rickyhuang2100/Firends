@@ -355,6 +355,202 @@
             border-color: #ef5350 !important;
             color: #d32f2f !important;
         }
+
+        /* Knowledge Graph / Learning Map Styles */
+        .tab-knowledge {
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab.active.tab-knowledge {
+            box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .kg-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 10px;
+        }
+
+        .kg-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .kg-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kg-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.1);
+        }
+
+        .kg-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .kg-card-blue::before {
+            background: linear-gradient(to bottom, #2196F3, #64b5f6);
+        }
+
+        .kg-card-green::before {
+            background: linear-gradient(to bottom, #4CAF50, #81c784);
+        }
+
+        .kg-card-purple::before {
+            background: linear-gradient(to bottom, #9c27b0, #ba68c8);
+        }
+
+        .kg-card-orange::before {
+            background: linear-gradient(to bottom, #ff9800, #ffb74d);
+        }
+
+        .kg-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #333;
+        }
+
+        .kg-node-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .kg-node-list::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .kg-node {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+            transition: border-color 0.2s;
+        }
+
+        .kg-node:hover {
+            border-color: #bbdefb;
+        }
+
+        .kg-node-icon {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            background: #ccc;
+        }
+
+        .kg-node-past .kg-node-icon {
+            background: #9e9e9e;
+        }
+
+        .kg-node-current .kg-node-icon {
+            background: #4CAF50;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.2);
+        }
+
+        .kg-node-future .kg-node-icon {
+            background: #2196F3;
+        }
+
+        .kg-node-content {
+            flex: 1;
+        }
+
+        .kg-node-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .kg-node-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .kg-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .kg-tag-ai {
+            background: #e8eaf6;
+            color: #3f51b5;
+            border: 1px solid #c5cae9;
+        }
+
+        .kg-ai-box {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px dashed #cfd8dc;
+            text-align: center;
+        }
+
+        .kg-ai-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kg-ai-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
     </style>
 </head>
 
@@ -390,8 +586,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
-                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧
-                    聽音重組</button>
+                <button type="button" class="tab tab-knowledge" onclick="showTab(event, 'learning-map')">🧠 Learning Map</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -568,6 +764,111 @@
                     </ol>
                 </div>
             </div>
+            <!-- 知識圖譜分頁 -->
+            <div id="learning-map" class="tab-content">
+                <div class="kg-container">
+                    <div class="kg-ai-box">
+                        <h3 style="color: #4a148c; margin-bottom: 10px;">🤖 ReadingCoach Knowledge OS</h3>
+                        <p style="color: #555; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                            這不僅是一篇課文，而是您英語知識網路的其中一個節點。AI 已經自動將本課的觀念與相關的學習歷程連結起來了！
+                        </p>
+                    </div>
+
+                    <div class="kg-row">
+                        <!-- 跨課文關聯 -->
+                        <div class="kg-card kg-card-blue">
+                            <div class="kg-title">🔗 跨課文概念連結 (Topics)</div>
+                            <div class="kg-node-list">
+                                <div class="kg-node kg-node-past">
+                                    <div class="kg-node-icon">3.2</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="3_2.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">A Camping Trip</a></div>
+                                        <div class="kg-node-desc">先備經驗：從大自然露營的經歷，延伸到對自然環境的觀察。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-current">
+                                    <div class="kg-node-icon">3.3</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title">What Do Plants Need? (本課)</div>
+                                        <div class="kg-node-desc">核心課題：植物的生長要素、光合作用的科學原理。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-future">
+                                    <div class="kg-node-icon">6.21</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="6_21.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">The Water Cycle</a></div>
+                                        <div class="kg-node-desc">AI 推薦延伸：從植物需要水，延伸學習地球的水循環。</div>
+                                        <span class="kg-tag kg-tag-ai">✨ AI 推薦進階課程</span>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-future">
+                                    <div class="kg-node-icon">💭</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="https://github.com/rickyhuang2100/course-discussions/discussions" target="_blank"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">Join the Discussion!</a></div>
+                                        <div class="kg-node-desc">目前尚未有同學在討論區分享他們的「種植經驗」或「植物觀察點子」。趕快到底部 Giscus 留言，你的想法有機會成為下一個 AI 推薦節點！</div>
+                                        <span class="kg-tag kg-tag-ai">✨ AI 社群互動</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 文法追蹤軌跡 -->
+                        <div class="kg-card kg-card-green">
+                            <div class="kg-title">📈 文法追蹤 (Grammar Journey)</div>
+                            <div class="kg-node-list">
+                                <div class="kg-node kg-node-past">
+                                    <div class="kg-node-icon">1.4</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title">初階用法 (keep + O. + adj.)</div>
+                                        <div class="kg-node-desc">初次認識 "keep" 搭配形容詞，表示「保持...狀態」，例如 keep it clean。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-current">
+                                    <div class="kg-node-icon">3.3</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title">進階分詞 (keep + O. + V-ed)</div>
+                                        <div class="kg-node-desc">"keep a plant attached" 學習使用過去分詞 (attached) 來表示被動或固定的狀態。</div>
+                                    </div>
+                                </div>
+                                <div class="kg-node kg-node-future">
+                                    <div class="kg-node-icon">8.5</div>
+                                    <div class="kg-node-content">
+                                        <div class="kg-node-title"><a href="8_5.html"
+                                                style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">Keeping the Lions Away</a>
+                                        </div>
+                                        <div class="kg-node-desc">解鎖高階課程中 "keep" 搭配複雜受詞來保護家畜免受獅子攻擊的進階語境。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kg-row">
+                        <!-- 單字語境演化 -->
+                        <div class="kg-card kg-card-purple">
+                            <div class="kg-title">🌱 單字演化 (Vocab Matrix)</div>
+                            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <strong style="color: #6a1b9a; font-size: 16px;">energy (名詞)</strong>
+                                <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="font-size: 14px; border-left: 3px solid #ccc; padding-left: 10px;">
+                                        <span style="color: #666; font-size: 12px;">日常用語 (活力)</span><br>
+                                        I have a lot of <strong>energy</strong> today. (指人的精神或活力)
+                                    </div>
+                                    <div
+                                        style="font-size: 14px; border-left: 3px solid #ab47bc; padding-left: 10px; background: white; padding: 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                        <span style="color: #9c27b0; font-size: 12px; font-weight: bold;">本課 3.3 (科學能量)</span><br>
+                                        Leaves take in light <strong>energy</strong> from the sun. (物理科學上的能量/光能)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="reconstruction" class="tab-content">
                 <div class="game-board">
                     <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
