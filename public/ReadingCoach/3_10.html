@@ -1,48 +1,378 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Bogotá, Colombia</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Bogotá, Colombia</h1>
+        <a href="3_10_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDlT-8DrNxlS5stnEZ8LAKEAUpT00dCv-KdJ8CD2I9R2Rw?e=gqqBPE"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -57,6 +387,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
@@ -71,52 +402,361 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">borders</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">與...相鄰、接壤</div></div>
-                    <div class="vocab-item"><div class="vocab-word">landscape</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">地形、風景</div></div>
-                    <div class="vocab-item"><div class="vocab-word">rainforest</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">雨林</div></div>
-                    <div class="vocab-item"><div class="vocab-word">capital</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">首都</div></div>
-                    <div class="vocab-item"><div class="vocab-word">altitude</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">海拔、高度</div></div>
-                    <div class="vocab-item"><div class="vocab-word">sea level</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">海平面</div></div>
-                    <div class="vocab-item"><div class="vocab-word">mountain sickness</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">高山症</div></div>
-                    <div class="vocab-item"><div class="vocab-word">millions</div><div class="vocab-type">[數詞]</div><div class="vocab-meaning">數百萬</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">borders</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">與...相鄰、接壤</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">landscape</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">地形、風景</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">rainforest</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">雨林</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">capital</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">首都</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">altitude</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">海拔、高度</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">sea level</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">海平面</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">mountain sickness</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">高山症</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">millions</div>
+                        <div class="vocab-type">[數詞]</div>
+                        <div class="vocab-meaning">數百萬</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. "That is because..." 那是因為</div><p>用來解釋原因：</p><div class="example"><span class="highlight">That is because</span> the city is on top of a mountain.<br>→ 那是因為這座城市在山頂上。</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "Because + S + V, S + V" 因為...所以...</div><p>說明因果關係：</p><div class="example"><span class="highlight">Because</span> it is so high up, sometimes people get sick.<br>→ 因為海拔太高，有時候人們會生病。</div></div>
-                <div class="grammar-box"><div class="grammar-title">3. 被動語態強調地理特徵</div><p>地理描述常用被動語態來介紹事實：</p><div class="example">A lot of the landscape in Colombia <span class="highlight">is</span> rainforest and jungle.<br>→ 哥倫比亞很多地形是雨林和叢林。</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "That is because..." 那是因為</div>
+                    <p>用來解釋原因：</p>
+                    <div class="example"><span class="highlight">That is because</span> the city is on top of a
+                        mountain.<br>→ 那是因為這座城市在山頂上。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "Because + S + V, S + V" 因為...所以...</div>
+                    <p>說明因果關係：</p>
+                    <div class="example"><span class="highlight">Because</span> it is so high up, sometimes people get
+                        sick.<br>→ 因為海拔太高，有時候人們會生病。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. 被動語態強調地理特徵</div>
+                    <p>地理描述常用被動語態來介紹事實：</p>
+                    <div class="example">A lot of the landscape in Colombia <span class="highlight">is</span> rainforest
+                        and jungle.<br>→ 哥倫比亞很多地形是雨林和叢林。</div>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: S + is a country in + 地區</strong><div class="example">Colombia <span class="highlight">is a country in</span> South America.<br>→ 介紹國家位置</div></div>
-                <div class="sentence-pattern"><strong>句型 2: S + is the capital of + 國家</strong><div class="example">Bogotá <span class="highlight">is the capital of</span> Colombia.<br>→ 介紹首都</div></div>
-                <div class="sentence-pattern"><strong>句型 3: It is + 數字 + above sea level</strong><div class="example">It is two miles <span class="highlight">above sea level</span>!<br>→ 描述海拔高度</div></div>
-                <div class="info-box"><strong>💡 地理描述常用表達</strong><ul><li>"borders the..." → 與...相鄰</li><li>"high altitude city" → 高海拔城市</li><li>"on top of a mountain" → 在山頂上</li><li>"get sick with" → 因...而生病</li></ul></div>
+                <div class="sentence-pattern"><strong>句型 1: S + is a country in + 地區</strong>
+                    <div class="example">Colombia <span class="highlight">is a country in</span> South America.<br>→
+                        介紹國家位置</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: S + is the capital of + 國家</strong>
+                    <div class="example">Bogotá <span class="highlight">is the capital of</span> Colombia.<br>→ 介紹首都
+                    </div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: It is + 數字 + above sea level</strong>
+                    <div class="example">It is two miles <span class="highlight">above sea level</span>!<br>→ 描述海拔高度
+                    </div>
+                </div>
+                <div class="info-box"><strong>💡 地理描述常用表達</strong>
+                    <ul>
+                        <li>"borders the..." → 與...相鄰</li>
+                        <li>"high altitude city" → 高海拔城市</li>
+                        <li>"on top of a mountain" → 在山頂上</li>
+                        <li>"get sick with" → 因...而生病</li>
+                    </ul>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：地理介紹</strong><p><strong>國家概況：</strong>哥倫比亞在南美洲，有雨林和叢林</p><p><strong>城市特色：</strong>波哥大是首都，海拔非常高</p><p><strong>特殊現象：</strong>高山症和特別的茶</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Where is Colombia? (哥倫比亞在哪裡？)</li><li>What language do people speak in Colombia? (哥倫比亞人說什麼語言？)</li><li>Why is Bogotá a high altitude city? (為什麼波哥大是高海拔城市？)</li><li>What do people drink for mountain sickness? (人們喝什麼來緩解高山症？)</li></ol></div>
+                <div class="info-box"><strong>文章結構：地理介紹</strong>
+                    <p><strong>國家概況：</strong>哥倫比亞在南美洲，有雨林和叢林</p>
+                    <p><strong>城市特色：</strong>波哥大是首都，海拔非常高</p>
+                    <p><strong>特殊現象：</strong>高山症和特別的茶</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>Where is Colombia? (哥倫比亞在哪裡？)</li>
+                        <li>What language do people speak in Colombia? (哥倫比亞人說什麼語言？)</li>
+                        <li>Why is Bogotá a high altitude city? (為什麼波哥大是高海拔城市？)</li>
+                        <li>What do people drink for mountain sickness? (人們喝什麼來緩解高山症？)</li>
+                    </ol>
+                </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;"
+                            onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;"
+                            onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)"
+                            style="background-color: #2196F3; padding: 8px 15px;">
+                            🔊 聽整句
+                        </button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint"
+                            style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()"
+                            style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Bogotá, Colombia\n\nColombia is a country in South America. It borders the Caribbean Sea. A lot of the landscape in Colombia is rainforest and jungle. The mountains are very green. It rains a lot in Colombia. People in Colombia speak Spanish.\n\nBogotá is the capital of Colombia. There are millions of people that live in Bogotá. It is a very high altitude city. That is because the city is on top of a mountain. It is two miles above sea level! Because it is so high up in the air, sometimes people get sick with "mountain sickness." There is a special tea in Bogotá that people drink to help them with mountain sickness.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Colombia is a country in South America.",
+                zh: "哥倫比亞是南美洲的一個國家。",
+                chunks: ["colombia is", "a country in", "south america"],
+                reviewData: [
+                    { chunk: "a country in", meaning: "在...的一個國家", collocation: "a country in Europe", synonym: "a nation located in", pronunciation: "country 的 ry 與 in 的 i 連讀為 /kʌntri ɪn/。" }
+                ]
+            },
+            {
+                en: "A lot of the landscape in Colombia is rainforest and jungle.",
+                zh: "哥倫比亞的很多地形是雨林和叢林。",
+                chunks: ["a lot of the landscape", "in colombia is", "rainforest and jungle"],
+                reviewData: [
+                    { chunk: "a lot of", meaning: "很多的", collocation: "a lot of time", synonym: "many / much", pronunciation: "lot 的 t 變為閃音 (flap t)，與 of 連讀為 /ə lɑd əv/。" },
+                    { chunk: "rainforest and jungle", meaning: "雨林和叢林", collocation: "explore the rainforest and jungle", synonym: "tropical forest and wilderness", pronunciation: "rainforest 的 st 常弱化，and 弱讀為 /ən/ 與 jungle 連著唸。" }
+                ]
+            },
+            {
+                en: "It is a very high altitude city.",
+                zh: "它是一個海拔非常高的城市。",
+                chunks: ["it is a very", "high altitude city"],
+                reviewData: [
+                    { chunk: "it is a very", meaning: "它是一個非常...", collocation: "it is a very beautiful place", synonym: "it's an extremely", pronunciation: "it 的 t 變成閃音與 is 連讀，is 的 s 發 /z/ 與 a 連讀：/ɪdɪzə/。" },
+                    { chunk: "high altitude", meaning: "高海拔", collocation: "high altitude training", synonym: "great elevation", pronunciation: "high 的結尾母音與 altitude 的母音輕輕滑過。" }
+                ]
+            },
+            {
+                en: "That is because the city is on top of a mountain.",
+                zh: "那是因為這座城市在山頂上。",
+                chunks: ["that is because", "the city is", "on top of a mountain"],
+                reviewData: [
+                    { chunk: "that is because", meaning: "那是因為", collocation: "that is because I like it", synonym: "the reason is that", pronunciation: "that 的 t 變成閃音，與 is 連讀為 /ðædɪz/。" },
+                    { chunk: "on top of", meaning: "在...的頂端", collocation: "on top of the world", synonym: "at the peak of", pronunciation: "top 的 p 與 of 連讀，of 的 f 常發 /v/ 音，甚至微弱。" }
+                ]
+            },
+            {
+                en: "Because it is so high up in the air, sometimes people get sick with mountain sickness.",
+                zh: "因為海拔太高了，有時候人們會得到高山症。",
+                chunks: ["because it is", "so high up in the air", "sometimes people get sick", "with mountain sickness"],
+                reviewData: [
+                    { chunk: "high up in the air", meaning: "在很高的空中 (高海拔)", collocation: "fly high up in the air", synonym: "at a high elevation", pronunciation: "up 的 p 與 in 連讀為 /ʌpɪn/。" },
+                    { chunk: "get sick with", meaning: "因為...而生病", collocation: "get sick with the flu", synonym: "fall ill from", pronunciation: "sick 的 k 遇到 with 的 w 會有點停頓再滑過去。" },
+                    { chunk: "mountain sickness", meaning: "高山症", collocation: "suffer from mountain sickness", synonym: "altitude sickness", pronunciation: "mountain 的 t 常發為喉塞音 (glottal stop)，聽起來像 /maʊn.ən/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
+
 </html>

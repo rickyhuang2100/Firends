@@ -1,48 +1,378 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Haiku</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Haiku</h1>
+        <a href="3_11_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCwyysO9ycNTqd8PAYrxuebAY6HiF7Edaia0pgfFjl_ptg?e=PVGKLr"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -57,6 +387,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
@@ -75,52 +406,362 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">poets</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">詩人</div></div>
-                    <div class="vocab-item"><div class="vocab-word">syllables</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">音節</div></div>
-                    <div class="vocab-item"><div class="vocab-word">expresses</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">表達</div></div>
-                    <div class="vocab-item"><div class="vocab-word">translation</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">翻譯</div></div>
-                    <div class="vocab-item"><div class="vocab-word">century</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">世紀</div></div>
-                    <div class="vocab-item"><div class="vocab-word">contests</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">比賽</div></div>
-                    <div class="vocab-item"><div class="vocab-word">nature</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">大自然</div></div>
-                    <div class="vocab-item"><div class="vocab-word">topic</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">主題</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">poets</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">詩人</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">syllables</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">音節</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">expresses</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">表達</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">translation</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">翻譯</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">century</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">世紀</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">contests</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">比賽</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">nature</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">大自然</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">topic</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">主題</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. "These...are called..." 這些...被稱為</div><p>用被動語態來介紹專有名詞：</p><div class="example"><span class="highlight">These</span> short poems <span class="highlight">are called</span> haiku.<br>→ 這些短詩被稱為俳句。</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "Since + 時間, S + has/have been" 自從...以來</div><p>現在完成式表示從過去持續到現在：</p><div class="example"><span class="highlight">Since</span> the 17th century, haiku <span class="highlight">has been</span> the most popular kind of poetry.<br>→ 自17世紀以來，俳句一直是最受歡迎的詩歌形式。</div></div>
-                <div class="grammar-box"><div class="grammar-title">3. "continues to be" 繼續是</div><p>表示持續不變的狀態：</p><div class="example">Nature <span class="highlight">continues to be</span> a popular topic.<br>→ 大自然仍然是一個熱門的主題。</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "These...are called..." 這些...被稱為</div>
+                    <p>用被動語態來介紹專有名詞：</p>
+                    <div class="example"><span class="highlight">These</span> short poems <span class="highlight">are
+                            called</span> haiku.<br>→ 這些短詩被稱為俳句。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "Since + 時間, S + has/have been" 自從...以來</div>
+                    <p>現在完成式表示從過去持續到現在：</p>
+                    <div class="example"><span class="highlight">Since</span> the 17th century, haiku <span
+                            class="highlight">has been</span> the most popular kind of poetry.<br>→
+                        自17世紀以來，俳句一直是最受歡迎的詩歌形式。</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "continues to be" 繼續是</div>
+                    <p>表示持續不變的狀態：</p>
+                    <div class="example">Nature <span class="highlight">continues to be</span> a popular topic.<br>→
+                        大自然仍然是一個熱門的主題。</div>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: S + expresses a lot by + V-ing</strong><div class="example">A haiku <span class="highlight">expresses a lot by using</span> few words.<br>→ 用很少的詞表達很多</div></div>
-                <div class="sentence-pattern"><strong>句型 2: Since + 時間, S + has been</strong><div class="example"><span class="highlight">Since the 17th century</span>, haiku <span class="highlight">has been</span> the most popular...<br>→ 自從...以來一直是</div></div>
-                <div class="sentence-pattern"><strong>句型 3: These days, S + can be about...</strong><div class="example"><span class="highlight">These days</span>, haiku <span class="highlight">can be about</span> anything.<br>→ 如今，...可以關於任何事</div></div>
-                <div class="info-box"><strong>💡 俳句小知識</strong><ul><li>俳句格式：5-7-5 音節</li><li>傳統主題：自然</li><li>最著名的俳句詩人：松尾芭蕉（Matsuo Basho）</li><li>現代俳句可以關於任何主題</li></ul></div>
+                <div class="sentence-pattern"><strong>句型 1: S + expresses a lot by + V-ing</strong>
+                    <div class="example">A haiku <span class="highlight">expresses a lot by using</span> few words.<br>→
+                        用很少的詞表達很多</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: Since + 時間, S + has been</strong>
+                    <div class="example"><span class="highlight">Since the 17th century</span>, haiku <span
+                            class="highlight">has been</span> the most popular...<br>→ 自從...以來一直是</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: These days, S + can be about...</strong>
+                    <div class="example"><span class="highlight">These days</span>, haiku <span class="highlight">can be
+                            about</span> anything.<br>→ 如今，...可以關於任何事</div>
+                </div>
+                <div class="info-box"><strong>💡 俳句小知識</strong>
+                    <ul>
+                        <li>俳句格式：5-7-5 音節</li>
+                        <li>傳統主題：自然</li>
+                        <li>最著名的俳句詩人：松尾芭蕉（Matsuo Basho）</li>
+                        <li>現代俳句可以關於任何主題</li>
+                    </ul>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：定義→歷史→現代</strong><p><strong>定義：</strong>俳句是日本短詩，三行（5-7-5音節）</p><p><strong>範例：</strong>松尾芭蕉的經典作品</p><p><strong>歷史：</strong>始於17世紀日本</p><p><strong>現代：</strong>全球流行，主題多元</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What is a haiku? (什麼是俳句？)</li><li>How many syllables does each line have? (每行有多少音節？)</li><li>Who was Matsuo Basho? (松尾芭蕉是誰？)</li><li>What are modern haiku about? (現代俳句關於什麼？)</li></ol></div>
+                <div class="info-box"><strong>文章結構：定義→歷史→現代</strong>
+                    <p><strong>定義：</strong>俳句是日本短詩，三行（5-7-5音節）</p>
+                    <p><strong>範例：</strong>松尾芭蕉的經典作品</p>
+                    <p><strong>歷史：</strong>始於17世紀日本</p>
+                    <p><strong>現代：</strong>全球流行，主題多元</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What is a haiku? (什麼是俳句？)</li>
+                        <li>How many syllables does each line have? (每行有多少音節？)</li>
+                        <li>Who was Matsuo Basho? (松尾芭蕉是誰？)</li>
+                        <li>What are modern haiku about? (現代俳句關於什麼？)</li>
+                    </ol>
+                </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;"
+                            onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;"
+                            onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)"
+                            style="background-color: #2196F3; padding: 8px 15px;">
+                            🔊 聽整句
+                        </button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint"
+                            style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()"
+                            style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Haiku\n\nGo outside. What do you see? Many poets write about what they see in nature. Long ago, some Japanese poets looked at nature and then wrote short poems. These short poems are called haiku.\n\nA haiku has three lines. Usually the first line has five syllables. The second line has seven syllables, and the third has five. A haiku expresses a lot by using few words. The picture above is a haiku in Japanese. Here's a translation of it:\n\nseas are wild tonight\n\nstretching over Sado Isle\n\nsilent clouds of stars\n\nThis haiku was written by a very famous Japanese haiku poet. His name was Matsuo Basho. He lived in the 17th century. Since the 17th century, haiku has been the most popular kind of poetry from Japan.\n\nToday, people all over the world write haiku. There are even haiku contests. What do people write about? These days, haiku can be about anything, but nature continues to be a popular topic.\n\npeople write haiku\n\nexpressing all that they see\n\nfew words say a lot`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Long ago, some Japanese poets looked at nature and then wrote short poems.",
+                zh: "很久以前，一些日本詩人觀察大自然，然後寫下短詩。",
+                chunks: ["long ago", "some japanese poets", "looked at nature", "and then wrote", "short poems"],
+                reviewData: [
+                    { chunk: "looked at nature", meaning: "觀察大自然", collocation: "looked at the beautiful nature", synonym: "observed nature", pronunciation: "looked 的 ed 發 /t/，與 at 連讀為 /lʊktæt/。" },
+                    { chunk: "short poems", meaning: "短詩", collocation: "wrote short poems", synonym: "brief poems", pronunciation: "short 的 t 常遇到 p 會不發音或輕輕帶過。" }
+                ]
+            },
+            {
+                en: "These short poems are called haiku.",
+                zh: "這些短詩被稱為俳句。",
+                chunks: ["these short poems", "are called haiku"],
+                reviewData: [
+                    { chunk: "are called", meaning: "被稱為", collocation: "they are called friends", synonym: "are named", pronunciation: "called 的 d 遇到 haiku 的 h 常弱化。" }
+                ]
+            },
+            {
+                en: "Usually the first line has five syllables.",
+                zh: "通常第一行有五個音節。",
+                chunks: ["usually", "the first line", "has five syllables"],
+                reviewData: [
+                    { chunk: "the first line", meaning: "第一行", collocation: "read the first line", synonym: "the initial line", pronunciation: "first 的 t 遇到 line 的 l 常會省略，聽起來像 /fɜːrslaɪn/。" }
+                ]
+            },
+            {
+                en: "A haiku expresses a lot by using few words.",
+                zh: "俳句用很少的詞表達很多。",
+                chunks: ["a haiku", "expresses a lot", "by using few words"],
+                reviewData: [
+                    { chunk: "expresses a lot", meaning: "表達很多", collocation: "it expresses a lot of feelings", synonym: "conveys much", pronunciation: "expresses 的 s 與 a 連讀為 /ɪkˈsprɛsɪzə/。" },
+                    { chunk: "by using", meaning: "藉由使用", collocation: "learn by using it", synonym: "through the use of", pronunciation: "by 的尾音與 using 連著唸。" }
+                ]
+            },
+            {
+                en: "Since the 17th century, haiku has been the most popular kind of poetry from Japan.",
+                zh: "自17世紀以來，俳句一直是日本最受歡迎的詩歌形式。",
+                chunks: ["since the 17th century", "haiku has been", "the most popular", "kind of poetry", "from japan"],
+                reviewData: [
+                    { chunk: "has been", meaning: "一直是 (現在完成式)", collocation: "has been my favorite", synonym: "has remained", pronunciation: "has 的 h 常弱化，聽起來像 /əz/ 或 /z/。" },
+                    { chunk: "the most popular", meaning: "最受歡迎的", collocation: "the most popular song", synonym: "the most famous", pronunciation: "most 的 t 遇到 p 常會輕輕帶過。" },
+                    { chunk: "kind of", meaning: "種類", collocation: "this kind of poetry", synonym: "type of", pronunciation: "kind 的 d 與 of 連讀為 /kaɪndəv/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
+
 </html>

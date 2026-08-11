@@ -1,48 +1,378 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Spicy Peruvian Peppers</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Spicy Peruvian Peppers</h1>
+        <a href="3_13_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCszhx5K2jGSrgOVLiynvWzARtMBAMMmYfDHM3jQpon14g?e=16Afg0"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -57,48 +387,150 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
-                <div class="info-box"><p style="line-height: 2; font-size: 16px;">辣味秘魯辣椒<br><br>秘魯以辣椒聞名。Rocoto 是秘魯的辣椒，非常非常辣！即使煮過後，它們仍然很辣。秘魯人喜歡把牛肉、起司和蛋塞進 rocoto 裡。這些填餡辣椒被稱為 rocotos rellenos。如果你喜歡辣的食物，這道菜就是為你準備的！生的 rocoto 辣椒比生的墨西哥辣椒辣10倍。為了讓它不那麼辣，人們會取出辣椒裡面的種子。很多時候，他們使用手套以免燙傷手！然後，他們在醋和水中煮 rocoto。這樣可以去除很多辣味。廚師把碎肉塞進辣椒裡。有時候，他們會在肉餡中加入水煮蛋。辣椒上面放很多融化的起司。然後，廚師把整個填餡辣椒放進烤箱烤。你會想試試這道辣味辣椒料理嗎？</p></div>
+                <div class="info-box">
+                    <p style="line-height: 2; font-size: 16px;">辣味秘魯辣椒<br><br>秘魯以辣椒聞名。Rocoto
+                        是秘魯的辣椒，非常非常辣！即使煮過後，它們仍然很辣。秘魯人喜歡把牛肉、起司和蛋塞進 rocoto 裡。這些填餡辣椒被稱為 rocotos
+                        rellenos。如果你喜歡辣的食物，這道菜就是為你準備的！生的 rocoto
+                        辣椒比生的墨西哥辣椒辣10倍。為了讓它不那麼辣，人們會取出辣椒裡面的種子。很多時候，他們使用手套以免燙傷手！然後，他們在醋和水中煮
+                        rocoto。這樣可以去除很多辣味。廚師把碎肉塞進辣椒裡。有時候，他們會在肉餡中加入水煮蛋。辣椒上面放很多融化的起司。然後，廚師把整個填餡辣椒放進烤箱烤。你會想試試這道辣味辣椒料理嗎？</p>
+                </div>
             </div>
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">famous</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">著名的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">stuffing</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">填餡</div></div>
-                    <div class="vocab-item"><div class="vocab-word">raw</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">生的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">gloves</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">手套</div></div>
-                    <div class="vocab-item"><div class="vocab-word">vinegar</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">醋</div></div>
-                    <div class="vocab-item"><div class="vocab-word">mixture</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">混合物</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">famous</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">著名的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stuffing</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">填餡</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">raw</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">生的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">gloves</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">手套</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">vinegar</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">醋</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">mixture</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">混合物</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. "even after + S + V"</div><p>即使在...之後：</p><div class="example"><span class='highlight'>Even after</span> they are boiled, they still are very spicy.</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "X times + 比較級 + than"</div><p>比...辣X倍：</p><div class="example">A raw rocoto is <span class='highlight'>10 times spicier than</span> a jalapeno.</div></div>
-                <div class="grammar-box"><div class="grammar-title">3. "so that + S + don't"</div><p>以免...：</p><div class="example">They use gloves <span class='highlight'>so that</span> they don't burn their hands!</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "even after + S + V"</div>
+                    <p>即使在...之後：</p>
+                    <div class="example"><span class='highlight'>Even after</span> they are boiled, they still are very
+                        spicy.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "X times + 比較級 + than"</div>
+                    <p>比...辣X倍：</p>
+                    <div class="example">A raw rocoto is <span class='highlight'>10 times spicier than</span> a
+                        jalapeno.</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "so that + S + don't"</div>
+                    <p>以免...：</p>
+                    <div class="example">They use gloves <span class='highlight'>so that</span> they don't burn their
+                        hands!</div>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: even after + S + V</strong><div class="example"><span class='highlight'>Even after</span> they are boiled, they still are very spicy.<br>→ 即使在...之後</div></div>
-                <div class="sentence-pattern"><strong>句型 2: X times + 比較級 + than</strong><div class="example">A raw rocoto is <span class='highlight'>10 times spicier than</span> a raw jalapeno.<br>→ 比...多X倍</div></div>
-                <div class="sentence-pattern"><strong>句型 3: so that + S + don't/won't</strong><div class="example">They use gloves <span class='highlight'>so that</span> they don't burn their hands!<br>→ 以免...；為了不...</div></div>
-                <div class="sentence-pattern"><strong>句型 4: To make it + adj</strong><div class="example"><span class='highlight'>To make it</span> less spicy, people take out the seeds.<br>→ 為了使它...（不定詞表目的）</div></div>
-                <div class="info-box"><strong>💡 實用表達</strong><ul><li>"be famous for" → 以...聞名</li><li>"stuffed with" → 填滿...的</li><li>"topped with" → 上面放滿...</li></ul></div>
+                <div class="sentence-pattern"><strong>句型 1: even after + S + V</strong>
+                    <div class="example"><span class='highlight'>Even after</span> they are boiled, they still are very
+                        spicy.<br>→ 即使在...之後</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: X times + 比較級 + than</strong>
+                    <div class="example">A raw rocoto is <span class='highlight'>10 times spicier than</span> a raw
+                        jalapeno.<br>→ 比...多X倍</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: so that + S + don't/won't</strong>
+                    <div class="example">They use gloves <span class='highlight'>so that</span> they don't burn their
+                        hands!<br>→ 以免...；為了不...</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 4: To make it + adj</strong>
+                    <div class="example"><span class='highlight'>To make it</span> less spicy, people take out the
+                        seeds.<br>→ 為了使它...（不定詞表目的）</div>
+                </div>
+                <div class="info-box"><strong>💡 實用表達</strong>
+                    <ul>
+                        <li>"be famous for" → 以...聞名</li>
+                        <li>"stuffed with" → 填滿...的</li>
+                        <li>"topped with" → 上面放滿...</li>
+                    </ul>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解</h3>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
                         <li>What are rocotos? (什麼是 rocoto？)</li>
                         <li>How spicy are they compared to jalapenos? (和墨西哥辣椒比有多辣？)</li>
                         <li>How do people make them less spicy? (人們怎麼讓它們不那麼辣？)</li>
                         <li>What is rocotos rellenos? (什麼是 rocotos rellenos？)</li>
-                    </ol></div>
+                    </ol>
+                </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;"
+                            onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;"
+                            onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)"
+                            style="background-color: #2196F3; padding: 8px 15px;">
+                            🔊 聽整句
+                        </button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint"
+                            style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()"
+                            style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Spicy Peruvian Peppers
@@ -107,15 +539,216 @@ Peru is famous for its peppers. Rocotos are Peruvian peppers that are hot, hot, 
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Even after they are boiled, they still are very spicy.",
+                zh: "即使煮過後，它們仍然很辣。",
+                chunks: ["even after", "they are boiled", "they still are", "very spicy"],
+                reviewData: [
+                    { chunk: "even after", meaning: "即使在...之後", collocation: "even after a long time", synonym: "despite being", pronunciation: "even 的 n 與 after 的 a 連讀為 /iːvənæftər/。" },
+                    { chunk: "are boiled", meaning: "被煮沸", collocation: "the eggs are boiled", synonym: "cooked in water", pronunciation: "boiled 的 d 會發輕微的 /d/ 音。" }
+                ]
+            },
+            {
+                en: "These stuffed peppers are called rocotos rellenos.",
+                zh: "這些填餡辣椒被稱為 rocotos rellenos。",
+                chunks: ["these stuffed peppers", "are called", "rocotos rellenos"],
+                reviewData: [
+                    { chunk: "stuffed peppers", meaning: "填餡辣椒", collocation: "bake the stuffed peppers", synonym: "filled peppers", pronunciation: "stuffed 的 ed 發 /t/，遇到 p 時常被弱化。" },
+                    { chunk: "are called", meaning: "被稱為", collocation: "they are called heroes", synonym: "are named", pronunciation: "called 的 d 遇到 r 容易省略或輕輕帶過。" }
+                ]
+            },
+            {
+                en: "A raw rocoto pepper is 10 times spicier than a raw jalapeno.",
+                zh: "生的 rocoto 辣椒比生的墨西哥辣椒辣10倍。",
+                chunks: ["a raw rocoto pepper", "is 10 times spicier than", "a raw jalapeno"],
+                reviewData: [
+                    { chunk: "raw", meaning: "生的", collocation: "eat raw vegetables", synonym: "uncooked", pronunciation: "raw 結尾母音與後方母音連讀，或者停頓。" },
+                    { chunk: "10 times spicier than", meaning: "比...辣10倍", collocation: "10 times better than", synonym: "tenfold hotter", pronunciation: "times 的 s 發 /z/，遇到 spicier 的 s 會合併發出 /z-sp/。" }
+                ]
+            },
+            {
+                en: "Many times, they use gloves so that they don't burn their hands!",
+                zh: "很多時候，他們使用手套以免燙傷手！",
+                chunks: ["many times", "they use gloves", "so that", "they don't burn", "their hands"],
+                reviewData: [
+                    { chunk: "use gloves", meaning: "使用手套", collocation: "use gloves to clean", synonym: "wear hand protection", pronunciation: "use 的 z 與 gloves 的 g 連讀較為順暢。" },
+                    { chunk: "so that", meaning: "以免 / 為了", collocation: "so that I can go", synonym: "in order to", pronunciation: "so 的母音與 that 連讀，that 的 t 常為喉塞音 /ʔ/。" },
+                    { chunk: "don't burn", meaning: "不燙傷", collocation: "don't burn the food", synonym: "avoid burning", pronunciation: "don't 的 t 遇到 b 時，通常不發音 (喉塞音)。" }
+                ]
+            },
+            {
+                en: "To make it less spicy, people take out the seeds from inside the pepper.",
+                zh: "為了讓它不那麼辣，人們會取出辣椒裡面的種子。",
+                chunks: ["to make it", "less spicy", "people take out", "the seeds", "from inside the pepper"],
+                reviewData: [
+                    { chunk: "to make it", meaning: "為了使它...", collocation: "to make it better", synonym: "in order to make", pronunciation: "make 的 k 與 it 連讀為 /meɪkɪt/。" },
+                    { chunk: "less spicy", meaning: "比較不辣", collocation: "a less spicy version", synonym: "milder", pronunciation: "less 的 s 與 spicy 的 s 合併為一個稍長的 /s/ 音。" },
+                    { chunk: "take out", meaning: "拿出 / 取出", collocation: "take out the trash", synonym: "remove", pronunciation: "take 的 k 與 out 的 ou 連讀為 /teɪkaʊt/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
+
 </html>
