@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超級狐狸的生存技能：拆解自然科普中的英文語感密碼</title>
+    <style>
+        :root {
+            --primary: #c2410c;
+            /* 狐狸紅橙色 */
+            --primary-light: #fff7ed;
+            --primary-dark: #9a3412;
+            --secondary: #0f766e;
+            /* 森林冷杉綠 */
+            --secondary-light: #f0fdfa;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.85;
+            padding: 24px 12px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border-radius: 18px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* 頂部橫幅 */
+        header {
+            background: linear-gradient(135deg, #9a3412 0%, #ea580c 50%, #f97316 100%);
+            color: #ffffff;
+            padding: 42px 28px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #ffedd5;
+            font-size: 1rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        /* 摘要重點盒 */
+        .summary-card {
+            background-color: var(--primary-light);
+            border: 1px solid #ffedd5;
+            border-left: 5px solid var(--primary);
+            margin: 28px;
+            padding: 22px 24px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .summary-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-card ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .summary-card li {
+            font-size: 0.95rem;
+            color: #7c2d12;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .summary-card li::before {
+            content: "🦊";
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* 內容對話區 */
+        .transcript-body {
+            padding: 10px 28px 40px;
+        }
+
+        /* 章節標題 */
+        .section-header {
+            text-align: center;
+            margin: 42px 0 24px;
+            position: relative;
+        }
+
+        .section-header::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e2e8f0;
+            z-index: 1;
+        }
+
+        .section-header span {
+            position: relative;
+            z-index: 2;
+            background-color: var(--bg-card);
+            padding: 5px 20px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border: 1px solid #fed7aa;
+            border-radius: 20px;
+            background-color: #fffaf5;
+        }
+
+        /* 原文引導區塊 */
+        .quote-box {
+            background-color: #fafafa;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px 12px 12px 8px;
+            padding: 20px 24px;
+            margin: 20px 0 25px;
+            font-family: "Georgia", serif;
+            color: #334155;
+            line-height: 1.9;
+        }
+
+        .quote-box .title {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* 對話氣泡 */
+        .dialogue-item {
+            display: flex;
+            margin-bottom: 22px;
+            gap: 14px;
+        }
+
+        .avatar {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .role-host .avatar {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+        }
+
+        .role-expert .avatar {
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+        }
+
+        .bubble {
+            flex-grow: 1;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .role-host .bubble {
+            border-top-left-radius: 2px;
+        }
+
+        .role-expert .bubble {
+            border-top-left-radius: 2px;
+        }
+
+        .name-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .role-host .name-label {
+            color: var(--secondary);
+        }
+
+        .role-expert .name-label {
+            color: var(--primary);
+        }
+
+        .content {
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        /* 標籤樣式 */
+        .tag-group {
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 4px 4px 2px 0;
+        }
+
+        .tag-grammar {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .tag-vocab {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .tag-biology {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .tag-writing {
+            background-color: #faf5ff;
+            color: #7e22ce;
+            border: 1px solid #e9d5ff;
+        }
+
+        .en-term {
+            font-family: "Georgia", serif;
+            font-weight: 600;
+            color: #0f172a;
+            background-color: #f1f5f9;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* 課後反思卡片 */
+        .reflection-card {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border: 1px solid #99f6e4;
+            border-radius: 14px;
+            padding: 26px;
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .reflection-card h4 {
+            color: #0f766e;
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .reflection-card p {
+            color: #134e4a;
+            font-size: 0.96rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                border-radius: 0;
+                border: none;
+            }
+
+            .transcript-body {
+                padding: 10px 16px 30px;
+            }
+
+            .summary-card {
+                margin: 18px 16px;
+            }
+
+            .dialogue-item {
+                gap: 10px;
+            }
+
+            .avatar {
+                width: 38px;
+                height: 38px;
+                font-size: 0.8rem;
+            }
+
+            .bubble {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>超級狐狸的生存超能力 × 英文語感拆解</h1>
+            <p>告別死記硬背！從大自然的生物工程學，透視動態畫面感與寫作邏輯</p>
+        </header>
+
+        <section class="summary-card">
+            <h3>本集核心精華速覽</h3>
+            <ul>
+                <li><b>動態畫面感：</b>利用現在分詞 <span class="en-term">-ing</span>（如
+                    <i>ticking</i>、<i>squeaking</i>）營造如影片般的連續臨場感。
+                </li>
+                <li><b>文字的情感溫度：</b>使用 <span class="en-term">catch dinner</span> 取代冷冰冰的 <i>catch food</i>，巧妙引發讀者共情。</li>
+                <li><b>打破文法教條：</b>在科普與自然文學中，對動物使用 <span class="en-term">who</span> 能賦予生命同理心與角色性格。</li>
+                <li><b>溫控物理學片語：</b><span class="en-term">give off heat</span>（耳廓狐大耳散熱）與北極狐小耳保溫的對比結構。</li>
+                <li><b>寫作路標邏輯：</b>善用 <span class="en-term">also</span> 與 <span class="en-term">finally</span>
+                    串聯論點，告別流水帳式的 <i>and</i>。</li>
+                <li><b>人類的終極超能力：</b>物理上的排汗散熱耐力，與精神上的語言符號、故事與同理心。</li>
+            </ul>
+        </section>
+
+        <main class="transcript-body">
+
+            <!-- PART 1 -->
+            <div class="section-header"><span>PART 1：40 碼外的滴答聲與畫面感文法</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        想像一下這個畫面：你現在站在一個標準籃球場的一端，而在最另一端、甚至退到看台區那邊，有個人手上戴著一隻傳統的指針手錶。在完全沒有擴音設備、周遭還有微風聲的情況下，你居然可以非常清楚地聽到那隻手錶發出「滴答、滴答」的聲音！
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        如果人類有這種能力，大概會覺得自己是某種超級英雄吧！但如果你是一隻<b>赤狐（Red
+                            Fox）</b>，這不過就是平凡無奇的每一天而已。這種近乎超自然的聽力，只是大自然無數生存策略裡的冰山一角。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        特別歡迎今天準備從零開始、或是想重新定義英文學習方式的聽眾！我們今天手邊有一篇名為 <span class="en-term">"Super
+                            Foxes"</span>（超級狐狸）的文章。表面上看是一篇科普生態文，但我們今天要把這段文字當成專屬的<b>英文解剖台</b>，帶大家聽懂英文的節奏與邏輯。
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖 Part 1</span>
+                "Super foxes. Did you know that foxes have superpowers? Red foxes have super hearing. They can hear a
+                clock ticking 40 yards away. They can hear mice squeaking under the snow far away. This sense of hearing
+                helps it catch dinner."
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        這段開場非常俐落！作者在描述聽力時，不是單調地說聽得到時鐘或老鼠，而是用了加上 <span class="en-term">-ing</span> 的動詞：<span
+                            class="en-term">clock ticking</span> 與 <span class="en-term">mice squeaking</span>。
+                        <br><br>
+                        在文法上這叫做<b>現在分詞當受詞補語</b>。功能在於：加上 <span class="en-term">-ing</span>
+                        後，它在讀者腦海中就不再是單一靜止的動作，而是一段<b>正在持續播放的連續畫面與音效</b>。
+                        <div class="tag-group">
+                            <span class="tag tag-grammar">文法：現在分詞 (-ing) 創造動態畫面</span>
+                            <span class="tag tag-biology">生物物理：雪層吸音與 squeak 高頻穿透</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        我看這段最後一句寫到：這項聽覺能力 <span class="en-term">"helps it catch
+                            dinner"</span>（幫助牠抓晚餐）。在學校考試時，動物尋找食物不是通常都寫 <span class="en-term">catch food</span> 或 <span
+                            class="en-term">locate food sources</span> 嗎？為什麼作者會選擇用 <span class="en-term">dinner</span>
+                        呢？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        這牽涉到<b>語言的溫度</b>！學術期刊確實會寫客觀冷靜的 <i>food sources</i>，但作者使用 <span
+                            class="en-term">dinner</span>，其實是在不知不覺中對狐狸進行了<b>微型擬人化（personification）</b>。
+                        <br><br>
+                        它把大雪中殘酷的生存獵捕，轉化為讀者可以共情的日常任務——就像辛苦的父母在風雪中努力打拚，只為把晚餐帶回家。這就是引導讀者情緒的文字魔法。
+                        <div class="tag-group">
+                            <span class="tag tag-writing">寫作技巧：用詞溫度與擬人化共情</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 2 -->
+            <div class="section-header"><span>PART 2：內建水冷散熱器 vs. 保溫瓶蓋</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖 Part 2</span>
+                "The fox's ears do more than hear. The Fennec Fox, who lives in the hot desert, has large ears. The
+                Fennec Fox's ears give off heat and cool its body. The Arctic Fox has tiny ears. These tiny ears do not
+                give off much heat and help to keep its body warm."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這裡有個文法細節：文本裡寫 <span class="en-term">"The Fennec Fox, who lives in the hot
+                            desert..."</span>。以前國中老師總強調 <span class="en-term">who</span> 只能用在「人」，動物或無生物必須用 <span
+                            class="en-term">which</span> 或 <span class="en-term">that</span>。這份文本是犯了文法錯誤嗎？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        這絕對不是錯誤！在嚴格的選擇題考試裡老師或許有他的標準，但在真實的自然文學與科普故事中，作者常會刻意打破規則對動物使用 <span class="en-term">who</span>。
+                        <br><br>
+                        用 <i>which</i> 時，<b>耳廓狐（Fennec Fox）</b>只是一個冰冷的生物標本；但用 <span class="en-term">who</span>
+                        的那一刻，牠就成了一個有名字、有性格，正在沙漠中努力求生的獨立生命。這不是文法不及格，而是寫作情感的升級。
+                        <div class="tag-group">
+                            <span class="tag tag-grammar">文法打破：對動物使用 who 建立同理心</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        那為什麼沙漠裡的耳廓狐需要那麼大的耳朵？文本用了 <span class="en-term">give off heat</span>（散發熱量）這個片語，這跟溫度調節有什麼關係呢？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        你可以把耳廓狐的大耳朵想像成汽車引擎的<b>散熱器（radiator）</b>！在撒哈拉沙漠極端高溫下，狐狸沒辦法像人類一樣全身流汗。牠們巨大的耳朵表面布滿微血管，熱血流過去時，微風一吹就能迅速
+                        <span class="en-term">give off</span> 熱量，冷卻後的血液流回體內就能 <span class="en-term">cool
+                            body</span>。這就是內建的水冷散熱系統！
+                        <br><br>
+                        反過來看<b>北極狐（Arctic Fox）</b>的 <span class="en-term">tiny ears</span>，就像保溫瓶蓋一樣，透過最小化表面積來減少散熱（<span
+                            class="en-term">do not give off much heat</span>），牢牢鎖住體溫。
+                        <div class="tag-group">
+                            <span class="tag tag-vocab">核心片語：give off heat (散發熱量)</span>
+                            <span class="tag tag-biology">生物工程：表面積與體溫調節 (散熱器 vs. 保溫蓋)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 3 -->
+            <div class="section-header"><span>PART 3：瑞士刀般的毛茸尾巴與寫作路標</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖 Part 3</span>
+                "Foxes have super tails that have many uses. Their thick tails help with balance, much like the way cats
+                use their tails. Foxes also use their bushy tails like a blanket to keep warm. Finally, foxes use their
+                tails to send messages."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這裡用了兩個很有視覺張力的形容詞：<span class="en-term">thick tails</span>（厚實的尾巴）和 <span class="en-term">bushy
+                            tails</span>（濃密毛茸的尾巴）。而且作者還用了很棒的比喻，比如像貓咪一樣平衡，以及 <span class="en-term">like a
+                            blanket</span>（像毯子一樣保暖）。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        這在物理學上非常合理！毯子本身不會發熱，它的功能是<b>困住空氣</b>。當狐狸用 <span class="en-term">bushy tail</span>
+                        捲住身體時，厚實的毛髮間會鎖住一層被體溫加熱過的靜止空氣層，成為完美的隔熱屏障。
+                        <br><br>
+                        另外在描述搖尾巴時用的動詞 <span class="en-term">wag</span>（如 <span class="en-term">wags
+                            tail</span>），字尾帶有微弱的喉嚨震動濁音，幾乎是專屬於有尾巴動物的專用動作。
+                        <div class="tag-group">
+                            <span class="tag tag-vocab">精準用字：bushy (濃密毛茸的), wag (搖擺)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這段在列舉尾巴的三個功能時（平衡、保暖、傳遞訊息），如果是一般初學者寫，很可能會變成流水帳：<i>"It is for balance, and it is for warm, and it
+                            sends messages..."</i>，整篇都是 <i>and</i>。作者是怎麼做到層次分明的？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        這就是<b>邏輯連接詞（轉折路標）</b>的功力！
+                        <ul>
+                            <li><b>第一點：</b>直接破題切入核心功能（<span class="en-term">help with balance</span>）。</li>
+                            <li><b>第二點：</b>使用 <span class="en-term">Foxes also use...</span> 明確宣告第二個功能進場。</li>
+                            <li><b>第三點：</b>使用 <span class="en-term">Finally, foxes use...</span>
+                                像交通號誌一樣提醒讀者準備接收最後一個關鍵資訊。</li>
+                        </ul>
+                        好的連接詞就像狐狸的尾巴能平衡身體一樣，能幫你的英文句子在邏輯上保持完美平衡！
+                        <div class="tag-group">
+                            <span class="tag tag-writing">寫作架構：善用 also 與 finally 擺脫流水帳</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 4 -->
+            <div class="section-header"><span>PART 4：終極反思——人類的超能力是什麼？</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        今天從雪地聽音、耳朵溫控解剖到多功能尾巴，收穫真的非常豐富。不過這也引出了一個有趣的思考題：如果自然界每種動物都演化出了專屬的生存超能力，那我們人類的超能力到底是什麼？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        從生物生理學來看，人類最大的物理超能力是<b>全身均勻流汗散熱</b>，這讓我們成為自然界長跑耐力頂尖的物種。
+                        <br><br>
+                        但從精神層面來看，人類最不可思議的超能力，就是<b>「語言、故事與同理心」</b>。我們能發明像 <span class="en-term">-ing</span>、<span
+                            class="en-term">squeaking</span> 這樣的聲音符號，創造文法，並透過說故事去深刻理解一隻遠在大雪中的狐狸。語言與溝通，正是這個星球上最強大的超能力！
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-card">
+                <h4>✨ 帶著你的「語言超能力」繼續探索！</h4>
+                <p>
+                    當你把單字、文法與真實世界的奇妙生存機制結合在一起時，<br>
+                    英文就不再是考卷上冷冰冰的符號，而是一扇通往大千世界的窗戶。<br>
+                    <b>保持這份好奇心，下次翻開英文文章時，盡情發揮你強大的語言超能力吧！</b>
+                </p>
+            </div>
+
+        </main>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_14.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

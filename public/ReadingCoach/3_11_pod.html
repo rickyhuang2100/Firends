@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度解析：從 17 世紀日文俳句破解英文底層邏輯</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #eff6ff;
+            --secondary-color: #0d9488;
+            --secondary-light: #f0fdf4;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --highlight-bg: #fef3c7;
+            --highlight-border: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.75;
+            padding: 20px 12px;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .summary-box {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            margin: 30px;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .summary-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .summary-box ul {
+            list-style-type: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .summary-box li {
+            font-size: 0.9rem;
+            color: #334155;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-box li::before {
+            content: "✦";
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .transcript-container {
+            padding: 10px 30px 40px;
+        }
+
+        .dialogue-card {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 16px;
+        }
+
+        .speaker-avatar {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .speaker-a .speaker-avatar {
+            background-color: var(--primary-color);
+        }
+
+        .speaker-b .speaker-avatar {
+            background-color: var(--secondary-color);
+        }
+
+        .dialogue-content {
+            flex-grow: 1;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .speaker-a .dialogue-content {
+            border-top-left-radius: 2px;
+        }
+
+        .speaker-b .dialogue-content {
+            border-top-left-radius: 2px;
+        }
+
+        .speaker-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .speaker-a .speaker-name {
+            color: var(--primary-color);
+        }
+
+        .speaker-b .speaker-name {
+            color: var(--secondary-color);
+        }
+
+        .text {
+            font-size: 1rem;
+            color: var(--text-dark);
+            word-break: break-word;
+        }
+
+        .en-quote {
+            font-family: "Georgia", serif;
+            font-style: italic;
+            color: #0f172a;
+            background-color: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .concept-tag {
+            display: inline-block;
+            background-color: var(--highlight-bg);
+            border: 1px solid var(--highlight-border);
+            color: #78350f;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .section-divider {
+            text-align: center;
+            margin: 35px 0 25px;
+            position: relative;
+        }
+
+        .section-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+
+        .section-divider span {
+            position: relative;
+            z-index: 2;
+            background-color: var(--card-bg);
+            padding: 0 15px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                border-radius: 0;
+            }
+
+            .transcript-container {
+                padding: 10px 15px 30px;
+            }
+
+            .summary-box {
+                margin: 20px 15px;
+            }
+
+            .dialogue-card {
+                gap: 10px;
+            }
+
+            .speaker-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>讀日文古詩學英文？觀念重構逐字稿</h1>
+            <p>從 17 世紀俳句（Haiku）解構英文發音迷思與底層運作邏輯</p>
+        </header>
+
+        <section class="summary-box">
+            <h3>核心學習重點速覽</h3>
+            <ul>
+                <li>祈使句機制：省略主詞創造動作張力</li>
+                <li>助動詞 Do：發問訊號燈而非實際動作</li>
+                <li>音節拆解：下巴下掉次數與母音核心</li>
+                <li>時態觀念：動詞自帶的「時間濾鏡」</li>
+                <li>語音自然流動：滑梯式連續音與連音衝浪</li>
+            </ul>
+        </section>
+
+        <main class="transcript-container">
+
+            <!-- Section 1 -->
+            <div class="section-divider"><span>PART 1：突破盲點的學習捷徑</span></div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">如果我現在告訴你，要搞懂英文的基本骨幹還有那個節奏，最快的方法其實不是去死背那些很厚的文法書，而是去讀一首 17
+                        世紀的日本古詩，你會不會覺得我瘋了？聽起來是蠻違背直覺的啦。對啊，但其實對於很多在台灣母語是中文、然後想要從零開始學英文的人來說，這往往是最能突破盲點的一個捷徑哦。</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">
+                        哇，那這就是我們今天這場深度解析的任務了。我們知道正在收聽節目的你，可能一直覺得學英文是一件壓力蠻大的事情，好像永遠有背不完的單字。但今天我們要駭進英文的基礎邏輯裡，我們準備了一篇非常簡短關於日本俳句（Haiku）的英文文本。透過這短短幾行，我們不只要破解英文發音的迷思，還要告訴你英文這個語言底層到底是如何運作的。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">這篇文本對零基礎的學習者來說真的個超完美的起點，怎麼說？因為俳句的核心精神就是用極少的字表達豐富的意涵。<span class="en-quote">Few
+                            words say a
+                            lot</span>。這正是初學英文就該建立的心態：不要去焦慮自己認識的字太少怎麼辦，重點在於你懂不懂這些字背後的物理發生機制與邏輯。懂了，就像打開一扇通往新世界的窗。</div>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section-divider"><span>PART 2：文義拆解與句型邏輯</span></div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">那我們就直接進入文本的情境吧！想像一下，如果你現在想把注意力從書本轉移到大自然，這篇文章的第一段是這樣開始的：<br>
+                        <span class="en-quote">"Go outside, what do you see? Many poets write about what they see in
+                            nature. Long ago, some Japanese poets looked at nature and then wrote short poems."</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">等等，我有個很直覺的疑問！這句話一開頭說 <span class="en-quote">Go
+                            outside</span>，對我們中文母語者來說，聽起來好像有點像在命令人？中文通常會說「你到外面去」或「請到外面去」，會有個「你」作為主詞。但這裡直接用 Go
+                        開頭，在英文裡是正常的嗎？</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">這是非常敏銳的觀察！這在英文文法中我們叫做<b>祈使句</b>。它其實是把主詞 You
+                        直接省略掉了。省略主詞並非沒禮貌，祈使句的功能是切入正題、引發動作。當你想邀請別人、給予指示，或呼籲讀者採取行動時，省略主詞可以創造出一種非常直接、沒有廢話的動態感與張力。</div>
+                    <span class="concept-tag">文法解析：祈使句省略 You</span>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">原來如此！緊接著下一句 <span class="en-quote">What do you see?</span>
+                        我就覺得有點反直覺了。照中文邏輯「你看見什麼」，對應單字應該是 You see what 或 What you see？為什麼中間會突然跑出一個 <span
+                            class="en-quote">do</span>？這到底在這裡做什麼？</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">這就是中英文底層邏輯最大的差異了！中文發問時通常保持句子結構原樣，在句尾加上「嗎」；英文不用句尾語氣詞，使用的是<b>輔助標記（助動詞）</b>。這個 <span
+                            class="en-quote">do</span>
+                        就像舉起紅旗警告聽者：「注意囉，接下來是一個問句！」它本身沒有實際動作意義，就是個提早告訴大腦的<b>信號燈</b>。初學者常漏掉它，就是因為一直想用中文逐字對應。</div>
+                    <span class="concept-tag">核心概念：助動詞作為疑問信號燈</span>
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section-divider"><span>PART 3：發音細節與物理機制</span></div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">理解了！對了，剛才聽到幾個基礎單字，像大自然 <span
+                            class="en-quote">nature</span>，我以前好像都會念成類似中文的「內切」，但你念的聲音不太一樣？</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">對，這是台灣學習者超常遇到的小陷阱。<span class="en-quote">Nature</span> 中間的 T 跟 U
+                        組合會發生語音同化，發出類似中文「區」的聲音（國際音標 /tʃ/）。試著把嘴唇稍微嘟起來連著念：<span
+                            class="en-quote">nature</span>，聲音的厚度就出來了。另外像 <span class="en-quote">outside</span> 字尾的
+                        d，在英文裡這種塞音不需要發得太重，舌頭放到位置輕輕點一下、阻斷氣流即可，做到「點到為止」。</div>
+                    <span class="concept-tag">發音技巧：/tʃ/ 音同化與字尾輕音</span>
+                </div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section-divider"><span>PART 4：音節（Syllables）與身體體感</span></div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">我們看看文本第二段怎麼解釋俳句的節奏：<br>
+                        <span class="en-quote">"Haiku has three lines. Usually the first line has five syllables. The
+                            second line has seven syllables and third has five."</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">這裡出現關鍵字 <span class="en-quote">syllables</span>（音節），也就是著名的 5-7-5
+                        規則。但我坦白說，我以前為了搞懂音節試著去數字母，結果根本行不通！像 <span class="en-quote">able</span> 有個字母但卻只有兩個音節，到底要怎麼拆解英文的聲音？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">
+                        數字母絕對會陷入災難，因為英文的拼寫和發音早就脫鉤了！中文是單音節語言（如「我愛你」三字三音），而英文音節的核心是<b>母音</b>。有個身體感受的實用秘訣：<b>發母音時下巴必須往下掉</b>。你把手背貼在下巴正下方念
+                        <span class="en-quote">syllable</span>，下巴會撞擊手背三次，代表它就是三個音節！</div>
+                    <span class="concept-tag">獨家技巧：下巴下掉次數測音節</span>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">那 <span class="en-quote">express</span>（表達）呢？原來的動詞 <span
+                            class="en-quote">express</span> 下巴只掉兩次，為什麼文本裡變成 <span class="en-quote">expresses</span>
+                        之後音節變多了？</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">問到點上了！當動詞遇第三人稱單數或名詞複數加 s/es 時，因為 <span class="en-quote">express</span> 字尾本身已經是 /s/
+                        的摩擦音，若再硬加 s 氣流會打結。人類嘴巴為了順暢發音，會在中間塞一個短音 /ɪz/，變成 <span
+                            class="en-quote">expresses</span>，音節就從兩個變三個。規則不是為了刁難我們，而是配合人體發音器官的物理極限。</div>
+                </div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="section-divider"><span>PART 5：詩意意境與連續音破解</span></div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">我們來看這首松尾芭蕉翻譯成英文的經典俳句：<br>
+                        <span class="en-quote">"Seas are wild tonight,<br>
+                            stretching over Sado Isle,<br>
+                            Silent Clouds of Stars."</span><br>
+                        （夜海浪狂暴，綿延至佐渡島，寂靜的心雲。）
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">畫面感太強烈了！前一行是動態震耳的 <span class="en-quote">Wild Seas</span>，下一行卻接靜態無聲的 <span
+                            class="en-quote">Silent Clouds</span>，只用兩個簡單形容詞就把空間維度拉開。不過 <span
+                            class="en-quote">stretching</span> 開頭的 STR 念起來舌頭超容易打結，常不自覺偷塞母音進去，要怎麼破解？</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">中文幾乎沒有連續子音，所以很常偷塞母音。破解方法是<b>想像在溜滑梯，氣流不能中斷</b>：先發蛇吐信的 /s/，舌尖順勢頂一下發 /t/，接著立刻捲舌發
+                        /r/。不要中斷氣流，快速滑過去：<span class="en-quote">stretching</span>！</div>
+                    <span class="concept-tag">發音秘訣：連續子音溜滑梯法</span>
+                </div>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="section-divider"><span>PART 6：動詞的「時間濾鏡」與連音</span></div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">介紹作者時文本說：<br>
+                        <span class="en-quote">"This Haiku was written by a very famous Japanese haiku poet. His name
+                            was Matsuo Basho. He lived in the 17th century Japan."</span><br>
+                        前面的動詞是 go, see, has，到了這裡全部變成 <span class="en-quote">was written</span> 和 <span
+                            class="en-quote">lived</span>，英文為什麼要大費周章改變動詞長相？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">這就是時態的核心概念。中文像是在照片背面用筆寫上日期，照片本身不變；但英文的動詞就像是<b>相機上的「時間濾鏡」</b>。當你談論過去，動詞會直接物理突變（如
+                        live 變 lived, write 變 was written），逼你在使用動詞時把時間維度直接鑲嵌在動作本身。學過去式不是背新單字，而是訓練大腦啟動時間濾鏡。</div>
+                    <span class="concept-tag">觀念重構：時態即時間濾鏡</span>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">最後一段回到現代：<br>
+                        <span class="en-quote">"Today, people all over the world write Haiku. There are even haiku
+                            contests... Few words say a lot."</span><br>
+                        注意日常片語 <span class="en-quote">all over the world</span>，母語者講話黏在一起不是為了快，而是為了氣流順暢。當前字尾是子音（all 的
+                        /l/），後字開頭是母音（over 的 /o/），子音會自然推過去連在一起（al-lover），像是一條流動的河，順著氣流衝浪過去。
+                    </div>
+                    <span class="concept-tag">口語技巧：自然連音流動</span>
+                </div>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="section-divider"><span>PART 7：結語與深度反思</span></div>
+
+            <div class="dialogue-card speaker-a">
+                <div class="speaker-avatar">主持</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">主持人</div>
+                    <div class="text">
+                        這真的打破了要把每個字念得字正腔圓的迷思。今天我們從祈使句、助動詞訊號燈、下巴測音節、時間濾鏡到連音滑梯，短短幾段話就掌握了語言的骨幹。但在結束前，我想留個問題：日文俳句講究 5-7-5
+                        的「拍」，翻譯成英文音節後，原始節奏還能完美保留嗎？</div>
+                </div>
+            </div>
+
+            <div class="dialogue-card speaker-b">
+                <div class="speaker-avatar">專家</div>
+                <div class="dialogue-content">
+                    <div class="speaker-name">專家</div>
+                    <div class="text">極度困難，甚至可以說不可能死守
+                        5-7-5，往往必須為保留意境做出妥協。這意味著：<b>學習英文時，你不能只是把中文標籤撕下來換上英文標籤，而是學習一種全新的呼吸方式，感受另一種心跳頻率。</b>今天的任務就是：Go
+                        outside！用僅有的簡單單字拼湊屬於你的三行詩，勇敢感受語言的律動吧！</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_11.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>從零解碼波哥大 —— 哥倫比亞的高空奇蹟與英文底層邏輯 | Podcast 逐字稿精讀</title>
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --brand-green: #15803d;
+            --brand-green-light: #f0fdf4;
+            --brand-green-border: #bbf7d0;
+            --brand-terracotta: #c2410c;
+            --brand-terracotta-light: #fff7ed;
+            --brand-terracotta-border: #ffedd5;
+            --accent-blue: #0284c7;
+            --accent-blue-light: #f0f9ff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.75;
+            padding-bottom: 60px;
+        }
+
+        /* Top Header Navigation / Bar */
+        .top-bar {
+            background: linear-gradient(135deg, #0f291e 0%, #15803d 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .top-bar .badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            color: #fef08a;
+            padding: 4px 14px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .top-bar h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .top-bar p {
+            font-size: 1.05rem;
+            color: #dcfce7;
+            max-width: 750px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1000px;
+            margin: -25px auto 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Episode Summary Info Card */
+        .summary-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-info {
+            flex: 1 1 500px;
+        }
+
+        .summary-info h3 {
+            font-size: 1.15rem;
+            color: var(--brand-green);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Table of Contents & Quick Navigation */
+        .toc-bar {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 15px;
+            z-index: 100;
+        }
+
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toc-links {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .toc-links a {
+            white-space: nowrap;
+            text-decoration: none;
+            color: var(--text-main);
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .toc-links a:hover {
+            background-color: var(--brand-green-light);
+            color: var(--brand-green);
+            border-color: var(--brand-green-border);
+        }
+
+        /* Chapter Section */
+        .chapter-section {
+            margin-bottom: 40px;
+            scroll-margin-top: 80px;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--brand-green-border);
+        }
+
+        .chapter-number {
+            background-color: var(--brand-green);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .chapter-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Dialogue Stream */
+        .dialogue-stream {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .dialogue-card {
+            display: flex;
+            gap: 16px;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 18px 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .dialogue-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .speaker-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .host-a .speaker-avatar {
+            background-color: var(--brand-terracotta-light);
+            color: var(--brand-terracotta);
+            border: 2px solid var(--brand-terracotta-border);
+        }
+
+        .host-b .speaker-avatar {
+            background-color: var(--brand-green-light);
+            color: var(--brand-green);
+            border: 2px solid var(--brand-green-border);
+        }
+
+        .dialogue-content {
+            flex: 1;
+        }
+
+        .speaker-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .host-a .speaker-name {
+            color: var(--brand-terracotta);
+        }
+
+        .host-b .speaker-name {
+            color: var(--brand-green);
+        }
+
+        .speaker-role {
+            font-size: 0.75rem;
+            font-weight: normal;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .dialogue-text {
+            font-size: 1.02rem;
+            color: #334155;
+            line-height: 1.7;
+        }
+
+        /* Quote Block for English Sentences */
+        .english-quote {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--accent-blue);
+            padding: 12px 16px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            color: #0f172a;
+            font-size: 1.05rem;
+        }
+
+        .english-quote .translation {
+            font-family: -apple-system, sans-serif;
+            font-style: normal;
+            font-size: 0.92rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Key Concept Cards (知識解碼卡) */
+        .concept-card {
+            margin: 24px 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #cbd5e1;
+            border-left: 5px solid var(--brand-green);
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--brand-green);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .concept-body {
+            font-size: 0.98rem;
+            color: #334155;
+            line-height: 1.65;
+        }
+
+        .concept-body ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .concept-body li {
+            margin-bottom: 6px;
+        }
+
+        .highlight-word {
+            background-color: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #854d0e;
+        }
+
+        .code-pill {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .top-bar h1 {
+                font-size: 1.6rem;
+            }
+
+            .toc-links {
+                font-size: 0.8rem;
+            }
+
+            .dialogue-card {
+                padding: 14px;
+                gap: 12px;
+            }
+
+            .speaker-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Banner -->
+    <header class="top-bar">
+        <span class="badge">🎙️ PODCAST 雙語解碼特輯</span>
+        <h1>從零解碼波哥大 —— 哥倫比亞的高空奇蹟與英文底層邏輯</h1>
+        <p>一趟專為台灣英文學習者打造的語意探險：從 3,200 公尺高空的雲端首都，拆解發音肌肉記憶與句型結構主樑。</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Summary Info Card -->
+        <div class="summary-card">
+            <div class="summary-info">
+                <h3>📖 節目簡介與精讀指南</h3>
+                <p>本逐字稿整理自雙語探討 Podcast。對談中透過南美洲哥倫比亞首都波哥大（Bogotá）的原文短文，打破死記硬背的傳統模式，帶領讀者透過具體情境拆解英文底層邏輯。</p>
+                <div class="summary-tags">
+                    <span class="tag">📍 波哥大 (Bogotá)</span>
+                    <span class="tag">🗣️ /θ/ 齒間音訓練</span>
+                    <span class="tag">🏗️ 動詞「主樑」邏輯</span>
+                    <span class="tag">🛠️ A lot 瑞士刀語法</span>
+                    <span class="tag">🏔️ Altitude vs Height</span>
+                    <span class="tag">🍵 Mountain Sickness</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Navigation -->
+        <nav class="toc-bar">
+            <div class="toc-title">
+                <span>快速導覽章節</span>
+                <span style="font-size:0.75rem; font-weight:normal; color:#94a3b8;">點擊可直接跳轉</span>
+            </div>
+            <div class="toc-links">
+                <a href="#part1">Part 1: 雲端城與發音痛點</a>
+                <a href="#part2">Part 2: 英文句子的主樑 (is)</a>
+                <a href="#part3">Part 3: 雨林與 A lot 的雙重用法</a>
+                <a href="#part4">Part 4: 海拔 2 英里的空間感</a>
+                <a href="#part5">Part 5: 高山症與溫和表達 (sick)</a>
+                <a href="#part6">Part 6: 結語與終極想像</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+
+            <!-- PART 1 -->
+            <section id="part1" class="chapter-section">
+                <div class="chapter-header">
+                    <div class="chapter-number">1</div>
+                    <h2 class="chapter-title">雲端大都會與 South 的發音肌肉記憶</h2>
+                </div>
+
+                <div class="dialogue-stream">
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                呃，想像一下，你現在人剛好在一座擁有數百萬人口的超級大城市。嗯，應該是車水馬龍，然後高樓林立的那種感覺吧？對，就是那種大都會。但是當你走出機場，每吸一口氣，你都覺得肺部好像有點緊繃，甚至會覺得頭有點暈，對吧？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                沒錯！而且這其實不是因為空氣污染啦，而是因為你腳下的這整座城市，它竟然比台北 101 還要高出六倍，懸在雲端之上。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                哇，六倍高！這聽起來真的很震撼。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                真的啊！所以今天呢，我們要帶你潛入這個不可思議的地方，歡迎來到我們這次的深度探討。我們這次有一個非常特別的任務哦——是為了一位母語是中文、然後想要從零開始解碼英文的台灣朋友（也就是正在收聽的你）量身打造的一場專屬探索。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                對，其實我們手邊有一份非常有趣的原文短篇，它描述的就是南美洲哥倫比亞的首都波哥大（Bogotá）。其實很多人一聽到要從零開始學英文，直覺反應就是要背單字啊，或者去記那些很痛苦的文法。以前在學校都是這樣學的。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                對啊，但我們今天就不走那條老路了！我們要把這篇短文當作是一個充滿線索的謎題。也就是說，透過拆解真實的句子來看看英文這個語言的底層邏輯到底是如何運作的。這其實是讓我最興奮的地方，因為我們不是在讀教科書，我們是在透過另一種語言的濾鏡來看這個世界。其實學語言本來就該是這樣。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                對，那既然我們要把這個當成是在解謎，那我們就先從大方向來下手好了。哥倫比亞這個國家，它在地圖上的哪個位置啊？它的周圍又是什麼樣的環境？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                關於這一點，其實這篇文本的開頭就給了我們很清晰的定位。你可以仔細聽聽看，也可以試著在心裡感受一下這幾個句子的節奏，它是這樣說的：
+                                <div class="english-quote">
+                                    "Bogota, Colombia. Colombia is a country in South America. It borders the Caribbean
+                                    Sea."
+                                    <div class="translation">（波哥大，哥倫比亞。哥倫比亞是南美洲的一個國家。它與加勒比海接壤。）</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                哇，這短短幾句話聽起來其實蠻簡潔直接的。但是我有注意到幾個發音上的細節耶！特別是那個 <span class="code-pill">South
+                                    America</span>，<span class="code-pill">South</span>
+                                這個字聽起來好像有一種很特殊的氣流聲，這好像是我們中文裡面完全沒有的發音方式吧？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                哇，你點出了一個非常關鍵的發音痛點哦！因為對很多中文母語者來說，South 結尾的這個擦音（<span
+                                    class="code-pill">/θ/</span>），它其實是一個全新的肌肉記憶。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                肌肉記憶？所以是要訓練嘴巴的意思嗎？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                沒錯！因為中文裡沒有所謂的「齒間音」嘛，很多人就會不自覺地把它念成 <span class="code-pill">/s/</span>（發「私」的音）或者 <span
+                                    class="code-pill">/f/</span>。其實真正的 <span class="code-pill">/θ/</span>
+                                音，你需要把舌尖輕輕放在上下排牙齒的中間，然後把空氣從舌頭和上牙齒之間的縫隙推出來。你可以試著感受一下：把舌尖微微伸出牙齒，輕輕吐氣，發出那種摩擦的聲音... <span
+                                    class="code-pill">/θ/</span>... South。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                我試試看哦... 舌尖放在牙齒中間吐氣... <span class="code-pill">/θ/</span>...
+                                South！非常棒，哇，這真的需要刻意練習耶，因為我們的嘴巴平常根本不習慣擺出這種姿勢啊。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                完全正確！所以語言學習很大一部分，其實就是口腔肌肉的物理訓練了。
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Concept Card 1 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        💡 語言學堂：/θ/ 齒間擦音與肌肉記憶
+                    </div>
+                    <div class="concept-body">
+                        中文沒有「咬舌音/齒間音」，因此許多台灣學習者易誤念為 <strong>/s/ (South -> Souse)</strong> 或 <strong>/f/ (South ->
+                            Souf)</strong>。
+                        <ul>
+                            <li><strong>發音訣竅：</strong> 將舌尖輕輕置於上下門牙之間（稍微露出舌尖），順暢吐氣形成氣流摩擦聲，再發出音節。</li>
+                            <li><strong>連音細節：</strong> <span class="code-pill">South America</span> 結合時，<span
+                                    class="code-pill">America</span> 重音落在第二音節 <span
+                                    class="highlight-word">/mɛ/</span>，整體讀作 <i>South A-ME-ri-ca</i>。</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- PART 2 -->
+            <section id="part2" class="chapter-section">
+                <div class="chapter-header">
+                    <div class="chapter-number">2</div>
+                    <h2 class="chapter-title">英文句子的主樑 —— is 與動詞轉化</h2>
+                </div>
+
+                <div class="dialogue-stream">
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                原來如此！那當你把 South 念對之後，再連著後面的 America，重音放在第二個音節上念做 America，合起來就是 South
+                                America（南美洲），念起來順多了。對了，除此之外，這三句話裡面還藏著英文最核心的骨架哦，也就是：
+                                <div class="english-quote">"Colombia is a country."</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                這句聽起來很直白啊，不過如果我們用中文思考的話，我們可能會直接說「哥倫比亞是南美洲國家」，甚至有時會省略動詞。但在英文裡面這個 <span
+                                    class="code-pill">is</span> 好像是永遠都扒不掉的？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                這個觀察非常敏銳！這其實是英文和中文在底層邏輯上最大的一個差異。因為中文是一種所謂的「高語境語言」，只要前後文有邏輯，我們常常會把動詞整個省掉。但是英文是一種結構非常嚴謹的語言，它就像是在蓋房子一樣——每一句話都必須要有一根「主樑」，那根主樑就是<span
+                                    class="highlight-word">動詞</span>。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                哦！動詞是主樑。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                沒錯！在這裡 Colombia 是主詞（主角），而 <span class="code-pill">is</span>
+                                就是那根主樑。在英文的世界裡，如果沒有動詞，這個句子就會直接垮掉。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                哇，所以 <span class="code-pill">is</span> 就像是數學裡面的「等號」一樣，它強迫確立了兩邊的關係：<span
+                                    class="code-pill">Colombia = a country</span>。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                完全沒錯！所以學英文的第一步，就是要先在腦海裡面建立這種「找主樑」的習慣。了解，那接下來那一句：
+                                <div class="english-quote">
+                                    "It borders the Caribbean Sea."
+                                    <div class="translation">（它與加勒比海相鄰。）</div>
+                                </div>
+                                這裏的主樑應該就是 <span class="code-pill">borders</span> 這個字了吧？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                是的，就是它！其實這個字當作名詞時，是「邊界」或「國界」的意思。但英文很有趣的一點是，名詞常常可以直接轉化為動詞來使用。所以在這邊 <span
+                                    class="code-pill">borders</span> 被當作動詞，意思就是「與……接壤/相鄰」。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                把名詞當動詞用……哇，這個畫面感變得非常強烈耶！這就像是兩戶人家共用同一面院子的圍牆嘛。哥倫比亞這戶人家圍牆外貼著的鄰居，就是美麗的加勒比海（Caribbean
+                                Sea）。這可以在讀者腦海中瞬間畫出一條明確的線：一邊是陸地，另一邊是大洋！
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Concept Card 2 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        🏗️ 句法邏輯：動詞是句子的「主樑」與名詞動詞化
+                    </div>
+                    <div class="concept-body">
+                        <ul>
+                            <li><strong>英文的「主樑」觀念：</strong> 中文允許無動詞句（如「明天星期五」），但英文句必須包含動詞。<span
+                                    class="code-pill">is</span> 作為 Be 動詞，角色宛如等號（Subject = Complement）。</li>
+                            <li><strong>名詞轉動詞 (Verbification)：</strong> <span class="code-pill">border</span>
+                                原意為「邊界」（名詞），轉為動詞 <span class="code-pill">borders</span> 時，具體表達「沿著……形成邊界 / 與……接壤」。</li>
+                            <li><strong>重音小提醒：</strong> <span class="code-pill">Caribbean</span> 讀音重音落在第三音節 <span
+                                    class="highlight-word">/biː/</span>（<i>Car-ib-BE-an</i>），展現輕快的海岸節奏感。</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- PART 3 -->
+            <section id="part3" class="chapter-section">
+                <div class="chapter-header">
+                    <div class="chapter-number">3</div>
+                    <h2 class="chapter-title">雨林與叢林 (Rainforest vs Jungle) & A Lot 瑞士刀</h2>
+                </div>
+
+                <div class="dialogue-stream">
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                那既然我們現在知道哥倫比亞有一面圍牆是緊鄰著充滿陽光的加勒比海，那它的內陸呢？我們通常會覺得靠近加勒比海的地方應該到處都是沙灘和棕櫚樹吧，但文本接下來的描述打破了這個刻板印象：
+                                <div class="english-quote">
+                                    "A lot of the landscape in Colombia is rainforest and jungle. Mountains are very
+                                    green."
+                                    <div class="translation">（哥倫比亞的大部分地貌是雨林和叢林。山脈非常翠綠。）</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                哇，這幾句話瞬間讓腦海裡充滿了濃密的綠色！不過我有注意到這裡連續出現了兩個描述森林的詞彙：一個是 <span
+                                    class="code-pill">rainforest</span>，另一個是 <span
+                                    class="code-pill">jungle</span>。這兩個字在英文裡有什麼微妙的差別嗎？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                這是一個很好的切入點哦！我們先來看 <span class="code-pill">landscape</span>
+                                這個字，它的意思就是「地貌」或「風景」。哥倫比亞很大一部分的地貌是 rainforest（雨林）還有 jungle（叢林）。<br>
+                                <span class="code-pill">rainforest</span> 是一個合成字（rain +
+                                forest），通常指降雨量極高、有高聳樹冠層的廣闊生態系統，算是一個生態學上的科學分類。<br>
+                                但 <span class="code-pill">jungle</span> 在英文語感中，帶有一種更原始、底層植物極度茂密、人類難以穿透的狂野畫面感。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                哇！所以 rainforest 聽起來像是《國家地理雜誌》的科學名詞，而 jungle 則是探險家拿著開山刀在裡面披荊斬棘的畫面感囉！而且在這幾句話裡，文本使用了兩次
+                                <span class="code-pill">a lot</span>：
+                                <ul>
+                                    <li>第一句：<span class="code-pill">A lot of the landscape</span>（很大一部分的地貌）</li>
+                                    <li>後面還有：<span class="code-pill">It rains a lot</span>（很常下雨）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                對！這就是英文裡面的「瑞士刀」！掌握了 <span class="code-pill">a lot</span> 的位置，你根本不需要去死背複雜的副詞或形容詞：
+                                <ul>
+                                    <li>放在<strong>名詞前</strong>（a lot of + noun）：表達「數量多」或「比例大」。</li>
+                                    <li>放在<strong>動詞後</strong>（verb + a lot）：表達「動作頻率高」或「程度深」。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                這真的太實用了！而且這段文字最後一句還提到：
+                                <div class="english-quote">"People in Colombia speak Spanish."</div>
+                                明明是美洲國家，卻因為 16 世紀西班牙帝國的殖民歷史而使用西班牙語。透過閱讀英文，我們同時吸收了真實世界的歷史脈絡！
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Concept Card 3 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        🔍 詞彙與語法：Rainforest vs Jungle 與 A Lot 萬用瑞士刀
+                    </div>
+                    <div class="concept-body">
+                        <ul>
+                            <li><strong>Rainforest（雨林）：</strong> 學術/生態學用語，強調高降雨量與多層樹冠生態。</li>
+                            <li><strong>Jungle（叢林）：</strong> 通俗/探險文學用語，強調地面灌木叢生、密不透風的原始野性。</li>
+                            <li><strong><span class="highlight-word">A lot</span> 的位點萬用法則：</strong>
+                                <ul>
+                                    <li>修飾名詞 (前置)：<span class="code-pill">a lot of money / a lot of land</span>（數量/面積多）
+                                    </li>
+                                    <li>修飾動詞 (後置)：<span class="code-pill">study a lot / rain a lot</span>（頻率/強度高）</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- PART 4 -->
+            <section id="part4" class="chapter-section">
+                <div class="chapter-header">
+                    <div class="chapter-number">4</div>
+                    <h2 class="chapter-title">海拔 2 英里的空間感 (Altitude & Above Sea Level)</h2>
+                </div>
+
+                <div class="dialogue-stream">
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                那文本接下來要介紹的首都波哥大，到底是一座什麼樣的城市呢？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                這就是波哥大最顛覆常理的地方了。文本是這樣介紹的：
+                                <div class="english-quote">
+                                    "Bogota is the capital of Colombia. There are millions of people that live in
+                                    Bogota. It is a very high altitude city. That is because the city is on top of a
+                                    mountain. It is 2 miles above sea level."
+                                    <div class="translation">（波哥大是哥倫比亞的首都。有數百萬人住在波哥大。它是一座海拔非常高的城市。那是因為這座城市位於山頂之上。它高於海平面
+                                        2 英里。）</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                Wow！這裡資訊量有點爆炸耶！這不是小村莊，而是數百萬人口的超級大都會。但真正讓我驚訝的是 <span
+                                    class="code-pill">altitude</span>（海拔高度）這個字，以及兩個極具空間感的片語：
+                                <ul>
+                                    <li><span class="code-pill">on top of</span>（在……的最頂端）</li>
+                                    <li><span class="code-pill">above sea level</span>（在海平面之上）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                你的敏銳度真的很棒！在英文中，<span class="code-pill">height</span> 是從物體底部量到頂部（比如 Taipei 101's
+                                height）；而 <span class="code-pill">altitude</span> 或 <span class="code-pill">above sea
+                                    level</span> 的基準零點，永遠是遙遠的大海表面。<br>
+                                2 英里大約是 <strong>3,200 公尺</strong>！試想一下，把整個台北市的規模（高樓、捷運、數百萬人口與車輛）全部搬到合歡山山頂上，這就是波哥大的空間震撼感！
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Concept Card 4 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        🏔️ 空間介系詞與測量基準：Height vs Altitude
+                    </div>
+                    <div class="concept-body">
+                        <ul>
+                            <li><strong>Height：</strong> 垂直高度（測量基準為地面或物體底部）。例如：<i>The height of Taipei 101 is 508
+                                    meters.</i></li>
+                            <li><strong>Altitude：</strong> 海拔高度（測量基準點為 <span class="code-pill">sea level</span>
+                                海平面）。例如：<i>Bogota is at a high altitude.</i></li>
+                            <li><strong>精準介系詞堆疊：</strong> <span class="code-pill">on top of a mountain</span>（位於山頂）+
+                                <span class="code-pill">2 miles above sea level</span>（高於海平面 2 英里，約
+                                3,200m），堆疊出極具質感的空間立體感。</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- PART 5 -->
+            <section id="part5" class="chapter-section">
+                <div class="chapter-header">
+                    <div class="chapter-number">5</div>
+                    <h2 class="chapter-title">高山症與溫和表達 (Mountain Sickness & Help With)</h2>
+                </div>
+
+                <div class="dialogue-stream">
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                把百萬人口城市建在 3,000 多公尺高空，必然會面臨生理適應問題。文本最後一段說道：
+                                <div class="english-quote">
+                                    "Because it is so high up in the air, sometimes people get sick with mountain
+                                    sickness. There is a special tea in Bogota that helps them with mountain sickness."
+                                    <div class="translation">（因為它在半空中那麼高的地方，有時人們會患上高山症。波哥大有一種特別的茶，能幫助他們緩解高山症。）</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                這裡用了邏輯連接詞 <span class="code-pill">because</span>，帶出「因高海拔缺氧，導致得高山症（mountain
+                                sickness）」的因果關聯。<br>
+                                關於 <span class="code-pill">get sick</span>，中文讀者常常以為「sick」一定要是感冒、發燒或病毒感染。但英文的 sick
+                                泛指所有「身體生理機能偏離正常狀態的不適感」！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                原來如此！難怪吃壞肚子想吐是 <span class="code-pill">I feel sick</span>，暈車是 <span
+                                    class="code-pill">carsick</span>，想家是 <span class="code-pill">homesick</span>！sick
+                                更像是一個表示「身體或心理狀況偏離常態」的萬用標籤。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                另外請注意句中的動詞用法：<span class="code-pill">helps them with mountain sickness</span>。<br>
+                                初學者常想用 <span class="code-pill">cure</span>（治癒）或 <span
+                                    class="code-pill">treat</span>（治療），但那聽起來太嚴肅沉重（cure 多用於根除絕症）。高山症是一種環境適應過程，使用 <span
+                                    class="highlight-word">help somebody with something</span>
+                                既自然又道地，完美傳達出「這杯熱茶能幫你緩解不適、度過難關」的溫和語氣。
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Concept Card 5 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        🍵 文化與道地用語：Sick 的廣義定義與 Help With 溫和語氣
+                    </div>
+                    <div class="concept-body">
+                        <ul>
+                            <li><strong><span class="highlight-word">Sick</span> 的萬用範圍：</strong> 非僅指病毒感染，涵蓋所有生理/心理不適。
+                                <ul>
+                                    <li><span class="code-pill">carsick / seasick / airsick</span>（暈車 / 暈船 / 暈機）</li>
+                                    <li><span class="code-pill">homesick</span>（思鄉孤寂感）</li>
+                                    <li><span class="code-pill">mountain sickness</span>（高山症適應不適）</li>
+                                </ul>
+                            </li>
+                            <li><strong>道地語氣搭配：</strong> <span class="code-pill">help someone with [issue]</span>
+                                常用於表達緩解症狀或輔助改善，比醫學用語 <span class="code-pill">cure / treat</span> 更親切生活化。</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- PART 6 -->
+            <section id="part6" class="chapter-section">
+                <div class="chapter-header">
+                    <div class="chapter-number">6</div>
+                    <h2 class="chapter-title">結語與終極想像</h2>
+                </div>
+
+                <div class="dialogue-stream">
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                很有趣對吧？透過拆解這篇短小的文本，我們今天不僅學到了「主詞 + 動詞」的結構、釐清了 <span class="code-pill">a lot</span> 的用法、明白了
+                                <span class="code-pill">sick</span> 的廣義定義，更重要的是，我們透過英文這個載體，認識了一座位於 3,200 公尺高空的奇蹟之城。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                這也就是為什麼我們不該把語言當成死板的公式來背誦。當你把它當成探索世界的工具時，每一個單字其實都會活過來。學習一門新的語言，剛開始難免會覺得有點喘不過氣，就像是初次抵達波哥大，經歷了語言學習上的
+                                <span class="code-pill">mountain sickness</span> 一樣。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                其實你的大腦在適應新的語法結構，你的口腔在適應新的發音位置，這些不適應都是絕對正常的物理現象。只要你持續暴露在這個環境中慢慢拆解，你的身體和大腦最終一定會適應這個新高度的！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                在我們結束這次的旅程之前呢，我想留給你一個問題，一個只有你自己能在腦海中探索的畫面：
+                                <div class="english-quote" style="border-left-color: var(--brand-terracotta);">
+                                    "想像一下，幾年後你真的買了一張飛往哥倫比亞的機票。當飛機降落在海拔兩英里高的波哥大，艙門打開的那一刻，踏出空橋的你，身體會感受到什麼樣的衝擊？而在那座建在雲端的百萬人口城市裡面，當地位人微笑著遞給你一杯為了緩解高山症而泡製的熱騰騰特別茶的時候，你會用今天學到的哪一句英文來回應他們呢？"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-a">
+                        <div class="speaker-avatar">A</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 A <span class="speaker-role">問答領航員</span></div>
+                            <div class="dialogue-text">
+                                這真的是一個很棒的想像！繼續保持你的好奇心去解碼這個語言吧，也許有一天，這一切將不再只是想像。我們下次的探討見囉！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-card host-b">
+                        <div class="speaker-avatar">B</div>
+                        <div class="dialogue-content">
+                            <div class="speaker-name">主持人 B <span class="speaker-role">語言解碼員</span></div>
+                            <div class="dialogue-text">
+                                下次見！
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>© Podcast 逐字稿解碼精讀本 | 讓語言學習成為探索世界的旅程</p>
+        </footer>
+
+    </div>
+
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_10.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>
