@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沙漠生存生存法則：破解英文底層邏輯與發音密碼</title>
+    <style>
+        :root {
+            --primary: #c2410c;
+            /* 沙漠赭紅/橘 */
+            --primary-light: #fff7ed;
+            --primary-dark: #9a3412;
+            --secondary: #0d9488;
+            /* 綠洲青綠 */
+            --secondary-light: #f0fdfa;
+            --bg-page: #fcfbf9;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --highlight-bg: #fef3c7;
+            --highlight-border: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.8;
+            padding: 24px 12px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border-radius: 18px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 頂部橫幅 */
+        header {
+            background: linear-gradient(135deg, #7c2d12 0%, #c2410c 60%, #ea580c 100%);
+            color: #ffffff;
+            padding: 45px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #fed7aa;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 重點總覽盒 */
+        .summary-card {
+            background-color: var(--primary-light);
+            border: 1px solid #ffedd5;
+            border-left: 5px solid var(--primary);
+            margin: 30px;
+            padding: 22px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .summary-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-card ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+        }
+
+        .summary-card li {
+            font-size: 0.95rem;
+            color: #431407;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .summary-card li::before {
+            content: "🌵";
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* 內容區域 */
+        .transcript-body {
+            padding: 10px 32px 50px;
+        }
+
+        /* 章節分隔標題 */
+        .section-header {
+            text-align: center;
+            margin: 45px 0 25px;
+            position: relative;
+        }
+
+        .section-header::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+
+        .section-header span {
+            position: relative;
+            z-index: 2;
+            background-color: var(--bg-card);
+            padding: 4px 18px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border: 1px solid #fdba74;
+            border-radius: 20px;
+            background-color: #fffaf5;
+        }
+
+        /* 原文引導區塊 */
+        .quote-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 20px 0 25px;
+            font-family: "Georgia", serif;
+            font-style: italic;
+            color: #334155;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .quote-box .title {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* 對話氣泡卡片 */
+        .dialogue-item {
+            display: flex;
+            margin-bottom: 22px;
+            gap: 16px;
+        }
+
+        .avatar {
+            flex-shrink: 0;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-host .avatar {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+
+        .role-guide .avatar {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+        }
+
+        .bubble {
+            flex-grow: 1;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 18px 22px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .role-host .bubble {
+            border-top-left-radius: 2px;
+        }
+
+        .role-guide .bubble {
+            border-top-left-radius: 2px;
+        }
+
+        .name-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .role-host .name-label {
+            color: var(--primary-dark);
+        }
+
+        .role-guide .name-label {
+            color: var(--secondary);
+        }
+
+        .content {
+            font-size: 1.02rem;
+            color: var(--text-main);
+        }
+
+        /* 關鍵字與標籤 */
+        .tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 6px 4px 2px 0;
+        }
+
+        .tag-grammar {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .tag-phonetics {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .tag-phrase {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .en-term {
+            font-family: "Georgia", serif;
+            font-weight: 600;
+            color: #0f172a;
+            background-color: #f1f5f9;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* 結語思考卡片 */
+        .reflection-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 24px;
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .reflection-card h4 {
+            color: #334155;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .reflection-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                border-radius: 0;
+                border: none;
+            }
+
+            .transcript-body {
+                padding: 10px 16px 40px;
+            }
+
+            .summary-card {
+                margin: 20px 16px;
+            }
+
+            .dialogue-item {
+                gap: 10px;
+            }
+
+            .avatar {
+                width: 38px;
+                height: 38px;
+                font-size: 0.8rem;
+            }
+
+            .bubble {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>沙漠生存法則 × 英文底層邏輯解碼</h1>
+            <p>跟著沙漠動植物的極致生存智慧，一次搞懂骨架文法、發音物理學與語言思維</p>
+        </header>
+
+        <section class="summary-card">
+            <h3>本篇核心觀念速覽</h3>
+            <ul>
+                <li><b>A is B 骨架：</b>動詞 is 如同「等號」，定義核心事實</li>
+                <li><b>右項分支：</b>主幹先講，細節如「便利貼」往後補充</li>
+                <li><b>對話殺球術：</b>用「How + 形容詞?」爭取思考時間</li>
+                <li><b>發音物理學：</b>聲帶震動決定複數尾音 /s/ 或 /z/</li>
+                <li><b>時間空間感：</b>during 是長走廊，at 是精準紅點</li>
+                <li><b>三單加 S 追蹤器：</b>長篇大論中鎖定主詞的防呆機制</li>
+            </ul>
+        </section>
+
+        <main class="transcript-body">
+
+            <!-- PART 1 -->
+            <div class="section-header"><span>PART 1：沙漠基本法則 —— 英文的 A is B 與右項分支</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        想像一下，你住在一個每年降雨量不到 10
+                        英寸的地方。超級乾！而且如果你是一隻老鼠，又沒辦法像候鳥一樣直接飛走，要怎麼活下去？我想答案應該就是徹底顛倒作息，並學會從吃下去的乾燥種子裡偷水來喝吧。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        沒錯，這種在極端環境下榨取資源的生存本能，跟我們今天要做的深度解碼任務非常像！很多成年人學英文，翻開書的瞬間就像被丟進撒哈拉沙漠一樣，滿滿的單字和文法讓人窒息。但只要仔細觀察，這篇看似很乾的英文短文
+                        <span class="en-term">"What Lives in the Desert"</span> 裡，其實藏著一套非常有邏輯的底層生存法則。
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 01</span>
+                "A desert is a dry place with little rain. How little? A desert gets less than 10 inches of rain each
+                year. Some deserts are hot, a few can be cold. A desert is a habitat. A habitat is a place where animals
+                and plants live."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        剛才聽你念的時候，切換成中文腦，我們可能會說「沙漠很少下雨」或「沙漠很乾」。可是在英文裡，我注意到一個非常強烈的節奏：<span class="en-term">A desert is a
+                            dry place</span> 和 <span class="en-term">A desert is a habitat</span>。英文好像非常執著於這種 <b>A is
+                            B</b> 的結構？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        你的直覺非常敏銳！中文是依賴上下文的語言，常憑感覺拼湊概念，例如「今天天氣很好」裡面其實沒有動詞。但英文有非常嚴格的骨架，完整句子就像有頭有身軀的生物，一定要有主詞與動詞。
+                        <br><br>
+                        在現在簡單式中，<span class="en-term">is</span> 就像一個<b>「等號」</b>，強行把主詞與定義綁在一起。只要掌握 <span
+                            class="en-term">A is B</span> 或 <span class="en-term">A is not B</span>，你幾乎就能解釋世上任何事物。
+                        <div><span class="tag tag-grammar">文法：A is B 等號結構</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這反映了英文單刀直入的性格！像文中說 <span class="en-term">A habitat is a place...</span> 重點「棲息地是一個地方」先出來，後面才拖著一長串
+                        <span class="en-term">where animals and plants live</span>。這跟中文先講一堆前提完全相反。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        這在語言學上叫做<b>「右項分支」</b>。英文喜歡把最重要的核心資訊放在最前面，細節與裝飾配件不斷往右邊、往後方掛上去。
+                        <br><br>
+                        另外文中突然丟出短問句 <span class="en-term">How little?</span>
+                        也是高明的溝通技巧：當外國人講了一長串細節你聽不懂時，不用慌張，只要抓出對方的形容詞加上 <span class="en-term">How</span>（例如：對方說車很貴就回 <span
+                            class="en-term">How expensive?</span>，等很久就回 <span class="en-term">How
+                            long?</span>），兩字就能把球漂亮殺回去並爭取思考時間！
+                        <div><span class="tag tag-grammar">思維：右項分支</span><span class="tag tag-phrase">口語武器：How +
+                                形容詞?</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 2 -->
+            <div class="section-header"><span>PART 2：沙漠動物的適應 —— 發音物理學與便利貼子句</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 02</span>
+                "Hot deserts are home to many kinds of living things. Animals living there include owls, snakes,
+                lizards, and coyotes... Kangaroo rats sleep during the day and come out at night. Kangaroo rats get the
+                water they need from food."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這段很有畫面感！但我剛才聽那些動物複數結尾加 S，聲音好像不太一樣？像 <span class="en-term">snakes</span> 跟 <span
+                            class="en-term">owls</span> 的尾音感覺不同？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        這是讓英文聽起來道地的關鍵！加 S 要念清脆的 /s/ 還是像蜜蜂嗡嗡叫的 /z/，取決於前一個音的<b>人體聲帶物理機制</b>：
+                        <br>
+                        <ul>
+                            <li><b>摸喉嚨念 snakes：</b>k 的音喉嚨不震動（無聲音），為了順暢，後面的 S 也發無震動的清脆 <b>/s/</b> 音。</li>
+                            <li><b>摸喉嚨念 owls：</b>l 的音聲帶強力震動（有聲音），若硬切換成不震動的 s 喉嚨會打結，大腦為了省力，會自動轉為帶震動的 <b>/z/</b> 音（如
+                                lizards, coyotes）。</li>
+                        </ul>
+                        語言是長在身體上的物理慣性，根本不需要死背規則！
+                        <div><span class="tag tag-phonetics">發音：聲帶震動慣性法則</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        另外，袋鼠鼠（Kangaroo rat）白天睡覺、晚上出來，文本用了 <span class="en-term">during the day</span> 與 <span
+                            class="en-term">at night</span>。為什麼白天用 during，晚上卻用 at 呢？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        這展現了英文對時間的「空間感」：
+                        <br>
+                        <ul>
+                            <li><span class="en-term">during</span> 像一條<b>長長的走廊</b>，代表一段有長度的期間（漫長的白天酷熱）。</li>
+                            <li><span class="en-term">at</span> 則像地圖上<b>精準標記的紅點</b>，太陽一下山、溫度驟降的精準時間點，動物就出動了。</li>
+                        </ul>
+                        學語言也一樣，不用在白天硬擠漫長時間痛苦死背，在睡前放鬆精準聽 10 分鐘（at night），找到節奏更有效。
+                        <div><span class="tag tag-grammar">介系詞：時間的空間感</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        最反直覺的是這句：<span class="en-term">"Kangaroo rats get the water they need from food."</span>
+                        中文邏輯是「他們需要的水」，英文偏偏寫成 <span class="en-term">the water they need</span>，這是什麼邏輯？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        這就是<b>「便利貼思維」</b>（省略關係代名詞的關係子句）！
+                        <br><br>
+                        英文務實急躁，先把真正重要的名詞主角丟出來：<span class="en-term">the water</span>（水！），接著把 <span class="en-term">they
+                            need</span> 當作一張自帶黏性的便利貼，「啪」一聲貼在 water 後面補充說明。文法上原本是 <span class="en-term">the water that
+                            they need</span>，但日常對話母語人士連 that 膠水都省了，直接貼上！習慣「先講主角，再貼便利貼」，就不會在大腦裡痛苦中翻英了。
+                        <div><span class="tag tag-grammar">思維：名詞後方便利貼法</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 3 -->
+            <div class="section-header"><span>PART 3：植物的極致防禦 —— 三單 S 追蹤器與拉丁複數</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 03</span>
+                "Some plants live in the hot desert, only a few kinds of trees and bushes can survive there. One of the
+                most common desert plants is the cactus. The cactus collects and stores water in its stem. Sharp spines
+                protect most cacti from animals."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        仙人掌只有一株，但後面動詞卻是 <span class="en-term">collects and stores</span> 加了
+                        S。中文動詞從來不變（我吃飯、仙人掌喝水），英文為什麼非要加 S 折磨人？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        把第三人稱單數動詞加 S 看成<b>「語言防呆追蹤器」</b>！
+                        <br><br>
+                        英文句子有時很長很複雜，為了確保聽者在長篇大論中依然能緊緊鎖定是「誰」在做動作，現在式強制要求加 S。這個 S
+                        就像訊號彈，提醒大腦「做動作的主角是那個孤單的他/它」。它是為了溝通精準度而存在的鎖與鑰匙。
+                        <div><span class="tag tag-grammar">觀念：動詞 S 是主詞追蹤訊號</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        那前面單數明明是 <span class="en-term">the cactus</span>，最後一句卻變成 <span class="en-term">most
+                            cacti</span>？<span class="en-term">cacti</span> 也是仙人掌嗎？難道我們連拉丁文規則都要背？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        沒錯，<span class="en-term">cacti</span> 是古拉丁文借詞留下來的複數型（-us 變
+                        -i）。但<b>千萬不要去死背所有不規則拉丁文規則</b>！面對例外，要像沙漠植物一樣「適應它，但不被它困住」。看過一次、心裡有底即可，別讓少數例外壞了學習胃口。
+                        <br><br>
+                        最後值得打包帶走的黃金句型是：<br>
+                        <span class="en-term"><b>A protects B from C</b></span>（A 保護 B 免受 C 傷害）
+                        <ul>
+                            <li>例句 1：<span class="en-term">Sunglasses protect my eyes from the
+                                    sun.</span>（太陽眼鏡保護眼睛免受陽光傷害）</li>
+                            <li>例句 2：<span class="en-term">A heavy coat protects you from the cold.</span>（厚大衣保護你免受寒冷）
+                            </li>
+                        </ul>
+                        <div><span class="tag tag-phrase">黃金句型：A protects B from C</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 4 -->
+            <div class="section-header"><span>PART 4：總結與思考 —— 尋找日常中的英文種子</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        不知不覺我們竟然把這篇短文完全解碼了！學會了單刀直入的 A is B 骨架、發音聲帶震動慣性、名詞後方便利貼思維、動詞 S
+                        追蹤器，以及防禦句型。只要懂了背後的原因，規則就不再乾旱，而是滋養的雨水。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-guide">
+                <div class="avatar">嚮導</div>
+                <div class="bubble">
+                    <div class="name-label">語言嚮導</div>
+                    <div class="content">
+                        袋鼠鼠沒有抱怨沙漠太熱，它改變作息；仙人掌沒有抱怨不下雨，它把水鎖在莖裡。不用急著一天背完一千個單字，每天吸收一個邏輯存起來，你的語言能力就會扎下堅韌的根。
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-card">
+                <h4>💡 留給你的課後小探索</h4>
+                <p>
+                    袋鼠鼠能從乾硬的種子裡榨出水來。<br>
+                    在看似全中文的環境裡，哪裡隱藏著你可以練習英文的「種子」？<br>
+                    <b>是手機 App 切換成英文介面？捷運站牌的中英對照？還是看劇時試著關閉字幕 10 分鐘？</b><br>
+                    只要打開尋找的雷達，到處都是讓語言茁壯的水源！
+                </p>
+            </div>
+
+        </main>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_12.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秘魯辣味辣椒：拆解英文學習的異國料理密碼</title>
+    <style>
+        :root {
+            --primary: #dc2626;
+            /* 鮮紅辣椒色 */
+            --primary-light: #fef2f2;
+            --primary-dark: #991b1b;
+            --secondary: #ea580c;
+            /* 橙黃烤色 */
+            --secondary-light: #fff7ed;
+            --bg-page: #fcfbf7;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #f3f4f6;
+            --accent-yellow: #fef3c7;
+            --accent-border: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.8;
+            padding: 24px 12px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border-radius: 18px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+        }
+
+        /* 頂部橫幅 */
+        header {
+            background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #ea580c 100%);
+            color: #ffffff;
+            padding: 40px 28px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #fecaca;
+            font-size: 1rem;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* 摘要重點盒 */
+        .summary-card {
+            background-color: var(--primary-light);
+            border: 1px solid #fee2e2;
+            border-left: 5px solid var(--primary);
+            margin: 28px;
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .summary-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-card ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+        }
+
+        .summary-card li {
+            font-size: 0.95rem;
+            color: #7f1d1d;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .summary-card li::before {
+            content: "🌶️";
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* 內容對話區 */
+        .transcript-body {
+            padding: 10px 28px 40px;
+        }
+
+        /* 章節標題 */
+        .section-header {
+            text-align: center;
+            margin: 40px 0 24px;
+            position: relative;
+        }
+
+        .section-header::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e5e7eb;
+            z-index: 1;
+        }
+
+        .section-header span {
+            position: relative;
+            z-index: 2;
+            background-color: var(--bg-card);
+            padding: 4px 18px;
+            color: var(--primary);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border: 1px solid #fca5a5;
+            border-radius: 20px;
+            background-color: #fff5f5;
+        }
+
+        /* 原文引導區塊 */
+        .quote-box {
+            background-color: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0 25px;
+            font-family: "Georgia", serif;
+            font-style: italic;
+            color: #374151;
+            line-height: 1.9;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .quote-box .title {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* 對話氣泡 */
+        .dialogue-item {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 14px;
+        }
+
+        .avatar {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.88rem;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-host .avatar {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+
+        .role-expert .avatar {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .bubble {
+            flex-grow: 1;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .role-host .bubble {
+            border-top-left-radius: 2px;
+        }
+
+        .role-expert .bubble {
+            border-top-left-radius: 2px;
+        }
+
+        .name-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .role-host .name-label {
+            color: var(--secondary);
+        }
+
+        .role-expert .name-label {
+            color: var(--primary);
+        }
+
+        .content {
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        /* 標籤樣式 */
+        .tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 6px 4px 2px 0;
+        }
+
+        .tag-pronunciation {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .tag-vocab {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .tag-grammar {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .en-term {
+            font-family: "Georgia", serif;
+            font-weight: 600;
+            color: #111827;
+            background-color: #f3f4f6;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* 課後反思卡片 */
+        .reflection-card {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid #fed7aa;
+            border-radius: 14px;
+            padding: 24px;
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .reflection-card h4 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .reflection-card p {
+            color: #7c2d12;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                border-radius: 0;
+                border: none;
+            }
+
+            .transcript-body {
+                padding: 10px 16px 30px;
+            }
+
+            .summary-card {
+                margin: 18px 16px;
+            }
+
+            .dialogue-item {
+                gap: 10px;
+            }
+
+            .avatar {
+                width: 38px;
+                height: 38px;
+                font-size: 0.8rem;
+            }
+
+            .bubble {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>秘魯辣味辣椒 × 英文學習料理課</h1>
+            <p>像拆解異國料理一樣破譯英文！從發音借字、高 ROI 單字到萬用文法結構</p>
+        </header>
+
+        <section class="summary-card">
+            <h3>本集核心精華速覽</h3>
+            <ul>
+                <li><b>外來借字發音：</b>Jalapeño 來自西文，J 發 H 的氣音（哈拉平喲）</li>
+                <li><b>高 ROI 萬用單字：</b>Stuff（動詞塞入、形容詞塞滿、名詞餡料 / I'm stuffed!）</li>
+                <li><b>擺脫直譯陷阱：</b>Ground meat 是研磨角肉；Burn 指化學灼熱感</li>
+                <li><b>倍數比較級公式：</b>數字 + times + 比較級 + than</li>
+                <li><b>語感前瞻性：</b>So that 展現主動目的，勝過被動事後說明的 because</li>
+                <li><b>萬用破冰句型：</b>If you like A, this B is for you!</li>
+            </ul>
+        </section>
+
+        <main class="transcript-body">
+
+            <!-- PART 1 -->
+            <div class="section-header"><span>PART 1：異國料理與英文學習的完美比喻</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        想像一下這個畫面：你走進一家充滿異國風情的南美餐廳，服務生端上了一道你從沒見過的料理。菜的最上面是一整顆鮮紅色的辣椒，而且還冒著熱氣。你半信半疑地咬下第一口，瞬間一股強烈的辛辣感直接衝上門，眼淚差點標出來，嘴裡簡直像著了火一樣！這時候你腦海裡大概只有一個念頭：「這到底是什麼東西？」
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        對很多台灣的成年人來說，要從零開始學習一門全新的語言，那個感覺真的就跟咬下那口未知的超辣辣椒一模一樣！一開始絕對充滿恐懼、無從下口，甚至覺得有點挫折。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        確實如此。很多初學者面對一整篇密密麻麻的英文，第一反應就是想逃避，覺得那是另一個世界的語言。但我們今天的任務就是要改變這個現狀！
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        沒錯，我們特地拋開死板枯燥的文法教科書，挑選了一篇名為 <span class="en-term">"Spicy Peruvian
+                            Peppers"</span>（秘魯辣味辣椒）的生動短文。它只有短短 100 多個字，介紹了秘魯鼎鼎大名的 <span
+                            class="en-term">Rocotos</span>（洛克脫辣椒），還教你怎麼做當地經典料理 <span class="en-term">Rocoto
+                            Relleno</span>（香烤填陷洛克脫辣椒）。
+                        <br><br>
+                        學習語言其實就像拆解一道異國料理：只要把<b>食材（單字）</b>和<b>食譜（文法邏輯）</b>一樣樣攤開來看，你會發現它根本沒有想像中那麼可怕。
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖</span>
+                "Spicy Peruvian Peppers. Peru is famous for its peppers. Rocotos are Peruvian peppers that are hot, hot,
+                hot. Even after they are boiled, they still are very spicy.<br>
+                People in Peru love stuffing rocotos with beef, cheese, and egg. These stuffed peppers are called Rocoto
+                Relleno. If you like spicy food, this dish is for you.<br>
+                A raw rocoto pepper is 10 times spicier than a raw jalapeño. To make it less spicy, people take out the
+                seeds from inside the pepper—many times they use gloves so that they don't burn their hands. Then, chefs
+                stuff these peppers with ground meat, hard-boiled eggs, and top them with cheese. Then chefs bake the
+                stuffed peppers in the oven. Would you try this spicy pepper dish?"
+            </div>
+
+            <!-- PART 2 -->
+            <div class="section-header"><span>PART 2：發音陷阱與外來語的文化脈絡</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        聽你唸完，原本盯著大塊密麻文字的壓迫感突然減少好多！但我注意到文中提到一種用來做比較級的墨西哥辣椒 <span
+                            class="en-term">jalapeño</span>，如果照我們以前學的自然發音法，看字面 <span
+                            class="en-term">J-A-L-A-P-E-Ñ-O</span> 直覺一定想念成 "Jalapanel" 或發 /j/ 的音，但你剛才念的完全不是這樣？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        這點出了英文非常核心的本質：<b>英文是一個極度愛「借東西」的語言！</b>在歷史發展中，它大量吸收了法文、德文，甚至西班牙文的詞彙，特別是在食物領域。
+                        <br><br>
+                        <span class="en-term">jalapeño</span> 是直接從西班牙文借過來的，保留了西文發音血統。在西文裡，字首的 J 是發 H 的氣音，所以我們要念作 <span
+                            class="en-term">/hɑːləˈpeɪnjoʊ/</span>（哈拉平喲）。了解單字背後的文化來源，比死背規則更容易記住！
+                        <div><span class="tag tag-pronunciation">發音陷阱：西文借詞 J 發 /h/</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        另一個容易卡住的地方是詞性變化。形容詞用 <span class="en-term">spicy</span>，但變成名詞 <span
+                            class="en-term">spiciness</span> 時字尾變長了，重音該放在哪裡呢？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        英文是有輕重拍的語言。當字尾加長變成 <span class="en-term">spiciness</span> 時，重音依然要牢牢釘在最前面的 <span
+                            class="en-term">spy-</span>，後面的 <span class="en-term">-ciness</span>
+                        就像溜滑梯一樣輕輕快速滑過去。只要把輕音節弱化，英文聽起來就會順暢很多。
+                        <br><br>
+                        至於文本裡的 <span class="en-term">"hot, hot,
+                            hot"</span>，母語人士重複單字是為了<b>堆疊情緒</b>。關鍵是每次重複時音調要有所變化（一次比一次高或最後加重拉長），把情緒展現出來，就不會像機器人在讀稿了。
+                        <div><span class="tag tag-pronunciation">節奏：重音固定與溜滑梯弱化</span><span
+                                class="tag tag-pronunciation">口語技巧：重複單字堆疊情緒</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 3 -->
+            <div class="section-header"><span>PART 3：靈魂單字食材與情境變身</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        文本裡有一個字反覆出現，根本是這篇文章的靈魂，那就是 <span class="en-term">stuff</span>！它在句子裡展現了三次變身呢！
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        觀察得非常仔細！<span class="en-term">Stuff</span> 是投資報酬率極高的單字，核心概念就是<b>「塞滿」</b>：
+                        <ul>
+                            <li><span class="en-term">stuffing rocotos</span>：加 ing 變成動名詞，表示「塞餡料的動作」。</li>
+                            <li><span class="en-term">stuffed peppers</span>：加 ed 變成形容詞，描述「被塞滿餡料的狀態」。</li>
+                            <li><span class="en-term">chefs stuff these peppers</span>：還原為原形動詞，表示「廚師塞入餡料」。</li>
+                        </ul>
+                        <b>生活延伸：</b>如果你去吃大餐吃得太撐，肚子塞滿食物，你可以拍拍肚子說：<span class="en-term">"I am stuffed!"</span>，這比教科書教的
+                        "I'm full" 更道地生動！
+                        <div><span class="tag tag-vocab">高 ROI 單字：stuff 的三型變身</span><span class="tag tag-vocab">道地表達：I
+                                am stuffed</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        還有幾個字容易讓人誤解，比如 <span class="en-term">ground meat</span>。初學者如果直譯成「地上撿起來的肉」，這餐廳大概明天就要被衛生局查封了吧？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        哈哈！這裡的 <span class="en-term">ground</span> 不是名詞地板，而是動詞 <span
+                            class="en-term">grind</span>（研磨/絞碎）的過去分詞當形容詞用，所以 <span class="en-term">ground meat</span>
+                        就是<b>絞肉</b>。像買咖啡粉包裝上的 <span class="en-term">ground coffee</span> 也是一樣的道理。
+                        <br><br>
+                        另外，處理辣椒帶手套 <span class="en-term">so that they don't burn their hands</span> 中的 <span
+                            class="en-term">burn</span>，核心概念是<b>「造成灼熱刺痛的傷害」</b>。辣椒素沾到皮膚造成的化學灼傷，感受上跟被火燙到一樣，所以吃太辣也可以說
+                        <span class="en-term">"My tongue is burning!"</span>。
+                        <div><span class="tag tag-vocab">單字解析：ground meat (絞肉)</span><span
+                                class="tag tag-vocab">廣義延伸：burn (灼熱刺痛)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 4 -->
+            <div class="section-header"><span>PART 4：破譯文法食譜與萬用句型外掛</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        文本裡有一句做辣度比較的句子：<span class="en-term">"A raw rocoto pepper is 10 times spicier than a raw
+                            jalapeño."</span>（生洛克脫辣椒比生墨西哥辣椒辣十倍）。這種倍數比較級常常是台灣學生的死穴，因為中文語序完全不同！
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        最佳破解法是把它當成<b>數學公式</b>：英文邏輯是<b>「先講倍數，再講狀態，最後拉出比較對象」</b>。
+                        <br><br>
+                        <div
+                            style="background-color: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px dashed #cbd5e1; margin: 8px 0; font-weight: bold;">
+                            公式：數字 + times + 比較級 + than + 比較對象
+                        </div>
+                        例如：我的手機比你的貴三倍 ➔ <span class="en-term">My phone is <b>three times more expensive than</b>
+                            yours.</span>
+                        <div><span class="tag tag-grammar">文法外掛：倍數比較級公式</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        那為什麼文本用 <span class="en-term">so that</span>（以便於）連接帶手套這件事，而不直接用大家最熟悉的 <span
+                            class="en-term">because</span> 呢？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        兩者的心態完全不同：
+                        <ul>
+                            <li><span class="en-term">because</span>：著重在<b>事後被動解釋原因</b>。</li>
+                            <li><span class="en-term">so that</span>：帶有強烈的<b>前瞻性與主動目的性</b>，強調人們是刻意、有計畫性地採取防護措施。</li>
+                        </ul>
+                        最後，請大家一定要打包帶走這個<b>萬用破冰模板</b>：
+                        <br>
+                        <span class="en-term"><b>If you like [A], this [B] is for you.</b></span>
+                        <br>例如：<span class="en-term">If you like sci-fi movies, this film is for
+                            you.</span>（如果你喜歡科幻電影，這部片很適合你。）
+                        <div><span class="tag tag-grammar">語感差異：because vs. so that</span><span
+                                class="tag tag-grammar">萬用模組：If you like..., this is for you</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 5 -->
+            <div class="section-header"><span>PART 5：文章結構與主動語態的力道</span></div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言專家</div>
+                    <div class="content">
+                        整篇文章在描述做菜過程時，使用了清晰的<b>時間順序（chronological sequence）</b>，透過 <span class="en-term">Then...</span>
+                        引導步驟。
+                        <br><br>
+                        更棒的是，文章幾乎全篇使用<b>主動語態</b>（例如 <span class="en-term">People take out the seeds</span>、<span
+                            class="en-term">Chefs stuff these
+                            peppers</span>），而不是堆疊複雜的被動語態。初學者先練好主動語態，明確交代「誰做了什麼」，英文聽起來反而更俐落、更有自信！
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-card">
+                <h4>🌶️ 準備好嚐嚐你的英文料理了嗎？</h4>
+                <p>
+                    學習英文就像面對那顆未知的超辣辣椒。今天我們已經把最辣、最難入口的地方（單字陷阱與文法盲點）給挑掉了！<br>
+                    剩下的，就是你願不願意跨出舒適圈，張開嘴巴大聲朗讀出來。<br>
+                    <b>成就感就是最好的調味劑！今天就開口嘗試這道英文料理吧！</b>
+                </p>
+            </div>
+
+        </main>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_13.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

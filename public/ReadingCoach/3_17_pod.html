@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打破說明書迷思：用「積木邏輯」重構英文學習直覺</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            /* 靛藍 */
+            --primary-light: #e0e7ff;
+            --primary-dark: #3730a3;
+            --secondary: #0284c7;
+            /* 天藍 */
+            --secondary-light: #e0f2fe;
+            --accent: #f59e0b;
+            /* 暖黃 */
+            --accent-light: #fef3c7;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.85;
+            padding: 24px 12px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border-radius: 18px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 頂部橫幅 */
+        header {
+            background: linear-gradient(135deg, #3730a3 0%, #4f46e5 60%, #0284c7 100%);
+            color: #ffffff;
+            padding: 42px 28px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: var(--primary-light);
+            font-size: 1rem;
+            max-width: 660px;
+            margin: 0 auto;
+        }
+
+        /* 重點摘要盒 */
+        .summary-card {
+            background-color: var(--primary-light);
+            border: 1px solid #c7d2fe;
+            border-left: 5px solid var(--primary);
+            margin: 28px;
+            padding: 22px 24px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .summary-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-card ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .summary-card li {
+            font-size: 0.95rem;
+            color: #312e81;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .summary-card li::before {
+            content: "🧩";
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* 主內容區 */
+        .transcript-body {
+            padding: 10px 28px 40px;
+        }
+
+        /* 章節標題 */
+        .section-header {
+            text-align: center;
+            margin: 42px 0 24px;
+            position: relative;
+        }
+
+        .section-header::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+
+        .section-header span {
+            position: relative;
+            z-index: 2;
+            background-color: #eef2ff;
+            color: var(--primary-dark);
+            padding: 5px 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border: 1px solid #c7d2fe;
+            border-radius: 20px;
+        }
+
+        /* 原文引導區塊 */
+        .quote-box {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px 12px 12px 8px;
+            padding: 20px 24px;
+            margin: 20px 0 25px;
+            font-family: "Georgia", serif;
+            color: #334155;
+            line-height: 1.9;
+        }
+
+        .quote-box .title {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* 對話氣泡 */
+        .dialogue-item {
+            display: flex;
+            margin-bottom: 22px;
+            gap: 14px;
+        }
+
+        .avatar {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .role-host .avatar {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+        }
+
+        .role-expert .avatar {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .bubble {
+            flex-grow: 1;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .name-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .role-host .name-label {
+            color: var(--secondary);
+        }
+
+        .role-expert .name-label {
+            color: var(--primary);
+        }
+
+        .content {
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        /* 標籤樣式 */
+        .tag-group {
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 4px 4px 2px 0;
+        }
+
+        .tag-grammar {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .tag-phonics {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .tag-mindset {
+            background-color: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .tag-writing {
+            background-color: #faf5ff;
+            color: #7e22ce;
+            border: 1px solid #e9d5ff;
+        }
+
+        .en-term {
+            font-family: "Georgia", serif;
+            font-weight: 600;
+            color: #0f172a;
+            background-color: #f1f5f9;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* 反思卡片 */
+        .reflection-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 14px;
+            padding: 26px;
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .reflection-card h4 {
+            color: #0369a1;
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .reflection-card p {
+            color: #0c4a6e;
+            font-size: 0.96rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                border-radius: 0;
+                border: none;
+            }
+
+            .transcript-body {
+                padding: 10px 16px 30px;
+            }
+
+            .summary-card {
+                margin: 18px 16px;
+            }
+
+            .dialogue-item {
+                gap: 10px;
+            }
+
+            .avatar {
+                width: 38px;
+                height: 38px;
+                font-size: 0.8rem;
+            }
+
+            .bubble {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>打破說明書迷思：用「積木邏輯」學英文</h1>
+            <p>擺脫二分法的嚴肅包袱，從嘴巴的發音物理學到電影導演般的時態鏡頭</p>
+        </header>
+
+        <section class="summary-card">
+            <h3>本集核心學習精華</h3>
+            <ul>
+                <li><b>嘴巴的物理學：</b>發音慣性決定尾音！<span class="en-term">solids</span>（有聲 /z/）與 <span
+                        class="en-term">blocks</span>（無聲 /s/）。</li>
+                <li><b>動詞 VIP 專屬積木：</b>不規則動詞是歷史磨合出的高頻常用詞，不是來找麻煩的例外。</li>
+                <li><b>時態的靜態底座：</b>現在簡單式代表「不變的常態與客觀真理」，而非僅指此時此刻。</li>
+                <li><b>電影導演長鏡頭：</b>過去進行式鋪陳背景（<span class="en-term">was making</span>），簡單過去式創造突發焦點。</li>
+                <li><b>片語的畫面色彩：</b><span class="en-term">take apart</span> 秩序拆解 vs <span class="en-term">knock
+                        down</span> 痛快推倒。</li>
+                <li><b>語言相對論：</b>學英文是換上全新度數的眼鏡，重新詮釋觀察世界的方式。</li>
+            </ul>
+        </section>
+
+        <main class="transcript-body">
+
+            <!-- PART 1 -->
+            <div class="section-header"><span>PART 1：放下組裝家具的包袱，開啟積木思維</span></div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        你有沒有發現，我們大人在面對全新挑戰時，心裡常常會有一種無形的包袱？特別是學語言這件事，包袱超重！
+                        <br><br>
+                        就像組裝大型系統家具一樣，我們總覺得需要極度精準，必須緊緊抓著說明書，確認第一步、第二步，深怕鎖錯一顆螺絲，整座櫃子就會直接塌掉變成一堆廢木板。很多成年人也是帶著這種「不容許犯錯」的壓力在學英文。
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        確實如此。成人的思維很容易陷入絕對的二分法：對或錯、標準或不標準。只要碰到模糊地帶或發現規則有例外，挫折感就會非常巨大。
+                        <br><br>
+                        但如果我們換個角度呢？把學英文不當成嚴肅的系統家具組裝，而是當成小時候玩的<b>「積木」</b>？今天我們沒有枯燥的文法書，而是要透過一篇簡短的文案 <span
+                            class="en-term">Building Blocks</span>，帶你感受英文在嘴巴裡的真實發音，把核心文法像積木一樣一塊塊拆解開來。
+                        <div class="tag-group">
+                            <span class="tag tag-mindset">心態重構：打破二分法，用積木思維學英文</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 2 -->
+            <div class="section-header"><span>PART 2：發音的「嘴巴物理學」與連音順勢</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖 Part 1</span>
+                "My class learned about solids today. Solids are things that have their own shape. Blocks are solids."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這段話出現了幾個複數名詞，結尾都加了 S，像是 <span class="en-term">solids</span>（固體）和 <span
+                            class="en-term">blocks</span>（積木）。很多人以為只要看到 S 就一律發像蛇一樣的「嘶」氣音，難道這兩個字的結尾發音不一樣嗎？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        完全不一樣！這不是死板的文法規定，而是<b>人體發音器官的自然慣性（物理學）</b>：
+                        <ul>
+                            <li><b><span class="en-term">solids</span>（/z/ 有聲）：</b>S 前面的子音是 D。發 D
+                                時喉嚨會震動（有聲子音），為了節省力氣讓發音一氣呵成，震動慣性會延續到 S 上，發出像蜜蜂嗡嗡聲的 /z/。</li>
+                            <li><b><span class="en-term">blocks</span>（/s/ 無聲）：</b>S 前面是 K。發 K 時聲帶不震動、只有空氣噴出（無聲子音），因此後面的
+                                S 順理成章維持純粹氣音的 /s/。</li>
+                        </ul>
+                        <div class="tag-group">
+                            <span class="tag tag-phonics">發音物理：有聲 vs 無聲子音的自然延續</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這真的解開了我長久以來的盲點！原來不是要死背，而是去感受氣流和震動。那如果是 <span class="en-term">have their own shape</span>
+                        這幾個字連在一起時，舌頭很容易打結，母語人士是怎麼處理的？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        母語人士會使用<b>「連音技巧」</b>。<span class="en-term">have</span> 尾音的 /v/
+                        上牙齒輕碰一下下嘴唇即可，不用發得太重，把它當作跳板，舌頭立刻順勢推出準備接 <span class="en-term">their</span> 開頭的 /ð/ 音。
+                        <br><br>
+                        語言的發展本來就是為了溝通效率，發音會自然趨向最省力的方式。這就像積木的邊角被磨圓，組裝起來會更加滑順。
+                        <div class="tag-group">
+                            <span class="tag tag-phonics">口語技巧：連音滑順過渡 (Linking)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 3 -->
+            <div class="section-header"><span>PART 3：時態的客觀底座與不規則動詞 VIP</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖 Part 2</span>
+                "Yesterday, I built a school out of blocks. When I was done playing with my block school, I took it
+                apart and put the blocks away. I keep all my blocks in a box."
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        第一段提到 <span class="en-term">learned</span> 用過去式，代表課上了；但解釋固體時卻說 <span class="en-term">solids
+                            are...</span> 用現在式。到了第二段，建造變成了 <span class="en-term">built</span>，拿走變成了 <span
+                            class="en-term">took</span>。為什麼不規則動詞不能統一加 -ed 就好？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        我們可以從兩個層面來拆解：
+                        <ol>
+                            <li><b>現在簡單式的本質：</b>解釋「固體有自己形狀」用現在式，因為不管昨天、今天或明天，這都是不變的客觀真理與常態，就像積木堆裡最穩固的底座。</li>
+                            <li><b>不規則動詞是 VIP 專屬積木：</b>觀察 <span class="en-term">eat</span>, <span
+                                    class="en-term">go</span>, <span class="en-term">make</span>, <span
+                                    class="en-term">build</span>, <span
+                                    class="en-term">take</span>，它們都是人類歷史上最常使用的核心動作。在漫長的口耳相傳中，被時間河流沖刷磨合，變成了最簡短順口的形狀。它們因為太常出現，所以獲得了專屬造形！
+                            </li>
+                        </ol>
+                        <div class="tag-group">
+                            <span class="tag tag-grammar">時態邏輯：現在簡單式代表不變真理</span>
+                            <span class="tag tag-writing">單字記憶：不規則動詞＝高頻 VIP 專屬積木</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        那這段裡面的 <span class="en-term">take it apart</span>（拆開）和 <span class="en-term">put the blocks
+                            away</span>（收好），這種動詞加上介系詞的組合，感覺也很像在拼積木？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        沒錯，這就是<b>動詞片語（Phrasal Verbs）</b>。母語人士非常喜歡用基本動詞加上介系詞，拼出全新的畫面感。<span class="en-term">apart</span>
+                        有分離之意，<span class="en-term">take apart</span> 就像把零件一個個分開；<span class="en-term">away</span>
+                        有歸位之意，<span class="en-term">put away</span> 就是妥當收納。
+                        <br><br>
+                        而最後一句回到 <span class="en-term">I keep all my blocks in a
+                            box</span>，又切回現在式，因為這是主角一直以來的<b>習慣與日常常態</b>，讓故事瞬間有了立體感。
+                        <div class="tag-group">
+                            <span class="tag tag-grammar">片語畫面：動詞＋介系詞的積木組合</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 4 -->
+            <div class="section-header"><span>PART 4：電影導演長鏡頭與情節衝突</span></div>
+
+            <div class="quote-box">
+                <span class="title">英文原文朗讀 📖 Part 3</span>
+                "I dumped out my blocks. Sante walked into the room while I was making my house. He asked me if he could
+                play, too. I said yes if he was making something different. Sante made a train. When we finished our
+                projects, we played with them for a while. Then we knocked them down! All aboard!"
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        這段話出現了 <span class="en-term">Sante walked into the room while I was making my
+                            house</span>。既然都是過去發生的事，為什麼要用過去進行式 <span class="en-term">was making</span>，而不是都用簡單過去式就好？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        如果全都用簡單過去式，聽起來會像一份平淡的警察筆錄。但使用了進行式，你就從警察變成了<b>電影導演</b>！
+                        <br><br>
+                        <span class="en-term">I was making my house</span> 就像架設了一個<b>背景長鏡頭</b>：畫面中孩子正專心疊著積木，動作持續進行中；此時
+                        <span class="en-term">he walked into the room</span>
+                        作為一個<b>突發事件瞬間切入</b>，打斷了背景。進行式鋪陳背景，簡單式創造突發焦點，故事的層次感就出來了。
+                        <div class="tag-group">
+                            <span class="tag tag-writing">敘事技巧：進行式長鏡頭 vs 簡單式突發焦點</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-host">
+                <div class="avatar">主持</div>
+                <div class="bubble">
+                    <div class="name-label">主持人</div>
+                    <div class="content">
+                        另外，這裡用 <span class="en-term">knocked them down</span> 來形容弄散積木，跟第二段看到的 <span class="en-term">took
+                            it apart</span> 有什麼差別？最後一句 <span class="en-term">All aboard!</span> 又該怎麼理解？
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-item role-expert">
+                <div class="avatar">專家</div>
+                <div class="bubble">
+                    <div class="name-label">語言顧問</div>
+                    <div class="content">
+                        這正是動詞片語的魅力所在：
+                        <ul>
+                            <li><b><span class="en-term">take apart</span>：</b>帶有秩序感，一個個零件拆解、分類收好。</li>
+                            <li><b><span class="en-term">knock down</span>：</b>帶有敲擊與碰撞的力道，呈現孩子玩到興奮處、「轟隆一聲」把建築物推倒的動態快感。
+                            </li>
+                        </ul>
+                        而 <span class="en-term">All aboard!</span>
+                        是極具文化色彩的慣用語（火車或船隻起程時長官大喊的「請上車/上船」）。放在結尾，完美呈現孩子蓋好積木火車後，立刻進入角色扮演的純真熱情！
+                        <div class="tag-group">
+                            <span class="tag tag-grammar">文化慣用語：All aboard! 的情境臨場感</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-card">
+                <h4>🧠 語言相對論思考：你的腦海鏡頭是什麼形狀？</h4>
+                <p>
+                    語言學中有個著名的「語言相對論」，探討當你掌握一種全新語言、習慣它切換時間的方式（例如像電影長鏡頭般的過去進行式）時，是否也在無形中改變了你大腦觀察與思考世界的形狀？<br><br>
+                    <b>學英文不只是換一套發音，而是獲得一副全新度數的眼鏡。</b><br>
+                    下次練習口說或寫作時，就算講得不完美，就像積木推倒重來就好。大膽去把玩你的語言積木吧！
+                </p>
+            </div>
+
+        </main>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '3_17.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span></div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>
