@@ -247,6 +247,22 @@
         .tab-content.active {
             display: block;
         }
+
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 
@@ -282,6 +298,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -451,6 +468,32 @@
                     </ol>
                 </div>
             </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -471,7 +514,212 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Theropods were the fierce meat eaters of the dinosaur world.",
+                zh: "獸腳類是恐龍世界中兇猛的肉食性恐龍。",
+                chunks: ["theropods were", "the fierce meat eaters", "of the dinosaur world"],
+                reviewData: [
+                    { chunk: "theropods were", meaning: "獸腳類是", collocation: "theropods were dinosaurs", synonym: "theropod dinosaurs were", pronunciation: "theropods 的 s /z/ 與 were 的 w 稍微停頓轉換。" },
+                    { chunk: "fierce meat eaters", meaning: "兇猛的肉食動物", collocation: "fierce meat eaters hunted", synonym: "ferocious carnivores", pronunciation: "fierce 的 ce /s/ 與 meat 的 m 順暢過渡。" },
+                    { chunk: "of the dinosaur world", meaning: "在恐龍世界中", collocation: "kings of the dinosaur world", synonym: "in the realm of dinosaurs", pronunciation: "of 的 f /v/ 與 the 的 th 連讀。" }
+                ]
+            },
+            {
+                en: "Unlike most plant eaters, theropods walked on their back legs.",
+                zh: "與大多數植食性恐龍不同，獸腳類恐龍靠後腿行走。",
+                chunks: ["unlike most", "plant eaters", "theropods walked", "on their back legs"],
+                reviewData: [
+                    { chunk: "unlike most", meaning: "與大多數不同", collocation: "unlike most people", synonym: "different from the majority", pronunciation: "unlike 的 k 與 most 的 m 順暢連接。" },
+                    { chunk: "plant eaters", meaning: "植食動物", collocation: "huge plant eaters", synonym: "herbivores", pronunciation: "plant 的 t 在 e 前不完全爆破，eaters 的 s /z/。" },
+                    { chunk: "theropods walked", meaning: "獸腳類行走", collocation: "theropods walked fast", synonym: "they moved on foot", pronunciation: "theropods 的 s /z/ 與 walked 的 w 連讀。" },
+                    { chunk: "on their back legs", meaning: "用牠們的後腿", collocation: "stand on their back legs", synonym: "on their hind legs", pronunciation: "back 的 k 與 legs 的 l 順暢過渡。" }
+                ]
+            },
+            {
+                en: "These tails helped theropods hunt, and kept them balanced.",
+                zh: "這些尾巴幫助獸腳類恐龍打獵，並讓牠們保持平衡。",
+                chunks: ["these tails", "helped theropods hunt", "and kept them balanced"],
+                reviewData: [
+                    { chunk: "these tails", meaning: "這些尾巴", collocation: "these long tails", synonym: "their tails", pronunciation: "these 的 s /z/ 與 tails 的 t 稍微停頓。" },
+                    { chunk: "helped theropods hunt", meaning: "幫助獸腳類打獵", collocation: "helped them hunt", synonym: "assisted in hunting", pronunciation: "helped 的 d /t/ 與 theropods 的 th 遇到時，t 不完全爆破。" },
+                    { chunk: "kept them balanced", meaning: "使牠們保持平衡", collocation: "kept them balanced well", synonym: "maintained their balance", pronunciation: "kept 的 t 與 them 的 th 連讀 /keptəm/。" }
+                ]
+            },
+            {
+                en: "When most people think of dinosaurs, they think of the T. rex.",
+                zh: "當大多數人想到恐龍時，都會想到暴龍。",
+                chunks: ["when most people", "think of dinosaurs", "they think of the T. rex"],
+                reviewData: [
+                    { chunk: "when most people", meaning: "當大多數人", collocation: "when most people hear", synonym: "as the majority of people", pronunciation: "when 的 n 與 most 的 m 順暢連接。" },
+                    { chunk: "think of dinosaurs", meaning: "想到恐龍", collocation: "think of dinosaurs first", synonym: "imagine dinosaurs", pronunciation: "think 的 k 與 of 的 o 連讀 /θɪŋkəv/。" },
+                    { chunk: "they think of", meaning: "他們想到...", collocation: "they always think of", synonym: "their mind goes to", pronunciation: "think 的 k 與 of 的 o 連讀 /θɪŋkəv/。" }
+                ]
+            },
+            {
+                en: "It needed to be fierce and strong in order to kill and eat other dinosaurs.",
+                zh: "牠需要變得既兇猛又強壯，才能殺死並吃掉其它恐龍。",
+                chunks: ["it needed to be", "fierce and strong", "in order to", "kill and eat", "other dinosaurs"],
+                reviewData: [
+                    { chunk: "needed to be", meaning: "需要是...", collocation: "needed to be fast", synonym: "was required to be", pronunciation: "needed 的 d 與 to 的 t 遇到時，發輕 d 音。" },
+                    { chunk: "fierce and strong", meaning: "兇猛且強壯", collocation: "a fierce and strong animal", synonym: "ferocious and powerful", pronunciation: "fierce 的 ce /s/ 與 and 的 a 連讀 /fɪəsənd/。" },
+                    { chunk: "in order to", meaning: "為了要...", collocation: "in order to survive", synonym: "so as to", pronunciation: "in 的 n 與 order 的 o 連讀 /ɪnɔːrdər/。" },
+                    { chunk: "kill and eat", meaning: "殺死並吃掉", collocation: "kill and eat prey", synonym: "hunt and consume", pronunciation: "kill 的 l 與 and 的 a 連讀 /kɪlənd/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 

@@ -31,6 +31,22 @@
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
         .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
         .tab-content { display: none; } .tab-content.active { display: block; }
+        
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 <body>
@@ -57,6 +73,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -187,6 +204,32 @@
                 <div class="info-box"><strong>文章結構：人物傳記短文 (Biography)</strong><p>文章介紹了第一位上太空的非裔美國人 Guion S. Bluford。這類傳記文章通常以「時間軸」方式推進：第一段先拋出他的頭銜；第二段講述他上太空「之前」的經歷（飛行員、博士、申請NASA）；第三段描寫他「上太空」的具體過程與心境（挑戰者號、下雨天、笑聲）；第四段是他們在太空「做了什麼」（實驗）；最後一段則是退休後的發展。非常標準的傳記寫作手法。</p></div>
                 <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What did Bluford do before he was an astronaut?</li><li>How many people applied to NASA's astronaut training program with Bluford?</li><li>Why did Bluford and the other astronauts do experiments in space?</li></ol></div>
             </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
     </div>
 <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
@@ -204,7 +247,216 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Before Bluford was an astronaut, he was a pilot in the United States Air Force.",
+                zh: "在 Bluford 成為太空人之前，他是美國空軍的飛行員。",
+                chunks: ["before Bluford was", "an astronaut", "he was a pilot", "in the United States Air Force"],
+                reviewData: [
+                    { chunk: "before Bluford was", meaning: "在 Bluford 成為...之前", collocation: "before he was famous", synonym: "prior to him being", pronunciation: "before 的 r 與 Bluford 的 B 順暢連接。" },
+                    { chunk: "an astronaut", meaning: "一名太空人", collocation: "train to be an astronaut", synonym: "a spaceman", pronunciation: "an 的 n 與 astronaut 的 a 連讀 /ænæstrənɔːt/。" },
+                    { chunk: "he was a pilot", meaning: "他是一名飛行員", collocation: "he was a pilot in the war", synonym: "he worked as an aviator", pronunciation: "was 的 s /z/ 與 a 連讀 /wəzə/。" },
+                    { chunk: "in the United States Air Force", meaning: "在美國空軍", collocation: "serve in the United States Air Force", synonym: "in the US Air Force", pronunciation: "States 的 s 與 Air 的 A 連讀。" }
+                ]
+            },
+            {
+                en: "NASA chose Bluford and just 34 others to train to be astronauts.",
+                zh: "NASA 竟然只選中了 Bluford 和其他 34 人進入接續的太空人訓練。",
+                chunks: ["NASA chose Bluford", "and just 34 others", "to train", "to be astronauts"],
+                reviewData: [
+                    { chunk: "NASA chose Bluford", meaning: "NASA 選了 Bluford", collocation: "NASA chose the best candidates", synonym: "NASA selected Bluford", pronunciation: "NASA 的 a 與 chose 的 ch 順暢連接。" },
+                    { chunk: "and just 34 others", meaning: "和僅僅 34 位其他人", collocation: "and just a few others", synonym: "and only thirty-four more", pronunciation: "and 的 d 與 just 的 j 連讀。" },
+                    { chunk: "to train", meaning: "去接受訓練", collocation: "to train for the mission", synonym: "to practice", pronunciation: "to 的 t 與 train 的 tr 順暢過渡。" },
+                    { chunk: "to be astronauts", meaning: "成為太空人", collocation: "study to be astronauts", synonym: "to become space travelers", pronunciation: "be 的 e 與 astronauts 的 a 連讀。" }
+                ]
+            },
+            {
+                en: "He was surprised to see so many people watching the spaceship launch.",
+                zh: "他很驚訝看到這麼多人來觀看太空船發射。",
+                chunks: ["he was surprised to see", "so many people", "watching", "the spaceship launch"],
+                reviewData: [
+                    { chunk: "he was surprised to see", meaning: "他很驚訝地看到", collocation: "I was surprised to see you", synonym: "he was amazed to notice", pronunciation: "was 的 s /z/ 與 surprised 的 s 連讀。" },
+                    { chunk: "so many people", meaning: "這麼多人", collocation: "there are so many people", synonym: "such a large crowd", pronunciation: "so 的 o 與 many 的 m 順暢連接。" },
+                    { chunk: "watching", meaning: "在觀看", collocation: "watching the game", synonym: "observing", pronunciation: "watching 的 ng 與後面的 th 順暢過渡。" },
+                    { chunk: "the spaceship launch", meaning: "太空船發射", collocation: "attend the spaceship launch", synonym: "the rocket liftoff", pronunciation: "spaceship 的 p 與 launch 的 l 順暢過渡。" }
+                ]
+            },
+            {
+                en: "I laughed and giggled all the way up. It was such a fun ride.",
+                zh: "我一路上去都在笑咯咯的。那真是一趟有趣的旅程。",
+                chunks: ["I laughed and giggled", "all the way up", "it was", "such a fun ride"],
+                reviewData: [
+                    { chunk: "I laughed and giggled", meaning: "我笑又咯咯地笑", collocation: "the children laughed and giggled", synonym: "I chuckled", pronunciation: "laughed 的 d /t/ 與 and 的 a 連讀。" },
+                    { chunk: "all the way up", meaning: "一路上(升)", collocation: "climb all the way up", synonym: "during the entire ascent", pronunciation: "way 的 y 與 up 的 u 連讀 /weɪjʌp/。" },
+                    { chunk: "it was", meaning: "它是", collocation: "it was amazing", synonym: "that was", pronunciation: "it 的 t 與 was 的 w 順暢連接。" },
+                    { chunk: "such a fun ride", meaning: "如此有趣的一趟旅程", collocation: "we had such a fun ride", synonym: "a very enjoyable trip", pronunciation: "such 的 ch 與 a 連讀 /sʌtʃə/。" }
+                ]
+            },
+            {
+                en: "Bluford flew into space three more times before deciding to stick to Earth for good.",
+                zh: "Bluford 後來又飛入太空三次，然後才決定永遠留在地球上。",
+                chunks: ["Bluford flew into space", "three more times", "before deciding", "to stick to Earth", "for good"],
+                reviewData: [
+                    { chunk: "Bluford flew into space", meaning: "Bluford 飛入太空", collocation: "the rocket flew into space", synonym: "traveled to space", pronunciation: "flew 的 w 與 into 的 i 連讀 /fluːwɪntuː/。" },
+                    { chunk: "three more times", meaning: "另外三次", collocation: "try three more times", synonym: "an additional three times", pronunciation: "more 的 r 與 times 的 t 連讀。" },
+                    { chunk: "before deciding", meaning: "在決定...之前", collocation: "think twice before deciding", synonym: "prior to making the choice", pronunciation: "before 的 r 與 deciding 的 d 順暢連接。" },
+                    { chunk: "to stick to Earth", meaning: "留在地球(不再上去)", collocation: "stick to the plan", synonym: "to remain on Earth", pronunciation: "stick 的 k 與 to 的 t 順暢過渡。" },
+                    { chunk: "for good", meaning: "永遠地", collocation: "he left for good", synonym: "forever / permanently", pronunciation: "for 的 r 與 good 的 g 順暢連接。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 </html>

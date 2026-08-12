@@ -31,6 +31,22 @@
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
         .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
         .tab-content { display: none; } .tab-content.active { display: block; }
+        
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 <body>
@@ -57,6 +73,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -154,6 +171,32 @@
                 <div class="info-box"><strong>文章結構：人物傳記 (Biography)</strong><p>這篇文章記述了美國著名黑人科學家卡佛的一生。文章採順敘法，第一段描述他早年因種族歧視而在求學路上遭遇阻礙，但仍不懈怠；第二段接著寫出他在研究所成就豐碩，並發揮所長去造福農村，幫農民解決問題，展現人物的毅力與貢獻。</p></div>
                 <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Why was George Washington Carver home-schooled when he was young?</li><li>What university did George eventually attend?</li><li>What three crops did George study to find hundreds of new uses for them?</li></ol></div>
             </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
     </div>
 <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
@@ -171,7 +214,214 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "George Washington Carver was a distinguished African-American scientist, inventor, and researcher.",
+                zh: "喬治·華盛頓·卡佛是一位傑出的非裔美國科學家、發明家和研究員。",
+                chunks: ["George Washington Carver", "was a distinguished", "African-American scientist", "inventor and researcher"],
+                reviewData: [
+                    { chunk: "George Washington Carver", meaning: "喬治·華盛頓·卡佛", collocation: "the famous George Washington Carver", synonym: "the noted botanist", pronunciation: "Washington 的 n 與 Carver 的 c 順暢連接。" },
+                    { chunk: "was a distinguished", meaning: "是一位傑出的", collocation: "was a distinguished leader", synonym: "was an eminent", pronunciation: "was 的 s /z/ 與 a 連讀 /wʌzə/。" },
+                    { chunk: "African-American scientist", meaning: "非裔美國科學家", collocation: "the first African-American scientist", synonym: "black American researcher", pronunciation: "African 的 n 與 American 的 A 連讀。" },
+                    { chunk: "inventor and researcher", meaning: "發明家與研究員", collocation: "a great inventor and researcher", synonym: "creator and investigator", pronunciation: "inventor 的 r 與 and 的 a 連讀。" }
+                ]
+            },
+            {
+                en: "As a young child, George was very interested in plants and science.",
+                zh: "卡佛在小時候時就對植物和科學非常感興趣。",
+                chunks: ["as a young child", "George was very interested in", "plants and science"],
+                reviewData: [
+                    { chunk: "as a young child", meaning: "身為一個小時候", collocation: "even as a young child", synonym: "when he was little", pronunciation: "as 的 s /z/ 與 a 連讀 /æzə/。" },
+                    { chunk: "George was very interested in", meaning: "喬治非常感興趣", collocation: "was very interested in history", synonym: "had a strong passion for", pronunciation: "interested 的 ed /ɪd/ 與 in 的 i 連讀 /ɪntrəstɪdɪn/。" },
+                    { chunk: "plants and science", meaning: "植物與科學", collocation: "study plants and science", synonym: "botany and scientific study", pronunciation: "plants 的 ts 與 and 的 a 順暢連接。" }
+                ]
+            },
+            {
+                en: "He wanted to attend school, but because of the color of his skin, he was not allowed to go to the local school.",
+                zh: "他渴望上學，但因為膚色的關係，他不被允許去當地的學校就讀。",
+                chunks: ["he wanted to attend school", "but because of", "the color of his skin", "he was not allowed to go", "to the local school"],
+                reviewData: [
+                    { chunk: "he wanted to attend school", meaning: "他渴望上學", collocation: "wanted to attend a good school", synonym: "desired to go to school", pronunciation: "wanted to 的 d 與 t 通常合併為一個 t。" },
+                    { chunk: "but because of", meaning: "但是因為...", collocation: "but because of the rain", synonym: "yet due to", pronunciation: "because 的 e /z/ 與 of 的 o 連讀 /bɪˈkʌzəv/。" },
+                    { chunk: "the color of his skin", meaning: "他的膚色", collocation: "judged by the color of his skin", synonym: "his skin color", pronunciation: "color 的 r 與 of 的 o 連讀。" },
+                    { chunk: "he was not allowed to go", meaning: "他不被允許去", collocation: "was not allowed to go out", synonym: "he was forbidden to attend", pronunciation: "allowed 的 d 與 to 的 t 順暢過渡。" },
+                    { chunk: "to the local school", meaning: "去當地的學校", collocation: "walk to the local school", synonym: "the neighborhood school", pronunciation: "to 的 o 與 the 的 th 順暢連接。" }
+                ]
+            },
+            {
+                en: "George studied peanuts, sweet potatoes, and soybeans, and discovered hundreds of new uses for these crops.",
+                zh: "卡佛研究生花生、地瓜和大豆，並發現這些農作物的數百種新用途。",
+                chunks: ["George studied peanuts", "sweet potatoes and soybeans", "and discovered", "hundreds of new uses", "for these crops"],
+                reviewData: [
+                    { chunk: "George studied peanuts", meaning: "喬治研究花生", collocation: "studied peanuts in the lab", synonym: "researched peanuts", pronunciation: "studied 的 d 與 peanuts 的 p 順暢連接。" },
+                    { chunk: "sweet potatoes and soybeans", meaning: "地瓜與大豆", collocation: "grow sweet potatoes and soybeans", synonym: "yams and soy", pronunciation: "potatoes 的 s /z/ 與 and 的 a 連讀。" },
+                    { chunk: "and discovered", meaning: "並發現了", collocation: "and discovered a cure", synonym: "and found out", pronunciation: "and 的 d 與 discovered 的 d 合併發音。" },
+                    { chunk: "hundreds of new uses", meaning: "數以百計的新用途", collocation: "find hundreds of new uses", synonym: "numerous new applications", pronunciation: "hundreds 的 s /z/ 與 of 的 o 連讀 /hʌndrədzəv/。" },
+                    { chunk: "for these crops", meaning: "針對這些農作物", collocation: "water for these crops", synonym: "for these agricultural products", pronunciation: "for 的 r 與 these 的 th 順暢過渡。" }
+                ]
+            },
+            {
+                en: "Farmers learned a lot from George Washington Carver.",
+                zh: "農民們從喬治·華盛頓·卡佛身上學到了很多東西。",
+                chunks: ["farmers learned a lot", "from George Washington Carver"],
+                reviewData: [
+                    { chunk: "farmers learned a lot", meaning: "農民們學到了很多", collocation: "the students learned a lot", synonym: "farmers gained much knowledge", pronunciation: "learned 的 d 與 a 連讀 /lɜrndə/。" },
+                    { chunk: "from George Washington Carver", meaning: "從喬治·華盛頓·卡佛身上", collocation: "learn from George Washington Carver", synonym: "by studying Carver", pronunciation: "from 的 m 與 George 的 j 順暢連接。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 </html>
