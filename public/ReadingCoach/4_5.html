@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Ancient Greece - The Cyclopes</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Ancient Greece - The Cyclopes</h1>
+        <a href="4_5_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQC09FtH05BcRYgur1049bKDAS2eMqqP4vWM4CIYXnRKvT4?e=GXxLFS"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -66,7 +291,8 @@
                     <h4 style="color: #2196F3; margin-bottom: 15px;">古希臘：獨眼巨人 (The Cyclopes)</h4>
                     <p style="line-height: 2; font-size: 16px;">
                         你知道任何希臘神話的故事嗎？神話就是古希臘人講述關於他們神祇的故事。<br><br>
-                        獨眼巨人 (Cyclopes) 是希臘神話中的著名人物。你可能聽說過他們。獨眼巨人非常巨大。他們只有一隻巨大的眼睛，且長在額頭的正中央。統治宇宙的神們討厭獨眼巨人。他們把這些單眼巨人丟進了冥界。一位名叫宙斯的強大神祇認為他需要獨眼巨人的幫助。於是宙斯將獨眼巨人從冥界中解救了出來。<br><br>
+                        獨眼巨人 (Cyclopes)
+                        是希臘神話中的著名人物。你可能聽說過他們。獨眼巨人非常巨大。他們只有一隻巨大的眼睛，且長在額頭的正中央。統治宇宙的神們討厭獨眼巨人。他們把這些單眼巨人丟進了冥界。一位名叫宙斯的強大神祇認為他需要獨眼巨人的幫助。於是宙斯將獨眼巨人從冥界中解救了出來。<br><br>
                         出於感激，獨眼巨人送給了宙斯禮物。宙斯接到了威力強大的雷霆，當作他的武器使用。宙斯利用這些新武器推翻了世界原本的統治者。然後，宙斯就成為了宇宙的統治者。
                     </p>
                 </div>
@@ -74,43 +300,56 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Do you know any stories from Greek mythology?</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你知道任何希臘神話的故事嗎？</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Do you know any stories from Greek
+                                mythology?</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>你知道任何希臘神話的故事嗎？</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Myths are the stories that the ancient Greeks told about their gods.</td>
+                            <td style="padding: 10px; vertical-align: top;">Myths are the stories that the ancient
+                                Greeks told about their gods.</td>
                             <td style="padding: 10px; vertical-align: top;">神話就是古希臘人講述關於他們神祇的故事。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The Cyclopes are famous figures in Greek mythology. You may have heard of them.</td>
+                            <td style="padding: 10px; vertical-align: top;">The Cyclopes are famous figures in Greek
+                                mythology. You may have heard of them.</td>
                             <td style="padding: 10px; vertical-align: top;">獨眼巨人 (Cyclopes) 是希臘神話中的著名人物。你可能聽說過他們。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The Cyclopes were giants. They only had one huge eye, and it was in the middle of their foreheads.</td>
+                            <td style="padding: 10px; vertical-align: top;">The Cyclopes were giants. They only had one
+                                huge eye, and it was in the middle of their foreheads.</td>
                             <td style="padding: 10px; vertical-align: top;">獨眼巨人非常巨大。他們只有一隻巨大的眼睛，且長在額頭的正中央。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The rulers of the universe hated the Cyclopes. They threw the one-eyed giants into the underworld.</td>
+                            <td style="padding: 10px; vertical-align: top;">The rulers of the universe hated the
+                                Cyclopes. They threw the one-eyed giants into the underworld.</td>
                             <td style="padding: 10px; vertical-align: top;">統治宇宙的神們討厭獨眼巨人。他們把這些單眼巨人丟進了冥界。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">A powerful god named Zeus decided that he needed the Cyclopes' help. Zeus freed the Cyclopes from the underworld.</td>
-                            <td style="padding: 10px; vertical-align: top;">一位名叫宙斯的強大神祇認為他需要獨眼巨人的幫助。於是宙斯將獨眼巨人從冥界中解救了出來。</td>
+                            <td style="padding: 10px; vertical-align: top;">A powerful god named Zeus decided that he
+                                needed the Cyclopes' help. Zeus freed the Cyclopes from the underworld.</td>
+                            <td style="padding: 10px; vertical-align: top;">一位名叫宙斯的強大神祇認為他需要獨眼巨人的幫助。於是宙斯將獨眼巨人從冥界中解救了出來。
+                            </td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Out of gratitude, the Cyclopes gave Zeus gifts.</td>
+                            <td style="padding: 10px; vertical-align: top;">Out of gratitude, the Cyclopes gave Zeus
+                                gifts.</td>
                             <td style="padding: 10px; vertical-align: top;">出於感激，獨眼巨人送給了宙斯禮物。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Zeus received powerful thunderbolts that he could use as weapons.</td>
+                            <td style="padding: 10px; vertical-align: top;">Zeus received powerful thunderbolts that he
+                                could use as weapons.</td>
                             <td style="padding: 10px; vertical-align: top;">宙斯接到了威力強大的雷霆，當作他的武器使用。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Zeus used his new weapons to overthrow the world's rulers.</td>
+                            <td style="padding: 10px; vertical-align: top;">Zeus used his new weapons to overthrow the
+                                world's rulers.</td>
                             <td style="padding: 10px; vertical-align: top;">宙斯利用這些新武器推翻了世界原本的統治者。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Then Zeus became the ruler of the universe.</td>
+                            <td style="padding: 10px; vertical-align: top;">Then Zeus became the ruler of the universe.
+                            </td>
                             <td style="padding: 10px; vertical-align: top;">然後，宙斯就成為了宇宙的統治者。</td>
                         </tr>
                     </table>
@@ -120,54 +359,137 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">mythology</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">神話，神話學（myth 為單一個神話故事）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">ancient</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">古代的，古老的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">figure</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">人物，身影</div></div>
-                    <div class="vocab-item"><div class="vocab-word">giant</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">巨人</div></div>
-                    <div class="vocab-item"><div class="vocab-word">forehead</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">額頭</div></div>
-                    <div class="vocab-item"><div class="vocab-word">universe</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">宇宙</div></div>
-                    <div class="vocab-item"><div class="vocab-word">underworld</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">冥界，地府（under 底下 + world 世界）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">gratitude</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">感謝，感激</div></div>
-                    <div class="vocab-item"><div class="vocab-word">thunderbolt</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">雷電，霹靂</div></div>
-                    <div class="vocab-item"><div class="vocab-word">weapon</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">武器</div></div>
-                    <div class="vocab-item"><div class="vocab-word">overthrow</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">推翻，打倒</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">mythology</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">神話，神話學（myth 為單一個神話故事）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">ancient</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">古代的，古老的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">figure</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">人物，身影</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">giant</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">巨人</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">forehead</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">額頭</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">universe</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">宇宙</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">underworld</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">冥界，地府（under 底下 + world 世界）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">gratitude</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">感謝，感激</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">thunderbolt</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">雷電，霹靂</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">weapon</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">武器</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">overthrow</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">推翻，打倒</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. may have + p.p. (可能已經...)</div><div class="example">You <span class="highlight">may have heard</span> of them.</div><p>用來推測或是指過去某件事「或許已經發生了」，意思是「你可能已經有聽說過他們了」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. 關係代名詞 that 子句</div><div class="example">Zeus received powerful thunderbolts <span class="highlight">that he could use as weapons</span>.</div><p>that 引導一個子句來修飾 thunderbolts，代表那雷霆「可以拿來當作武器使用」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. named 的用法 (被稱為...)</div><div class="example">A powerful god <span class="highlight">named Zeus</span> decided that...</div><p>這裡的 named 是過去分詞，意思是「被命名為」，用來保留被動涵義修飾前面的名詞 god。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. may have + p.p. (可能已經...)</div>
+                    <div class="example">You <span class="highlight">may have heard</span> of them.</div>
+                    <p>用來推測或是指過去某件事「或許已經發生了」，意思是「你可能已經有聽說過他們了」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. 關係代名詞 that 子句</div>
+                    <div class="example">Zeus received powerful thunderbolts <span class="highlight">that he could use
+                            as weapons</span>.</div>
+                    <p>that 引導一個子句來修飾 thunderbolts，代表那雷霆「可以拿來當作武器使用」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. named 的用法 (被稱為...)</div>
+                    <div class="example">A powerful god <span class="highlight">named Zeus</span> decided that...</div>
+                    <p>這裡的 named 是過去分詞，意思是「被命名為」，用來保留被動涵義修飾前面的名詞 god。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: out of 出於...</strong><div class="example"><span class="highlight">Out of gratitude</span>, the Cyclopes gave Zeus gifts.</div><p>除了表示在某事之外，out of 也可以表示某個動機，如「出於感謝」或是「出於嫉妒 (out of jealousy)」。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: in the middle of 在...正中間</strong><div class="example">...it was <span class="highlight">in the middle of</span> their foreheads.</div><p>用來表示位置正好座落在兩者或是某個區域的正中央。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: free... from... 把...從...當中解放出來</strong><div class="example">Zeus <span class="highlight">freed the Cyclopes from</span> the underworld.</div><p>動詞 free 把某人釋放，然後加上 from 表示脫離了原本受困的狀態或地方。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: out of 出於...</strong>
+                    <div class="example"><span class="highlight">Out of gratitude</span>, the Cyclopes gave Zeus gifts.
+                    </div>
+                    <p>除了表示在某事之外，out of 也可以表示某個動機，如「出於感謝」或是「出於嫉妒 (out of jealousy)」。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: in the middle of 在...正中間</strong>
+                    <div class="example">...it was <span class="highlight">in the middle of</span> their foreheads.
+                    </div>
+                    <p>用來表示位置正好座落在兩者或是某個區域的正中央。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: free... from... 把...從...當中解放出來</strong>
+                    <div class="example">Zeus <span class="highlight">freed the Cyclopes from</span> the underworld.
+                    </div>
+                    <p>動詞 free 把某人釋放，然後加上 from 表示脫離了原本受困的狀態或地方。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：神話故事短篇</strong><p>這篇文章以短短三個段落介紹了希臘神話中「獨眼巨人 (The Cyclopes)」與「宙斯」聯手的故事。先點出獨眼巨人的特徵與悲慘處境，第二段描寫宙斯解救他們，第三段描寫獨眼巨人以「雷電」作為回報，造就了統治宇宙的宙斯。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>Where was the Cyclopes' eye located?</li><li>Why did Zeus decide to free the Cyclopes from the underworld?</li><li>What gift did the Cyclopes give Zeus in return for their freedom?</li></ol></div>
+                <div class="info-box"><strong>文章結構：神話故事短篇</strong>
+                    <p>這篇文章以短短三個段落介紹了希臘神話中「獨眼巨人 (The
+                        Cyclopes)」與「宙斯」聯手的故事。先點出獨眼巨人的特徵與悲慘處境，第二段描寫宙斯解救他們，第三段描寫獨眼巨人以「雷電」作為回報，造就了統治宇宙的宙斯。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>Where was the Cyclopes' eye located?</li>
+                        <li>Why did Zeus decide to free the Cyclopes from the underworld?</li>
+                        <li>What gift did the Cyclopes give Zeus in return for their freedom?</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Do you know any stories from Greek mythology? Myths are the stories that the ancient Greeks told about their gods.\n\nThe Cyclopes are famous figures in Greek mythology. You may have heard of them. The Cyclopes were giants. They only had one huge eye, and it was in the middle of their foreheads. The rulers of the universe hated the Cyclopes. They threw the one-eyed giants into the underworld. A powerful god named Zeus decided that he needed the Cyclopes' help. Zeus freed the Cyclopes from the underworld.\n\nOut of gratitude, the Cyclopes gave Zeus gifts. Zeus received powerful thunderbolts that he could use as weapons. Zeus used his new weapons to overthrow the world's rulers. Then Zeus became the ruler of the universe.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>

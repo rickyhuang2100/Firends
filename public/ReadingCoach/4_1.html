@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - The Human Body: You've Got Some Nerve!</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 The Human Body: You've Got Some Nerve!</h1>
+        <a href="4_1_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQC5XQu0qZ_JQLKAgdQx9yvfAYbviXmhy2tRkP1lNZKu7ls?e=e2IurX"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -65,7 +290,8 @@
                 <div class="info-box">
                     <h4 style="color: #2196F3; margin-bottom: 15px;">人體大解密：感覺神經</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        你怎麼知道一個東西是熱的還是冷的？你會去觸碰它。你的手指裡有一些東西能幫助你知道是否燙手或冰冷。它們被稱為神經。你的全身遍布著神經。神經會對我們觸碰到的東西產生反應，並將訊息傳過身體傳達給大腦，告訴我們東西摸起來是什麼感覺。如果你觸摸到刀片的邊緣，會有什麼感覺？會很痛。如果你沒有神經，你還是會流血，但你不會覺得痛。你會感覺不到它。那麼，為什麼有神經是件好事呢？如果沒有它們，我們會讓自己受到更多的傷害。 <br><br>
+                        你怎麼知道一個東西是熱的還是冷的？你會去觸碰它。你的手指裡有一些東西能幫助你知道是否燙手或冰冷。它們被稱為神經。你的全身遍布著神經。神經會對我們觸碰到的東西產生反應，並將訊息傳過身體傳達給大腦，告訴我們東西摸起來是什麼感覺。如果你觸摸到刀片的邊緣，會有什麼感覺？會很痛。如果你沒有神經，你還是會流血，但你不會覺得痛。你會感覺不到它。那麼，為什麼有神經是件好事呢？如果沒有它們，我們會讓自己受到更多的傷害。
+                        <br><br>
                         想像一下你正在廚房裡做宵夜。你把手靠在火爐上。過了一會兒，你注意到空氣中有煙霧升起。那是你的手！它著火了！如果你沒有神經，你就不會感覺到來自火爐的高溫。然後你就得去醫院報到了。<br><br>
                         如果我們沒有神經，天氣就不會影響我們，是這樣嗎？如果氣溫低於40度，你不會感覺到有多冷。但是如果你不做好身體保暖就走到戶外，你可能會生重病或是死掉。神經有著幫助我們保持安全與健康的重要功用。
                     </p>
@@ -74,52 +300,70 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>How can you tell if something is hot or cold? You touch it.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>你怎麼知道一個東西是熱的還是冷的？你會去觸碰它。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>How can you tell if something is hot or
+                                cold? You touch it.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>你怎麼知道一個東西是熱的還是冷的？你會去觸碰它。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">There are things in your fingers that help you to know if something is hot or if something is cold. They're called nerves.</td>
+                            <td style="padding: 10px; vertical-align: top;">There are things in your fingers that help
+                                you to know if something is hot or if something is cold. They're called nerves.</td>
                             <td style="padding: 10px; vertical-align: top;">你的手指裡有一些東西能幫助你知道是否燙手或冰冷。它們被稱為神經。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">You have them all over your body. Nerves react to things we touch and send a message through our bodies to our brains, telling us how something feels.</td>
-                            <td style="padding: 10px; vertical-align: top;">你的全身遍布著神經。神經會對我們觸碰到的東西產生反應，並將訊息傳過身體傳達給大腦，告訴我們東西摸起來是什麼感覺。</td>
+                            <td style="padding: 10px; vertical-align: top;">You have them all over your body. Nerves
+                                react to things we touch and send a message through our bodies to our brains, telling us
+                                how something feels.</td>
+                            <td style="padding: 10px; vertical-align: top;">
+                                你的全身遍布著神經。神經會對我們觸碰到的東西產生反應，並將訊息傳過身體傳達給大腦，告訴我們東西摸起來是什麼感覺。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">If you touched the edge of a knife, how would that feel? It would hurt.</td>
+                            <td style="padding: 10px; vertical-align: top;">If you touched the edge of a knife, how
+                                would that feel? It would hurt.</td>
                             <td style="padding: 10px; vertical-align: top;">如果你觸摸到刀片的邊緣，會有什麼感覺？會很痛。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">If you didn't have nerves, you would still bleed, but it wouldn't hurt. You wouldn't be able to feel it.</td>
+                            <td style="padding: 10px; vertical-align: top;">If you didn't have nerves, you would still
+                                bleed, but it wouldn't hurt. You wouldn't be able to feel it.</td>
                             <td style="padding: 10px; vertical-align: top;">如果你沒有神經，你還是會流血，但你不會覺得痛。你會感覺不到它。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">So, why are nerves a good thing? We would hurt ourselves a lot more without them.</td>
+                            <td style="padding: 10px; vertical-align: top;">So, why are nerves a good thing? We would
+                                hurt ourselves a lot more without them.</td>
                             <td style="padding: 10px; vertical-align: top;">那麼，為什麼有神經是件好事呢？如果沒有它們，我們會讓自己受到更多的傷害。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Imagine that you're making a snack in the kitchen. You lean your hand down on the stove.</td>
+                            <td style="padding: 10px; vertical-align: top;">Imagine that you're making a snack in the
+                                kitchen. You lean your hand down on the stove.</td>
                             <td style="padding: 10px; vertical-align: top;">想像一下你正在廚房裡做宵夜。你把手靠在火爐上。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">After a minute or two, you notice some smoke rising in the air. It's your hand! It's burning!</td>
+                            <td style="padding: 10px; vertical-align: top;">After a minute or two, you notice some smoke
+                                rising in the air. It's your hand! It's burning!</td>
                             <td style="padding: 10px; vertical-align: top;">過了一會兒，你注意到空氣中有煙霧升起。那是你的手！它著火了！</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">If you had no nerves, you wouldn't be able to feel the heat from the stove. Then you would have to go to the hospital.</td>
+                            <td style="padding: 10px; vertical-align: top;">If you had no nerves, you wouldn't be able
+                                to feel the heat from the stove. Then you would have to go to the hospital.</td>
                             <td style="padding: 10px; vertical-align: top;">如果你沒有神經，你就不會感覺到來自火爐的高溫。然後你就得去醫院報到了。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">If we had no nerves, the weather wouldn't affect us, or would it?</td>
+                            <td style="padding: 10px; vertical-align: top;">If we had no nerves, the weather wouldn't
+                                affect us, or would it?</td>
                             <td style="padding: 10px; vertical-align: top;">如果我們沒有神經，天氣就不會影響我們，是這樣嗎？</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">If it were below 40 degrees, you wouldn't feel how cold it was.</td>
+                            <td style="padding: 10px; vertical-align: top;">If it were below 40 degrees, you wouldn't
+                                feel how cold it was.</td>
                             <td style="padding: 10px; vertical-align: top;">如果氣溫低於40度，你不會感覺到有多冷。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">But if you went outside without protecting your body from the cold, you could get very sick or die. Nerves help us stay safe and healthy.</td>
-                            <td style="padding: 10px; vertical-align: top;">但是如果你不做好身體保暖就走到戶外，你可能會生重病或是死掉。神經有著幫助我們保持安全與健康的重要功用。</td>
+                            <td style="padding: 10px; vertical-align: top;">But if you went outside without protecting
+                                your body from the cold, you could get very sick or die. Nerves help us stay safe and
+                                healthy.</td>
+                            <td style="padding: 10px; vertical-align: top;">
+                                但是如果你不做好身體保暖就走到戶外，你可能會生重病或是死掉。神經有著幫助我們保持安全與健康的重要功用。</td>
                         </tr>
                     </table>
                 </div>
@@ -128,50 +372,117 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">nerve</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">神經</div></div>
-                    <div class="vocab-item"><div class="vocab-word">react</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">產生反應</div></div>
-                    <div class="vocab-item"><div class="vocab-word">edge</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">邊緣</div></div>
-                    <div class="vocab-item"><div class="vocab-word">bleed</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">流血</div></div>
-                    <div class="vocab-item"><div class="vocab-word">stove</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">爐子，火爐</div></div>
-                    <div class="vocab-item"><div class="vocab-word">affect</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">影響</div></div>
-                    <div class="vocab-item"><div class="vocab-word">protect</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">保護</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">nerve</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">神經</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">react</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">產生反應</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">edge</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">邊緣</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">bleed</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">流血</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stove</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">爐子，火爐</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">affect</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">影響</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">protect</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">保護</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. 與現在事實相反的假設語氣 (If + 過去式動詞, S + would + V)</div><div class="example"><span class="highlight">If you didn't have nerves</span>, you <span class="highlight">would still bleed</span>...</div><p>我們現在「有神經」，因此用過去式 didn't have 以及助動詞過去式 would 來表達如果「與現在事實相反」時的狀況。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. help (+ 受詞) + (to) V 幫助某人做某事</div><div class="example">There are things in your fingers that <span class="highlight">help you to know</span>...</div><p>表示幫助某人做什麼，後面的動詞可以帶 to 或是直接放原形動詞（如最後一句的 Nerves help us stay safe）。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. be able to + V (能夠...)</div><div class="example">You wouldn't <span class="highlight">be able to feel</span> it.</div><p>表示具有某種能力能夠去做到某件事。因為前面已經有了助動詞 wouldn't，所以放 be able to。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 與現在事實相反的假設語氣 (If + 過去式動詞, S + would + V)</div>
+                    <div class="example"><span class="highlight">If you didn't have nerves</span>, you <span
+                            class="highlight">would still bleed</span>...</div>
+                    <p>我們現在「有神經」，因此用過去式 didn't have 以及助動詞過去式 would 來表達如果「與現在事實相反」時的狀況。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. help (+ 受詞) + (to) V 幫助某人做某事</div>
+                    <div class="example">There are things in your fingers that <span class="highlight">help you to
+                            know</span>...</div>
+                    <p>表示幫助某人做什麼，後面的動詞可以帶 to 或是直接放原形動詞（如最後一句的 Nerves help us stay safe）。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. be able to + V (能夠...)</div>
+                    <div class="example">You wouldn't <span class="highlight">be able to feel</span> it.</div>
+                    <p>表示具有某種能力能夠去做到某件事。因為前面已經有了助動詞 wouldn't，所以放 be able to。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: tell if 辨別/分辨是否...</strong><div class="example">How can you <span class="highlight">tell if</span> something is hot or cold?</div><p>tell 除了當告訴之外，還可以當作分辨、看出來。if 表示是否。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: all over 遍佈</strong><div class="example">You have them <span class="highlight">all over</span> your body.</div><p>表示神經在身體上無所不在、到處都是。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: 分詞構句補充說明狀態</strong><div class="example">...send a message... to our brains, <span class="highlight">telling us</span> how something feels.</div><p>使用現在分詞 telling 當作補充說明的動作，代表神經將訊息傳到大腦「並告訴」我們感覺。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: tell if 辨別/分辨是否...</strong>
+                    <div class="example">How can you <span class="highlight">tell if</span> something is hot or cold?
+                    </div>
+                    <p>tell 除了當告訴之外，還可以當作分辨、看出來。if 表示是否。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: all over 遍佈</strong>
+                    <div class="example">You have them <span class="highlight">all over</span> your body.</div>
+                    <p>表示神經在身體上無所不在、到處都是。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: 分詞構句補充說明狀態</strong>
+                    <div class="example">...send a message... to our brains, <span class="highlight">telling us</span>
+                        how something feels.</div>
+                    <p>使用現在分詞 telling 當作補充說明的動作，代表神經將訊息傳到大腦「並告訴」我們感覺。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：科普說明文</strong><p>作者一開始以「冷熱」的問題開頭，接著帶入文章主軸「神經(nerves)」。並透過兩個假設例子：「碰到刀鋒」以及「被火爐燒到」，來生動解釋沒有神經的恐怖後果。結尾重申神經是幫助我們保護自我的重要工具。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What do nerves send messages to?</li><li>What would happen if you touched a knife and you didn't have any nerves?</li><li>How do nerves help us to cope with the cold weather?</li></ol></div>
+                <div class="info-box"><strong>文章結構：科普說明文</strong>
+                    <p>作者一開始以「冷熱」的問題開頭，接著帶入文章主軸「神經(nerves)」。並透過兩個假設例子：「碰到刀鋒」以及「被火爐燒到」，來生動解釋沒有神經的恐怖後果。結尾重申神經是幫助我們保護自我的重要工具。
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What do nerves send messages to?</li>
+                        <li>What would happen if you touched a knife and you didn't have any nerves?</li>
+                        <li>How do nerves help us to cope with the cold weather?</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `How can you tell if something is hot or cold? You touch it. There are things in your fingers that help you to know if something is hot or if something is cold. They're called nerves. You have them all over your body. Nerves react to things we touch and send a message through our bodies to our brains, telling us how something feels. If you touched the edge of a knife, how would that feel? It would hurt. If you didn't have nerves, you would still bleed, but it wouldn't hurt. You wouldn't be able to feel it. So, why are nerves a good thing? We would hurt ourselves a lot more without them.\n\nImagine that you're making a snack in the kitchen. You lean your hand down on the stove. After a minute or two, you notice some smoke rising in the air. It's your hand! It's burning! If you had no nerves, you wouldn't be able to feel the heat from the stove. Then you would have to go to the hospital.\n\nIf we had no nerves, the weather wouldn't affect us, or would it? If it were below 40 degrees, you wouldn't feel how cold it was. But if you went outside without protecting your body from the cold, you could get very sick or die. Nerves help us stay safe and healthy.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>

@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Famous Scientists - Sir Isaac Newton</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Famous Scientists - Sir Isaac Newton</h1>
+        <a href="4_2_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDic_NWwpAdRKqVvl0Fc2jXATmrSb7d4KUPYTfXVnz5F8c?e=vtWBSf"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -66,54 +291,68 @@
                     <h4 style="color: #2196F3; margin-bottom: 15px;">著名科學家——艾薩克·牛頓爵士</h4>
                     <p style="line-height: 2; font-size: 16px;">
                         重力是將物體拉向地球的力量。有一個故事是這樣說的：有一天，艾薩克·牛頓爵士坐在樹下時發現了重力。一顆蘋果從樹上掉下來，砸在了牛頓的頭上。他意識到重力就是讓我們留在地面上的那股力量。他也發現正是重力讓月亮能靠近地球。這個關於蘋果的故事可能不是真的。然而，它卻是一個說明重力如何影響事物的好例子。<br><br>
-                        牛頓是個天才。遺憾的是，與他同時代的人們還無法接受他的想法。他們對他的發現充滿批評。牛頓害怕發表他的研究結果。那些手稿在他的書架上擺了二十多年。最後，在 1687 年，他的這第一本書終於出版了。如今，它被認為是科學史上最偉大的著作之一。
+                        牛頓是個天才。遺憾的是，與他同時代的人們還無法接受他的想法。他們對他的發現充滿批評。牛頓害怕發表他的研究結果。那些手稿在他的書架上擺了二十多年。最後，在 1687
+                        年，他的這第一本書終於出版了。如今，它被認為是科學史上最偉大的著作之一。
                     </p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Gravity is the force that pulls objects towards the earth.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>重力是將物體拉向地球的力量。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Gravity is the force that pulls objects
+                                towards the earth.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>重力是將物體拉向地球的力量。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">There is a story that Sir Isaac Newton discovered gravity one day when he was sitting under a tree.</td>
+                            <td style="padding: 10px; vertical-align: top;">There is a story that Sir Isaac Newton
+                                discovered gravity one day when he was sitting under a tree.</td>
                             <td style="padding: 10px; vertical-align: top;">有一個故事是這樣說的：有一天，艾薩克·牛頓爵士坐在樹下時發現了重力。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">An apple fell from the tree and hit Newton on the head.</td>
+                            <td style="padding: 10px; vertical-align: top;">An apple fell from the tree and hit Newton
+                                on the head.</td>
                             <td style="padding: 10px; vertical-align: top;">一顆蘋果從樹上掉下來，砸在了牛頓的頭上。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">He realized gravity was the force that kept us on the ground.</td>
+                            <td style="padding: 10px; vertical-align: top;">He realized gravity was the force that kept
+                                us on the ground.</td>
                             <td style="padding: 10px; vertical-align: top;">他意識到重力就是讓我們留在地面上的那股力量。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">He also discovered it kept the moon close to the earth.</td>
+                            <td style="padding: 10px; vertical-align: top;">He also discovered it kept the moon close to
+                                the earth.</td>
                             <td style="padding: 10px; vertical-align: top;">他也發現正是重力讓月亮能靠近地球。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">The story of the apple is probably not true. However, it is a good example of how gravity affects things.</td>
+                            <td style="padding: 10px; vertical-align: top;">The story of the apple is probably not true.
+                                However, it is a good example of how gravity affects things.</td>
                             <td style="padding: 10px; vertical-align: top;">這個關於蘋果的故事可能不是真的。然而，它卻是一個說明重力如何影響事物的好例子。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Newton was a genius. Unfortunately, people of his time were not ready for his ideas.</td>
+                            <td style="padding: 10px; vertical-align: top;">Newton was a genius. Unfortunately, people
+                                of his time were not ready for his ideas.</td>
                             <td style="padding: 10px; vertical-align: top;">牛頓是個天才。遺憾的是，與他同時代的人們還無法接受他的想法。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">They were critical of his discoveries. Newton was afraid to publish his findings.</td>
+                            <td style="padding: 10px; vertical-align: top;">They were critical of his discoveries.
+                                Newton was afraid to publish his findings.</td>
                             <td style="padding: 10px; vertical-align: top;">他們對他的發現充滿批評。牛頓害怕發表他的研究結果。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">They sat on his shelf for over twenty years.</td>
+                            <td style="padding: 10px; vertical-align: top;">They sat on his shelf for over twenty years.
+                            </td>
                             <td style="padding: 10px; vertical-align: top;">那些手稿在他的書架上擺了二十多年。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Finally, in 1687, his first book was published.</td>
+                            <td style="padding: 10px; vertical-align: top;">Finally, in 1687, his first book was
+                                published.</td>
                             <td style="padding: 10px; vertical-align: top;">最後，在 1687 年，他的這第一本書終於出版了。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Today, it is considered one of the greatest works in the history of science.</td>
+                            <td style="padding: 10px; vertical-align: top;">Today, it is considered one of the greatest
+                                works in the history of science.</td>
                             <td style="padding: 10px; vertical-align: top;">如今，它被認為是科學史上最偉大的著作之一。</td>
                         </tr>
                     </table>
@@ -123,50 +362,116 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">gravity</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">重力，地心引力</div></div>
-                    <div class="vocab-item"><div class="vocab-word">force</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">力量，力</div></div>
-                    <div class="vocab-item"><div class="vocab-word">discover</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">發現</div></div>
-                    <div class="vocab-item"><div class="vocab-word">genius</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">天才</div></div>
-                    <div class="vocab-item"><div class="vocab-word">critical</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">批評的，挑剔的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">publish</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">出版，發表</div></div>
-                    <div class="vocab-item"><div class="vocab-word">finding</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">發現，研究結果</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">gravity</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">重力，地心引力</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">force</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">力量，力</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">discover</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">發現</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">genius</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">天才</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">critical</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">批評的，挑剔的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">publish</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">出版，發表</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">finding</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">發現，研究結果</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. 關係代名詞 that 用法</div><div class="example">Gravity is the force <span class="highlight">that pulls</span> objects...</div><p>that 作為關係代名詞，用來代替前面的 the force，並引導一個子句來修飾它，意思為「把物體拉向地球的那股"力量"」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. keep + 受詞 + 受詞補語</div><div class="example">...gravity was the force that <span class="highlight">kept us on the ground</span>.</div><p>動詞 keep 表示保持某狀態，後面接受詞 (us)，再加上介系詞片語 (on the ground) 作為補語，意思是「讓我們保持在地面上」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. 被動語態 (be + p.p.)</div><div class="example">...his first book <span class="highlight">was published</span>. / ...it <span class="highlight">is considered</span> one of the...</div><p>書是被出版的，作品是被認為的，因此使用「Be動詞 + 過去分詞」來表示被動的狀態。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 關係代名詞 that 用法</div>
+                    <div class="example">Gravity is the force <span class="highlight">that pulls</span> objects...</div>
+                    <p>that 作為關係代名詞，用來代替前面的 the force，並引導一個子句來修飾它，意思為「把物體拉向地球的那股"力量"」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. keep + 受詞 + 受詞補語</div>
+                    <div class="example">...gravity was the force that <span class="highlight">kept us on the
+                            ground</span>.</div>
+                    <p>動詞 keep 表示保持某狀態，後面接受詞 (us)，再加上介系詞片語 (on the ground) 作為補語，意思是「讓我們保持在地面上」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. 被動語態 (be + p.p.)</div>
+                    <div class="example">...his first book <span class="highlight">was published</span>. / ...it <span
+                            class="highlight">is considered</span> one of the...</div>
+                    <p>書是被出版的，作品是被認為的，因此使用「Be動詞 + 過去分詞」來表示被動的狀態。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: hit sb. on the head 擊中某人的頭部</strong><div class="example">An apple fell from the tree and <span class="highlight">hit Newton on the head</span>.</div><p>英文在表達打到身體某部位時，習慣先寫人 (hit Newton)，再用「介系詞 on/in + the + 身體部位」來表示。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: be critical of 對...充滿批評</strong><div class="example">They <span class="highlight">were critical of</span> his discoveries.</div><p>表示對某事抱持著批評的態度或是挑剔。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: be afraid to V 害怕去(做)...</strong><div class="example">Newton <span class="highlight">was afraid to</span> publish his findings.</div><p>用來表示某人因為恐懼或擔憂而不敢去進行某個行為。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: hit sb. on the head 擊中某人的頭部</strong>
+                    <div class="example">An apple fell from the tree and <span class="highlight">hit Newton on the
+                            head</span>.</div>
+                    <p>英文在表達打到身體某部位時，習慣先寫人 (hit Newton)，再用「介系詞 on/in + the + 身體部位」來表示。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: be critical of 對...充滿批評</strong>
+                    <div class="example">They <span class="highlight">were critical of</span> his discoveries.</div>
+                    <p>表示對某事抱持著批評的態度或是挑剔。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: be afraid to V 害怕去(做)...</strong>
+                    <div class="example">Newton <span class="highlight">was afraid to</span> publish his findings.</div>
+                    <p>用來表示某人因為恐懼或擔憂而不敢去進行某個行為。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：名人傳記介紹</strong><p>文章第一段講述了牛頓與蘋果「發現重力」的經典故事，並指出這可能只是個傳說，但仍是理解重力的好例子。第二段則講述牛頓作為天才遇到的困難：同時代的人們無法接受他，導致他害怕出版，研究結果因此塵封了二十年之久。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>According to the story, what fell on Newton's head?</li><li>What is gravity described as in the article?</li><li>Why did Newton wait for over twenty years to publish his findings?</li></ol></div>
+                <div class="info-box"><strong>文章結構：名人傳記介紹</strong>
+                    <p>文章第一段講述了牛頓與蘋果「發現重力」的經典故事，並指出這可能只是個傳說，但仍是理解重力的好例子。第二段則講述牛頓作為天才遇到的困難：同時代的人們無法接受他，導致他害怕出版，研究結果因此塵封了二十年之久。
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>According to the story, what fell on Newton's head?</li>
+                        <li>What is gravity described as in the article?</li>
+                        <li>Why did Newton wait for over twenty years to publish his findings?</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Gravity is the force that pulls objects towards the earth. There is a story that Sir Isaac Newton discovered gravity one day when he was sitting under a tree. An apple fell from the tree and hit Newton on the head. He realized gravity was the force that kept us on the ground. He also discovered it kept the moon close to the earth. The story of the apple is probably not true. However, it is a good example of how gravity affects things.\n\nNewton was a genius. Unfortunately, people of his time were not ready for his ideas. They were critical of his discoveries. Newton was afraid to publish his findings. They sat on his shelf for over twenty years. Finally, in 1687, his first book was published. Today, it is considered one of the greatest works in the history of science.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>

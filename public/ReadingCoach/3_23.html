@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - A South American Adventure</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 A South American Adventure</h1>
+        <a href="3_23_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCnF60KNHKWSaDc1s-xqab5AVGERrrBaldJdhSwx678f2I?e=KHZRCY"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -60,45 +285,111 @@
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
-                <div class="info-box"><p style="line-height: 2; font-size: 16px;">南美洲冒險<br><br>南美洲是世界七大洲之一。它是第四大洲。在南美洲，你可以找到地球上一些最美麗的地方。其中兩個地方是亞馬遜雨林和安第斯山脈。讓我們更仔細看看這兩個不可思議的地方。<br><br>想像站在世界最大的雨林——亞馬遜的中間。你可能會抬頭發現細細的陽光試圖穿透茂密的樹冠。如果你環顧四周，你可能會發現色彩繽紛的金剛鸚鵡、吼猴或懶洋洋的樹懶。但你必須小心！你不想遇到危險的美洲豹或藍色箭毒蛙。這些動物可以殺死你。也不要迷路！亞馬遜雨林非常大。它橫跨八個不同的國家。<br><br>但也許你想來一場山區冒險。安第斯山脈就是你要找的！安第斯山脈是世界上最長的山脈，穿越七個不同的國家。地球上一些最高的山是這個山脈的一部分。在這裡你會發現龍貓、羊駝和大型禿鷹等動物。你會發現像形狀扭曲的 Polylepis 樹這樣的稀有植物。你甚至會發現火山！<br><br>你想體驗哪種南美洲冒險？</p></div>
+                <div class="info-box">
+                    <p style="line-height: 2; font-size: 16px;">
+                        南美洲冒險<br><br>南美洲是世界七大洲之一。它是第四大洲。在南美洲，你可以找到地球上一些最美麗的地方。其中兩個地方是亞馬遜雨林和安第斯山脈。讓我們更仔細看看這兩個不可思議的地方。<br><br>想像站在世界最大的雨林——亞馬遜的中間。你可能會抬頭發現細細的陽光試圖穿透茂密的樹冠。如果你環顧四周，你可能會發現色彩繽紛的金剛鸚鵡、吼猴或懶洋洋的樹懶。但你必須小心！你不想遇到危險的美洲豹或藍色箭毒蛙。這些動物可以殺死你。也不要迷路！亞馬遜雨林非常大。它橫跨八個不同的國家。<br><br>但也許你想來一場山區冒險。安第斯山脈就是你要找的！安第斯山脈是世界上最長的山脈，穿越七個不同的國家。地球上一些最高的山是這個山脈的一部分。在這裡你會發現龍貓、羊駝和大型禿鷹等動物。你會發現像形狀扭曲的
+                        Polylepis 樹這樣的稀有植物。你甚至會發現火山！<br><br>你想體驗哪種南美洲冒險？</p>
+                </div>
             </div>
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">continents</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">大洲</div></div>
-                    <div class="vocab-item"><div class="vocab-word">incredible</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">不可思議的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">dense</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">茂密的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">stretches</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">延伸</div></div>
-                    <div class="vocab-item"><div class="vocab-word">mountain range</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">山脈</div></div>
-                    <div class="vocab-item"><div class="vocab-word">rare</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">稀有的</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">continents</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">大洲</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">incredible</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">不可思議的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dense</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">茂密的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stretches</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">延伸</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">mountain range</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">山脈</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">rare</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">稀有的</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. "one of the + 最高級 + N"</div><p>...之一：</p><div class="example">South America is <span class='highlight'>one of the</span> seven continents.</div></div>
-                <div class="grammar-box"><div class="grammar-title">2. "Look no further than"</div><p>...就是你要找的：</p><div class="example"><span class='highlight'>Look no further than</span> the Andes Mountains!</div></div>
-                <div class="grammar-box"><div class="grammar-title">3. "You'll find...like"</div><p>你會發現像...：</p><div class="example"><span class='highlight'>You'll find</span> animals <span class='highlight'>like</span> chinchillas, llamas...</div></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. "one of the + 最高級 + N"</div>
+                    <p>...之一：</p>
+                    <div class="example">South America is <span class='highlight'>one of the</span> seven continents.
+                    </div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. "Look no further than"</div>
+                    <p>...就是你要找的：</p>
+                    <div class="example"><span class='highlight'>Look no further than</span> the Andes Mountains!</div>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. "You'll find...like"</div>
+                    <p>你會發現像...：</p>
+                    <div class="example"><span class='highlight'>You'll find</span> animals <span
+                            class='highlight'>like</span> chinchillas, llamas...</div>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: one of the + 最高級 + N</strong><div class="example">South America is <span class='highlight'>one of the</span> seven continents of the world.<br>→ ...之一</div></div>
-                <div class="sentence-pattern"><strong>句型 2: Look no further than + N</strong><div class="example"><span class='highlight'>Look no further than</span> the Andes Mountains!<br>→ 看看...就夠了（強調推薦）</div></div>
-                <div class="sentence-pattern"><strong>句型 3: You'll find + N + like</strong><div class="example"><span class='highlight'>You'll find</span> animals <span class='highlight'>like</span> chinchillas, llamas...<br>→ 你會發現像...這樣的...</div></div>
-                <div class="sentence-pattern"><strong>句型 4: Imagine + V-ing</strong><div class="example"><span class='highlight'>Imagine standing</span> in the middle of the largest rainforest.<br>→ 想像...（動名詞作為受詞）</div></div>
-                <div class="info-box"><strong>💡 實用表達</strong><ul><li>"the fourth largest" → 第四大的</li><li>"stretches over" → 延伸跨越</li><li>"run into" → 偶然遇到</li></ul></div>
+                <div class="sentence-pattern"><strong>句型 1: one of the + 最高級 + N</strong>
+                    <div class="example">South America is <span class='highlight'>one of the</span> seven continents of
+                        the world.<br>→ ...之一</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: Look no further than + N</strong>
+                    <div class="example"><span class='highlight'>Look no further than</span> the Andes Mountains!<br>→
+                        看看...就夠了（強調推薦）</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: You'll find + N + like</strong>
+                    <div class="example"><span class='highlight'>You'll find</span> animals <span
+                            class='highlight'>like</span> chinchillas, llamas...<br>→ 你會發現像...這樣的...</div>
+                </div>
+                <div class="sentence-pattern"><strong>句型 4: Imagine + V-ing</strong>
+                    <div class="example"><span class='highlight'>Imagine standing</span> in the middle of the largest
+                        rainforest.<br>→ 想像...（動名詞作為受詞）</div>
+                </div>
+                <div class="info-box"><strong>💡 實用表達</strong>
+                    <ul>
+                        <li>"the fourth largest" → 第四大的</li>
+                        <li>"stretches over" → 延伸跨越</li>
+                        <li>"run into" → 偶然遇到</li>
+                    </ul>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解</h3>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
                         <li>What two places are described? (描述了哪兩個地方？)</li>
                         <li>What animals live in the Amazon? (什麼動物住在亞馬遜？)</li>
                         <li>Why should you be careful in the Amazon? (為什麼你在亞馬遜要小心？)</li>
                         <li>What is special about the Andes? (安第斯山脈有什麼特別？)</li>
-                    </ol></div>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `A South American Adventure
@@ -113,15 +404,16 @@ Which South American adventure would you like to experience?`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>

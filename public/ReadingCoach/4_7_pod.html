@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星際探索與英文解碼：從 Shooting Star 到 68 噸隕石的語感筆記</title>
+    <style>
+        :root {
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --bg-card-light: #334155;
+            --text-main: #F8FAFC;
+            --text-sub: #94A3B8;
+            --accent-cyan: #38BDF8;
+            --accent-indigo: #818CF8;
+            --accent-amber: #FBBF24;
+            --accent-rose: #FB7185;
+            --border-color: #475569;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", "PingFang TC", sans-serif;
+            --font-code: "Consolas", "Monaco", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.85;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tag-badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.35;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #38BDF8 0%, #818CF8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            font-weight: 400;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            color: var(--accent-cyan);
+            margin: 40px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .section-title .icon {
+            font-size: 1.6rem;
+        }
+
+        /* 對話方塊 */
+        .chat-box {
+            background-color: var(--bg-card);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border-left: 4px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-a {
+            border-left-color: var(--accent-cyan);
+        }
+
+        .chat-b {
+            border-left-color: var(--accent-indigo);
+        }
+
+        .speaker-tag {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .chat-a .speaker-tag {
+            color: var(--accent-cyan);
+        }
+
+        .chat-b .speaker-tag {
+            color: var(--accent-indigo);
+        }
+
+        .chat-text {
+            font-size: 1.02rem;
+            color: #E2E8F0;
+        }
+
+        /* 英文朗讀短文專用區塊 */
+        .english-passage {
+            background: linear-gradient(145deg, #1E293B, #0F172A);
+            border: 1px solid var(--accent-indigo);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 25px 0;
+            box-shadow: 0 8px 24px rgba(129, 140, 248, 0.15);
+            position: relative;
+        }
+
+        .passage-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .passage-title {
+            color: var(--accent-amber);
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .passage-content {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #F1F5F9;
+            letter-spacing: 0.3px;
+        }
+
+        /* 關鍵字與知識點卡片 */
+        .card-note {
+            background-color: rgba(51, 65, 85, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .card-note-title {
+            color: var(--accent-amber);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-note-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card-note-list li {
+            position: relative;
+            padding-left: 22px;
+            margin-bottom: 10px;
+            color: #CBD5E1;
+            font-size: 0.98rem;
+        }
+
+        .card-note-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            font-size: 0.8rem;
+            top: 2px;
+        }
+
+        /* 英文詞彙高亮 */
+        .en-hl {
+            color: var(--accent-cyan);
+            font-family: var(--font-code);
+            font-weight: 700;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .en-code {
+            color: var(--accent-amber);
+            font-family: var(--font-code);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .english-passage {
+                padding: 20px;
+            }
+
+            .chat-box {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <span class="tag-badge">天文科普 ✕ 雙語語感廣播</span>
+            <h1>🌠 星際探索與英文解碼<br><span style="font-size: 1.3rem; font-weight: 500; color: #94A3B8;">從 Shooting Star 到 68
+                    噸隕石的語感筆記</span></h1>
+            <p class="subtitle">打破死記硬背！結合物理真相（RAM Pressure）與字尾密碼（-ite）的無痛英文內化指南</p>
+        </header>
+
+        <!-- SECTION 1 -->
+        <div class="section-title">
+            <span class="icon">✨</span>
+            <span>第一部分：流星不是星？概念翻轉與情境選字</span>
+        </div>
+
+        <div class="chat-box chat-a">
+            <span class="speaker-tag">Host A</span>
+            <div class="chat-text">
+                歡迎來到今天的深度解析！今天我們的任務非常明確，就是專為想從零開始學好英文的台灣朋友量身打造。我們不讀死板的教科書，而是帶你透過一段真實的天文文本，一邊探索太空，一邊把英文單詞與語感直接烙印在腦海裡！
+            </div>
+        </div>
+
+        <div class="chat-box chat-b">
+            <span class="speaker-tag">Host B</span>
+            <div class="chat-text">
+                沒錯！當你對充滿驚奇的科學現象產生好奇時，那些英文自然就會被記住了。我們先來朗讀文本的第一段：
+            </div>
+        </div>
+
+        <!-- PASSAGE 1 -->
+        <div class="english-passage">
+            <div class="passage-header">
+                <span class="passage-title">📖 Reading Passage 1</span>
+            </div>
+            <div class="passage-content">
+                A shooting star is not actually a star. When people see one, they are really seeing a meteor fall toward
+                earth.
+            </div>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">💡 核心語感與發音要點</div>
+            <ul class="card-note-list">
+                <li><span class="en-hl">shooting star</span>：流星。發音時 <span class="en-code">-ing</span> 結尾要輕輕帶過。命名來自 <span
+                        class="en-code">shoot</span>（射擊），充滿視覺畫面感，如同夜空中有無形弓箭手射出星體。</li>
+                <li><span class="en-hl">meteor</span>：流星體（科學名詞）。重音在最前方，念作 <span class="en-code">/ˈmiː.ti.ɔːr/</span>。
+                </li>
+                <li><span class="en-hl">actually</span>：帶有「反轉語氣/打破既定認知」的副詞，暗示「實際上…（要揭曉真相了）」。</li>
+            </ul>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">🗺️ 情境選字指南：Shooting Star vs. Meteor</div>
+            <ul class="card-note-list">
+                <li><strong>日常浪漫情境（Shooting star）：</strong> 在合歡山露營、享受夜空氛圍時，使用 <span class="en-hl">shooting star</span>
+                    最自然、最具生活感。</li>
+                <li><strong>科學專業情境（Meteor）：</strong> 參觀科博館、觀看《國家地理頻道》時，<span class="en-hl">meteor</span> 是唯一精準的選擇。</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section-title">
+            <span class="icon">🌌</span>
+            <span>第二部分：太空中的髒雪球（Dirty Snowball）與動詞代換</span>
+        </div>
+
+        <div class="chat-box chat-a">
+            <span class="speaker-tag">Host A</span>
+            <div class="chat-text">
+                那麼這些流星體到底是從哪裡來的呢？我們看第二段文本：
+            </div>
+        </div>
+
+        <!-- PASSAGE 2 -->
+        <div class="english-passage">
+            <div class="passage-header">
+                <span class="passage-title">📖 Reading Passage 2</span>
+            </div>
+            <div class="passage-content">
+                Meteors come from outer space. Frozen lumps of dust, rocks, and gas move through our solar system. They
+                orbit the sun like planets do.
+            </div>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">☄️ 天文名詞與生活比喻</div>
+            <ul class="card-note-list">
+                <li><span class="en-hl">Frozen lumps of dust, rocks, and gas</span>：由灰塵、岩石和氣體組成的凍結碎塊。</li>
+                <li><span class="en-hl">lump</span>：笨重、形狀不規則的塊狀物。在天學上常比喻為 <strong>"Dirty
+                        Snowball"（骯髒的雪球）</strong>——在極低溫的深空將宇宙灰塵與石頭凍結成一坨。</li>
+                <li><strong>動態感動詞：</strong> <span class="en-hl">come from</span>（來自）、<span class="en-hl">move
+                        through</span>（穿過）、<span class="en-hl">orbit</span>（環繞軌道）。</li>
+            </ul>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">✍️ 口語句型精髓：like planets do</div>
+            <ul class="card-note-list">
+                <li>句子寫法：<span class="en-hl">They orbit the sun like planets do.</span></li>
+                <li><strong>文法解析：</strong> 這裡的 <span class="en-code">do</span> 是代動詞，用來代替前面出現過的 <span
+                        class="en-code">orbit</span>，避免重複說成 <i>"like planets orbit the sun"</i>。</li>
+                <li><strong>生活活用句型：</strong> <span class="en-code">like [something] do</span>，能讓表達更簡潔道地。</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section-title">
+            <span class="icon">🔥</span>
+            <span>第三部分：劃破夜空的光芒——衝壓物理學與因果鏈結</span>
+        </div>
+
+        <div class="chat-box chat-b">
+            <span class="speaker-tag">Host B</span>
+            <div class="chat-text">
+                一顆冰冷的髒雪球是怎麼變成耀眼光芒的？這是一段劇烈的狀態轉變：
+            </div>
+        </div>
+
+        <!-- PASSAGE 3 -->
+        <div class="english-passage">
+            <div class="passage-header">
+                <span class="passage-title">📖 Reading Passage 3</span>
+            </div>
+            <div class="passage-content">
+                The sun's heat warms these lumps causing pieces of dust and rock to break away from them. These pieces
+                can enter the earth's atmosphere and catch on fire. Once they do, they become meteors. As a meteor
+                burns, it leaves a trail of light behind it.
+            </div>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">🧪 迷思破解：為何用 catch on fire 而非 burn？</div>
+            <ul class="card-note-list">
+                <li><strong>科學真相（RAM Pressure 衝壓）：</strong>
+                    流星發光主因並非摩擦力，而是極高速衝入大氣層時，前方空氣被劇烈壓縮爆發幾千度高溫，將物質氣化並形成發光電漿（plasma）。</li>
+                <li><span class="en-hl">catch on fire</span>：強調「瞬間狀態突變/瞬間被高溫點燃」（轟的一聲）。</li>
+                <li><span class="en-hl">burn</span>：強調持續燃燒的狀態（如壁爐內慢慢燒）。</li>
+                <li><span class="en-hl">a trail of light</span>：燃燒時留下的「光軌」。</li>
+            </ul>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">🔗 完美邏輯與時間連接詞寫作模板</div>
+            <ul class="card-note-list">
+                <li><span class="en-code">causing...</span>：啟動連鎖反應（<span class="en-hl">causing pieces to break
+                        away</span> 導致碎片脫離）。</li>
+                <li><span class="en-code">Once they do...</span>：時間副詞，確認狀態變更（一陣點燃，即正式成為流星）。</li>
+                <li><span class="en-code">As a meteor burns...</span>：表示動作同步進行（當燃燒時，同時留下光軌）。</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 4 -->
+        <div class="section-title">
+            <span class="icon">🌧️</span>
+            <span>第四部分：流星雨（Meteor Showers）與高速公路比喻</span>
+        </div>
+
+        <!-- PASSAGE 4 -->
+        <div class="english-passage">
+            <div class="passage-header">
+                <span class="passage-title">📖 Reading Passage 4</span>
+            </div>
+            <div class="passage-content">
+                Sometimes there are a lot of shooting stars at once. These events are known as meteor showers. They
+                happen when the earth moves through an area of outer space with lots of dust and rocks.
+            </div>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">🚗 生活化形象比喻</div>
+            <ul class="card-note-list">
+                <li><span class="en-hl">meteor showers</span>：流星雨。<span class="en-code">shower</span>
+                    意為蓮蓬頭陣雨/淋浴，具有光芒如水花散射的強烈畫面感。</li>
+                <li><strong>高速公路擋風玻璃比喻：</strong> 地球就像夜間開在高速公路上的汽車，行經彗星留下的垃圾碎片帶（蚊蟲密集的區域），碎片撞擊大氣層（擋風玻璃）即形成流星雨。</li>
+                <li><strong>口語量詞：</strong> 使用 <span class="en-hl">a lot of</span> 與 <span class="en-hl">lots of</span>
+                    比死背 <i>a large quantity of</i> 更自然道地。</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="section-title">
+            <span class="icon">🪨</span>
+            <span>第五部分：落地為石——隕石與解鎖字尾密碼 -ite</span>
+        </div>
+
+        <div class="chat-box chat-a">
+            <span class="speaker-tag">Host A</span>
+            <div class="chat-text">
+                如果大氣層擋不住巨大的石頭，沒燒完掉到地上會發生什麼事？請看最後一段轉折：
+            </div>
+        </div>
+
+        <!-- PASSAGE 5 -->
+        <div class="english-passage">
+            <div class="passage-header">
+                <span class="passage-title">📖 Reading Passage 5</span>
+            </div>
+            <div class="passage-content">
+                Sometimes a meteor doesn't completely burn up in the sky. It falls all the way to the ground. Once it
+                hits the ground, it is called a meteorite. Most meteorites look a lot like rocks on earth. Some
+                meteorites have been found that weigh way more than 60 tons.
+            </div>
+        </div>
+
+        <div class="card-note">
+            <div class="card-note-title">🔑 單字變換與字尾密碼 (-ite)</div>
+            <ul class="card-note-list">
+                <li>空中燃燒 = <span class="en-hl">Meteor</span>（流星） ➔ 撞擊地面 = <span class="en-hl">Meteorite</span>（隕石）。</li>
+                <li><strong>字尾密碼 <span class="en-code">-ite</span>：</strong> 源自古希臘文 <i>lithos</i>（石頭）。凡看到 <span
+                        class="en-code">-ite</span> 結尾的單字，幾乎 100% 與石頭或礦物有關（例：鐘乳石 Stalactite、孔雀石 Malachite）。</li>
+                <li><span class="en-hl">way more than 60 tons</span>：遠遠超過 60 噸（<span class="en-code">way</span>
+                    作副詞用來極致強調）。</li>
+                <li><strong>真實案例：</strong> 位於非洲納米比亞的「霍巴隕石」（Hoba meteorite），重達 60 多噸，落地球 8 萬年至今依然停留在當年的撞擊坑中。</li>
+                <li><span class="en-hl">Fusion Crust</span>（融殼）：隕石經過高溫燃燒形成的黑色外殼，風化後外觀與普通玄武岩極為相似。</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 6 -->
+        <div class="section-title">
+            <span class="icon">🎯</span>
+            <span>第六部分：總結與生活啟示</span>
+        </div>
+
+        <div class="chat-box chat-b">
+            <span class="speaker-tag">Host B</span>
+            <div class="chat-text">
+                今天我們搞懂了 <span class="en-hl">shooting star</span> 的視覺命名、學會用 <span class="en-hl">actually</span> 轉折語氣、掌握了
+                <span class="en-hl">like planets do</span> 代動詞句型、明白了 <span class="en-hl">catch on fire</span>
+                的衝壓高溫，還解開了代表石頭的字尾密碼 <span class="en-hl">-ite</span>！
+            </div>
+        </div>
+
+        <div class="chat-box chat-a">
+            <span class="speaker-tag">Host A</span>
+            <div class="chat-text">
+                下次在台灣登山散步時，低頭看看腳邊不起眼的黑褐色石塊——它可能誕生於數十億年前的太陽系邊緣，穿越了電漿高溫，最終安靜地躺在你的腳邊。現在你已經可以用最精確、最生動的英文大聲地說：<span
+                    class="en-hl">"This is a meteorite!"</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 雙語深度解析指南｜星際探索與英文解碼精修版</p>
+        </footer>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '4_7.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

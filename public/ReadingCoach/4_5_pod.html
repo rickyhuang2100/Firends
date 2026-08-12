@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古希臘神話與英文解碼：從獨眼巨人到語感升級</title>
+    <style>
+        :root {
+            --bg-main: #F8FAFFC0;
+            --card-bg: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --primary: #2563EB;
+            /* 宙斯神雷藍 */
+            --primary-light: #EFF6FF;
+            --secondary: #7C3AED;
+            /* 史詩紫 */
+            --secondary-light: #F5F3FF;
+            --accent-gold: #D97706;
+            /* 神話金 */
+            --accent-gold-light: #FEF3C7;
+            --border-color: #E2E8F0;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", "PingFang TC", sans-serif;
+            --font-code: "Consolas", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: #F1F5F9;
+            color: var(--text-main);
+            line-height: 1.85;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 50px 45px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px dashed #E2E8F0;
+            padding-bottom: 35px;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--accent-gold-light);
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 4px 16px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 2.1rem;
+            color: #0F172A;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin: 42px 0 22px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .section-header h2 {
+            font-size: 1.35rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        /* 對話框設計 */
+        .dialogue {
+            margin-bottom: 18px;
+            padding: 16px 22px;
+            border-radius: 14px;
+            font-size: 1.02rem;
+            position: relative;
+        }
+
+        .host-a {
+            background-color: var(--primary-light);
+            border-left: 5px solid var(--primary);
+        }
+
+        .host-b {
+            background-color: var(--secondary-light);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .speaker-tag {
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .host-a .speaker-tag {
+            color: var(--primary);
+        }
+
+        .host-b .speaker-tag {
+            color: var(--secondary);
+        }
+
+        /* 英文文本朗讀卡片 */
+        .passage-box {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            color: #F8FAFC;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin: 25px 0;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+        }
+
+        .passage-title {
+            color: #FAC775;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .passage-text {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.12rem;
+            line-height: 1.9;
+            color: #E2E8F0;
+        }
+
+        /* 英文單字標記 */
+        .en-word {
+            font-weight: 700;
+            font-style: normal;
+            color: #1D4ED8;
+            background-color: #DBEAFE;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-family: var(--font-code);
+            font-size: 0.96rem;
+        }
+
+        /* 觀念解碼卡片 */
+        .card-tip {
+            background-color: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 22px 0;
+            font-size: 0.98rem;
+        }
+
+        .card-tip-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-tip-title::before {
+            content: "⚡";
+            margin-right: 8px;
+        }
+
+        ul.tip-list {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        ul.tip-list li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid #E2E8F0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .passage-box {
+                padding: 20px;
+            }
+
+            .dialogue {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <span class="badge">雙語深度解析逐字稿</span>
+            <h1>⚡ 古希臘神話與英文解碼<br><span style="font-size:1.3rem; font-weight:600; color:#475569;">從獨眼巨人到大腦語感升級</span></h1>
+            <p class="subtitle">便利貼理論 ‧ 歷史活化石動詞 ‧ TH 發音微觀物理學｜精修 HTML 閱讀版</p>
+        </header>
+
+        <!-- SECTION 1 -->
+        <div class="section-header">
+            <span class="section-icon">👁️</span>
+            <h2>第一部分：開場情境與神話聽力體驗</h2>
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            想像一下，你現在是一個身高好幾公尺的巨人。擁有無窮的力氣，但就因為你長得跟別人不太一樣，額頭正中央竟然只長了一顆巨大的眼睛！當時的宇宙統治者看你不順眼，直接把你無情地扔進了暗無天日的冥界裡……這聽起來是不是超像好萊塢奇幻史詩大片？
+        </div>
+
+        <div class="dialogue host-b">
+            <span class="speaker-tag">Host B</span>
+            對！但這不是電影，而是古希臘神話裡最經典的橋段之一。今天這段關於「獨眼巨人」與「宙斯權力鬥爭」的神話，要帶著你從零開始，把這段故事當成藏寶圖，挖掘英文發音節奏、核心句型邏輯，以及大腦記憶單字的祕密！
+        </div>
+
+        <!-- PASSAGE BOX -->
+        <div class="passage-box">
+            <div class="passage-title">📜 English Myth Passage 英文短文朗讀</div>
+            <div class="passage-text">
+                Do you know any stories from Greek mythology? Myths are the stories that the ancient Greeks told about
+                their gods. The cyclopes are famous figures in Greek mythology. You may have heard of them.<br><br>
+                The cyclopes were giants. They only had one huge eye and it was in the middle of their foreheads. The
+                rulers of the universe hated the cyclopes. They threw the one-eyed giants into the underworld.<br><br>
+                A powerful god named Zeus decided that he needed the cyclopes' help. Zeus freed the cyclopes from the
+                underworld. Out of gratitude, the cyclopes gave Zeus gifts. Zeus received powerful thunderbolts that he
+                could use as weapons. Zeus used his new weapons to overthrow the world's rulers. Then Zeus became the
+                ruler of the universe.
+            </div>
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            這段資訊量與畫面感真的超強！一開始介紹神話背景，接著獨眼巨人 <span class="en-word">cyclopes</span> 被丟進冥界受苦；然後宙斯 <span
+                class="en-word">Zeus</span> 出現釋放巨人，巨人為了報恩送給宙斯充滿破壞力的雷霆 <span
+                class="en-word">thunderbolts</span>，宙斯靠著雷霆推翻原本的統治者，成為宇宙新霸主！
+        </div>
+
+        <div class="dialogue host-b">
+            <span class="speaker-tag">Host B</span>
+            這展示了英文說故事的黃金結構：開頭用「現在式」帶你進入大背景、聊天互動；當進入故事與歷史事件時，瞬間切換到「過去式」，把你帶進歷史的漩渦裡。
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section-header">
+            <span class="section-icon">📌</span>
+            <h2>第二部分：關聯詞 「that」 的便利貼理論</h2>
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            許多人在學英文時最害怕看到 <span class="en-word">that</span>，學校老師叫它「關係代名詞」，光聽名稱就頭痛。
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">觀念突破：把 that 當成「便利貼」</div>
+            <p>英文是一個<strong>開門見山、缺乏耐心</strong>的語言（右分之語言 Right-branching language），習慣先把最核心的主角與結論丟出來：</p>
+            <ul class="tip-list">
+                <li><strong>先講核心：</strong> <span class="en-word">Myths are the stories...</span>（神話就是那些故事……）</li>
+                <li><strong>貼上便利貼：</strong> 聽眾疑惑「什麼故事？」時，說話者立刻拿出名為 <span class="en-word">that</span> 的便利貼，啪一聲貼在 <span
+                        class="en-word">stories</span> 後面。</li>
+                <li><strong>右側補充細節：</strong> <span class="en-word">...that the ancient Greeks told about their
+                        gods.</span>（便利貼上寫著：古希臘人講述關於他們神明的故事）。</li>
+                <li><strong>中英文差異：</strong> 中文習慣把修飾語全堆在前面（左分之語言）；英文則是「先講重點，細節後補」，用便利貼不斷往右延伸！</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section-header">
+            <span class="section-icon">🎬</span>
+            <h2>第三部分：不規則動詞的歷史活化石與情境記憶</h2>
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            關於過去式，為什麼 <span class="en-word">hate</span> 變 <span class="en-word">hated</span>、<span
+                class="en-word">decide</span> 變 <span class="en-word">decided</span>（加 -ed）很規律，但「丟」這動作 <span
+                class="en-word">throw</span> 的過去式卻突變成 <span class="en-word">threw</span>？長得完全不一樣啊！
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">語言學解密：不規則動詞是「古語言的活化石」</div>
+            <ul class="tip-list">
+                <li><strong>母音變換（Vowel Mutation）：</strong> 在古英語時期，許多動詞本來就是靠改變母音來表達時間（如 <span
+                        class="en-word">throw</span> &rarr; <span class="en-word">threw</span>, <span
+                        class="en-word">sing</span> &rarr; <span class="en-word">sang</span>, <span
+                        class="en-word">know</span> &rarr; <span class="en-word">knew</span>）。這在當時才是正統規則！</li>
+                <li><strong>為什麼沒被馴化？</strong> 後來為了方便，大眾開始流行統一加 <span class="en-word">-ed</span>。但因為日常生活中最常用、出現頻率極高的動詞（如
+                    eat, sing, throw），早已深植在對話習慣中，頑強抵抗了新規則，將古老形式保留至今。</li>
+            </ul>
+        </div>
+
+        <div class="dialogue host-b">
+            <span class="speaker-tag">Host B</span>
+            死背不規則動詞表大腦很容易忘記，神經科學告訴我們，大腦最擅長的是<strong>「情境記憶」</strong>（畫面、情感與動作）：
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">導演視角記憶法：threw（用力丟擲）</div>
+            <p>看到 <span class="en-word">They threw the one-eyed giants into the underworld</span> 時：</p>
+            <p>想像自己是電影導演——高高在上、冷酷無情的宇宙統治者，毫不留情抓起巨大的獨眼巨人，用盡全身力氣 <span class="en-word">threw</span> 把他們狠摔進充斥火焰與絕望的冥界深淵。將
+                <span class="en-word">threw</span> 的發音與重力下墜的絕望感綁定，單字就變成了微電影，刻在神經元裡！</p>
+        </div>
+
+        <!-- SECTION 4 -->
+        <div class="section-header">
+            <span class="section-icon">🧱</span>
+            <h2>第四部分：單字組合與實用片語塊</h2>
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            文本裡對巨人的描述也非常直觀：<span class="en-word">forehead</span>（額頭）就是 <span class="en-word">fore-</span>（前） + <span
+                class="en-word">head</span>（頭）；<span class="en-word">huge eye</span>（巨大的眼睛）。簡單詞組就能拼湊出震撼畫面。
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">高階道地片語萬用骨架：Out of + [情緒名詞]</div>
+            <p><span class="en-word">Out of gratitude, the cyclopes gave Zeus gifts.</span>（出於感激，獨眼巨人給了宙斯禮物。）</p>
+            <ul class="tip-list">
+                <li><span class="en-word">Out of curiosity</span>：出於好奇</li>
+                <li><span class="en-word">Out of love</span>：出於愛</li>
+                <li><span class="en-word">Out of fear</span>：出於恐懼</li>
+            </ul>
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">動作隱喻：Overthrow（推翻 / 過肩摔）</div>
+            <p><span class="en-word">Zeus used his new weapons to overthrow the world's rulers.</span></p>
+            <p>拆解：<span class="en-word">over</span>（越過/上方） + <span class="en-word">throw</span>（用力丟） &rarr;
+                就像柔道比賽中，一把抓住高高在上的統治者給他一個強力的<strong>「過肩摔」</strong>砸向地面！延伸到政治上就是徹底推翻舊政權。</p>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="section-header">
+            <span class="section-icon">👅</span>
+            <h2>第五部分：TH 發音大魔王與終極繞口令</h2>
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            台灣學習者最頭痛的發音大魔王就是 <span class="en-word">TH</span>！很多人以為要把整片舌頭伸出來，結果念起來超吃力又像大舌頭。
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">TH 發音微觀物理學（精密咬舌技巧）</div>
+            <p>千萬不要伸出整片舌頭！正確物理動作非常微小精緻：</p>
+            <ul class="tip-list">
+                <li><strong>正確動作：</strong> 用上排門牙輕柔觸碰舌尖（舌尖只需稍微露出門牙邊緣一點點），將肺部氣流從牙齒與舌尖的極小縫隙輕擠出去。</li>
+                <li><strong>無聲 TH (/&theta;/):</strong> 純送氣、聲帶不震動（摩擦絲聲）。範例：<span class="en-word">myths</span>, <span
+                        class="en-word">through</span>, <span class="en-word">thunderbolts</span>, <span
+                        class="en-word">overthrow</span></li>
+                <li><strong>有聲 TH (/&eth;/):</strong> 嘴型相同，但同時震動喉嚨聲帶。範例：<span class="en-word">they</span>, <span
+                        class="en-word">the</span>, <span class="en-word">that</span></li>
+                <li><strong>尾音 S 不要漏：</strong> <span class="en-word">gods</span>, <span class="en-word">giants</span>
+                    結尾複數音一定要確實發出來。</li>
+            </ul>
+        </div>
+
+        <div class="card-tip">
+            <div class="card-tip-title">🔥 終極口腔體操繞口令菜單</div>
+            <p style="font-size:1.2rem; font-weight:700; color:var(--primary); text-align:center; margin:10px 0;">
+                "They threw the thunderbolts."
+            </p>
+            <p>短短四個字涵蓋有聲 <span class="en-word">They / the</span> 與無聲 <span class="en-word">threw /
+                    thunderbolts</span>，每天對著鏡子練習，鍛鍊口腔肌肉記憶！</p>
+        </div>
+
+        <!-- SECTION 6 -->
+        <div class="section-header">
+            <span class="section-icon">🚀</span>
+            <h2>第六部分：結語與揮舞你的英文雷霆</h2>
+        </div>
+
+        <div class="dialogue host-b">
+            <span class="speaker-tag">Host B</span>
+            宙斯原本面對看似無法撼動的舊統治階級，因為獲得了獨眼巨人打造的雷霆（<span class="en-word">thunderbolts</span>），最終成功推翻（<span
+                class="en-word">overthrow</span>）舊世界，成為新霸主。
+        </div>
+
+        <div class="dialogue host-a">
+            <span class="speaker-tag">Host A</span>
+            對現在的你來說，英文這門語言或許就像那把威力無比的雷霆。當你理解了語言的底層邏輯，熟練揮舞這把名為英文的雷霆時，你打算推翻自己生活中的哪些限制？又想憑藉這份力量去征服哪一個充滿未知的嶄新宇宙呢？帶著這個問題，繼續享受你的學習之旅吧！
+        </div>
+
+        <footer>
+            <p>© 古希臘神話與英文解碼指南｜精緻 HTML 閱讀版</p>
+        </footer>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '4_5.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

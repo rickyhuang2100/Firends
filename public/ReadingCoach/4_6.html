@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - The Human Body - Hiccups</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 The Human Body - Hiccups</h1>
+        <a href="4_6_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQAc10BEsfcbTY1TzPKGBQnAAdQji1jbI8VlR0oP_CFeMR0?e=5xRxbK"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -66,7 +291,8 @@
                     <h4 style="color: #2196F3; margin-bottom: 15px;">人體奧秘——打嗝 (Hiccups)</h4>
                     <p style="line-height: 2; font-size: 16px;">
                         毫無預警地——在教室裡、在車上、講電話中，或是看電視時——隨時隨地，它都有可能發生：打嗝。令人害怕的打嗝。真的有人找到治打嗝的方法嗎？有些人認為憋氣、喝水、倒立，或是這三個動作同時做，就能有助於治好打嗝。然而往往沒有半點用。我們到底是為什麼會打嗝的呢？<br><br>
-                        你曾經感覺到你的眉毛在跳動嗎？它往往是突然開始的，就像打嗝一樣。這兩者都是同一個原因引起的：肌肉痙攣。當你打嗝的時候，你胸口一處的肌肉開始收縮。這會使空氣急促地被吸入你的肺部裡。空氣衝入後，肺部頂端的瓣膜突然閉合，發出了「嗝 (hic)」的聲音。這在我們的身體各處無時無刻都有可能發生。這是一種自然的人體機能。<br><br>
+                        你曾經感覺到你的眉毛在跳動嗎？它往往是突然開始的，就像打嗝一樣。這兩者都是同一個原因引起的：肌肉痙攣。當你打嗝的時候，你胸口一處的肌肉開始收縮。這會使空氣急促地被吸入你的肺部裡。空氣衝入後，肺部頂端的瓣膜突然閉合，發出了「嗝
+                        (hic)」的聲音。這在我們的身體各處無時無刻都有可能發生。這是一種自然的人體機能。<br><br>
                         幸運的是，多數的打嗝並不會持續那麼久——頂多幾分鐘而已。不過，曾經有一個人連續打了整整六十八年的嗝。你能想像嗎？他打嗝長達六十八年，不論工作或睡覺都在打嗝。我想他或許滿需要被好好嚇一跳才對。
                     </p>
                 </div>
@@ -74,51 +300,67 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Out of nowhere – in class, in the car, on the phone, or watching television – at any moment, it can happen.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>毫無預警地——在教室裡、在車上、講電話中，或是看電視時——隨時隨地，它都有可能發生。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Out of nowhere – in class, in the car,
+                                on the phone, or watching television – at any moment, it can happen.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>毫無預警地——在教室裡、在車上、講電話中，或是看電視時——隨時隨地，它都有可能發生。
+                            </td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Hiccup. The dreaded hiccup. Has anyone ever really found a cure for hiccups?</td>
+                            <td style="padding: 10px; vertical-align: top;">Hiccup. The dreaded hiccup. Has anyone ever
+                                really found a cure for hiccups?</td>
                             <td style="padding: 10px; vertical-align: top;">打嗝。令人害怕的打嗝。真的有人找到治打嗝的方法嗎？</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Some people believe that holding your breath, drinking water, standing on your head, or doing all three at the same time can help cure hiccups.</td>
+                            <td style="padding: 10px; vertical-align: top;">Some people believe that holding your
+                                breath, drinking water, standing on your head, or doing all three at the same time can
+                                help cure hiccups.</td>
                             <td style="padding: 10px; vertical-align: top;">有些人認為憋氣、喝水、倒立，或是這三個動作同時做，就能有助於治好打嗝。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Nothing ever works. How do we even get hiccups?</td>
+                            <td style="padding: 10px; vertical-align: top;">Nothing ever works. How do we even get
+                                hiccups?</td>
                             <td style="padding: 10px; vertical-align: top;">然而往往沒有半點用。我們到底是為什麼會打嗝的呢？</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Have you ever felt your eyebrow twitching? It starts suddenly, just like hiccups.</td>
+                            <td style="padding: 10px; vertical-align: top;">Have you ever felt your eyebrow twitching?
+                                It starts suddenly, just like hiccups.</td>
                             <td style="padding: 10px; vertical-align: top;">你曾經感覺到你的眉毛在跳動嗎？它往往是突然開始的，就像打嗝一樣。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Both are caused by the same thing, muscle spasms.</td>
+                            <td style="padding: 10px; vertical-align: top;">Both are caused by the same thing, muscle
+                                spasms.</td>
                             <td style="padding: 10px; vertical-align: top;">這兩者都是同一個原因引起的：肌肉痙攣。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">When you get the hiccups, a muscle in your chest starts contracting. It rushes air into your lungs.</td>
+                            <td style="padding: 10px; vertical-align: top;">When you get the hiccups, a muscle in your
+                                chest starts contracting. It rushes air into your lungs.</td>
                             <td style="padding: 10px; vertical-align: top;">當你打嗝的時候，你胸口一處的肌肉開始收縮。這會使空氣急促地被吸入你的肺部裡。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">After air rushes in, the sudden closing of the valve at the top of your lungs causes the “hic” sound.</td>
+                            <td style="padding: 10px; vertical-align: top;">After air rushes in, the sudden closing of
+                                the valve at the top of your lungs causes the “hic” sound.</td>
                             <td style="padding: 10px; vertical-align: top;">空氣衝入後，肺部頂端的瓣膜突然閉合，發出了「嗝(hic)」的聲音。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">This happens to us all throughout our bodies all the time. It is a natural bodily function.</td>
+                            <td style="padding: 10px; vertical-align: top;">This happens to us all throughout our bodies
+                                all the time. It is a natural bodily function.</td>
                             <td style="padding: 10px; vertical-align: top;">這在我們的身體各處無時無刻都有可能發生。這是一種自然的人體機能。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Luckily, most hiccups don’t last that long – only a few minutes at the most.</td>
+                            <td style="padding: 10px; vertical-align: top;">Luckily, most hiccups don’t last that long –
+                                only a few minutes at the most.</td>
                             <td style="padding: 10px; vertical-align: top;">幸運的是，多數的打嗝並不會持續那麼久——頂多幾分鐘而已。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">However, there once was a man who had the hiccups for sixty-eight whole years. Can you imagine?</td>
+                            <td style="padding: 10px; vertical-align: top;">However, there once was a man who had the
+                                hiccups for sixty-eight whole years. Can you imagine?</td>
                             <td style="padding: 10px; vertical-align: top;">不過，曾經有一個人連續打了整整六十八年的嗝。你能想像嗎？</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">He had hiccups for sixty-eight years, through work and sleep. I guess he could have used a good scare.</td>
+                            <td style="padding: 10px; vertical-align: top;">He had hiccups for sixty-eight years,
+                                through work and sleep. I guess he could have used a good scare.</td>
                             <td style="padding: 10px; vertical-align: top;">他打嗝長達六十八年，不論工作或睡覺都在打嗝。我想他或許滿需要被好好嚇一跳才對。</td>
                         </tr>
                     </table>
@@ -128,51 +370,123 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">hiccup</div><div class="vocab-type">[名詞/動詞]</div><div class="vocab-meaning">打嗝</div></div>
-                    <div class="vocab-item"><div class="vocab-word">nowhere</div><div class="vocab-type">[副詞]</div><div class="vocab-meaning">無處，不知何處 (Out of nowhere 指突然間、毫無預警)</div></div>
-                    <div class="vocab-item"><div class="vocab-word">dreaded</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">令人畏懼的，討厭的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">cure</div><div class="vocab-type">[名詞/動詞]</div><div class="vocab-meaning">治療方法，解藥；治癒</div></div>
-                    <div class="vocab-item"><div class="vocab-word">twitch</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">抽搐，痙攣</div></div>
-                    <div class="vocab-item"><div class="vocab-word">spasm</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">抽筋，痙攣 (muscle spasm 肌肉痙攣)</div></div>
-                    <div class="vocab-item"><div class="vocab-word">contract</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">收縮</div></div>
-                    <div class="vocab-item"><div class="vocab-word">valve</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">瓣膜，活門，閥門</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">hiccup</div>
+                        <div class="vocab-type">[名詞/動詞]</div>
+                        <div class="vocab-meaning">打嗝</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">nowhere</div>
+                        <div class="vocab-type">[副詞]</div>
+                        <div class="vocab-meaning">無處，不知何處 (Out of nowhere 指突然間、毫無預警)</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">dreaded</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">令人畏懼的，討厭的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">cure</div>
+                        <div class="vocab-type">[名詞/動詞]</div>
+                        <div class="vocab-meaning">治療方法，解藥；治癒</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">twitch</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">抽搐，痙攣</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">spasm</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">抽筋，痙攣 (muscle spasm 肌肉痙攣)</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">contract</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">收縮</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">valve</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">瓣膜，活門，閥門</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. 現在完成式 (Have you ever + p.p.?)</div><div class="example"><span class="highlight">Have you ever felt</span> your eyebrow twitching?</div><p>表示從過去到現在為止是否「曾有過」某個經驗，中文翻譯為「你曾經...過嗎？」</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. 動名詞 (V-ing) 當作主詞</div><div class="example">...<span class="highlight">holding your breath</span>, <span class="highlight">drinking water</span>, <span class="highlight">standing on your head</span>, or <span class="highlight">doing all three</span>... can help cure hiccups.</div><p>把原本的動詞加上 -ing 後變成了名詞化的「行為」或「事情」，放在句首當作一個大主詞使用。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. could have + p.p. (原本可以.../也許原本可以...)</div><div class="example">I guess he <span class="highlight">could have used</span> a good scare.</div><p>這是一種帶有推測或事後諸葛意味的用法。嚇一跳 (a good scare) 據說可以治打嗝，因此作者開玩笑說，那個打嗝 68 年的人如果被狠狠嚇一跳就好了（他本來可以被治好的）。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. 現在完成式 (Have you ever + p.p.?)</div>
+                    <div class="example"><span class="highlight">Have you ever felt</span> your eyebrow twitching?</div>
+                    <p>表示從過去到現在為止是否「曾有過」某個經驗，中文翻譯為「你曾經...過嗎？」</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. 動名詞 (V-ing) 當作主詞</div>
+                    <div class="example">...<span class="highlight">holding your breath</span>, <span
+                            class="highlight">drinking water</span>, <span class="highlight">standing on your
+                            head</span>, or <span class="highlight">doing all three</span>... can help cure hiccups.
+                    </div>
+                    <p>把原本的動詞加上 -ing 後變成了名詞化的「行為」或「事情」，放在句首當作一個大主詞使用。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. could have + p.p. (原本可以.../也許原本可以...)</div>
+                    <div class="example">I guess he <span class="highlight">could have used</span> a good scare.</div>
+                    <p>這是一種帶有推測或事後諸葛意味的用法。嚇一跳 (a good scare) 據說可以治打嗝，因此作者開玩笑說，那個打嗝 68 年的人如果被狠狠嚇一跳就好了（他本來可以被治好的）。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: out of nowhere 突然間、不知道從哪冒出來</strong><div class="example"><span class="highlight">Out of nowhere</span> ... at any moment, it can happen.</div><p>用來形容一個情況發生得毫無徵兆、突如其來。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: at the same time 同時</strong><div class="example">...or doing all three <span class="highlight">at the same time</span> can help cure hiccups.</div><p>指在同一個時間點進行多個動作或發生多件事。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: at the most 頂多、最多也不過</strong><div class="example">...only a few minutes <span class="highlight">at the most</span>.</div><p>常放在句子結尾，用來說明最大的限度也就而已（例如打嗝時間最久不過幾分鐘）。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: out of nowhere 突然間、不知道從哪冒出來</strong>
+                    <div class="example"><span class="highlight">Out of nowhere</span> ... at any moment, it can happen.
+                    </div>
+                    <p>用來形容一個情況發生得毫無徵兆、突如其來。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: at the same time 同時</strong>
+                    <div class="example">...or doing all three <span class="highlight">at the same time</span> can help
+                        cure hiccups.</div>
+                    <p>指在同一個時間點進行多個動作或發生多件事。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: at the most 頂多、最多也不過</strong>
+                    <div class="example">...only a few minutes <span class="highlight">at the most</span>.</div>
+                    <p>常放在句子結尾，用來說明最大的限度也就而已（例如打嗝時間最久不過幾分鐘）。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：健康與人體科普</strong><p>文章第一段帶讀者體驗「打嗝的突然與無奈」，說明許多偏方都無效。第二段解釋了打嗝真正的生理原因（橫膈膜等肌肉痙攣、空氣衝入後活瓣快速關上）。第三段用了一個打嗝長達68年的金氏世界紀錄作結尾，並開了個小玩笑。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>According to the text, what actually causes hiccups?</li><li>What creates the "hic" sound when you have hiccups?</li><li>How long did the man mentioned in the text have hiccups for?</li></ol></div>
+                <div class="info-box"><strong>文章結構：健康與人體科普</strong>
+                    <p>文章第一段帶讀者體驗「打嗝的突然與無奈」，說明許多偏方都無效。第二段解釋了打嗝真正的生理原因（橫膈膜等肌肉痙攣、空氣衝入後活瓣快速關上）。第三段用了一個打嗝長達68年的金氏世界紀錄作結尾，並開了個小玩笑。
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>According to the text, what actually causes hiccups?</li>
+                        <li>What creates the "hic" sound when you have hiccups?</li>
+                        <li>How long did the man mentioned in the text have hiccups for?</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Out of nowhere – in class, in the car, on the phone, or watching television – at any moment, it can happen. Hiccup. The dreaded hiccup. Has anyone ever really found a cure for hiccups? Some people believe that holding your breath, drinking water, standing on your head, or doing all three at the same time can help cure hiccups. Nothing ever works. How do we even get hiccups?\n\nHave you ever felt your eyebrow twitching? It starts suddenly, just like hiccups. Both are caused by the same thing, muscle spasms. When you get the hiccups, a muscle in your chest starts contracting. It rushes air into your lungs. After air rushes in, the sudden closing of the valve at the top of your lungs causes the “hic” sound. This happens to us all throughout our bodies all the time. It is a natural bodily function.\n\nLuckily, most hiccups don’t last that long – only a few minutes at the most. However, there once was a man who had the hiccups for sixty-eight whole years. Can you imagine? He had hiccups for sixty-eight years, through work and sleep. I guess he could have used a good scare.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>
