@@ -1,64 +1,381 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Eva Perón</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
-        
-        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
-        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
 
         /* 聽音重組遊戲樣式 */
-        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
-        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
-        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
-        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
-        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
-        .status-correct { color: #4CAF50; }
-        .status-wrong { color: #f44336; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
-        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Eva Perón</h1>
+        <a href="4_10_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDeV45dSI7oQKnt059Oh4maAcGf2qzk_k9fKJKXeq-G_KM?e=bmdCD5"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -73,7 +390,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
-                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧
+                    聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -82,8 +400,11 @@
                 <div class="info-box">
                     <h4 style="color: #2196F3; margin-bottom: 15px;">阿根廷第一夫人：伊娃·裴隆 (Eva Perón)</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        伊娃·裴隆 (Eva Perón) 是阿根廷及全世界一位重要的人物。她是一位阿根廷總統的妻子。在阿根廷，許多窮人很難負擔得起食物和住房。伊娃·裴隆通過了幫助這些貧窮公民的法律。她在阿根廷是個英雄。<br><br>
-                        伊娃·裴隆出生於 1919 年。她在一個貧窮的村莊長大。她的家境並不富裕，但她有著遠大的夢想。十五歲時，她搬到了首都布宜諾斯艾利斯。她想成為一名女演員。當她努力讓夢想成真的時候，她遇見了胡安·裴隆 (Juan Perón)。他是一位軍隊裡的上校。他們結了婚，而他後來成為了阿根廷總統。<br><br>
+                        伊娃·裴隆 (Eva Perón)
+                        是阿根廷及全世界一位重要的人物。她是一位阿根廷總統的妻子。在阿根廷，許多窮人很難負擔得起食物和住房。伊娃·裴隆通過了幫助這些貧窮公民的法律。她在阿根廷是個英雄。<br><br>
+                        伊娃·裴隆出生於 1919
+                        年。她在一個貧窮的村莊長大。她的家境並不富裕，但她有著遠大的夢想。十五歲時，她搬到了首都布宜諾斯艾利斯。她想成為一名女演員。當她努力讓夢想成真的時候，她遇見了胡安·裴隆 (Juan
+                        Perón)。他是一位軍隊裡的上校。他們結了婚，而他後來成為了阿根廷總統。<br><br>
                         當胡安·裴隆成為總統後，伊娃開始幫助全國各地的窮人。她為貧困家庭創辦了一個基金會。她贈送鞋子、鍋具，甚至是縫紉機！她還捐錢建造學校和醫院。<br><br>
                         伊娃為了賦予婦女投票權而努力奮鬥。多虧了她的成果，阿根廷婦女在 1951 年首次投下了選票。<br><br>
                         不幸的是，伊娃罹患了癌症。她於 1952 年去世，享年三十三歲。成千上萬的人排著隊來向她告別。時至今日，伊娃·裴隆幫助人們過上更好生活的善舉，依然讓人深切緬懷。
@@ -93,71 +414,90 @@
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>Eva Perón was an important figure in Argentina and around the world.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>伊娃·裴隆是阿根廷及全世界一位重要的人物。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>Eva Perón was an important figure in
+                                Argentina and around the world.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>伊娃·裴隆是阿根廷及全世界一位重要的人物。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She was married to a president of Argentina.</td>
+                            <td style="padding: 10px; vertical-align: top;">She was married to a president of Argentina.
+                            </td>
                             <td style="padding: 10px; vertical-align: top;">她是一位阿根廷總統的妻子。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Many poor people in Argentina struggled to afford food and housing.</td>
+                            <td style="padding: 10px; vertical-align: top;">Many poor people in Argentina struggled to
+                                afford food and housing.</td>
                             <td style="padding: 10px; vertical-align: top;">在阿根廷，許多窮人很難負擔得起食物和住房。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Eva Perón passed laws that helped these poor citizens. She is a hero in Argentina.</td>
+                            <td style="padding: 10px; vertical-align: top;">Eva Perón passed laws that helped these poor
+                                citizens. She is a hero in Argentina.</td>
                             <td style="padding: 10px; vertical-align: top;">伊娃·裴隆通過了幫助這些貧窮公民的法律。她在阿根廷是個英雄。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Eva Perón was born in 1919. She grew up in a poor village.</td>
+                            <td style="padding: 10px; vertical-align: top;">Eva Perón was born in 1919. She grew up in a
+                                poor village.</td>
                             <td style="padding: 10px; vertical-align: top;">伊娃·裴隆出生於 1919 年。她在一個貧窮的村莊長大。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Her family did not have much money, but she had big dreams.</td>
+                            <td style="padding: 10px; vertical-align: top;">Her family did not have much money, but she
+                                had big dreams.</td>
                             <td style="padding: 10px; vertical-align: top;">她的家境並不富裕，但她有著遠大的夢想。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">When she was fifteen, she moved to the capital city, Buenos Aires.</td>
+                            <td style="padding: 10px; vertical-align: top;">When she was fifteen, she moved to the
+                                capital city, Buenos Aires.</td>
                             <td style="padding: 10px; vertical-align: top;">十五歲時，她搬到了首都布宜諾斯艾利斯。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She wanted to be an actress. As she worked to make her dream come true, she met Juan Perón.</td>
+                            <td style="padding: 10px; vertical-align: top;">She wanted to be an actress. As she worked
+                                to make her dream come true, she met Juan Perón.</td>
                             <td style="padding: 10px; vertical-align: top;">她想成為一名女演員。當她努力讓夢想成真的時候，她遇見了胡安·裴隆。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">He was a colonel in the military. They got married, and he became the president of Argentina.</td>
+                            <td style="padding: 10px; vertical-align: top;">He was a colonel in the military. They got
+                                married, and he became the president of Argentina.</td>
                             <td style="padding: 10px; vertical-align: top;">他是一位軍隊裡的上校。他們結了婚，而他後來成為了阿根廷總統。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">When Juan Perón became president, Eva began to help poor people across the country.</td>
+                            <td style="padding: 10px; vertical-align: top;">When Juan Perón became president, Eva began
+                                to help poor people across the country.</td>
                             <td style="padding: 10px; vertical-align: top;">當胡安·裴隆成為總統後，伊娃開始幫助全國各地的窮人。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She started a foundation for poor families. She gave away shoes, cooking pots, and even sewing machines!</td>
+                            <td style="padding: 10px; vertical-align: top;">She started a foundation for poor families.
+                                She gave away shoes, cooking pots, and even sewing machines!</td>
                             <td style="padding: 10px; vertical-align: top;">她為貧困家庭創辦了一個基金會。她贈送鞋子、鍋具，甚至是縫紉機！</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">She also gave money to build schools and hospitals.</td>
+                            <td style="padding: 10px; vertical-align: top;">She also gave money to build schools and
+                                hospitals.</td>
                             <td style="padding: 10px; vertical-align: top;">她還捐錢建造學校和醫院。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Eva fought hard to give women the right to vote.</td>
+                            <td style="padding: 10px; vertical-align: top;">Eva fought hard to give women the right to
+                                vote.</td>
                             <td style="padding: 10px; vertical-align: top;">伊娃為了賦予婦女投票權而努力奮鬥。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Thanks to her work, Argentinean women voted for the first time in 1951.</td>
+                            <td style="padding: 10px; vertical-align: top;">Thanks to her work, Argentinean women voted
+                                for the first time in 1951.</td>
                             <td style="padding: 10px; vertical-align: top;">多虧了她的成果，阿根廷婦女在 1951 年首次投下了選票。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Sadly, Eva became sick with cancer. She died in 1952 at the age of thirty-three.</td>
+                            <td style="padding: 10px; vertical-align: top;">Sadly, Eva became sick with cancer. She died
+                                in 1952 at the age of thirty-three.</td>
                             <td style="padding: 10px; vertical-align: top;">不幸的是，伊娃罹患了癌症。她於 1952 年去世，享年三十三歲。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Thousands of people stood in line to say goodbye.</td>
+                            <td style="padding: 10px; vertical-align: top;">Thousands of people stood in line to say
+                                goodbye.</td>
                             <td style="padding: 10px; vertical-align: top;">成千上萬的人排著隊來向她告別。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Today, Eva Perón is remembered for her work helping people live better lives.</td>
+                            <td style="padding: 10px; vertical-align: top;">Today, Eva Perón is remembered for her work
+                                helping people live better lives.</td>
                             <td style="padding: 10px; vertical-align: top;">時至今日，伊娃·裴隆幫助人們過上更好生活的善舉，依然讓人深切緬懷。</td>
                         </tr>
                     </table>
@@ -167,78 +507,158 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">figure</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">重要人物，數字，體態</div></div>
-                    <div class="vocab-item"><div class="vocab-word">struggle</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">掙扎，努力應付（struggle to + V 努力想要...卻很困難）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">afford</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">負擔得起，買得起</div></div>
-                    <div class="vocab-item"><div class="vocab-word">citizen</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">公民，市民</div></div>
-                    <div class="vocab-item"><div class="vocab-word">capital</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">首都（capital city）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">foundation</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">基金會，基礎</div></div>
-                    <div class="vocab-item"><div class="vocab-word">right</div><div class="vocab-type">[名詞/形容詞]</div><div class="vocab-meaning">權利；正確的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">vote</div><div class="vocab-type">[動詞/名詞]</div><div class="vocab-meaning">投票，選舉</div></div>
-                    <div class="vocab-item"><div class="vocab-word">cancer</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">癌症</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">figure</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">重要人物，數字，體態</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">struggle</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">掙扎，努力應付（struggle to + V 努力想要...卻很困難）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">afford</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">負擔得起，買得起</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">citizen</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">公民，市民</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">capital</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">首都（capital city）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">foundation</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">基金會，基礎</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">right</div>
+                        <div class="vocab-type">[名詞/形容詞]</div>
+                        <div class="vocab-meaning">權利；正確的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">vote</div>
+                        <div class="vocab-type">[動詞/名詞]</div>
+                        <div class="vocab-meaning">投票，選舉</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">cancer</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">癌症</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. be married to... (和...結婚)</div><div class="example">She <span class="highlight">was married to</span> a president of Argentina.</div><p>表示婚姻關係狀態。注意介系詞是搭配 to 而不是 with 哦！</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. make... come true (使...成真)</div><div class="example">As she worked to <span class="highlight">make her dream come true</span>...</div><p>make 在這裡是使役動詞（要某事/某人去...），後面會接一個沒有 to 的「原形動詞（come）」，這裡代表「使她的夢想變成真的」。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. be remembered for... (因為...而被人銘記)</div><div class="example">...Eva Perón <span class="highlight">is remembered for</span> her work...</div><p>這是一個被動語態 (be + p.p.)，表示「被記住」。介系詞 for 用來解釋被記住的「原因」。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. be married to... (和...結婚)</div>
+                    <div class="example">She <span class="highlight">was married to</span> a president of Argentina.
+                    </div>
+                    <p>表示婚姻關係狀態。注意介系詞是搭配 to 而不是 with 哦！</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. make... come true (使...成真)</div>
+                    <div class="example">As she worked to <span class="highlight">make her dream come true</span>...
+                    </div>
+                    <p>make 在這裡是使役動詞（要某事/某人去...），後面會接一個沒有 to 的「原形動詞（come）」，這裡代表「使她的夢想變成真的」。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. be remembered for... (因為...而被人銘記)</div>
+                    <div class="example">...Eva Perón <span class="highlight">is remembered for</span> her work...</div>
+                    <p>這是一個被動語態 (be + p.p.)，表示「被記住」。介系詞 for 用來解釋被記住的「原因」。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: As... 當...時候</strong><div class="example"><span class="highlight">As</span> she worked to make her dream come true, she met Juan Perón.</div><p>As 在這裡當連接詞是「當...這個時候」的意思，跟 When 和 While 很像，帶出兩個時間點重疊的情況。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: give away 贈送、免費分發</strong><div class="example">She <span class="highlight">gave away</span> shoes, cooking pots, and even sewing machines!</div><p>give 是給，加上 away 代表「發送出去白給別人」的意思。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: thanks to... 幸虧、多虧了</strong><div class="example"><span class="highlight">Thanks to</span> her work, Argentinean women voted for the first time...</div><p>thanks 後面加上 to 之後，不再是道謝了，而是帶有「好險有...」或是「多虧了某個好的原因」，後面接上帶來正面影響的人事物。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: As... 當...時候</strong>
+                    <div class="example"><span class="highlight">As</span> she worked to make her dream come true, she
+                        met Juan Perón.</div>
+                    <p>As 在這裡當連接詞是「當...這個時候」的意思，跟 When 和 While 很像，帶出兩個時間點重疊的情況。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: give away 贈送、免費分發</strong>
+                    <div class="example">She <span class="highlight">gave away</span> shoes, cooking pots, and even
+                        sewing machines!</div>
+                    <p>give 是給，加上 away 代表「發送出去白給別人」的意思。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: thanks to... 幸虧、多虧了</strong>
+                    <div class="example"><span class="highlight">Thanks to</span> her work, Argentinean women voted for
+                        the first time...</div>
+                    <p>thanks 後面加上 to 之後，不再是道謝了，而是帶有「好險有...」或是「多虧了某個好的原因」，後面接上帶來正面影響的人事物。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：歷史人物傳記 (Biography)</strong><p>這篇文章記述了阿根廷著名的第一夫人「伊娃·裴隆」(也就是著名的電影《阿根廷別為我哭泣》的女主角原型)。首段先定義了她在民眾心中的地位；第二段講述她童年的貧苦到結識權貴；三、四段描述她利用權力幫助窮人並爭取女權；最後一段則是用她英年早逝卻流芳百世來作結。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What did Eva Perón originally want to be when she moved to Buenos Aires at age 15?</li><li>What did Eva Perón do to help the poor families in Argentina?</li><li>In what year did Argentinean women vote for the first time?</li></ol></div>
-            </div>
-            </div>
-            <div id="reconstruction" class="tab-content">
-                <div class="game-board">
-                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
-                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
-                    </div>
-
-                    <div class="game-controls">
-                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
-                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
-                    </div>
-
-                    <div id="answerArea" class="answer-area"></div>
-                    <div id="wordBank" class="word-bank"></div>
-
-                    <div id="gameStatus" class="game-status"></div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
-                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
-                    </div>
-
-                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                <div class="info-box"><strong>文章結構：歷史人物傳記 (Biography)</strong>
+                    <p>這篇文章記述了阿根廷著名的第一夫人「伊娃·裴隆」(也就是著名的電影《阿根廷別為我哭泣》的女主角原型)。首段先定義了她在民眾心中的地位；第二段講述她童年的貧苦到結識權貴；三、四段描述她利用權力幫助窮人並爭取女權；最後一段則是用她英年早逝卻流芳百世來作結。
+                    </p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What did Eva Perón originally want to be when she moved to Buenos Aires at age 15?</li>
+                        <li>What did Eva Perón do to help the poor families in Argentina?</li>
+                        <li>In what year did Argentinean women vote for the first time?</li>
+                    </ol>
                 </div>
             </div>
         </div>
+        <div id="reconstruction" class="tab-content">
+            <div class="game-board">
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                    <button id="btnChunkMode" class="btn" style="background-color: #2196F3;"
+                        onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                    <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;"
+                        onclick="setGameMode('word')">🔤 單字模式</button>
+                </div>
+
+                <div class="game-controls">
+                    <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                    <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)"
+                        style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                </div>
+
+                <div id="answerArea" class="answer-area"></div>
+                <div id="wordBank" class="word-bank"></div>
+
+                <div id="gameStatus" class="game-status"></div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <div id="translationHint"
+                        style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                    <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句
+                        ➡️</button>
+                </div>
+
+                <div id="reviewArea" style="margin-top: 30px;"></div>
+            </div>
+        </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    </div>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Eva Perón was an important figure in Argentina and around the world. She was married to a president of Argentina. Many poor people in Argentina struggled to afford food and housing. Eva Perón passed laws that helped these poor citizens. She is a hero in Argentina.\n\nEva Perón was born in 1919. She grew up in a poor village. Her family did not have much money, but she had big dreams. When she was fifteen, she moved to the capital city, Buenos Aires. She wanted to be an actress. As she worked to make her dream come true, she met Juan Perón. He was a colonel in the military. They got married, and he became the president of Argentina.\n\nWhen Juan Perón became president, Eva began to help poor people across the country. She started a foundation for poor families. She gave away shoes, cooking pots, and even sewing machines! She also gave money to build schools and hospitals.\n\nEva fought hard to give women the right to vote. Thanks to her work, Argentinean women voted for the first time in 1951.\n\nSadly, Eva became sick with cancer. She died in 1952 at the age of thirty-three. Thousands of people stood in line to say goodbye. Today, Eva Perón is remembered for her work helping people live better lives.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        
+
         // --- 聽音重組遊戲邏輯 ---
         const gameSentences = [
             {
@@ -410,7 +830,7 @@
                 if (answerWords.length === currentWords.length) {
                     document.getElementById('gameStatus').textContent = "✅ 完全正確！";
                     document.getElementById('nextBtn').style.display = 'inline-block';
-                    
+
                     const successDiv = document.createElement('div');
                     successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
                     successDiv.innerHTML = `
@@ -449,4 +869,5 @@
         };
     </script>
 </body>
+
 </html>

@@ -1,64 +1,381 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Mexico's Natural Wonder: Paricutin Volcano</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
-        
-        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
-        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
 
         /* 聽音重組遊戲樣式 */
-        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
-        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
-        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
-        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
-        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
-        .status-correct { color: #4CAF50; }
-        .status-wrong { color: #f44336; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
-        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Mexico's Natural Wonder: Paricutin Volcano</h1>
+        <a href="4_18_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCOUW08WpW7T6jBmaqicwm6AaIewmBx4OBDRN1XAQKy1gc?e=jWGREI"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -73,7 +390,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
-                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧
+                    聽音重組</button>
             </div>
 
             <!-- 中文翻譯分頁 -->
@@ -82,46 +400,59 @@
                 <div class="info-box">
                     <h4 style="color: #2196F3; margin-bottom: 15px;">墨西哥的自然奇觀：帕里庫廷火山</h4>
                     <p style="line-height: 2; font-size: 16px;">
-                        隨著帕里庫廷火山持續噴發，周圍地區被煙霧和火山灰覆蓋。人們被迫離開。噴發在第一年最為猛烈。到第一年年底，這座火山已經超過 1000 英尺高！兩年內，只有一座教堂的頂部在所有的熔岩上方可見。帕里庫廷火山持續爆發了大約九年才停止。它現在已經大約 1,391 英尺高了！現在，帕里庫廷火山被認為是死火山了。但在它活躍的那九年期間，科學家們密切地研究了這座火山。帕里庫廷火山是第一座科學家能夠從誕生到死亡進行研究和記錄的火山。多虧了這個自然奇觀，科學家們學到了很多關於火山的知識。
+                        隨著帕里庫廷火山持續噴發，周圍地區被煙霧和火山灰覆蓋。人們被迫離開。噴發在第一年最為猛烈。到第一年年底，這座火山已經超過 1000
+                        英尺高！兩年內，只有一座教堂的頂部在所有的熔岩上方可見。帕里庫廷火山持續爆發了大約九年才停止。它現在已經大約 1,391
+                        英尺高了！現在，帕里庫廷火山被認為是死火山了。但在它活躍的那九年期間，科學家們密切地研究了這座火山。帕里庫廷火山是第一座科學家能夠從誕生到死亡進行研究和記錄的火山。多虧了這個自然奇觀，科學家們學到了很多關於火山的知識。
                     </p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">逐句對照</div>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #4CAF50;">English:</strong><br>As Paricutin continued erupting, the surrounding area was covered in smoke and ash.</td>
-                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong style="color: #2196F3;">中文:</strong><br>隨著帕里庫廷火山持續噴發，周圍地區被煙霧和火山灰覆蓋。</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #4CAF50;">English:</strong><br>As Paricutin continued erupting, the
+                                surrounding area was covered in smoke and ash.</td>
+                            <td style="padding: 10px; width: 50%; vertical-align: top;"><strong
+                                    style="color: #2196F3;">中文:</strong><br>隨著帕里庫廷火山持續噴發，周圍地區被煙霧和火山灰覆蓋。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">People were forced to leave. The eruption was most intense during the first year.</td>
+                            <td style="padding: 10px; vertical-align: top;">People were forced to leave. The eruption
+                                was most intense during the first year.</td>
                             <td style="padding: 10px; vertical-align: top;">人們被迫離開。噴發在第一年最為猛烈。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">By the end of the first year, the volcano was over 1000 feet high!</td>
+                            <td style="padding: 10px; vertical-align: top;">By the end of the first year, the volcano
+                                was over 1000 feet high!</td>
                             <td style="padding: 10px; vertical-align: top;">到第一年年底，這座火山已經超過 1000 英尺高！</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Within two years, only the top of a church was visible above all the lava.</td>
+                            <td style="padding: 10px; vertical-align: top;">Within two years, only the top of a church
+                                was visible above all the lava.</td>
                             <td style="padding: 10px; vertical-align: top;">兩年內，只有一座教堂的頂部在所有的熔岩上方可見。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Paricutin continued exploding for about nine years before stopping.</td>
+                            <td style="padding: 10px; vertical-align: top;">Paricutin continued exploding for about nine
+                                years before stopping.</td>
                             <td style="padding: 10px; vertical-align: top;">帕里庫廷火山持續爆發了大約九年才停止。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">It is now about 1,391 feet high! Now, Paricutin is considered extinct.</td>
+                            <td style="padding: 10px; vertical-align: top;">It is now about 1,391 feet high! Now,
+                                Paricutin is considered extinct.</td>
                             <td style="padding: 10px; vertical-align: top;">它現在已經大約 1,391 英尺高了！現在，帕里庫廷火山被認為是死火山了。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">But during the nine years it was active, scientists studied the volcano closely.</td>
+                            <td style="padding: 10px; vertical-align: top;">But during the nine years it was active,
+                                scientists studied the volcano closely.</td>
                             <td style="padding: 10px; vertical-align: top;">但在它活躍的那九年期間，科學家們密切地研究了這座火山。</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px; vertical-align: top;">Paricutin is the first volcano that scientists were able to study and document from birth to death.</td>
+                            <td style="padding: 10px; vertical-align: top;">Paricutin is the first volcano that
+                                scientists were able to study and document from birth to death.</td>
                             <td style="padding: 10px; vertical-align: top;">帕里庫廷火山是第一座科學家能夠從誕生到死亡進行研究和記錄的火山。</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; vertical-align: top;">Thanks to this natural wonder, scientists learned a lot about volcanoes.</td>
+                            <td style="padding: 10px; vertical-align: top;">Thanks to this natural wonder, scientists
+                                learned a lot about volcanoes.</td>
                             <td style="padding: 10px; vertical-align: top;">多虧了這個自然奇觀，科學家們學到了很多關於火山的知識。</td>
                         </tr>
                     </table>
@@ -131,77 +462,151 @@
             <div id="vocabulary" class="tab-content">
                 <h3>📖 重點單字與片語</h3>
                 <div class="vocab-grid">
-                    <div class="vocab-item"><div class="vocab-word">erupt</div><div class="vocab-type">[動詞]</div><div class="vocab-meaning">噴發（名詞為 eruption）</div></div>
-                    <div class="vocab-item"><div class="vocab-word">ash</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">火山灰，灰燼</div></div>
-                    <div class="vocab-item"><div class="vocab-word">intense</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">強烈的，猛烈的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">visible</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">可看得見的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">lava</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">熔岩，岩漿</div></div>
-                    <div class="vocab-item"><div class="vocab-word">extinct</div><div class="vocab-type">[形容詞]</div><div class="vocab-meaning">滅絕的，（指火山）死火山的</div></div>
-                    <div class="vocab-item"><div class="vocab-word">document</div><div class="vocab-type">[動詞/名詞]</div><div class="vocab-meaning">記錄；文件</div></div>
-                    <div class="vocab-item"><div class="vocab-word">wonder</div><div class="vocab-type">[名詞]</div><div class="vocab-meaning">奇觀，奇蹟</div></div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">erupt</div>
+                        <div class="vocab-type">[動詞]</div>
+                        <div class="vocab-meaning">噴發（名詞為 eruption）</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">ash</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">火山灰，灰燼</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">intense</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">強烈的，猛烈的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">visible</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">可看得見的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">lava</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">熔岩，岩漿</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">extinct</div>
+                        <div class="vocab-type">[形容詞]</div>
+                        <div class="vocab-meaning">滅絕的，（指火山）死火山的</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">document</div>
+                        <div class="vocab-type">[動詞/名詞]</div>
+                        <div class="vocab-meaning">記錄；文件</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">wonder</div>
+                        <div class="vocab-type">[名詞]</div>
+                        <div class="vocab-meaning">奇觀，奇蹟</div>
+                    </div>
                 </div>
             </div>
             <div id="grammar" class="tab-content">
                 <h3>✏️ 文法重點解析</h3>
-                <div class="grammar-box"><div class="grammar-title">1. As 連接詞用法 (隨著 / 當...時候)</div><div class="example"><span class="highlight">As</span> Paricutin continued erupting, the surrounding area was covered...</div><p>As 這裡用來連接兩個子句，表示兩件事情「隨著」另一件事一起進行或發生。</p></div>
-                <div class="grammar-box"><div class="grammar-title">2. be forced to (被迫去做)</div><div class="example">People <span class="highlight">were forced to leave</span>.</div><p>force 是強迫的意思。被動語態 be forced 用來表達「不得不，被迫」去選擇某個行動。</p></div>
-                <div class="grammar-box"><div class="grammar-title">3. be considered + adj. (被認為是...)</div><div class="example">Now, Paricutin <span class="highlight">is considered extinct</span>.</div><p>因為客觀的科學觀察結果，它如今「被認為或是被視為」是一座死火山。</p></div>
+                <div class="grammar-box">
+                    <div class="grammar-title">1. As 連接詞用法 (隨著 / 當...時候)</div>
+                    <div class="example"><span class="highlight">As</span> Paricutin continued erupting, the surrounding
+                        area was covered...</div>
+                    <p>As 這裡用來連接兩個子句，表示兩件事情「隨著」另一件事一起進行或發生。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">2. be forced to (被迫去做)</div>
+                    <div class="example">People <span class="highlight">were forced to leave</span>.</div>
+                    <p>force 是強迫的意思。被動語態 be forced 用來表達「不得不，被迫」去選擇某個行動。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">3. be considered + adj. (被認為是...)</div>
+                    <div class="example">Now, Paricutin <span class="highlight">is considered extinct</span>.</div>
+                    <p>因為客觀的科學觀察結果，它如今「被認為或是被視為」是一座死火山。</p>
+                </div>
             </div>
             <div id="sentences" class="tab-content">
                 <h3>💬 重要句型分析</h3>
-                <div class="sentence-pattern"><strong>句型 1: be covered in/with 被...覆蓋</strong><div class="example">the surrounding area <span class="highlight">was covered in</span> smoke and ash.</div><p>指表面佈滿了某種東西，這裡是指整個地區佈滿了煙幕和火山灰。</p></div>
-                <div class="sentence-pattern"><strong>句型 2: By 作為時間介系詞用法</strong><div class="example"><span class="highlight">By</span> the end of the first year,...</div><p>By 在時間表達上用來表示「在...之前，直到...為止」。意即到第一年年底的時候。</p></div>
-                <div class="sentence-pattern"><strong>句型 3: Thanks to... 多虧了... / 幸虧...</strong><div class="example"><span class="highlight">Thanks to</span> this natural wonder, scientists learned a lot...</div><p>用來表達感謝某個原因，讓好的結果因此發生。</p></div>
+                <div class="sentence-pattern"><strong>句型 1: be covered in/with 被...覆蓋</strong>
+                    <div class="example">the surrounding area <span class="highlight">was covered in</span> smoke and
+                        ash.</div>
+                    <p>指表面佈滿了某種東西，這裡是指整個地區佈滿了煙幕和火山灰。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 2: By 作為時間介系詞用法</strong>
+                    <div class="example"><span class="highlight">By</span> the end of the first year,...</div>
+                    <p>By 在時間表達上用來表示「在...之前，直到...為止」。意即到第一年年底的時候。</p>
+                </div>
+                <div class="sentence-pattern"><strong>句型 3: Thanks to... 多虧了... / 幸虧...</strong>
+                    <div class="example"><span class="highlight">Thanks to</span> this natural wonder, scientists
+                        learned a lot...</div>
+                    <p>用來表達感謝某個原因，讓好的結果因此發生。</p>
+                </div>
             </div>
             <div id="reading" class="tab-content">
                 <h3>🎯 閱讀理解技巧</h3>
-                <div class="info-box"><strong>文章結構：壯觀天災與科學的說明文</strong><p>這是一則融合地質學歷史的文章，介紹了歷史上少見的，科學家能「從無到有」完整紀錄一生的火山：帕里庫廷火山 (Paricutin Volcano)。文章用年份去鋪陳噴發的嚴重性（從短短幾年內掩蓋教堂），到後來火山停止活動，讓科學家獲益良多。</p></div>
-                <div class="grammar-box"><div class="grammar-title">理解測驗</div><ol><li>What was the surrounding area covered in when Paricutin erupted?</li><li>How long did the volcano continue exploding before stopping?</li><li>What is special about Paricutin for scientists?</li></ol></div>
-            </div>
-            </div>
-            <div id="reconstruction" class="tab-content">
-                <div class="game-board">
-                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
-                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
-                    </div>
-
-                    <div class="game-controls">
-                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
-                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
-                    </div>
-
-                    <div id="answerArea" class="answer-area"></div>
-                    <div id="wordBank" class="word-bank"></div>
-
-                    <div id="gameStatus" class="game-status"></div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
-                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
-                    </div>
-
-                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                <div class="info-box"><strong>文章結構：壯觀天災與科學的說明文</strong>
+                    <p>這是一則融合地質學歷史的文章，介紹了歷史上少見的，科學家能「從無到有」完整紀錄一生的火山：帕里庫廷火山 (Paricutin
+                        Volcano)。文章用年份去鋪陳噴發的嚴重性（從短短幾年內掩蓋教堂），到後來火山停止活動，讓科學家獲益良多。</p>
+                </div>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>What was the surrounding area covered in when Paricutin erupted?</li>
+                        <li>How long did the volcano continue exploding before stopping?</li>
+                        <li>What is special about Paricutin for scientists?</li>
+                    </ol>
                 </div>
             </div>
         </div>
+        <div id="reconstruction" class="tab-content">
+            <div class="game-board">
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                    <button id="btnChunkMode" class="btn" style="background-color: #2196F3;"
+                        onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                    <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;"
+                        onclick="setGameMode('word')">🔤 單字模式</button>
+                </div>
+
+                <div class="game-controls">
+                    <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                    <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)"
+                        style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                </div>
+
+                <div id="answerArea" class="answer-area"></div>
+                <div id="wordBank" class="word-bank"></div>
+
+                <div id="gameStatus" class="game-status"></div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <div id="translationHint"
+                        style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                    <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句
+                        ➡️</button>
+                </div>
+
+                <div id="reviewArea" style="margin-top: 30px;"></div>
+            </div>
+        </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    </div>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Mexico's Natural Wonder: Paricutin Volcano\n\nAs Paricutin continued erupting, the surrounding area was covered in smoke and ash. People were forced to leave. The eruption was most intense during the first year. By the end of the first year, the volcano was over 1000 feet high! Within two years, only the top of a church was visible above all the lava.\n\nParicutin continued exploding for about nine years before stopping. It is now about 1,391 feet high! Now, Paricutin is considered extinct. But during the nine years it was active, scientists studied the volcano closely. Paricutin is the first volcano that scientists were able to study and document from birth to death. Thanks to this natural wonder, scientists learned a lot about volcanoes.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        
+
         // --- 聽音重組遊戲邏輯 ---
         const gameSentences = [
             {
@@ -373,7 +778,7 @@
                 if (answerWords.length === currentWords.length) {
                     document.getElementById('gameStatus').textContent = "✅ 完全正確！";
                     document.getElementById('nextBtn').style.display = 'inline-block';
-                    
+
                     const successDiv = document.createElement('div');
                     successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
                     successDiv.innerHTML = `
@@ -412,4 +817,5 @@
         };
     </script>
 </body>
+
 </html>

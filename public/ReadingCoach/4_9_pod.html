@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Dive 英文學習筆記與完整逐字稿 | 喬治·華盛頓·卡佛的故事</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --accent: #d97706;
+            --accent-light: #fef3c7;
+            --success: #059669;
+            --success-light: #ecfdf5;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --speaker-a: #3b82f6;
+            --speaker-b: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding-bottom: 60px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 40px 20px 30px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        header .badge {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Nav Tabs */
+        .nav-tabs-container {
+            max-width: 1000px;
+            margin: -25px auto 30px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-tabs {
+            background: #ffffff;
+            padding: 6px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Tab Content Control */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+        }
+
+        .card-title .icon {
+            font-size: 1.5rem;
+        }
+
+        /* English Quote Highlight */
+        .english-quote {
+            background-color: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+            font-family: Georgia, Cambria, serif;
+            font-size: 1.1rem;
+            color: #0f172a;
+            line-height: 1.6;
+        }
+
+        .english-quote .translation {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-style: normal;
+        }
+
+        /* Key Concept Box */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .concept-card {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .concept-card.highlight-amber {
+            background-color: var(--accent-light);
+            border-color: #fde68a;
+        }
+
+        .concept-card.highlight-blue {
+            background-color: var(--primary-light);
+            border-color: #bfdbfe;
+        }
+
+        .concept-card.highlight-green {
+            background-color: var(--success-light);
+            border-color: #a7f3d0;
+        }
+
+        .concept-card h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        /* Pronunciation Badge */
+        .phonetic {
+            display: inline-block;
+            background-color: #e2e8f0;
+            color: #334155;
+            font-family: monospace;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Comparison Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .compare-table th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .compare-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Intonation Visualizer */
+        .intonation-box {
+            background: #1e293b;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .intonation-words {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .intonation-item {
+            background: #334155;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .arrow-up {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .arrow-down {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* Dialogue Transcript Styling */
+        .dialogue-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .speech-bubble {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar.speaker-a {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .avatar.speaker-b {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .bubble-content {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 0 16px 16px 16px;
+            padding: 14px 18px;
+            max-width: 88%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        .speaker-a-group .bubble-content {
+            border-left: 3px solid var(--speaker-a);
+        }
+
+        .speaker-b-group .bubble-content {
+            border-left: 3px solid var(--speaker-b);
+        }
+
+        .speaker-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .speaker-a-group .speaker-name {
+            color: var(--speaker-a);
+        }
+
+        .speaker-b-group .speaker-name {
+            color: var(--speaker-b);
+        }
+
+        .speech-text {
+            font-size: 1.02rem;
+            line-height: 1.65;
+            color: var(--text-main);
+        }
+
+        .speech-text mark {
+            background-color: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .speech-text .en-inline {
+            font-family: Georgia, serif;
+            font-weight: 600;
+            color: #1e3a8a;
+            background-color: #eff6ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Search & Filter bar for Transcript */
+        .search-box {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.98rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 640px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .nav-tabs {
+                width: 100%;
+            }
+
+            .tab-btn {
+                flex: 1;
+                justify-content: center;
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            .bubble-content {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <span class="badge">Deep Dive 深度學習講堂</span>
+        <h1>丟掉文法說明書：從故事輕鬆學英文</h1>
+        <p>美國傳奇科學家 George Washington Carver 的生命故事與英文核心邏輯拆解</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs-container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('study-notes')">
+                <span>📖</span> 結構化學習筆記
+            </button>
+            <button class="tab-btn" onclick="switchTab('full-transcript')">
+                <span>🎙️</span> 完整逐字稿對照
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ==================== TAB 1: STRUCTURED STUDY NOTES ==================== -->
+        <div id="study-notes" class="tab-content active">
+
+            <!-- Section 0: Metaphor Intro -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🛋️</span> 觀念翻轉：語言不是 IKEA 平整包裝家具
+                </div>
+                <p>許多人在學英文時，感覺就像拿到了一箱 IKEA 家具：倒出滿地的單字（木板）與艱澀的文法規則（螺絲說明書），被要求硬死記下來。</p>
+                <p style="margin-top: 10px;">
+                    <strong>真正有效的學習法：</strong>直接觀賞一件已經組裝好的精美作品！透過故事脈絡，看見單字如何在句子中呼吸，體會文法如何傳達主角的情感與命運。</p>
+            </div>
+
+            <!-- Section 1: English Story Text -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📜</span> 核心英文故事文本 (Core Narrative)
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 12px;">試著先不看翻譯，閉上眼睛朗讀或聆聽下列英文段落：</p>
+
+                <div class="english-quote">
+                    <strong>Paragraph 1: Background & Early Life</strong><br>
+                    "George Washington Carver was a distinguished African American scientist, inventor, and researcher.
+                    He was born near the end of slavery. As a young child, George was very interested in plants and
+                    science. He wanted to attend school, but because of the color of his skin, he was not allowed to go
+                    to the local school. Instead, he was homeschooled at a very young age. When he grew older, he was
+                    finally able to attend a school in a town nearby. He kept learning and eventually joined Iowa State
+                    University. He was the first African American student at the college."
+                    <div class="translation">
+                        喬治·華盛頓·卡佛是一位傑出的非裔美國科學家、發明家與研究員。他出生於奴隸制度即將結束之際。孩提時代的他對植物與科學極具興趣。他想上學，但因為膚色原因，他不被允許進入當地的學校。相反地，他在很小的時候接受居家教育。長大後，他終於能夠到附近鎮上的學校就讀。他持續學習，最終進入愛荷華州立大學，成為該校首位非裔學生。
+                    </div>
+                </div>
+
+                <div class="english-quote">
+                    <strong>Paragraph 2: Career & Legacy</strong><br>
+                    "After college, George focused on his love of farming and research. George studied the needs of
+                    farmers and their biggest problems. He helped farmers find new ways to grow crops and make more
+                    money. George studied peanuts, sweet potatoes, and soybeans and discovered hundreds of new uses for
+                    these crops. Farmers learned a lot from George Washington Carver."
+                    <div class="translation">
+                        大學畢業後，喬治專注於他所熱愛的農業與研究。他深入研究農民的需求與最棘手的難題。他幫助農民尋找種植作物的新方法並增加收入。喬治研究了花生、地瓜和大豆，並為這些作物發現了數百種新用途。農民從喬治·華盛頓·卡佛身上學到了很多。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Deep Dive Focus Areas -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🔍</span> 關鍵拆解 1：單字發音與「職業字尾」密碼
+                </div>
+
+                <div class="concept-grid">
+                    <div class="concept-card highlight-amber">
+                        <h4>1. distinguished (傑出的、著名的)</h4>
+                        <p>發音重點：重音在第二音節 <span class="phonetic">dis-TING-guished</span>。</p>
+                        <p style="margin-top: 6px;">字尾 <code>-ed</code> 的發音變換：因為前一個音是無聲氣音，為求發音順暢，<code>-ed</code> 轉化為輕巧的
+                            <span class="phonetic">/t/</span> 音（非 /d/）。</p>
+                        <p style="margin-top: 6px; font-style: italic; color: var(--accent);">概念理解：就像自帶 VIP
+                            光環，一出場大家就知道是大人物！</p>
+                    </div>
+
+                    <div class="concept-card highlight-blue">
+                        <h4>2. 人物身份字尾 (-er / -or)</h4>
+                        <p>把「動作動詞」加上字尾，代表做該動作的人：</p>
+                        <ul style="margin-left: 20px; margin-top: 6px;">
+                            <li><code>invent</code> (發明) + <code>-or</code> ➔ <strong>inventor</strong> (發明家)</li>
+                            <li><code>research</code> (研究) + <code>-er</code> ➔ <strong>researcher</strong> (研究員)</li>
+                            <li><code>act</code> (演戲) + <code>-or</code> ➔ <strong>actor</strong> (演員)</li>
+                        </ul>
+                        <p style="margin-top: 6px; font-size: 0.88rem; color: var(--text-muted);">
+                            例外提醒：<code>doctor</code> 來自拉丁文「學者/老師」，並非由動詞衍生。將此規則當作線索而非絕對公式。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">⏰</span> 關鍵拆解 2：時態時光機與 "Because of" 鉤子比喻
+                </div>
+
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>時態是時光機：<code>was born</code></h4>
+                        <p>英文對過去時態極為講究。使用 <code>was</code> 而非 <code>is</code>，就像按下時光機按鈕，強制聽眾的大腦切換到已結束的歷史時空。</p>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>空間描繪時間：<code>near the end of</code></h4>
+                        <p>英文習慣用空間概念形容時間。<code>near the end of slavery</code> 意指「靠近奴隸制的尾聲」。</p>
+                        <p style="margin-top: 4px; font-size: 0.9rem; color: var(--primary);">例：near the end of the
+                            movie (電影快結束時)</p>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 20px; margin-bottom: 10px;">Grammar Spotlight: 介系詞 "Because of" vs. 連接詞 "Because"
+                </h4>
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>用法類型</th>
+                            <th>形象比喻</th>
+                            <th>接續內容</th>
+                            <th>故事例句</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Because of</strong></td>
+                            <td>⚓ <strong>鉤子</strong>：只能勾住具體的名詞/名詞片語</td>
+                            <td>名詞區塊 (Noun Phrase)</td>
+                            <td>...<strong>because of</strong> <code>the color of his skin</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Because</strong></td>
+                            <td>🚪 <strong>大門</strong>：門後會展開一齣完整場景/小電影</td>
+                            <td>完整句子 (Subject + Verb)</td>
+                            <td>I stayed home <strong>because</strong> <code>it was raining</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎭</span> 關鍵拆解 3：被動語態 — 文法作為情緒與壓迫感的載體
+                </div>
+                <p>寫作指南常建議「少用被動語態」，但文本在此連用兩次被動語態，簡直是<strong>神來之筆</strong>：</p>
+
+                <div class="concept-grid" style="margin-top: 12px;">
+                    <div class="concept-card highlight-amber">
+                        <h4>被動象徵無奈與剝奪</h4>
+                        <p><code>he was not allowed to go to the local school</code></p>
+                        <p><code>he was homeschooled</code></p>
+                        <p style="margin-top: 8px; font-size: 0.95rem;">卡佛內心懷抱主動渴望（<em>he wanted to attend
+                                school</em>），但時代體制卻關上大門。作者透過被動語態剝奪卡佛在句子裡的主導權，完美傳達出面對種族偏見與體制壓迫時的無奈感。</p>
+                    </div>
+
+                    <div class="concept-card highlight-green">
+                        <h4>翻轉！主動詞展現生命力</h4>
+                        <p>當卡佛成長並進入大學後，文本節奏徹底翻轉為一系列強而有力的主動詞：</p>
+                        <p style="margin-top: 6px; font-weight: 600; color: var(--success);">
+                            <code>focused on</code> ➔ <code>studied</code> ➔ <code>helped</code> ➔
+                            <code>discovered</code>
+                        </p>
+                        <p style="margin-top: 6px; font-size: 0.95rem;">卡佛化身農業創新的主動推進者，奪回人生主導權！</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎵</span> 關鍵拆解 4：口語清單語調 (↗ ↗ ↘) 與精準用字
+                </div>
+
+                <h4>1. 列舉多項物品時的語調音樂感</h4>
+                <p>英文在列舉三個或以上的項目時，前幾項語調要<strong>上揚</strong>（提示聽眾還有內容），最後一項語調<strong>下降</strong>（代表清單結束）：</p>
+
+                <div class="intonation-box">
+                    <p style="font-size: 0.95rem; color: #94a3b8;">"George studied..."</p>
+                    <div class="intonation-words">
+                        <div class="intonation-item">peanuts <span class="arrow-up">↗</span></div>
+                        <div class="intonation-item">sweet potatoes <span class="arrow-up">↗</span></div>
+                        <div class="intonation-item">and soybeans <span class="arrow-down">↘</span></div>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 24px;">2. 關鍵動詞：Discovered (發現) vs. Invented (發明)</h4>
+                <p style="margin-top: 6px;">卡佛為花生找到了數百種新用途（作顏料、化妝品、肥皂），為什麼作者選擇用 <strong>discovered</strong> 而不用
+                    <strong>invented</strong>？</p>
+                <div class="concept-card highlight-blue" style="margin-top: 10px;">
+                    <p><strong>Invent (發明)</strong>：憑空創造出世界上原本不存在的新事物。</p>
+                    <p><strong>Discover (發現)</strong>：覺察並發掘出大自然原本就蘊含的潛力與奧秘。</p>
+                    <p style="margin-top: 6px; font-style: italic; color: var(--primary-dark);">
+                        卡佛並非憑空變出神奇花生，而是透過研究發掘出大自然早已鎖在小花生裡的無限可能。</p>
+                </div>
+            </div>
+
+            <!-- Reflection Challenge -->
+            <div class="card"
+                style="background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border-color: #fde68a;">
+                <div class="card-title" style="color: #92400e; border-bottom-color: #fcd34d;">
+                    <span class="icon">💡</span> 課後思考題：向外國朋友介紹台灣傳奇人物
+                </div>
+                <p style="color: #78350f;">如果今天你要向外國朋友介紹一位台灣的傳奇人物（歷史英雄、科技巨擘或體育巨星），試著套用今天學到的核心句型與精準單字：</p>
+                <ul style="margin-left: 20px; margin-top: 10px; color: #78350f;">
+                    <li>形容他的傑出地位：<code>[Name] was a distinguished [profession]...</code></li>
+                    <li>描繪他的專注熱情：<code>He/She focused on his/her love of [field]...</code></li>
+                    <li>闡述他的貢獻與突破：<code>He/She helped [people] find new ways to...</code></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- ==================== TAB 2: FULL TRANSCRIPT ==================== -->
+        <div id="full-transcript" class="tab-content">
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎙️</span> 廣播節目 Deep Dive 對話逐字稿 (完整版)
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="transcript-search" class="search-input"
+                        placeholder="🔍 搜尋逐字稿關鍵字（例如：distinguished, because of, 被動語態...）" onkeyup="filterTranscript()">
+                </div>
+
+                <div class="dialogue-container" id="dialogue-list">
+
+                    <!-- Speech item -->
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                你知道嗎？學習一門新語言的感覺啊，通常就像是打開了一箱 IKEA 的平整包裝家具。沒錯，然後你倒出來的說明書上全是讓人看無的文法符號跟聲音規則，上面寫著你要怎麼把 A 鎖進
+                                B。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                對啊，完全就是那種感覺！你拿到一堆名為單字的木板，還有一包叫做句型的螺絲，然後有人告訴你：好，把這些全部死背下來，你就能組裝出一口流利的英文。可是說真的，這個過程往往既枯燥又讓人充滿挫折感，因為你根本看不到這件家具最後拼起來會有多美。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                就是這樣！我們太常把語言拆解成冷冰冰的零件，卻忘了語言真正的用途，其實是去傳遞有溫度的故事。所以在今天的 Deep
+                                Dive，我們要直接把那讓人頭痛的文法說明書丟掉，我們要來看一件已經組裝得非常精美的作品。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speaker-name"></div>
+                            <div class="speech-text">
+                                沒錯！今天我們要探索的是一位美國傳奇科學家 <span class="en-inline">George Washington Carver</span>
+                                (喬治·華盛頓·卡佛)
+                                的真實故事。這是一趟為從零開始學英文的你專屬打造的深度學習之旅。透過真實的故事，你可以看到單詞是如何在句子中呼吸的，你也會發現文法又是如何去傳達主角的情感的。真的，當你理解了故事的脈絡，那些看似艱澀的英文自然而然就會印在你的腦海裡了。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                為了讓你有最直接的感受，我們首先要請你閉上眼睛、放輕鬆，純粹去聆聽英文的聲音。對，不要擔心有聽不懂的字，我們等一下會一句一句陪你一起去探索。現在就請你專心感受英文的發音、語調起伏與節奏。準備好了嗎？故事的第一段是這樣開始的：
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B (英文朗讀)</div>
+                            <div class="speech-text">
+                                <span class="en-inline">"George Washington Carver was a distinguished African American
+                                    scientist, inventor, and researcher. He was born near the end of slavery."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                嗯，點出了他的身份，還有出生的時代。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                對，接著看他的童年：<br>
+                                <span class="en-inline">"As a young child, George was very interested in plants and
+                                    science. He wanted to attend school, but because of the color of his skin, he was
+                                    not allowed to go to the local school."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                哇，因為膚色不能去學校，這真的蠻沉重的哦。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                是的。不過故事繼續發展：<br>
+                                <span class="en-inline">"Instead, he was homeschooled at a very young age. When he grew
+                                    older, he was finally able to attend a school in a town nearby."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                所以他還是找到了學習的方法。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                沒錯。<br>
+                                <span class="en-inline">"He kept learning and eventually joined Iowa State University.
+                                    He was the first African American student at the college."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                成為第一位非裔大學生，這真的很大的一個突破耶！那大學畢業之後呢？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                節奏就開始轉變了：<br>
+                                <span class="en-inline">"After college, George focused on his love of farming and
+                                    research. George studied the needs of farmers and their biggest problems."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                聽起來他把研究跟實際應用結合在一起去幫助別人。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                對，他付出了行動：<br>
+                                <span class="en-inline">"He helped farmers find new ways to grow crops and make more
+                                    money. George studied peanuts, sweet potatoes, and soybeans and discovered hundreds
+                                    of new uses for these crops."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                哇，這貢獻真的很大！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                最後一句話做了一個完美的總結：<br>
+                                <span class="en-inline">"Farmers learned a lot from George Washington Carver."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                OK, let's unpack this!
+                                好，我們來拆解一下。聽完全英文，如果你覺得心跳有點加速，或者覺得「天哪，我好像只抓到幾個字」，請完全不要有壓力哦！就像我們剛剛說到的，我們現在要像看電影一樣，從主角登場開始拆解。任何好故事的開頭都會先為主角建立形象嘛。故事的第一句話是這樣說的：<br>
+                                <span class="en-inline">"George Washington Carver was a distinguished African American
+                                    scientist, inventor and researcher."</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                這裡我們必須停下來，因為裡面有一個字超級長，就是
+                                <mark>distinguished</mark>。對於想要從零開始學英文的人來說，這個字光看就讓人想放棄了，而且發音聽起來好像很容易咬到舌頭對吧？但其實我們可以從發音的邏輯來拆解它。它的重音
+                                occur 在第二個音節，念 <span class="en-inline">dis-TING-guished</span>。這裡有個很有趣的發音現象，就是字尾的 -ed。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                沒錯，雖然它拼做 -ed，但因為它前面的字母發出的是無聲氣音，你的聲帶是沒有震動的。為了發音順暢，英文會把這個 -ed 轉化成輕巧的 /t/ 聲音。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                哦！所以不是念成 distinguished 加一個 /d/ 的音，而是輕輕地吐一個 /t/ 的音！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                完全正確！你可以試著念一次 <span class="en-inline">distinguished</span> 加上輕的
+                                /t/。這代表的意思是傑出的、著名的、受人尊重的。如果要用一個我們生活中常用的概念來理解 distinguished 這個字，這就像是某人在他的專業領域裡「自帶光環」。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                對！就是那種超級 VIP，一出場大家就知道「哇，大人物來了」的那種等級。然後文本用了三個身份來定義他：<span
+                                    class="en-inline">scientist</span> (科學家)、<span class="en-inline">inventor</span>
+                                (發明家) 和 <span class="en-inline">researcher</span>
+                                (研究員)。這裡其實隱藏了一個非常實用的單式密碼哦！你觀察一下，inventor 字尾是 -or，然後 researcher 字尾是 -er。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                沒錯！在英文的邏輯裡，把一個動作加上這些字尾，通常就會變成「做這個動作的人」。invent 是發明，加上 -or 就是發明家；research 是研究，加上 -er
+                                就是研究員。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                聽起來蠻方便的！不過這裡我要考你囉。照這個邏輯，doctor (醫生) 難道是來自一個叫做 doct 的動作嗎？actor (演員) 就是 act 加上 -or
+                                這說得通，但是不是所有字都能這樣套用啊？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                哇，這是個非常敏銳的問題！沒錯，語言永遠都有例外，它不是一個百可套用的數學公式，應該說它是一種「模式」。很多字確實是來自拉丁文或其他語言的字根，像是 doctor
+                                本身在拉丁文就是「老師」或「學者」的意思。但對於初學者來說，抓到 -er 或 -or 常代表某種身份或職業這個大方向，其實就會幫你省下非常多死背單字的力氣了。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                了解！也就是說把它當成一個常見的線索，而不是絕對的鐵律就對了。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                沒錯。不過這位自帶光環的超級 VIP，他的故事起點其實非常黑暗耶。文本接下來交代了他的背景：<span class="en-inline">"was born near the
+                                    end of slavery"</span>，他出生於奴隸制度即將結束之際。這裡我想談 <span class="en-inline">he was
+                                    born</span> (他出生) 這個用法。was 是 is
+                                的過去式嘛，可是中文我們也不會特別強調「他曾出生」啊？對，出生當然是過去發生的事，那為什麼英文總是對過去式這麼斤斤計較呢？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                因為在英文的思維裡，動詞就像是一台「時光機」。當你用 was 而不是 is，你就是在告訴聽眾：「請把你的大腦切換到過去的時空。」
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                哦！也就是這件事已經徹底結束了，它強制我們去正視那個歷史的重量。沒錯，而且這句話裡還有一個很棒的片語：<mark>near the end
+                                    of</mark>。這聽起來像是描繪一個空間，比方說「在走廊的盡頭附近」那樣。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                這就是英文有趣的地方！它常常用空間的概念來描述時間。<span class="en-inline">near the end of slavery</span>
+                                意思是「靠近奴隸制度的尾聲」。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                原來如此！所以你可以把它拿來用在生活中的各種情境，對吧？比方說 <span class="en-inline">near the end of the movie</span>
+                                (在電影快結束的時候)，或者 <span class="en-inline">near the end of the year</span>
+                                (接近年底的時候)，這是一個非常有畫面的表達方式。所以 Carver
+                                出生的時候，那個把人當做財產的黑暗時代還沒有完全結束，這就帶出了他人生的第一個巨大阻礙，也就是故事的衝突點。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                沒錯，文本說：<span class="en-inline">"He wanted to attend school, but because of the color of
+                                    his skin, he was not allowed to go to the local school."</span>
+                                他想去上學，但因為他的膚色，他不被允許進入當地的學校。這裡我們必須停下來，因為這裡有一個幾乎所有初學者都會踩到的陷阱——就是 <mark>because of</mark>！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                我承認我以前背這兩個詞的時候超痛苦的，中文不都是「因為」嗎？多一個 of 到底差在哪裡？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                讓我用一個比喻來解釋它的邏輯：你可以把 of 想像成一個<strong>「鉤子」</strong>⚓。在英文裡，介系詞這個鉤子只能勾住具體的東西或概念，也就是名詞。所以
+                                because of 這個帶有鉤子的版本，後面只能接一個名詞區塊。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                完全正確！還所以在這段文本中，作者寫的是 <span class="en-inline">because of the color of his skin</span>。The
+                                color of his skin 是一個名詞區塊，它不是一個有動作、有主角的完整事件，所以我們必須用帶有鉤子的 because of 把這個名詞勾住，對吧？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                對啦！那如果你不用鉤子 because 呢？那它就像是一扇<strong>「門」</strong>🚪，門後面必須展開一個完整的場景，有主角、有動作。比方說：<span
+                                    class="en-inline">"I stayed home because it was raining."</span> (我待在家，因為當時在下雨)。was
+                                raining 是一部小電影，是一個完整的句子！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                原來如此！所以如果我說 <s>because of it was
+                                    raining</s>，這在英文邏輯上是錯的，因為這個鉤子勾不起一整部電影！只要想著那個鉤子，你以後就不會再搞混了。不過這句話的後半段有另一個讓我非常在地的地方哦：<span
+                                    class="en-inline">"he was not allowed to go to the local school"</span>
+                                (他不被允許去當地的學校)；接著下一句說 <span class="en-inline">"he was homeschooled"</span>
+                                (他被安排在家自學)。這兩個句子都是<mark>被動語態</mark>耶！我記得很多英文寫作指南都強烈建議：想要寫出有力量的英文，應該要多用主動語態、少用被動語態。為什麼這篇文本在這裡連續使用被動語態？這不會讓文章顯得很無力嗎？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speaker-name"></div>
+                            <div class="speech-text">
+                                這可是個絕佳的觀察點！如果我們退一步把文法跟整個故事連接起來看，你會發現這裡的被動語態用得簡直是<strong>神來之筆</strong>！在某些商業報告裡被動語態可能顯得推卸責任，但在這個故事裡，你想想
+                                Carver 當時的處境：他是一個對植物充滿好奇心、想去上學的小男孩，他明明有主動的渴望 (<span class="en-inline">he wanted to
+                                    attend school</span>)，可是社會體制卻對他關上了大門。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                哇，我好像懂你的意思了！所以作者刻意把句子換成 <span class="en-inline">he was not allowed</span>
+                                (他不被允許)，是為了反映現實！作者用被動語態剝奪了 Carver 在句子裡的主導權，完美對應了他 transient
+                                在當時的社會體制下無法掌控自身受教權的無奈感。他不是不想去學校，他是被社會的偏見阻擋了。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                這真的讓我起雞皮疙瘩！所以這個被動語態不是作者文法不好，而是他刻意營造的壓迫感。文法竟然變成了情緒的載體！直接反映了非裔美國人在那個時代受到的體制壓迫，這就是語言迷人的地方。當你下次看到被動語態，不要只把它當成「把受詞搬到前面加個
+                                Be 動詞」的無聊公式，去體會一下：當我們想表達一個人處於弱勢或者是身不由己的時候，被動語態是非常強大的修辭工具。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                但 Carver 的故事並沒有停在這個充滿壓迫感的被動語態裡哦！文本繼續說：<span class="en-inline">"He grew older. He was
+                                    finally able to attend school in a town nearby."</span> 他持續並且 <span
+                                    class="en-inline">"eventually joined Iowa State University"</span>
+                                (最終加入了愛荷華州立大學)。<mark>Eventually</mark> (最終)
+                                這個副詞在這裡非常有力量，它帶有一種經歷了漫長等待、跨越了無數障礙之後，終於達成的語氣。而且文本馬上點出了這個突破的歷史意義：<span
+                                    class="en-inline">"He was the first African American student at the college."</span>
+                                從不被允許上學到成為第一位非裔大學生，這是多麼驚人的跨越！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                而且接下來這部分超級有趣哦！當故事進入第二段 Carver
+                                大學畢業後，你會發現文本的節奏和用字徹底改變了——它從第一段那種處處受限的被動，完全翻轉成了主動出擊！讓我們來看看英文是如何呈現這種翻轉的。第二段一開始說：<span
+                                    class="en-inline">"After College, George focused on his love of farming and
+                                    research."</span> (大學畢業後，喬治專注於他對農業和研究的熱愛)。請大家注意 <mark>focused on</mark> (專注於)
+                                這個動詞片語，從這裡開始所有的動詞都變得極具行動力！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                真的耶！後面接著說：<span class="en-inline">"George studied the needs of farmers and their biggest
+                                    problems."</span> 他沒有把自己關在象牙塔裡，而是去研究農民實際的問題；<span class="en-inline">"He helped
+                                    farmers find new ways to grow crops and make more money."</span> 你看這一連串的動詞：<span
+                                    class="en-inline">studied</span> (研究)、<span class="en-inline">helped</span>
+                                (幫助)、<span class="en-inline">find</span> (尋找)、<span class="en-inline">grow</span> (種植) 跟
+                                <span class="en-inline">make</span> (賺取)，就像引擎一樣推動著故事向前推進！如果用現代的角度來看，Carver 簡直就是農業界的
+                                Silicon Valley 創新者，他把目光轉向了最不起眼的農作物。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                沒錯！我們來聽聽這句描述他研究對象的話：<span class="en-inline">"George studied peanuts, sweet potatoes, and
+                                    soybeans."</span>
+                                這句話看似簡單，但其實隱藏了一個非常適合初學者練習口語的細節哦！當我們在英文裡列舉三個或三個以上的物品時，語調是有套特定邏輯的。如果你全部平平地念過去，聽起來會像機器人，而且聽眾會不知道你什麼時候要講完。英文的規律是：在列舉清單時，前面項目的語調要<mark>上揚
+                                    ↗</mark>，直到最後一個項目語調才會<mark>下降 ↘</mark>。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                這就像你在走樓梯，最後一步才穩穩地踏平對吧？上揚、上揚，然後下降！我來示範一次：<br>
+                                <span class="en-inline">"George studied peanuts ↗, sweet potatoes ↗, and soybeans
+                                    ↘."</span><br>
+                                哇，這聽起來真的有一種音樂的韻律感誒！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                沒錯！而且這背後的「為什麼」很重要：你語調上揚是在給聽眾一個心理暗示——「我的清單還沒念完哦，請繼續聽」；直到語調下降，聽眾的大腦就會接收到「啊，列舉結束了」的訊號。這是一個很小的細節，但對於抓住聽眾的注意力非常關鍵！所以這位農業界的創新者拿這些花生、地瓜和大豆做了什麼驚天動地的事呢？文本說：<span
+                                    class="en-inline">"and discovered hundreds of new uses for these crops."</span>
+                                (並且為這些農作物發現了數百種新用途)。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                等等，數百種！這數量也太驚人了吧！而且我注意到作者用的是 <mark>discovered</mark> (發現)，而不是我們前面學到的
+                                <mark>invented</mark> (發明)。他為花生找到了幾百種新用途，像是做成顏料、化妝品甚至肥皂，這難道不算是發明嗎？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                這是個非常精準的語言問題！為什麼不用 invented 呢？因為 <span class="en-inline">invent</span>
+                                是指創造出一個世界上本來不存在的東西；可是花生裡面那些可以提煉出油做成顏料的化學成分，是大自然原本就賦予它的！所以 Carver
+                                並沒有憑空創造出一顆神奇魔力花生，那些潛力一直都鎖在小小的花生裡，只是沒有人看見。Carver 是透過他的研究，將這些本來就存在的潛力給發掘、發現了出來。所以用 <span
+                                    class="en-inline">discovered</span> 遠比 invented 更加準確，也更能彰顯他對大自然的理解！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                這種對單字細微差異的拿捏真的太迷人了！難怪故事的最後一句話用一種非常踏實的語調總結：<span class="en-inline">"Farmers learned a lot
+                                    from George Washington Carver."</span> (農民從喬治·華盛頓·卡佛身上學到了很多)。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                如果我們回過頭來看今天的討論，你會發現即使是這短短兩段看起來專為初學者設計的簡單文本，裡面也蘊含了巨大的力量。我們沒有拿著紅筆在那邊死背規則，但我們不知不覺中學會了好多東西：我們理解了為什麼英文總是執著於用過去式
+                                <span class="en-inline">was born</span> 來當做時間機器，我們也釐清了 <span
+                                    class="en-inline">because</span> 像一扇打開事件的門、和 <span class="en-inline">because
+                                    of</span> 作為勾住名詞的鉤子在邏輯上有什麼不同。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                對！我們還發現了被寫作指南嫌棄的被動語態，其實能精準傳達出一個非裔小男孩面對時代壓迫時的身不由己；然後看著他如何奪回主導權，用一連串充滿力量的主動動詞改變了整個農業社會；最後我們甚至學會了如何用上揚與下降的語調，像音樂一樣去引導聽眾的注意力。這些都不是冷冰冰的零件，它們是你用來講述生命故事的工具！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                農民從 George Washington Carver
+                                身上學到了如何改善農作物的命運，而我們今天也從他的故事中學到了如何用英文去理解世界。其實這就是學語言最棒的狀態啦！當你下次在閱讀任何一段英文時，試著去問自己：作者為什麼在這裡用被動語態？為什麼用這個動詞？當你開始對語言背後的邏輯產生好奇，你的進步將會是非常驚人的。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                在我們今天這探索即將結束之際，我想留給各位聽眾一個課外的思考題，希望能讓你把今天學到的東西真正應用到你自己的生活中。想像一下，如果你今天遇到了一位外國朋友，你要用英文向他介紹一位台灣的傳奇人物——不管是推動歷史的英雄、科技界的大佬，還是為國爭光的運動健兒，你會選擇誰？
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-b-group">
+                        <div class="avatar speaker-b">B</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">解說員 B</div>
+                            <div class="speech-text">
+                                而且在介紹他的時候，你會不會試著用上我們今天學到的 <span class="en-inline">distinguished</span> (傑出的)
+                                來形容他的成就呢？或者用 <span class="en-inline">focused on</span> (專注於)
+                                來描述他一生致力熱情所在？你甚至可以在腦海裡試著把這位台灣傳奇人物的名字套進我們今天讀的句式裡，大聲地朗讀出來哦！
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speech-bubble speaker-a-group">
+                        <div class="avatar speaker-a">A</div>
+                        <div class="bubble-content">
+                            <div class="speaker-name">主持人 A</div>
+                            <div class="speech-text">
+                                回到我們一開始說的，學習語言從來就不該是痛苦地對著那張看不懂的 IKEA
+                                說明書發呆。當你手裡握著一個好故事，當你有迫不及待想要傳達的情感，那些單式和句型自然而然就會拼湊成最美麗的形狀。希望我們今天的解析能讓你感受到學英文真正的樂趣！感謝你的收聽，大家下次見！
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Deep Dive English Learning Series &copy; 2026 | Designed for Effortless Reading & Language Mastery</p>
+    </footer>
+
+    <!-- Interactive JS -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show current tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Set current button active
+            event.currentTarget.classList.add('active');
+        }
+
+        function filterTranscript() {
+            const input = document.getElementById('transcript-search').value.toLowerCase();
+            const bubbles = document.querySelectorAll('#dialogue-list .speech-bubble');
+
+            bubbles.forEach(bubble => {
+                const text = bubble.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    bubble.style.display = 'flex';
+                } else {
+                    bubble.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '4_9.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>
