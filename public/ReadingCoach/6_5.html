@@ -31,6 +31,22 @@
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
         .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
         .tab-content { display: none; } .tab-content.active { display: block; }
+
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 <body>
@@ -57,6 +73,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
@@ -108,6 +125,32 @@
                         <li style="margin-bottom: 15px;">今天巴西的人口組成包括哪些群體？<ul style="list-style-type: none; padding-left: 20px; margin-top: 5px;"><li>A) 只有葡萄牙人</li><li>B) 西非人、葡萄牙人和美洲原住民</li><li>C) 只有原住民</li><li>D) 歐洲人和亞洲人</li></ul><p style="color: #4CAF50; font-weight: bold;">正確答案：B</p></li>
                 </ol></div>
             </div>
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
     </div>
 <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
@@ -127,7 +170,211 @@ The flag also symbolizes the lush landscape of Brazil. Brazil also has beautiful
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Brazil's flag symbolizes the government of the people.",
+                zh: "巴西的國旗象徵著人民的政府。",
+                chunks: ["brazil's flag", "symbolizes", "the government", "of the people"],
+                reviewData: [
+                    { chunk: "brazil's flag", meaning: "巴西的國旗", collocation: "brazil's flag symbolizes", synonym: "the flag of brazil", pronunciation: "brazil's 的 z 音與 flag 的 f 順暢連接。" },
+                    { chunk: "symbolizes", meaning: "象徵", collocation: "symbolizes the government", synonym: "represents", pronunciation: "symbolizes 的 z 尾音順暢帶出。" },
+                    { chunk: "the government", meaning: "政府", collocation: "the government of the people", synonym: "the administration", pronunciation: "government 的 t 尾音與 of 連讀。" }
+                ]
+            },
+            {
+                en: "The blue sphere around the stars in the flag resembles the bright blue sky over Brazil.",
+                zh: "國旗上星星周圍的藍色球體類似巴西上方明亮的藍天。",
+                chunks: ["the blue sphere", "around the stars", "in the flag", "resembles", "the bright blue sky", "over brazil"],
+                reviewData: [
+                    { chunk: "blue sphere", meaning: "藍色球體", collocation: "the blue sphere around", synonym: "blue globe", pronunciation: "blue 的母音與 sphere 的 s 順暢連接。" },
+                    { chunk: "around the stars", meaning: "在星星周圍", collocation: "around the stars in the flag", synonym: "surrounding the stars", pronunciation: "around 的 d 與 the 的 th 連讀。" },
+                    { chunk: "resembles", meaning: "類似於", collocation: "resembles the bright blue sky", synonym: "looks like", pronunciation: "resembles 的 z 尾音順暢帶出。" }
+                ]
+            },
+            {
+                en: "The yellow in the flag in the shape of a diamond represents gold and diamonds.",
+                zh: "國旗中菱形的黃色代表黃金和鑽石。",
+                chunks: ["the yellow in the flag", "in the shape of a diamond", "represents", "gold and diamonds"],
+                reviewData: [
+                    { chunk: "in the shape of", meaning: "形狀為...的", collocation: "in the shape of a diamond", synonym: "formed like", pronunciation: "shape 的 p 與 of 的 o 連讀。" },
+                    { chunk: "represents", meaning: "代表", collocation: "represents gold and diamonds", synonym: "stands for", pronunciation: "represents 的 ts 尾音順暢帶出。" },
+                    { chunk: "gold and diamonds", meaning: "黃金與鑽石", collocation: "represents gold and diamonds", synonym: "precious jewels and metals", pronunciation: "gold 的 d 與 and 的 a 連讀。" }
+                ]
+            },
+            {
+                en: "The green in the flag symbolizes the country's deep forests and fertile fields.",
+                zh: "國旗中的綠色象徵著國家的茂密森林和肥沃田地。",
+                chunks: ["the green in the flag", "symbolizes", "the country's deep forests", "and fertile fields"],
+                reviewData: [
+                    { chunk: "the green in the flag", meaning: "國旗中的綠色", collocation: "the green in the flag symbolizes", synonym: "the color green", pronunciation: "green 的 n 與 in 的 i 連讀。" },
+                    { chunk: "deep forests", meaning: "茂密森林", collocation: "the country's deep forests", synonym: "dense woods", pronunciation: "deep 的 p 與 forests 的 f 順暢連接。" },
+                    { chunk: "fertile fields", meaning: "肥沃田地", collocation: "and fertile fields", synonym: "productive lands", pronunciation: "fertile 的 l 與 fields 的 f 順暢連接。" }
+                ]
+            },
+            {
+                en: "Today, Brazil's population is a mixture of these groups – West Africans, Portuguese, and also Native Americans.",
+                zh: "今天，巴西的人口是這些群體的混合——西非人、葡萄牙人，還有美洲原住民。",
+                chunks: ["today", "brazil's population", "is a mixture of", "these groups"],
+                reviewData: [
+                    { chunk: "brazil's population", meaning: "巴西的人口", collocation: "brazil's population is", synonym: "people of brazil", pronunciation: "brazil's 的 z 與 population 的 p 順暢連接。" },
+                    { chunk: "is a mixture of", meaning: "是...的混合", collocation: "is a mixture of these groups", synonym: "is a blend of", pronunciation: "is 的 s 與 a 連讀，mixture 的 r 與 of 連讀。" },
+                    { chunk: "these groups", meaning: "這些群體", collocation: "a mixture of these groups", synonym: "these different peoples", pronunciation: "these 的 z 與 groups 的 g 順暢連接。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const cleanText = text.replace(/[’']/g, "'");
+                const u = new SpeechSynthesisUtterance(cleanText);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 </html>

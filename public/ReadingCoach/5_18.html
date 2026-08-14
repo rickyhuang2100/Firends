@@ -247,6 +247,22 @@
         .tab-content.active {
             display: block;
         }
+
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 
@@ -282,6 +298,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
@@ -380,9 +397,33 @@
                     <span class="highlight">Answer: Good luck (and the different paths in life).</span>
                 </li>
             </ol>
-
         </div>
     </div>
+    <!-- 聽音重組分頁 -->
+    <div id="reconstruction" class="tab-content">
+        <div class="game-board">
+            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+            </div>
+
+            <div class="game-controls">
+                <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+            </div>
+
+            <div id="answerArea" class="answer-area"></div>
+            <div id="wordBank" class="word-bank"></div>
+
+            <div id="gameStatus" class="game-status"></div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+            </div>
+
+            <div id="reviewArea" style="margin-top: 30px;"></div>
+        </div>
     </div>
     </div>
     </div>
@@ -404,7 +445,210 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Chelo-kebab is the national dish of Iran, which comes as no surprise.",
+                zh: "Chelo-kebab 是伊朗的國菜，這一點都不令人驚訝。",
+                chunks: ["chelo kebab is", "the national dish of iran", "which comes as", "no surprise"],
+                reviewData: [
+                    { chunk: "national dish", meaning: "國菜", collocation: "the national dish of", synonym: "traditional local food", pronunciation: "national 的 l 與 dish 的 d 順暢連接。" },
+                    { chunk: "comes as no surprise", meaning: "一點也不驚訝", collocation: "it comes as no surprise that", synonym: "is not surprising", pronunciation: "comes 的 z 尾音與 as 的 a 連讀。" }
+                ]
+            },
+            {
+                en: "Relative to the traditional preparation of rice, preparing tahdig is very time-consuming.",
+                zh: "相對於傳統的米飯準備方式，準備 tahdig 非常耗時。",
+                chunks: ["relative to", "the traditional preparation", "of rice", "preparing tahdig is", "very time consuming"],
+                reviewData: [
+                    { chunk: "relative to", meaning: "相對於", collocation: "relative to others", synonym: "compared to", pronunciation: "relative 的 v 與 to 的 t 順暢過渡。" },
+                    { chunk: "preparation", meaning: "準備", collocation: "meal preparation", synonym: "getting ready", pronunciation: "preparation 的 tion 發 /ʃən/。" },
+                    { chunk: "time consuming", meaning: "耗時的", collocation: "a time consuming process", synonym: "taking up a lot of time", pronunciation: "time 的 m 與 consuming 的 c 順暢連接。" }
+                ]
+            },
+            {
+                en: "Soaking the rice guarantees that the individual grains of rice will be separate.",
+                zh: "浸泡米飯保證了每一粒米飯都會分開。",
+                chunks: ["soaking the rice", "guarantees that", "the individual grains of rice", "will be separate"],
+                reviewData: [
+                    { chunk: "soaking", meaning: "浸泡", collocation: "soaking in water", synonym: "steeping", pronunciation: "soaking 的 ng 尾音順暢帶出。" },
+                    { chunk: "guarantees that", meaning: "保證...", collocation: "guarantees that it works", synonym: "ensures that", pronunciation: "guarantees 的 s 與 that 的 th 順暢連接。" },
+                    { chunk: "individual grains", meaning: "每一粒", collocation: "individual grains of sand", synonym: "single pieces", pronunciation: "individual 的 l 與 grains 的 g 順暢過渡。" }
+                ]
+            },
+            {
+                en: "In addition to being delicious, some types of Iranian food serve as symbols.",
+                zh: "除了美味之外，某些類型的伊朗食物還具有象徵意義。",
+                chunks: ["in addition to", "being delicious", "some types of iranian food", "serve as symbols"],
+                reviewData: [
+                    { chunk: "in addition to", meaning: "除...之外", collocation: "in addition to this", synonym: "besides", pronunciation: "in 的 n 與 addition 的 a 連讀。" },
+                    { chunk: "being delicious", meaning: "美味", collocation: "besides being delicious", synonym: "tasting good", pronunciation: "being 的 ng 尾音輕快。" },
+                    { chunk: "serve as", meaning: "作為...之用", collocation: "serve as a reminder", synonym: "act as", pronunciation: "serve 的 v 與 as 的 a 連讀。" }
+                ]
+            },
+            {
+                en: "The reason it holds this meaning is that the noodles were initially transported along a path from China to Iran.",
+                zh: "它具有這種意義的原因是與麵條最初是沿著從中國到伊朗的道路運輸有關。",
+                chunks: ["the reason it holds", "this meaning is that", "the noodles were", "initially transported", "along a path", "from china to iran"],
+                reviewData: [
+                    { chunk: "the reason it holds", meaning: "它具有...的原因", collocation: "the reason it holds true", synonym: "why it maintains", pronunciation: "reason 的 n 與 it 的 i 連讀。" },
+                    { chunk: "initially transported", meaning: "最初被運輸", collocation: "initially transported by ship", synonym: "first moved", pronunciation: "initially 的 y 與 transported 的 t 順暢連接。" },
+                    { chunk: "along a path", meaning: "沿著一條路線", collocation: "walking along a path", synonym: "on a route", pronunciation: "along 的 ng 尾音與 a 連讀。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const cleanText = text.replace(/[’']/g, "'");
+                const u = new SpeechSynthesisUtterance(cleanText);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 

@@ -247,6 +247,22 @@
         .tab-content.active {
             display: block;
         }
+        
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 
@@ -282,6 +298,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <!-- 中文翻譯分頁 -->
             <div id="translation" class="tab-content active">
@@ -403,6 +420,31 @@
                     </ol>
                 </div>
             </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -423,7 +465,217 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "In fact, Kyoto used to be the capital of Japan for hundreds of years before Tokyo took its place.",
+                zh: "事實上，在東京取代它之前，京都曾經是日本數百年的首都。",
+                chunks: ["in fact", "kyoto used to be", "the capital of japan", "for hundreds of years", "before tokyo took its place"],
+                reviewData: [
+                    { chunk: "in fact", meaning: "事實上", collocation: "in fact it is true", synonym: "actually", pronunciation: "in 的 n 與 fact 連讀。" },
+                    { chunk: "kyoto used to be", meaning: "京都曾經是", collocation: "used to be", synonym: "was formerly", pronunciation: "used 的 d 與 to 的 t 重疊，讀一個 t 的音。" },
+                    { chunk: "the capital of japan", meaning: "日本的首都", collocation: "the capital of", synonym: "the chief city of Japan", pronunciation: "capital 的 l 與 of 的 o 連讀 /kæpɪtələv/。" },
+                    { chunk: "for hundreds of years", meaning: "數百年間", collocation: "hundreds of years", synonym: "for centuries", pronunciation: "hundreds 的 ds 與 of 連讀 /hʌndrədzəv/。" },
+                    { chunk: "before tokyo took its place", meaning: "在東京取代它之前", collocation: "took its place", synonym: "replaced it", pronunciation: "took 的 k 與 its 的 i 連讀 /tʊkɪts/，its 的 ts 與 place 的 p 順暢連接。" }
+                ]
+            },
+            {
+                en: "Thankfully, Kyoto’s historical treasures weren’t destroyed in World War II like most were in Tokyo.",
+                zh: "值得慶幸的是，京都的歷史珍寶並沒有像東京的大多數珍寶那樣在第二次世界大戰中被摧毀。",
+                chunks: ["thankfully", "kyoto’s historical treasures", "weren’t destroyed in world war II", "like most were in tokyo"],
+                reviewData: [
+                    { chunk: "thankfully", meaning: "值得慶幸的是", collocation: "thankfully survived", synonym: "fortunately", pronunciation: "thankfully 正常發音。" },
+                    { chunk: "kyoto’s historical treasures", meaning: "京都的歷史珍寶", collocation: "historical treasures", synonym: "ancient valuables", pronunciation: "kyoto's 的 s 與 historical 的 h 順暢過渡。" },
+                    { chunk: "weren’t destroyed in world war II", meaning: "沒有在二戰中被摧毀", collocation: "destroyed in the war", synonym: "survived the conflict", pronunciation: "destroyed 的 d 與 in 的 i 連讀 /dɪstrɔɪdɪn/。" },
+                    { chunk: "like most were in tokyo", meaning: "就像大部分在東京的(珍寶)一樣", collocation: "like most were", synonym: "similar to those in Tokyo", pronunciation: "most 的 t 與 were 順暢過渡，were 的 r 與 in 連讀 /wɜːrɪn/。" }
+                ]
+            },
+            {
+                en: "The homes that line Kyoto’s winding streets are made of paper and wood.",
+                zh: "沿著京都蜿蜒街道的房屋是由紙和木頭建造的。",
+                chunks: ["the homes that line", "kyoto’s winding streets", "are made of", "paper and wood"],
+                reviewData: [
+                    { chunk: "the homes that line", meaning: "沿著...排列的房屋", collocation: "homes that line the street", synonym: "houses alongside", pronunciation: "that 的 t 與 line 的 l 順暢連接。" },
+                    { chunk: "kyoto’s winding streets", meaning: "京都蜿蜒的街道", collocation: "winding streets", synonym: "curving roads of Kyoto", pronunciation: "kyoto's 的 s 與 winding 的 w 順暢過渡。" },
+                    { chunk: "are made of", meaning: "是由...製造的", collocation: "made of wood", synonym: "constructed from", pronunciation: "made 的 d 與 of 的 o 連讀 /meɪdəv/。" },
+                    { chunk: "paper and wood", meaning: "紙和木頭", collocation: "paper and wood", synonym: "timber and paper", pronunciation: "paper 的 r 與 and 的 a 連讀 /peɪpərænd/，and 的 d 與 wood 的 w 順暢過渡。" }
+                ]
+            },
+            {
+                en: "First built in 1397, this impressive structure sits in the middle of a gorgeous lake surrounded by well-maintained gardens.",
+                zh: "這座令人印象深刻的建築最初建於1397年，坐落在一個華麗湖泊的中央，周圍環繞著維護良好的庭園。",
+                chunks: ["first built in 1397", "this impressive structure", "sits in the middle of", "a gorgeous lake", "surrounded by well-maintained gardens"],
+                reviewData: [
+                    { chunk: "first built in 1397", meaning: "最初建於1397年", collocation: "built in the year", synonym: "originally constructed in 1397", pronunciation: "built 的 t 與 in 的 i 連讀 /bɪltɪn/。" },
+                    { chunk: "this impressive structure", meaning: "這座令人印象深刻的建築", collocation: "an impressive structure", synonym: "this remarkable building", pronunciation: "this 的 s 與 impressive 的 i 連讀 /ðɪsɪmprɛsɪv/。" },
+                    { chunk: "sits in the middle of", meaning: "坐落在...的中央", collocation: "in the middle of", synonym: "located centrally in", pronunciation: "sits 的 ts 與 in 的 i 連讀 /sɪtsɪn/，middle 的 l 與 of 的 o 連讀 /mɪdələv/。" },
+                    { chunk: "a gorgeous lake", meaning: "一個華麗的湖泊", collocation: "a gorgeous lake", synonym: "a beautiful pond", pronunciation: "gorgeous 的 s /dʒ/ 與 lake 的 l 順暢連接。" },
+                    { chunk: "surrounded by well-maintained gardens", meaning: "周圍環繞著維護良好的庭園", collocation: "surrounded by gardens", synonym: "encircled by kept gardens", pronunciation: "surrounded 的 d 與 by 的 b 順暢過渡。" }
+                ]
+            },
+            {
+                en: "Believe it or not, the pavilion is actually adorned with real gold!",
+                zh: "信不信由你，這座樓閣實際上是用真金裝飾的！",
+                chunks: ["believe it or not", "the pavilion is actually", "adorned with real gold"],
+                reviewData: [
+                    { chunk: "believe it or not", meaning: "信不信由你", collocation: "believe it or not", synonym: "surprisingly", pronunciation: "believe 的 v 與 it 的 i 連讀 /bɪliːvɪt/，it 的 t 與 or 連讀 /ɪtɔːr/，or 的 r 與 not 連讀。" },
+                    { chunk: "the pavilion is actually", meaning: "這座樓閣實際上是", collocation: "is actually", synonym: "the structure is in fact", pronunciation: "pavilion 的 n 與 is 的 i 連讀，is 的 s /z/ 與 actually 的 a 連讀 /ɪzæktʃuəli/。" },
+                    { chunk: "adorned with real gold", meaning: "用真金裝飾的", collocation: "adorned with gold", synonym: "decorated with genuine gold", pronunciation: "adorned 的 d 與 with 的 w 順暢過渡。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const cleanText = text.replace(/[’']/g, "'");
+                const u = new SpeechSynthesisUtterance(cleanText);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 

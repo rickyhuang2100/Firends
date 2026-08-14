@@ -247,6 +247,22 @@
         .tab-content.active {
             display: block;
         }
+        
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 
@@ -282,6 +298,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
@@ -329,53 +346,64 @@
                     </div>
                 </div>
             </div>
-            <div class="vocab-meaning"></div>
+            <div id="grammar" class="tab-content">
+                <h3>✏️ 文法重點解析</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">Past Perfect Tense (過去完成式)</div>
+                    <p>用於描述在過去某個時間點之前已經發生的動作。例如："Before he left for England, his daughter had given birth..." (在他去英國之前，他的女兒已經生下了...)。</p>
+                </div>
+            </div>
+            <div id="sentences" class="tab-content">
+                <h3>💬 重要句型分析</h3>
+                <div class="sentence-pattern">
+                    <strong>Rhetorical Questions (修辭問句)</strong>
+                    <div class="example">What could have happened?</div>
+                    <p>作者使用問句來引發讀者的思考，並強調這個歷史謎團的神秘感，而不是期待一個直接的答案。</p>
+                </div>
+            </div>
+            <div id="reading" class="tab-content">
+                <h3>🎯 閱讀理解</h3>
+                <div class="grammar-box">
+                    <div class="grammar-title">理解測驗</div>
+                    <ol>
+                        <li>Who was the leader of the Roanoke colony?<br>
+                            <span class="highlight">Answer: John White</span>
+                        </li>
+                        <li>What was the only clue left behind by the settlers?<br>
+                            <span class="highlight">Answer: The word "CROATOAN" carved into a post.</span>
+                        </li>
+                        <li>Why did John White leave the colony in 1587?<br>
+                            <span class="highlight">Answer: To get supplies from England.</span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
-    <div id="grammar" class="tab-content">
-        <h3>✏️ 文法重點解析</h3>
-
-        <div class="grammar-box">
-            <div class="grammar-title">Past Perfect Tense (過去完成式)</div>
-            <p>用於描述在過去某個時間點之前已經發生的動作。例如："Before he left for England, his daughter had given birth..."
-                (在他去英國之前，他的女兒已經生下了...)。</p>
-        </div>
-
-    </div>
-    </div>
-    <div id="sentences" class="tab-content">
-        <h3>💬 重要句型分析</h3>
-
-        <div class="sentence-pattern">
-            <strong>Rhetorical Questions (修辭問句)</strong>
-            <div class="example">What could have happened?</div>
-            <p>作者使用問句來引發讀者的思考，並強調這個歷史謎團的神秘感，而不是期待一個直接的答案。</p>
-        </div>
-
-    </div>
-    </div>
-    <div id="reading" class="tab-content">
-        <h3>🎯 閱讀理解</h3>
-        <div class="grammar-box">
-            <div class="grammar-title">理解測驗</div>
-
-            <ol>
-                <li>Who was the leader of the Roanoke colony?<br>
-                    <span class="highlight">Answer: John White</span>
-                </li>
-                <li>What was the only clue left behind by the settlers?<br>
-                    <span class="highlight">Answer: The word "CROATOAN" carved into a post.</span>
-                </li>
-                <li>Why did John White leave the colony in 1587?<br>
-                    <span class="highlight">Answer: To get supplies from England.</span>
-                </li>
-            </ol>
-
-        </div>
-    </div>
-    </div>
-    </div>
     </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
         data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
@@ -395,7 +423,214 @@
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "By the time John White’s ships returned, the colony had vanished.",
+                zh: "當約翰·懷特的船隻返回時，殖民地已經消失了。",
+                chunks: ["by the time", "john white’s ships", "returned", "the colony", "had vanished"],
+                reviewData: [
+                    { chunk: "by the time", meaning: "到...的時候", collocation: "by the time you arrive", synonym: "when", pronunciation: "time 的 m 與後面的字稍微停頓。" },
+                    { chunk: "john white’s ships", meaning: "約翰·懷特的船隻", collocation: "the captain's ships", synonym: "his vessels", pronunciation: "white's 的 s 與 ships 的 sh 順暢連接。" },
+                    { chunk: "had vanished", meaning: "已經消失了", collocation: "the evidence had vanished", synonym: "had disappeared", pronunciation: "had 的 d 與 vanished 的 v 順暢過渡。" }
+                ]
+            },
+            {
+                en: "All of the houses were taken down.",
+                zh: "所有的房子都被拆除了。",
+                chunks: ["all of", "the houses", "were taken down"],
+                reviewData: [
+                    { chunk: "all of", meaning: "所有的", collocation: "all of them", synonym: "every one of", pronunciation: "all 的 l 與 of 的 o 連讀 /ɔːləv/。" },
+                    { chunk: "the houses", meaning: "房子", collocation: "build the houses", synonym: "the homes", pronunciation: "houses 的 s /z/ 音清晰。" },
+                    { chunk: "were taken down", meaning: "被拆除了", collocation: "the signs were taken down", synonym: "were dismantled", pronunciation: "taken 的 n 與 down 的 d 順暢過渡。" }
+                ]
+            },
+            {
+                en: "Before he left for England, his daughter had given birth to a baby named Virginia.",
+                zh: "在他去英國之前，他的女兒生下了一個名叫維吉尼亞的嬰兒。",
+                chunks: ["before he left", "for england", "his daughter", "had given birth to", "a baby named virginia"],
+                reviewData: [
+                    { chunk: "before he left", meaning: "在他離開之前", collocation: "before he left home", synonym: "prior to his departure", pronunciation: "left 的 t 與 for 順暢過渡。" },
+                    { chunk: "for england", meaning: "前往英國", collocation: "leave for england", synonym: "heading to britain", pronunciation: "for 的 r 與 england 的 e 連讀 /fɔːrˈɪŋglənd/。" },
+                    { chunk: "had given birth to", meaning: "已經生下了", collocation: "had given birth to twins", synonym: "had delivered", pronunciation: "birth 的 th 與 to 的 t 順暢連接。" },
+                    { chunk: "a baby named virginia", meaning: "一個名叫維吉尼亞的嬰兒", collocation: "a boy named john", synonym: "an infant called virginia", pronunciation: "named 的 d 與 virginia 的 v 順暢過渡。" }
+                ]
+            },
+            {
+                en: "Someone had found the chest and taken all of its contents.",
+                zh: "有人發現了箱子並拿走了裡面所有的東西。",
+                chunks: ["someone had found", "the chest", "and taken", "all of its contents"],
+                reviewData: [
+                    { chunk: "someone had found", meaning: "有人已經發現了", collocation: "someone had found the key", synonym: "somebody had discovered", pronunciation: "had 的 d 與 found 的 f 順暢過渡。" },
+                    { chunk: "the chest", meaning: "這個箱子", collocation: "a treasure chest", synonym: "the trunk", pronunciation: "chest 的 t 與 and 順暢過渡。" },
+                    { chunk: "and taken", meaning: "並且拿走了", collocation: "and taken away", synonym: "and removed", pronunciation: "and 的 d 與 taken 的 t 順暢連接。" },
+                    { chunk: "all of its contents", meaning: "裡面所有的東西", collocation: "empty its contents", synonym: "everything inside it", pronunciation: "all 的 l 與 of 連讀，of 的 f /v/ 與 its 連讀 /ɔːləvɪts/。" }
+                ]
+            },
+            {
+                en: "Even today, no one knows the answers to these questions.",
+                zh: "即使在今天，也沒有人知道這些問題的答案。",
+                chunks: ["even today", "no one knows", "the answers to", "these questions"],
+                reviewData: [
+                    { chunk: "even today", meaning: "即使在今天", collocation: "even today it is popular", synonym: "still nowadays", pronunciation: "even 的 n 與 today 的 t 順暢過渡。" },
+                    { chunk: "no one knows", meaning: "沒有人知道", collocation: "no one knows why", synonym: "nobody understands", pronunciation: "one 的 n 與 knows 的 n 順暢連接。" },
+                    { chunk: "the answers to", meaning: "對於...的答案", collocation: "the answers to the test", synonym: "the solutions for", pronunciation: "answers 的 s /z/ 與 to 的 t 順暢過渡。" },
+                    { chunk: "these questions", meaning: "這些問題", collocation: "ask these questions", synonym: "these inquiries", pronunciation: "these 的 s /z/ 與 questions 的 q /k/ 順暢過渡。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const cleanText = text.replace(/[’']/g, "'");
+                const u = new SpeechSynthesisUtterance(cleanText);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 

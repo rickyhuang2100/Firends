@@ -247,6 +247,22 @@
         .tab-content.active {
             display: block;
         }
+        
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+
+        /* 聽音重組遊戲樣式 */
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #f44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 
@@ -282,6 +298,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <!-- 中文翻譯分頁 -->
             <div id="translation" class="tab-content active">
@@ -414,6 +431,31 @@
                     </ol>
                 </div>
             </div>
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color: #2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color: #9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight: bold; color: #555; font-size: 16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color: #2196F3; padding: 8px 15px;">🔊 聽整句</button>
+                    </div>
+
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+
+                    <div id="gameStatus" class="game-status"></div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div id="translationHint" style="margin-bottom: 15px; font-size: 16px; color: #666; font-style: italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display: none; width: 200px;">下一句 ➡️</button>
+                    </div>
+
+                    <div id="reviewArea" style="margin-top: 30px;"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -437,7 +479,217 @@ Get in the habit. Be proud of recycling. Encourage others to recycle. You can ma
         function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
-        window.onload = initText;
+        
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                en: "Recycling is a process where something is reused rather than thrown away.",
+                zh: "回收是一個將物品重複使用而不是丟棄的過程。",
+                chunks: ["recycling is a process", "where something is reused", "rather than", "thrown away"],
+                reviewData: [
+                    { chunk: "recycling is a process", meaning: "回收是一個過程", collocation: "learning is a process", synonym: "a procedure", pronunciation: "recycling 的 ng 與 is 的 i 連讀，is 的 s /z/ 與 a 連讀。" },
+                    { chunk: "where something is reused", meaning: "在那裡某物被重複使用", collocation: "where something is made", synonym: "in which things are reused", pronunciation: "where 的 r 與 something 順暢過渡，is 的 s /z/ 與 reused 連讀。" },
+                    { chunk: "rather than", meaning: "而不是", collocation: "choose this rather than that", synonym: "instead of", pronunciation: "rather 的 r 與 than 的 th 順暢連接。" },
+                    { chunk: "thrown away", meaning: "被丟棄", collocation: "thrown away in the trash", synonym: "discarded", pronunciation: "thrown 的 n 與 away 的 a 連讀 /θroʊnəweɪ/。" }
+                ]
+            },
+            {
+                en: "Why should people bother to recycle even though it takes a lot of work?",
+                zh: "為什麼人們即使需要花費很多力氣，也應該不厭其煩地回收呢？",
+                chunks: ["why should people", "bother to recycle", "even though", "it takes a lot of work"],
+                reviewData: [
+                    { chunk: "why should people", meaning: "為什麼人們應該", collocation: "why should people care", synonym: "for what reason must people", pronunciation: "why 與 should 順暢過渡，should 的 d 與 people 的 p 不完全爆破。" },
+                    { chunk: "bother to recycle", meaning: "費心去回收", collocation: "bother to ask", synonym: "take the trouble to recycle", pronunciation: "bother 的 r 與 to 連讀。" },
+                    { chunk: "even though", meaning: "即使，雖然", collocation: "even though it's hard", synonym: "despite the fact that", pronunciation: "even 的 n 與 though 的 th 順暢連接。" },
+                    { chunk: "it takes a lot of work", meaning: "這需要花費很多力氣", collocation: "building it takes a lot of work", synonym: "requires much effort", pronunciation: "takes 的 s /s/ 與 a 連讀，lot 的 t 與 of 的 o 連讀 /lɒtəv/。" }
+                ]
+            },
+            {
+                en: "Every time you are about to drop a plastic bottle in the garbage, stop and think.",
+                zh: "每次你準備要把塑膠瓶丟進垃圾桶時，停下來想一想。",
+                chunks: ["every time", "you are about to drop", "a plastic bottle", "in the garbage", "stop and think"],
+                reviewData: [
+                    { chunk: "every time", meaning: "每一次", collocation: "every time I see you", synonym: "whenever", pronunciation: "every 與 time 順暢過渡。" },
+                    { chunk: "you are about to drop", meaning: "你正準備丟下", collocation: "about to drop the ball", synonym: "you are on the verge of dropping", pronunciation: "are 的 r 與 about 的 a 連讀，about 的 t 與 to 順暢連接。" },
+                    { chunk: "a plastic bottle", meaning: "一個塑膠瓶", collocation: "recycle a plastic bottle", synonym: "a plastic container", pronunciation: "a 與 plastic 順暢連接。" },
+                    { chunk: "in the garbage", meaning: "在垃圾桶裡", collocation: "throw it in the garbage", synonym: "into the trash", pronunciation: "in 的 n 與 the 的 th 順暢連接。" },
+                    { chunk: "stop and think", meaning: "停下來想一想", collocation: "just stop and think", synonym: "pause and consider", pronunciation: "stop 的 p 與 and 的 a 連讀，and 的 d 與 think 的 th 順暢連接。" }
+                ]
+            },
+            {
+                en: "Your actions now can help preserve the environment for generations to come.",
+                zh: "你現在的行動可以幫助為後代子孫保護環境。",
+                chunks: ["your actions now", "can help preserve", "the environment", "for generations to come"],
+                reviewData: [
+                    { chunk: "your actions now", meaning: "你現在的行動", collocation: "your actions now matter", synonym: "what you do today", pronunciation: "your 的 r 與 actions 的 a 連讀，actions 的 s /z/ 與 now 順暢過渡。" },
+                    { chunk: "can help preserve", meaning: "可以幫助保護", collocation: "can help preserve nature", synonym: "can assist in protecting", pronunciation: "can 的 n 與 help 的 h 順暢連接，help 的 p 不完全爆破。" },
+                    { chunk: "the environment", meaning: "這個環境", collocation: "protect the environment", synonym: "the surroundings", pronunciation: "the (發/ði/音) 與 environment 的 e 連讀。" },
+                    { chunk: "for generations to come", meaning: "為未來的世世代代", collocation: "safe for generations to come", synonym: "for future generations", pronunciation: "generations 的 s /z/ 與 to 順暢連接。" }
+                ]
+            },
+            {
+                en: "All you have to do is throw that bottle into a recycling bin.",
+                zh: "你所要做的就是把那個瓶子扔進回收桶裡。",
+                chunks: ["all you have to do is", "throw that bottle", "into", "a recycling bin"],
+                reviewData: [
+                    { chunk: "all you have to do is", meaning: "你所要做的只是", collocation: "all you have to do is ask", synonym: "the only thing required is to", pronunciation: "all 的 l 與 you 連讀，is 的 s /z/ 順暢過渡。" },
+                    { chunk: "throw that bottle", meaning: "扔掉那個瓶子", collocation: "throw that bottle away", synonym: "toss that bottle", pronunciation: "throw 與 that 的 th 順暢連接。" },
+                    { chunk: "into", meaning: "進入...裡面", collocation: "put it into the box", synonym: "inside", pronunciation: "in 與 to 順暢連接。" },
+                    { chunk: "a recycling bin", meaning: "一個回收桶", collocation: "put it in a recycling bin", synonym: "a recycling container", pronunciation: "a 與 recycling 順暢過渡。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let bankWords = [];
+        let answerWords = [];
+        let gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const cleanText = text.replace(/[’']/g, "'");
+                const u = new SpeechSynthesisUtterance(cleanText);
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = googleVoice || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            const currentSentence = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex + 1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${currentSentence.zh}`;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            if (gameMode === 'chunk') {
+                currentWords = [...currentSentence.chunks];
+            } else {
+                let cleanEn = currentSentence.en.toLowerCase().replace(/[.,!?”“:–\-]/g, '');
+                currentWords = cleanEn.split(/\s+/);
+            }
+
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            answerWords.forEach(word => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(selectedWord);
+                document.getElementById('gameStatus').textContent = "✅ 很好！";
+                document.getElementById('gameStatus').className = "game-status status-correct";
+
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = "";
+                    const currentSentence = gameSentences[currentGameIndex];
+                    if (currentSentence.reviewData) {
+                        currentSentence.reviewData.forEach(item => {
+                            if (selectedWord.includes(item.chunk)) {
+                                const card = document.createElement('div');
+                                card.style.cssText = "background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #9c27b0;";
+                                card.innerHTML = `
+                                    <h4 style="color: #9c27b0; margin-bottom: 10px; font-size: 18px;">📌 語塊範例：${item.chunk}</h4>
+                                    <ul style="list-style: none; padding: 0; line-height: 1.8; font-size: 15px;">
+                                        <li><strong>1. 中文語意：</strong>${item.meaning}</li>
+                                        <li><strong>2. 母語者搭配：</strong>${item.collocation}</li>
+                                        <li><strong>3. 同義替換：</strong>${item.synonym}</li>
+                                        <li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li>
+                                    </ul>
+                                `;
+                                document.getElementById('reviewArea').appendChild(card);
+                            }
+                        });
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = "✅ 完全正確！";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    
+                    const successDiv = document.createElement('div');
+                    successDiv.style.cssText = "background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: center; animation: fadeIn 0.5s;";
+                    successDiv.innerHTML = `
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">${gameSentences[currentGameIndex].en}</div>
+                        <div style="font-size: 16px; opacity: 0.9;">${gameSentences[currentGameIndex].zh}</div>
+                    `;
+                    document.getElementById('answerArea').appendChild(successDiv);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = "❌ 順序不對喔，再試試看！";
+                document.getElementById('gameStatus').className = "game-status status-wrong";
+                const buttons = document.getElementById('wordBank').children;
+                buttons[index].classList.add('error-shake');
+                setTimeout(() => {
+                    buttons[index].classList.remove('error-shake');
+                }, 400);
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            if (currentGameIndex >= gameSentences.length) {
+                currentGameIndex = 0;
+            }
+            initGame();
+        }
+
+        window.onload = () => {
+            initText();
+            initGame();
+        };
     </script>
 </body>
 
