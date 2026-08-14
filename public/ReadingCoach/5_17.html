@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - The Ever-Changing Sky</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 The Ever-Changing Sky</h1>
+        <a href="5_17_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQAbiSBTzP1PSaz--e4qk_hkAWgra5hahqXbsAgE8-6DF14?e=JouIeq"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -59,106 +284,121 @@
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
             </div>
             <div id="translation" class="tab-content active">
-        <h3>🌏 中文翻譯</h3>
-        <div class="info-box"><p style="line-height: 2; font-size: 16px;">在晴朗的日子抬頭看天空。你會看到太陽。它是明亮閃耀的，溫暖著它的光芒所觸及的大部分東西。晚上再抬頭看天空。你可能會看到星星。它們也是明亮閃耀的，在黑暗的天空中閃爍。你也可能會看到月亮。它看起來明亮閃耀，反射著來自太陽的光。人們總是帶著驚奇看著天空。有些人甚至研究過太陽、月亮和星星。這些人被稱為天文學家，他們已經了解到天空中的那些物體並不是一直停留在同一個地方。<br><br>地球繞著太陽公轉，同時也在其軸上自轉，這是一條從北極到南極穿過地球中心的假想線。地球在其軸上完成一次自轉需要將近 24 小時——沒錯，就是一天！猜猜地球繞太陽公轉需要多長時間？稍微超過 365 天。那就是一年，加上額外的四分之一天。<br><br>讓我們仔細看看月亮。地球不繞著月亮轉。相反，月亮繞著地球轉。月亮大約需要四週的時間才能完成繞地球一圈。我們在地球上看到的月亮部分在這大約四週的時間內會隨著月亮繞地球的位置而改變。我們晚上看到的月光是月亮反射到地球上的陽光。月亮以不同方式出現被稱為月相。月相取決於月亮相對於地球和太陽的位置。四週的週期以新月開始和結束。新月是看不見的，因為月亮被太陽照亮的一面背對著地球。這是因為此時月亮幾乎位於太陽和地球之間。之後是上弦月，這是當我們看到月亮被太陽照亮的一面的一半時。然後是滿月，當我們可以看到月亮被太陽照亮的整個一面時。這是因為地球幾乎排列在太陽和月亮之間，而且月亮受光的一面面向地球。最後的階段之一稱為下弦月。這是當我們看到月亮受光面的另一半時。<br><br>有時太陽、月亮和地球的位置會導致稱為日食或月食的事件。有兩種類型的食。月食發生在地球經過月亮和太陽之間，並且地球擋住了照向月亮的陽光時。地球的影子可能會擋住整個月亮或只是月亮的一部分。日食發生在月亮直接經過地球和太陽之間時。日食可以擋住部分太陽或整個太陽，使地球看不見。<br><br>由於月亮繞地球的規律軌道和地球繞太陽的規律軌道，天文學家甚至可以預測未來許多年何時會發生日食或月食。</p></div>
-    </div>
-            <div id="vocabulary" class="tab-content">
-        <h3>📖 重點單字與片語</h3>
-        <div class="vocab-grid">
-            
-            <div class="vocab-item">
-                <div class="vocab-word">rotate</div>
-                <div class="vocab-type">v. (verb)</div>
-                <div class="vocab-meaning">自轉、旋轉</div>
-                <div class="example">The Earth rotates on its axis.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">revolve</div>
-                <div class="vocab-type">v. (verb)</div>
-                <div class="vocab-meaning">公轉、繞轉</div>
-                <div class="example">The Earth revolves around the sun.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">axis</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">軸</div>
-                <div class="example">The Earth remains tilted on its axis.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">phases</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">階段、相 (月相)</div>
-                <div class="example">The moon has different phases.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">eclipse</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">蝕 (日/月)</div>
-                <div class="example">A solar eclipse is a rare event.</div>
-            </div>
-        </div>
-    </div><div class="vocab-meaning"></div></div>
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box">
+                    <p style="line-height: 2; font-size: 16px;">
+                        在晴朗的日子抬頭看天空。你會看到太陽。它是明亮閃耀的，溫暖著它的光芒所觸及的大部分東西。晚上再抬頭看天空。你可能會看到星星。它們也是明亮閃耀的，在黑暗的天空中閃爍。你也可能會看到月亮。它看起來明亮閃耀，反射著來自太陽的光。人們總是帶著驚奇看著天空。有些人甚至研究過太陽、月亮和星星。這些人被稱為天文學家，他們已經了解到天空中的那些物體並不是一直停留在同一個地方。<br><br>地球繞著太陽公轉，同時也在其軸上自轉，這是一條從北極到南極穿過地球中心的假想線。地球在其軸上完成一次自轉需要將近
+                        24 小時——沒錯，就是一天！猜猜地球繞太陽公轉需要多長時間？稍微超過 365
+                        天。那就是一年，加上額外的四分之一天。<br><br>讓我們仔細看看月亮。地球不繞著月亮轉。相反，月亮繞著地球轉。月亮大約需要四週的時間才能完成繞地球一圈。我們在地球上看到的月亮部分在這大約四週的時間內會隨著月亮繞地球的位置而改變。我們晚上看到的月光是月亮反射到地球上的陽光。月亮以不同方式出現被稱為月相。月相取決於月亮相對於地球和太陽的位置。四週的週期以新月開始和結束。新月是看不見的，因為月亮被太陽照亮的一面背對著地球。這是因為此時月亮幾乎位於太陽和地球之間。之後是上弦月，這是當我們看到月亮被太陽照亮的一面的一半時。然後是滿月，當我們可以看到月亮被太陽照亮的整個一面時。這是因為地球幾乎排列在太陽和月亮之間，而且月亮受光的一面面向地球。最後的階段之一稱為下弦月。這是當我們看到月亮受光面的另一半時。<br><br>有時太陽、月亮和地球的位置會導致稱為日食或月食的事件。有兩種類型的食。月食發生在地球經過月亮和太陽之間，並且地球擋住了照向月亮的陽光時。地球的影子可能會擋住整個月亮或只是月亮的一部分。日食發生在月亮直接經過地球和太陽之間時。日食可以擋住部分太陽或整個太陽，使地球看不見。<br><br>由於月亮繞地球的規律軌道和地球繞太陽的規律軌道，天文學家甚至可以預測未來許多年何時會發生日食或月食。
+                    </p>
                 </div>
             </div>
-            <div id="grammar" class="tab-content">
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+
+                    <div class="vocab-item">
+                        <div class="vocab-word">rotate</div>
+                        <div class="vocab-type">v. (verb)</div>
+                        <div class="vocab-meaning">自轉、旋轉</div>
+                        <div class="example">The Earth rotates on its axis.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">revolve</div>
+                        <div class="vocab-type">v. (verb)</div>
+                        <div class="vocab-meaning">公轉、繞轉</div>
+                        <div class="example">The Earth revolves around the sun.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">axis</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">軸</div>
+                        <div class="example">The Earth remains tilted on its axis.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">phases</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">階段、相 (月相)</div>
+                        <div class="example">The moon has different phases.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">eclipse</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">蝕 (日/月)</div>
+                        <div class="example">A solar eclipse is a rare event.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="vocab-meaning"></div>
+        </div>
+    </div>
+    </div>
+    <div id="grammar" class="tab-content">
         <h3>✏️ 文法重點解析</h3>
-        
-      <div class="grammar-box">
-        <div class="grammar-title">Because of + Noun Phrase (因為...)</div>
-        <p>"Because of" 是介係詞片語，後面接名詞或名詞片語，表示原因。例如："Because of the regular orbit..." (因為規律的軌道...)。注意區分 "Because" (連接詞，接子句)。</p>
-      </div>
-    
+
+        <div class="grammar-box">
+            <div class="grammar-title">Because of + Noun Phrase (因為...)</div>
+            <p>"Because of" 是介係詞片語，後面接名詞或名詞片語，表示原因。例如："Because of the regular orbit..." (因為規律的軌道...)。注意區分 "Because"
+                (連接詞，接子句)。</p>
+        </div>
+
     </div>
-            </div>
-            <div id="sentences" class="tab-content">
-         <h3>💬 重要句型分析</h3>
-         
-      <div class="sentence-pattern">
-        <strong>Definitions (定義句)</strong>
-        <div class="example">A lunar eclipse happens when the earth passes between the moon and the sun...</div>
-        <p>科學文章常使用 "A ... happens when..." 或 "A ... is ..." 來定義現象或術語。</p>
-      </div>
-    
     </div>
-            </div>
-            <div id="reading" class="tab-content">
+    <div id="sentences" class="tab-content">
+        <h3>💬 重要句型分析</h3>
+
+        <div class="sentence-pattern">
+            <strong>Definitions (定義句)</strong>
+            <div class="example">A lunar eclipse happens when the earth passes between the moon and the sun...</div>
+            <p>科學文章常使用 "A ... happens when..." 或 "A ... is ..." 來定義現象或術語。</p>
+        </div>
+
+    </div>
+    </div>
+    <div id="reading" class="tab-content">
         <h3>🎯 閱讀理解</h3>
         <div class="grammar-box">
             <div class="grammar-title">理解測驗</div>
-            
-      <ol>
-        <li>How long does it take for the Earth to revolve around the sun?<br>
-          <span class="highlight">Answer: A little over 365 days (a year).</span>
-        </li>
-        <li>Why can't we see the new moon?<br>
-          <span class="highlight">Answer: Because the lit side of the moon is facing away from the Earth.</span>
-        </li>
-        <li>What happens during a solar eclipse?<br>
-          <span class="highlight">Answer: The moon passes directly between the Earth and the sun, blocking the sun.</span>
-        </li>
-      </ol>
-    
+
+            <ol>
+                <li>How long does it take for the Earth to revolve around the sun?<br>
+                    <span class="highlight">Answer: A little over 365 days (a year).</span>
+                </li>
+                <li>Why can't we see the new moon?<br>
+                    <span class="highlight">Answer: Because the lit side of the moon is facing away from the
+                        Earth.</span>
+                </li>
+                <li>What happens during a solar eclipse?<br>
+                    <span class="highlight">Answer: The moon passes directly between the Earth and the sun, blocking the
+                        sun.</span>
+                </li>
+            </ol>
+
         </div>
     </div>
-            </div>
-        </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    </div>
+    </div>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Look up at the sky on a clear day. You will see the sun. It is bright and shiny, warming much of what its light touches. Look up at the sky again at night. You may see the stars. They are also bright and shiny, glimmering in the dark sky. You may also see the moon. It looks bright and shiny, reflecting light from the sun. People have always looked up at the sky with wonder. Some have even studied the sun, moon, and stars. These people, called astronomers, have learned that those objects in the sky do not stay in the same place all the time.\n\nThe earth revolves around the sun and also rotates on its axis, which is an imaginary line that runs from the North Pole to the South Pole, through the earth’s center. It takes just under 24 hours for the earth to complete one rotation on its axis — a day, that’s right! And guess how long it takes the earth to revolve around the sun? A little over 365 days. That’s a year, with an extra quarter of a day.\n\nLet’s take a closer look at the moon. The earth does not revolve around the moon. Instead, the moon revolves around the earth. It takes the moon about four weeks to complete a revolution around the earth. The portion of the moon we, here on Earth, see changes over this period of about four weeks as the moon’s position around the earth changes. The moonlight we see at night is the moon’s reflection of sunlight onto Earth. The different ways the moon appears to us are known as the moon’s phases. The moon’s phases depend on the moon’s position in relation to the earth and the sun. The four-week period starts and ends with the new moon. The new moon cannot be seen because the side of the moon lit by the sun is facing away from the earth. This is because the moon is nearly between the sun and the earth at this time. After that comes the first quarter moon, which is when we see half of the side of the moon lit by the sun. Then comes the full moon, when we can see the entire side of the moon lit up by the sun. This is because the earth is nearly lined up between the sun and the moon, and the sunlit part of the moon is facing the earth. One of the last phases is called the last quarter moon. This is when we see the other half of the lit side of the moon.\n\nSometimes the way the sun, moon, and earth are positioned causes an event known as an eclipse. There are two types of eclipses. A lunar eclipse happens when the earth passes between the moon and the sun and when the earth blocks the moon from the sun. The earth’s shadow may block the entire moon or just part of the moon from view. A solar eclipse happens when the moon passes directly between the earth and the sun. A solar eclipse can block part of the sun or the entire sun from the earth’s view.\n\nBecause of the regular orbit of the moon around the earth and the regular orbit of the earth around the sun, astronomers can predict when an eclipse will happen even many years into the future.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>
