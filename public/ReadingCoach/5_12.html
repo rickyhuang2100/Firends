@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - Jazz</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 Jazz</h1>
+        <a href="5_12_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCaRsHGMp_ZR40aXAtFKQVsAbHZbg6eGWcIxAHijiM1Z3I?e=BvdX9x"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -63,9 +288,13 @@
                 <h3>🌏 中文翻譯</h3>
                 <div class="info-box">
                     <p style="line-height: 2; font-size: 16px;">
-                        爵士樂 (Jazz) 是隨著哈林文藝復興 (Harlem Renaissance) 興起，一種著名且深受喜愛的音樂風格。這是一種非常創新的音樂形式。它與之前出現的任何音樂形式都不太一樣。然而，它確實依賴於早期的音樂風格。非裔美國音樂家將歐洲音樂和非洲音樂的元素混合在一起創造了爵士樂。<br><br>
-                        爵士音樂最著名的特點之一是即興創作 (improvisation)。即興創作是指音樂家在演奏時隨機編造音樂。由於即興創作是爵士樂的一個特徵，所以爵士音樂家通常可以自由地改變他們正在演奏的音樂。事實上，爵士音樂可以自由地在表演的過程中被改變！因此，一位優秀的爵士音樂家必須能夠快速地思考和創造音樂。<br><br>
-                        在20世紀有許多爵士音樂家。其中一位最受歡迎的爵士藝術家是路易斯·阿姆斯壯 (Louis Armstrong)。你聽過《多麼美好的世界 (What a Wonderful World) 》這首歌嗎？沒錯，那首歌曾經由路易斯·阿姆斯壯演唱過！他也很出名於他在小號上的即興演奏能力。另一位著名的爵士表演者是比莉·哈樂黛 (Billie Holiday)。她是一位可以用聲音即興創作的歌手。她因為以滿懷情感和熱情唱歌而被銘記。
+                        爵士樂 (Jazz) 是隨著哈林文藝復興 (Harlem Renaissance)
+                        興起，一種著名且深受喜愛的音樂風格。這是一種非常創新的音樂形式。它與之前出現的任何音樂形式都不太一樣。然而，它確實依賴於早期的音樂風格。非裔美國音樂家將歐洲音樂和非洲音樂的元素混合在一起創造了爵士樂。<br><br>
+                        爵士音樂最著名的特點之一是即興創作
+                        (improvisation)。即興創作是指音樂家在演奏時隨機編造音樂。由於即興創作是爵士樂的一個特徵，所以爵士音樂家通常可以自由地改變他們正在演奏的音樂。事實上，爵士音樂可以自由地在表演的過程中被改變！因此，一位優秀的爵士音樂家必須能夠快速地思考和創造音樂。<br><br>
+                        在20世紀有許多爵士音樂家。其中一位最受歡迎的爵士藝術家是路易斯·阿姆斯壯 (Louis Armstrong)。你聽過《多麼美好的世界 (What a Wonderful World)
+                        》這首歌嗎？沒錯，那首歌曾經由路易斯·阿姆斯壯演唱過！他也很出名於他在小號上的即興演奏能力。另一位著名的爵士表演者是比莉·哈樂黛 (Billie
+                        Holiday)。她是一位可以用聲音即興創作的歌手。她因為以滿懷情感和熱情唱歌而被銘記。
                     </p>
                 </div>
             </div>
@@ -123,17 +352,20 @@
                 <div class="grammar-box">
                     <div class="grammar-title">1. did + 原形動詞 (強調語氣)</div>
                     <p>在過去式的句子中，可以用 did 加上原形動詞來表示「確實、真的有...」，用來加強語氣。</p>
-                    <div class="example">However, it <span class="highlight">did rely on</span> earlier music styles. (它確實依賴...)</div>
+                    <div class="example">However, it <span class="highlight">did rely on</span> earlier music styles.
+                        (它確實依賴...)</div>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">2. the ability to + V (做某事的能力)</div>
                     <p>通常使用 ability 後面會接不定詞 (to + V)，表示有去執行這個動作的能力。</p>
-                    <div class="example">He is also famous for his <span class="highlight">ability to improvise</span> on the trumpet.</div>
+                    <div class="example">He is also famous for his <span class="highlight">ability to improvise</span>
+                        on the trumpet.</div>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">3. be remembered for + V-ing / N (因為...而被銘記/記住)</div>
                     <p>這是一個很棒的人物語氣寫法，表達某人由於某項特色或成就而被大家掛念。</p>
-                    <div class="example">She <span class="highlight">is remembered for singing</span> with emotion and passion.</div>
+                    <div class="example">She <span class="highlight">is remembered for singing</span> with emotion and
+                        passion.</div>
                 </div>
             </div>
             <!-- 句型分析分頁 -->
@@ -141,17 +373,20 @@
                 <h3>💬 重要句型分析</h3>
                 <div class="sentence-pattern">
                     <strong>1. not quite like (不太像，截然不同)</strong>
-                    <div class="example">It was <span class="highlight">not quite like</span> any music form that came before it.</div>
+                    <div class="example">It was <span class="highlight">not quite like</span> any music form that came
+                        before it.</div>
                     <p>quite 是有點、相當的意思，not quite combined with like 就指「並沒有那麼像」，表示它是獨樹一格的。</p>
                 </div>
                 <div class="sentence-pattern">
                     <strong>2. make up (編造，虛構，隨機組成)</strong>
-                    <div class="example">Improvisation is when musicians <span class="highlight">make up</span> the music as they play it.</div>
+                    <div class="example">Improvisation is when musicians <span class="highlight">make up</span> the
+                        music as they play it.</div>
                     <p>在這個語境下，make up 不是化妝，也不是和好，而是指音樂家在當下「隨心所欲地編寫/創作」。</p>
                 </div>
                 <div class="sentence-pattern">
                     <strong>3. in the middle of (在...之中，進行到一半)</strong>
-                    <div class="example">...jazz music is free to be changed <span class="highlight">in the middle of</span> a performance!</div>
+                    <div class="example">...jazz music is free to be changed <span class="highlight">in the middle
+                            of</span> a performance!</div>
                     <p>表示在某個活動正在進行的中途發生某事。</p>
                 </div>
             </div>
@@ -160,7 +395,8 @@
                 <h3>🎯 閱讀技巧</h3>
                 <div class="info-box">
                     <strong>Key Characteristics (核心特徵抓取)</strong>
-                    <p>當文章在介紹一種藝術學派或是音樂風格時，通常會花費大量篇幅來解釋它背後的精神或核心元素。這篇文章花了一整段從各個角度說明「即興創作 (improvisation)」，請試著將 "make up the music as they play it" 以及 "change up the music" 這些行為描繪與專有名詞 "improvisation" 連繫在一起。</p>
+                    <p>當文章在介紹一種藝術學派或是音樂風格時，通常會花費大量篇幅來解釋它背後的精神或核心元素。這篇文章花了一整段從各個角度說明「即興創作 (improvisation)」，請試著將 "make up
+                        the music as they play it" 以及 "change up the music" 這些行為描繪與專有名詞 "improvisation" 連繫在一起。</p>
                 </div>
                 <div class="grammar-box">
                     <div class="grammar-title">理解測驗</div>
@@ -173,22 +409,26 @@
             </div>
         </div>
     </div>
-    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Jazz is a famous and beloved style of music that rose with the Harlem Renaissance. It was a very innovative form of music. It was not quite like any music form that came before it. However, it did rely on earlier music styles. African American musicians mixed elements of European music and African music to create jazz.\n\nOne of the most famous characteristics of jazz music is improvisation. Improvisation is when musicians make up the music as they play it. Since improvisation is a characteristic of jazz music, jazz musicians often have the freedom to change up the music they are playing. In fact, jazz music is free to be changed in the middle of a performance! A strong jazz musician must, therefore, be able to think and create music quickly.\n\nThere were many jazz musicians during the 20th century. One of the most popular jazz artists was Louis Armstrong. Have you ever heard of the song "What a Wonderful World"? Well, that was once sung by Louis Armstrong! He is also famous for his ability to improvise on the trumpet. Another famous jazz performer was Billie Holiday. She was a singer who could improvise with her voice. She is remembered for singing with emotion and passion.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>

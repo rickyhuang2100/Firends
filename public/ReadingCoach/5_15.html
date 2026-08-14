@@ -1,48 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to Speech - The Musical Style of Carlos Santana</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background-color: #f5f5f5; }
-        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; } h2 { color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-top: 30px; } h3 { color: #555; margin-top: 20px; }
-        .text-content { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; line-height: 2.5; font-size: 18px; }
-        .word { display: inline; padding: 2px 4px; margin: 0 1px; border-radius: 3px; transition: all 0.2s ease; }
-        .word.active { background-color: #4CAF50; color: white; font-weight: bold; padding: 4px 6px; } .word.completed { color: #999; }
-        .controls { text-align: center; margin: 20px 0; }
-        .btn { background-color: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; } .btn:hover { background-color: #45a049; } .btn-stop { background-color: #f44336; } .btn-stop:hover { background-color: #da190b; }
-        .settings { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; } .setting-item { margin: 10px 0; }
-        label { display: inline-block; width: 100px; font-weight: bold; } select, input[type="range"] { width: 200px; padding: 5px; }
-        .value-display { display: inline-block; margin-left: 10px; font-weight: bold; color: #4CAF50; }
-        .learning-section { margin-top: 30px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border: 2px solid #ffd966; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0; }
-        .vocab-item { background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2196F3; }
-        .vocab-word { font-size: 18px; font-weight: bold; color: #2196F3; } .vocab-type { color: #666; font-style: italic; font-size: 14px; } .vocab-meaning { margin-top: 8px; color: #333; }
-        .grammar-box { background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .grammar-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
-        .example { background-color: #fff3e0; padding: 10px; margin: 8px 0; border-radius: 4px; font-style: italic; }
-        .highlight { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
-        .info-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2196F3; }
-        .sentence-pattern { background-color: #f3e5f5; padding: 12px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #9c27b0; }
-        ul, ol { line-height: 1.8; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { padding: 10px 20px; cursor: pointer; background-color: #f0f0f0; border: none; border-radius: 5px 5px 0 0; font-size: 16px; } .tab.active { background-color: #4CAF50; color: white; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .text-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            line-height: 2.5;
+            font-size: 18px;
+        }
+
+        .word {
+            display: inline;
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .word.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+        }
+
+        .word.completed {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-stop {
+            background-color: #f44336;
+        }
+
+        .btn-stop:hover {
+            background-color: #da190b;
+        }
+
+        .settings {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="range"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .learning-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            border: 2px solid #ffd966;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .vocab-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .vocab-type {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vocab-meaning {
+            margin-top: 8px;
+            color: #333;
+        }
+
+        .grammar-box {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .grammar-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background-color: #fff3e0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .sentence-pattern {
+            background-color: #f3e5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📖 The Musical Style of Carlos Santana</h1>
+        <a href="5_15_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCE8OgHrODaSqqu1p2NFZ3NARADFFaecTJ8CJqXnrhYRys?e=VAGFVj"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
-            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" /><span class="value-display" id="rateValue">1.0</span></div>
-            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
-            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
-            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5" step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
+            <div class="setting-item"><label>速度:</label><input type="range" id="rateSlider" min="0.5" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="rateValue">1.0</span></div>
+            <div class="setting-item"><label>音調:</label><input type="range" id="pitchSlider" min="0" max="2" step="0.1"
+                    value="1" /><span class="value-display" id="pitchValue">1.0</span></div>
+            <div class="setting-item"><label>音量:</label><input type="range" id="volumeSlider" min="0" max="1" step="0.1"
+                    value="1" /><span class="value-display" id="volumeValue">1.0</span></div>
+            <div class="setting-item"><label>同步調整:</label><input type="range" id="timingSlider" min="0.5" max="1.5"
+                    step="0.05" value="1.5" /><span class="value-display" id="timingValue">1.5</span><span
+                    style="font-size: 12px; color: #666; margin-left: 10px;">← 太快 | 太慢 →</span></div>
         </div>
         <div class="controls">
             <button type="button" class="btn" onclick="speakText()">🔊 開始朗讀</button>
@@ -59,110 +284,127 @@
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
             </div>
             <div id="translation" class="tab-content active">
-        <h3>🌏 中文翻譯</h3>
-        <div class="info-box"><p style="line-height: 2; font-size: 16px;">你有一個喜歡很久的嗜好嗎？卡洛斯·桑塔納有！卡洛斯·桑塔納從小就熱愛音樂。音樂一直是他的熱情所在。5 歲時，他開始拉小提琴。8 歲時，他開始彈吉他。桑塔納努力發展他的音樂天賦，特別是在吉他上。他成為歷史上最著名的墨西哥裔美國音樂家之一。<br><br>桑塔納在墨西哥蒂華納長大，在許多樂隊演奏音樂。儘管他的家人在 1960 年代搬到了舊金山，但他經常訪問墨西哥。他受到墨西哥藍調音樂以及美國搖滾音樂的啟發。他結合了許多不同類型的音樂創造了獨特的風格。<br><br>他在 1969 年的伍德斯托克音樂節上獲得了重大突破。伍德斯托克是一個巨大的音樂節，大約有 40 萬人參加。許多人在他表演之前不知道桑塔納是誰。但在那之後他們知道了！許多人說桑塔納是為期三天的音樂節的亮點之一。他們說他的吉他演奏令人難以置信！它充滿了激情和靈魂。<br><br>桑塔納和他的樂隊開始製作一首又一首的熱門歌曲，包括「Oye Como Va」和「Evil Ways」。樂隊的歌曲展示了一種獨特的音樂風格，結合了拉丁和搖滾節奏。桑塔納在他的職業生涯中贏得了 10 個葛萊美獎。他擁有或為許多偉大的歌曲和令人印象深刻的表演做出了貢獻。<br><br>卡洛斯·桑塔納希望孩子們有機會像他一樣發現自己的熱情。他和他的家人創立了 Milagro 基金會，該基金會通過向藝術、教育和健康捐款來幫助兒童成功。今天，卡洛斯·桑塔納繼續與美國各地及其他地區的人們分享他的音樂天賦。</p></div>
-    </div>
-            <div id="vocabulary" class="tab-content">
-        <h3>📖 重點單字與片語</h3>
-        <div class="vocab-grid">
-            
-            <div class="vocab-item">
-                <div class="vocab-word">hobby</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">嗜好</div>
-                <div class="example">My hobby is reading.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">passion</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">熱情</div>
-                <div class="example">Music is his passion.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">highlight</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">亮點、最精彩的部分</div>
-                <div class="example">The concert was the highlight of my week.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">combine</div>
-                <div class="vocab-type">v. (verb)</div>
-                <div class="vocab-meaning">結合</div>
-                <div class="example">Combine flour and sugar in a bowl.</div>
-            </div>
-            <div class="vocab-item">
-                <div class="vocab-word">foundation</div>
-                <div class="vocab-type">n. (noun)</div>
-                <div class="vocab-meaning">基金會、基礎</div>
-                <div class="example">The foundation helps sick children.</div>
-            </div>
-        </div>
-    </div><div class="vocab-meaning"></div></div>
+                <h3>🌏 中文翻譯</h3>
+                <div class="info-box">
+                    <p style="line-height: 2; font-size: 16px;">你有一個喜歡很久的嗜好嗎？卡洛斯·桑塔納有！卡洛斯·桑塔納從小就熱愛音樂。音樂一直是他的熱情所在。5
+                        歲時，他開始拉小提琴。8
+                        歲時，他開始彈吉他。桑塔納努力發展他的音樂天賦，特別是在吉他上。他成為歷史上最著名的墨西哥裔美國音樂家之一。<br><br>桑塔納在墨西哥蒂華納長大，在許多樂隊演奏音樂。儘管他的家人在
+                        1960 年代搬到了舊金山，但他經常訪問墨西哥。他受到墨西哥藍調音樂以及美國搖滾音樂的啟發。他結合了許多不同類型的音樂創造了獨特的風格。<br><br>他在 1969
+                        年的伍德斯托克音樂節上獲得了重大突破。伍德斯托克是一個巨大的音樂節，大約有 40
+                        萬人參加。許多人在他表演之前不知道桑塔納是誰。但在那之後他們知道了！許多人說桑塔納是為期三天的音樂節的亮點之一。他們說他的吉他演奏令人難以置信！它充滿了激情和靈魂。<br><br>桑塔納和他的樂隊開始製作一首又一首的熱門歌曲，包括「Oye
+                        Como Va」和「Evil Ways」。樂隊的歌曲展示了一種獨特的音樂風格，結合了拉丁和搖滾節奏。桑塔納在他的職業生涯中贏得了 10
+                        個葛萊美獎。他擁有或為許多偉大的歌曲和令人印象深刻的表演做出了貢獻。<br><br>卡洛斯·桑塔納希望孩子們有機會像他一樣發現自己的熱情。他和他的家人創立了 Milagro
+                        基金會，該基金會通過向藝術、教育和健康捐款來幫助兒童成功。今天，卡洛斯·桑塔納繼續與美國各地及其他地區的人們分享他的音樂天賦。</p>
                 </div>
             </div>
-            <div id="grammar" class="tab-content">
+            <div id="vocabulary" class="tab-content">
+                <h3>📖 重點單字與片語</h3>
+                <div class="vocab-grid">
+
+                    <div class="vocab-item">
+                        <div class="vocab-word">hobby</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">嗜好</div>
+                        <div class="example">My hobby is reading.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">passion</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">熱情</div>
+                        <div class="example">Music is his passion.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">highlight</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">亮點、最精彩的部分</div>
+                        <div class="example">The concert was the highlight of my week.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">combine</div>
+                        <div class="vocab-type">v. (verb)</div>
+                        <div class="vocab-meaning">結合</div>
+                        <div class="example">Combine flour and sugar in a bowl.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">foundation</div>
+                        <div class="vocab-type">n. (noun)</div>
+                        <div class="vocab-meaning">基金會、基礎</div>
+                        <div class="example">The foundation helps sick children.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="vocab-meaning"></div>
+        </div>
+    </div>
+    </div>
+    <div id="grammar" class="tab-content">
         <h3>✏️ 文法重點解析</h3>
-        
-      <div class="grammar-box">
-        <div class="grammar-title">Even though (即使/雖然)</div>
-        <p>"Even though his family moved to San Francisco..., he visited Mexico often." Even though 引導讓步子句，語氣比 although 更強。</p>
-      </div>
-      <div class="grammar-box">
-        <div class="grammar-title">One of the + Superlative + Plural Noun (最...之一)</div>
-        <p>"one of the most famous Mexican American musicians" (最著名的...音樂家之一)。注意後面接複數名詞 musicians。</p>
-      </div>
-    
+
+        <div class="grammar-box">
+            <div class="grammar-title">Even though (即使/雖然)</div>
+            <p>"Even though his family moved to San Francisco..., he visited Mexico often." Even though 引導讓步子句，語氣比
+                although 更強。</p>
+        </div>
+        <div class="grammar-box">
+            <div class="grammar-title">One of the + Superlative + Plural Noun (最...之一)</div>
+            <p>"one of the most famous Mexican American musicians" (最著名的...音樂家之一)。注意後面接複數名詞 musicians。</p>
+        </div>
+
     </div>
-            </div>
-            <div id="sentences" class="tab-content">
-         <h3>💬 重要句型分析</h3>
-         
-      <div class="sentence-pattern">
-        <strong>S + V + O + C (使役動詞/感官動詞) or Prepositional Phrases</strong>
-        <div class="example">It was full of passion and soul.</div>
-        <p>"be full of" 是一個常用片語，形容充滿了某種特質或東西。</p>
-      </div>
-    
     </div>
-            </div>
-            <div id="reading" class="tab-content">
+    <div id="sentences" class="tab-content">
+        <h3>💬 重要句型分析</h3>
+
+        <div class="sentence-pattern">
+            <strong>S + V + O + C (使役動詞/感官動詞) or Prepositional Phrases</strong>
+            <div class="example">It was full of passion and soul.</div>
+            <p>"be full of" 是一個常用片語，形容充滿了某種特質或東西。</p>
+        </div>
+
+    </div>
+    </div>
+    <div id="reading" class="tab-content">
         <h3>🎯 閱讀理解</h3>
         <div class="grammar-box">
             <div class="grammar-title">理解測驗</div>
-            
-      <ol>
-        <li>What instruments did Carlos Santana play as a child?<br>
-          <span class="highlight">Answer: Violin and guitar.</span>
-        </li>
-        <li>Where did Santana get his "big break"?<br>
-          <span class="highlight">Answer: At the Woodstock music festival in 1969.</span>
-        </li>
-        <li>What makes Santana's musical style unique?<br>
-          <span class="highlight">Answer: It combines Latin and rock rhythms.</span>
-        </li>
-      </ol>
-    
+
+            <ol>
+                <li>What instruments did Carlos Santana play as a child?<br>
+                    <span class="highlight">Answer: Violin and guitar.</span>
+                </li>
+                <li>Where did Santana get his "big break"?<br>
+                    <span class="highlight">Answer: At the Woodstock music festival in 1969.</span>
+                </li>
+                <li>What makes Santana's musical style unique?<br>
+                    <span class="highlight">Answer: It combines Latin and rock rhythms.</span>
+                </li>
+            </ol>
+
         </div>
     </div>
-            </div>
-        </div>
     </div>
-<script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g" data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
+    </div>
+    </div>
+    <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
+        data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
+        data-theme="preferred_color_scheme" data-lang="zh-TW" crossorigin="anonymous" async></script>
     <script>
         const synth = window.speechSynthesis; let voices = []; let wordElements = []; let currentIndex = 0; let highlightTimer = null; let timingAdjustment = 1.5;
         const storyText = `Do you have a hobby that you have loved for a long time? Carlos Santana does! Carlos Santana has loved music from a young age. Music has been his passion. At age 5, he started playing the violin. At age 8, he began playing the guitar. Santana worked hard to develop his musical talent, especially on the guitar. He became one of the most famous Mexican American musicians in history.\n\nSantana grew up in Tijuana, Mexico, playing music in many bands. Even though his family moved to San Francisco in the 1960s, he visited Mexico often. He was inspired by Mexican blues music as well as American rock music. He combined many different types of music to create a unique style.\n\nHe got his big break in 1969 at the Woodstock music festival. Woodstock was a huge music festival that around 400,000 people attended. Many people did not know who Santana was before his performance. But they knew who he was after it! Many people said Santana was one of the highlights of the three-day festival. They said his guitar playing was incredible! It was full of passion and soul.\n\nSantana and his band began producing hit after hit, including “Oye Como Va” and “Evil Ways.” The band’s songs show off a unique musical style, combining Latin and rock rhythms. Santana has won 10 Grammy Awards throughout his career. He has had or contributed to many great songs and impressive performances.\n\nCarlos Santana wanted children to have the opportunity to discover their passions, like he did. He and his family created the Milagro Foundation, which helps children succeed by giving money to the arts, education, and health. Today, Carlos Santana continues sharing his musical talent with people all over the United States and beyond.`;
         function initText() { const container = document.getElementById('storyContainer'); const lines = storyText.split('\n'); lines.forEach((line, li) => { if (line.trim() === '') { container.appendChild(document.createElement('br')); return; } const words = line.split(' '); words.forEach((word, wi) => { if (word.trim()) { const span = document.createElement('span'); span.className = 'word'; span.textContent = word; container.appendChild(span); wordElements.push(span); if (wi < words.length - 1) container.appendChild(document.createTextNode(' ')); } }); if (li < lines.length - 1) container.appendChild(document.createElement('br')); }); }
         function loadVoices() { voices = synth.getVoices(); const select = document.getElementById('voiceSelect'); select.innerHTML = ''; voices.forEach((v, i) => { const o = document.createElement('option'); o.textContent = `${v.name} (${v.lang})`; o.value = i; select.appendChild(o); if (v.lang.startsWith('zh-TW')) select.selectedIndex = i; }); }
         if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices; loadVoices();
-        document.getElementById('rateSlider').oninput = function() { document.getElementById('rateValue').textContent = this.value; };
-        document.getElementById('pitchSlider').oninput = function() { document.getElementById('pitchValue').textContent = this.value; };
-        document.getElementById('volumeSlider').oninput = function() { document.getElementById('volumeValue').textContent = this.value; };
-        document.getElementById('timingSlider').oninput = function() { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
+        document.getElementById('rateSlider').oninput = function () { document.getElementById('rateValue').textContent = this.value; };
+        document.getElementById('pitchSlider').oninput = function () { document.getElementById('pitchValue').textContent = this.value; };
+        document.getElementById('volumeSlider').oninput = function () { document.getElementById('volumeValue').textContent = this.value; };
+        document.getElementById('timingSlider').oninput = function () { timingAdjustment = parseFloat(this.value); document.getElementById('timingValue').textContent = this.value; };
         function highlightWord(index) { if (index < currentIndex) return; currentIndex = index; wordElements.forEach((w, i) => { w.classList.remove('active', 'completed'); if (i < index) w.classList.add('completed'); }); if (index < wordElements.length) wordElements[index].classList.add('active'); }
-        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function() { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
+        function speakText() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); currentIndex = 0; wordElements.forEach(w => w.classList.remove('active', 'completed')); const u = new SpeechSynthesisUtterance(storyText); const vi = document.getElementById('voiceSelect').value; if (voices[vi]) u.voice = voices[vi]; u.rate = parseFloat(document.getElementById('rateSlider').value); u.pitch = parseFloat(document.getElementById('pitchSlider').value); u.volume = parseFloat(document.getElementById('volumeSlider').value); let bs = false; u.addEventListener('boundary', (e) => { if (e.name === 'word') { bs = true; const t = storyText.substring(0, e.charIndex); const wb = t.trim().split(/\s+/).filter(w => w.length > 0); if (wb.length < wordElements.length) highlightWord(wb.length); } }); u.onend = function () { if (highlightTimer) clearInterval(highlightTimer); setTimeout(() => { wordElements.forEach(w => w.classList.remove('active', 'completed')); }, 500); }; synth.speak(u); setTimeout(() => { if (!bs) { const r = u.rate; const ms = (60000 / (150 * r)) * timingAdjustment; currentIndex = 0; highlightWord(0); let ni = 1; highlightTimer = setInterval(() => { if (ni < wordElements.length && synth.speaking) { if (ni >= currentIndex) highlightWord(ni); ni++; } else clearInterval(highlightTimer); }, ms); } }, 300); }
         function stopSpeaking() { if (synth.speaking) synth.cancel(); if (highlightTimer) clearInterval(highlightTimer); wordElements.forEach(w => w.classList.remove('active', 'completed')); }
         function showTab(event, tabName) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.currentTarget.classList.add('active'); }
         window.onload = initText;
     </script>
 </body>
+
 </html>
