@@ -399,12 +399,28 @@
             color: #e65100;
             border: 1px solid #ffb74d;
         }
+
+        .tab-reconstruct { background-color: #e3f2fd; color: #1565c0; font-weight: bold; }
+        .tab.active.tab-reconstruct { background-color: #4CAF50 !important; color: white !important; }
+        .game-board { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px; }
+        .answer-area { min-height: 80px; border: 2px dashed #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; background: #f1f8e9; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 100px; }
+        .word-block { padding: 10px 18px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4,0,0.2,1); user-select: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .word-block:hover { transform: translateY(-2px); border-color: #2196F3; box-shadow: 0 4px 8px rgba(33,150,243,0.2); color: #1976D2; }
+        .game-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .game-status { font-size: 18px; font-weight: bold; margin-top: 15px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; } .status-wrong { color: #f44336; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px) rotate(-1deg)} 75%{transform:translateX(5px) rotate(1deg)} }
+        .error-shake { animation: shake 0.4s ease-in-out; background-color: #ffebee !important; border-color: #ef5350 !important; color: #d32f2f !important; }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>📖 Mabel Ping-Hua Lee’s Fight for Voting Rights</h1>
+        <a href="7_1_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDmFE_EYhD4TreigmBCXcj3AQXpypAx_YLzSfwEpmpRDPw?e=KBm1ch"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -431,6 +447,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab tab-reconstruct" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
             <div id="translation" class="tab-content active">
                 <h3>🌏 中文翻譯</h3>
@@ -808,6 +825,27 @@
                     </ol>
                 </div>
             </div>
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <div class="game-board">
+                    <div style="display:flex;justify-content:center;gap:10px;margin-bottom:20px;">
+                        <button id="btnChunkMode" class="btn" style="background-color:#2196F3;" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="btn" style="background-color:#9e9e9e;" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+                    <div class="game-controls">
+                        <span id="progressIndicator" style="font-weight:bold;color:#555;font-size:16px;"></span>
+                        <button class="btn" onclick="playGoogleTTS(gameSentences[currentGameIndex].en)" style="background-color:#2196F3;padding:8px 15px;">🔊 聽整句</button>
+                    </div>
+                    <div id="answerArea" class="answer-area"></div>
+                    <div id="wordBank" class="word-bank"></div>
+                    <div id="gameStatus" class="game-status"></div>
+                    <div style="text-align:center;margin-top:20px;">
+                        <div id="translationHint" style="margin-bottom:15px;font-size:16px;color:#666;font-style:italic;"></div>
+                        <button id="nextBtn" class="btn" onclick="nextSentence()" style="display:none;width:200px;">下一句 ➡️</button>
+                    </div>
+                    <div id="reviewArea" style="margin-top:30px;"></div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -1060,7 +1098,140 @@ Mabel Ping-Hua Lee devoted the rest of her life to serving the Chinese community
         }
 
         // 頁面載入時初始化
-        window.onload = initText;
+
+        const gameSentences = [
+            {
+                en: "She began campaigning for women's suffrage, or the right to vote, at a young age.",
+                zh: "她在年輕時就開始為女性的選舉權（投票權）發起運動。",
+                chunks: ["she began campaigning", "for womens suffrage", "or the right to vote", "at a young age"],
+                reviewData: [
+                    { chunk: "began campaigning", meaning: "開始發起運動", collocation: "began campaigning for suffrage", synonym: "started advocating", pronunciation: "began 的 n 與 campaigning 的 c 連讀。" },
+                    { chunk: "the right to vote", meaning: "投票權", collocation: "the right to vote", synonym: "voting rights / suffrage", pronunciation: "right 的 t 與 to 的 t 合併，聽起來像 /raɪ tə/。" }
+                ]
+            },
+            {
+                en: "Lee helped lead the parade on horseback.",
+                zh: "李彬華騎馬協助帶領這場遊行。",
+                chunks: ["lee helped lead", "the parade", "on horseback"],
+                reviewData: [
+                    { chunk: "helped lead", meaning: "協助帶領", collocation: "helped lead the parade", synonym: "assisted in leading", pronunciation: "helped 的 d 與 lead 的 l 連讀。" },
+                    { chunk: "on horseback", meaning: "騎著馬", collocation: "lead on horseback", synonym: "on a horse", pronunciation: "on 的 n 與 horseback 的 h 連讀。" }
+                ]
+            },
+            {
+                en: "One essay argued that democracy was only possible if women could vote.",
+                zh: "其中一篇文章主張，只有在女性可以投票的情況下，民主才有可能實現。",
+                chunks: ["one essay argued", "that democracy was only possible", "if women could vote"],
+                reviewData: [
+                    { chunk: "argued that", meaning: "主張、論證", collocation: "argued that democracy was possible", synonym: "claimed that / contended that", pronunciation: "argued 的 d 與 that 的 th 連讀，d 幾乎消失。" },
+                    { chunk: "if women could vote", meaning: "如果女性可以投票", collocation: "possible if women could vote", synonym: "provided women had the right to vote", pronunciation: "if 的 f 與 women 的 w 連讀。" }
+                ]
+            },
+            {
+                en: "Because of this law, Lee could not become a citizen and, therefore, could not vote.",
+                zh: "因為這項法律，李彬華無法成為公民，因此也無法投票。",
+                chunks: ["because of this law", "lee could not become a citizen", "and therefore could not vote"],
+                reviewData: [
+                    { chunk: "because of this law", meaning: "因為這項法律", collocation: "because of this law", synonym: "due to this legislation", pronunciation: "because 的 s 與 of 的 o 連讀，聽起來像 /bɪkɒz əv/。" },
+                    { chunk: "therefore could not vote", meaning: "因此無法投票", collocation: "therefore could not vote", synonym: "as a result could not cast a ballot", pronunciation: "therefore 的 r 與 could 連讀順暢。" }
+                ]
+            },
+            {
+                en: "She was the first Chinese woman to get a PhD in economics in the U.S.",
+                zh: "她是第一位在美國獲得經濟學博士學位的中國女性。",
+                chunks: ["she was the first chinese woman", "to get a phd", "in economics in the us"],
+                reviewData: [
+                    { chunk: "the first chinese woman", meaning: "第一位中國女性", collocation: "the first Chinese woman to...", synonym: "the pioneering Chinese female", pronunciation: "first 的 t 與 chinese 的 ch 順暢過渡。" },
+                    { chunk: "to get a phd", meaning: "獲得博士學位", collocation: "get a PhD in economics", synonym: "to earn a doctorate", pronunciation: "get 的 t 與 a 的 a 連讀，聽起來像 /gɛ tə/。" }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0, currentWords = [], bankWords = [], answerWords = [], gameMode = 'chunk';
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text.replace(/['']/g, "'"));
+                const gv = voices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                u.voice = gv || voices.find(v => v.lang.includes('en')) || voices[0];
+                u.rate = parseFloat(document.getElementById('rateSlider').value);
+                u.pitch = parseFloat(document.getElementById('pitchSlider').value);
+                u.volume = parseFloat(document.getElementById('volumeSlider').value);
+                synth.speak(u);
+            }, 50);
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = mode === 'chunk' ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = mode === 'word' ? '#2196F3' : '#9e9e9e';
+            initGame();
+        }
+
+        function shuffleArray(arr) { for (let i = arr.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+        function initGame() {
+            const s = gameSentences[currentGameIndex];
+            document.getElementById('progressIndicator').textContent = `進度: ${currentGameIndex+1} / ${gameSentences.length}`;
+            document.getElementById('translationHint').textContent = `提示：${s.zh}`;
+            document.getElementById('gameStatus').textContent = '';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = '';
+            currentWords = gameMode === 'chunk' ? [...s.chunks] : s.en.toLowerCase().replace(/[.,!?"":'\u2013\-\(\)]/g,'').split(/\s+/);
+            bankWords = shuffleArray([...currentWords]);
+            answerWords = [];
+            renderGame();
+        }
+
+        function renderGame() {
+            const aa = document.getElementById('answerArea'); aa.innerHTML = '';
+            answerWords.forEach(w => { const b = document.createElement('div'); b.className='word-block'; b.textContent=w; b.style.cursor='default'; aa.appendChild(b); });
+            const wb = document.getElementById('wordBank'); wb.innerHTML = '';
+            bankWords.forEach((w,i) => { const b = document.createElement('div'); b.className='word-block'; b.textContent=w; b.onclick=()=>moveWord(i); wb.appendChild(b); });
+        }
+
+        function moveWord(index) {
+            const sel = bankWords[index];
+            playGoogleTTS(sel);
+            if (sel === currentWords[answerWords.length]) {
+                bankWords.splice(index, 1);
+                answerWords.push(sel);
+                document.getElementById('gameStatus').textContent = '✅ 很好！';
+                document.getElementById('gameStatus').className = 'game-status status-correct';
+                if (gameMode === 'chunk') {
+                    document.getElementById('reviewArea').innerHTML = '';
+                    (gameSentences[currentGameIndex].reviewData || []).forEach(item => {
+                        if (sel.includes(item.chunk)) {
+                            const card = document.createElement('div');
+                            card.style.cssText = 'background:white;border-radius:8px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-left:4px solid #9c27b0;';
+                            card.innerHTML = `<h4 style="color:#9c27b0;margin-bottom:10px;font-size:18px;">📌 語塊範例：${item.chunk}</h4><ul style="list-style:none;padding:0;line-height:1.8;font-size:15px;"><li><strong>1. 中文語意：</strong>${item.meaning}</li><li><strong>2. 母語者搭配：</strong>${item.collocation}</li><li><strong>3. 同義替換：</strong>${item.synonym}</li><li><strong>4. 聽力連讀點：</strong>${item.pronunciation}</li></ul>`;
+                            document.getElementById('reviewArea').appendChild(card);
+                        }
+                    });
+                }
+                if (answerWords.length === currentWords.length) {
+                    document.getElementById('gameStatus').textContent = '✅ 完全正確！';
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                    const sd = document.createElement('div');
+                    sd.style.cssText = 'background-color:#4CAF50;color:white;padding:20px;border-radius:8px;margin-top:15px;text-align:center;';
+                    sd.innerHTML = `<div style="font-size:24px;font-weight:bold;margin-bottom:10px;">${gameSentences[currentGameIndex].en}</div><div style="font-size:16px;opacity:0.9;">${gameSentences[currentGameIndex].zh}</div>`;
+                    document.getElementById('answerArea').appendChild(sd);
+                    setTimeout(() => playGoogleTTS(gameSentences[currentGameIndex].en), 1500);
+                }
+                renderGame();
+            } else {
+                document.getElementById('gameStatus').textContent = '❌ 順序不對喔，再試試看！';
+                document.getElementById('gameStatus').className = 'game-status status-wrong';
+                const btns = document.getElementById('wordBank').children;
+                btns[index].classList.add('error-shake');
+                setTimeout(() => btns[index].classList.remove('error-shake'), 400);
+            }
+        }
+
+        function nextSentence() { currentGameIndex = (currentGameIndex+1) % gameSentences.length; initGame(); }
+
+        window.onload = () => { initText(); initGame(); };
     </script>
 
 </body>

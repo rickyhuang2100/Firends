@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨西哥城歷史：AI Podcast 逐字稿與學習精華</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f9fc;
+            --primary-color: #b2503d;
+            /* Terracotta / Aztec inspired */
+            --secondary-color: #0a4a5c;
+            /* Deep Teal */
+            --host-a-bg: #ffffff;
+            --host-b-bg: #fdf6f5;
+            /* Light terracotta tint */
+            --text-color: #333333;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            background-image: linear-gradient(135deg, var(--secondary-color) 0%, #1e6c82 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -30px auto 40px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* Study Guide Section */
+        .study-guide {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .study-guide h2 {
+            color: var(--primary-color);
+            font-family: 'Noto Serif TC', serif;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .study-guide h3 {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 5px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vocab-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .vocab-list li {
+            margin-bottom: 8px;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .vocab-list strong {
+            color: var(--primary-color);
+            display: inline-block;
+            width: 110px;
+        }
+
+        /* Transcript Section */
+        .transcript-container {
+            background: transparent;
+        }
+
+        .transcript-title {
+            text-align: center;
+            font-family: 'Noto Serif TC', serif;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 24px;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .message.host-a {
+            flex-direction: row;
+        }
+
+        .message.host-b {
+            flex-direction: row;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .host-a .avatar {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .host-b .avatar {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .bubble-wrapper {
+            max-width: 80%;
+        }
+
+        .speaker-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #718096;
+        }
+
+        .host-a .speaker-name {
+            color: var(--secondary-color);
+        }
+
+        .host-b .speaker-name {
+            color: var(--primary-color);
+        }
+
+        .bubble {
+            padding: 18px 24px;
+            border-radius: 20px;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            position: relative;
+        }
+
+        .host-a .bubble {
+            background-color: var(--host-a-bg);
+            border-top-left-radius: 4px;
+            border: 1px solid #edf2f7;
+        }
+
+        .host-b .bubble {
+            background-color: var(--host-b-bg);
+            border-top-left-radius: 4px;
+            border: 1px solid #f9e8e5;
+        }
+
+        /* Typography inside bubbles */
+        .bubble strong {
+            color: var(--primary-color);
+            background: rgba(178, 80, 61, 0.08);
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        .bubble em {
+            color: var(--secondary-color);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>墨西哥城歷史：AI Podcast</h1>
+        <p>跟著我們挖開現代街道，發掘特諾奇提特蘭的失落帝國，並無痛吸收高級英文用法！</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Study Guide Recap -->
+        <section class="study-guide">
+            <h2>📖 學習精華筆記回顧</h2>
+            <p style="color: #4a5568; margin-bottom: 20px;">在開始閱讀逐字稿前，先預習一下本集的精華亮點，幫助你更順利吸收內容。</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>💡 核心單字與片語</h3>
+                    <ul class="vocab-list">
+                        <li><strong>Intricate</strong> 錯綜複雜的、精細的</li>
+                        <li><strong>Channel</strong> (動詞) 引導水流</li>
+                        <li><strong>Foundation</strong> 基礎、地基</li>
+                        <li><strong>Pedestrians</strong> 行人</li>
+                        <li><strong>Bustling</strong> 熙熙攘攘的</li>
+                        <li><strong>Sacrifice</strong> 獻祭、犧牲</li>
+                        <li><strong>At the heart of</strong> 在...的核心</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>✍️ 寫作與文法亮點</h3>
+                    <ul class="vocab-list">
+                        <li><strong>同位語的巧妙運用</strong>：用逗號補充說明，俐落又專業。</li>
+                        <li><strong>排比句型創造史詩感</strong>：連續使用 before，像鏟子般挖開歷史。</li>
+                        <li><strong>打破距離感的開場</strong>：使用 imagine (想像) 直接拉近讀者距離。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transcript -->
+        <section class="transcript-container">
+            <h2 class="transcript-title">🎧 精彩對話逐字稿</h2>
+            <div class="transcript-list">
+
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">嘿，你有沒有過這樣的經驗？就是當你走過一座那個閃閃發光的現代化玻璃帷幕大樓，或是踩在平整堅硬的柏油路上時，你會理所當然地以為這片土地本來就是這個樣子。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，我們大腦其實會自動假設城市的底下，除了水泥，應該還是水泥啦。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">沒錯。但今天呢，我們要帶你前往墨西哥城，也就是 <strong>Mexico
+                                City</strong>，在那裡只要你輕輕刮開現代街道的表層，底下藏著的居然是一個龐大，而且曾經完全被水環繞的失落帝國。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">這絕對是歷史上最令人震撼的空間重疊現象。你以為你站在現代的十字路口，但其實你的腳下正踩著一個中美洲最古老文明的心臟。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">真的！而且今天這趟深度解析的任務非常特別，如果你一直想把英文學好，卻覺得教科書太無聊，那你絕對來對地方了。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，因為我們手邊有一篇非常精彩的英文短文，它完美記錄了這座失落之城的雙重面貌，我們今天不會死板地字字翻譯哦。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">對對對，我們是要在揭開這段阿茲特克，也就是 <strong>Aztec</strong>
+                            歷史謎團的同時，帶你一起從這段文字裡無痛吸收超實用的英文發音和單字。準備好一起挖掘了嗎？我們直接來看看這文本是怎麼開場的？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">好的，文本一開始就給我們建立了一個很強烈的視覺震撼，我來慢慢念一次，你可以跟著聽聽跟發音，它是這樣寫的：<br><em>“Mexico City,
+                                the capital city of Mexico, has a rich history.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">好，我們來拆解一下這個概念。這第一句看似很簡單，但其實藏著一個對初學者超級好用的英文小技巧。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">哦，你說的是那個逗號的用法嗎？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">對，你看 Mexico City（墨西哥城）後面跟著一個逗號，然後說 <em>capital city of
+                                Mexico</em>（墨西哥的首都），這在英文文法裡叫做<strong>同位語</strong>。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">啊，同位語，這個名詞聽起來有點嚇人，但其實超實用。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">
+                            沒錯。這就像是你認識一個新朋友，你在他的名字旁邊偷偷貼了一個小名牌，用來補充說明他的身份。你不需要寫成兩句冗長的話，一個逗號就能讓你的表達變得又快又專業。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，這個「貼名牌」的比喻蠻精準的耶。而在介紹完這座城市後，文本馬上帶我們往下挖了，你可以聽聽這段描述。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">好，洗耳恭聽。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">哇，這裡提到的 Moctezuma，也就是蒙特祖馬，文本說他是一位 <strong>Great Emperor</strong>，發音是
+                            <em>Emperor</em>，也就是偉大的皇帝。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">沒錯，<strong>Emperor</strong>
+                            這個字大家可以學起來。但讓我整個起雞皮疙瘩的，是它的空間感。現在墨西哥的總統府（President's
+                            Palace），那個掌握現代國家最高權力的地方，它的正下方居然就是當年阿茲特克皇帝的宮殿！</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">確實很不可思議，而且不僅僅是政治權力的重疊，宗教信仰也是。文本緊接著說：<br><em>“Before a Catholic Cathedral was
+                                built for Spaniards to worship, a huge Aztec temple stood in its place.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">等一下，所以西班牙人，也就是 Spaniards，他們為了 <strong>worship</strong>... 那個是敬拜的意思對吧？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，<strong>worship</strong>，敬拜或者是做禮拜的意思。他們為了 worship
+                            上帝而建造的天主教堂，竟然是直接蓋在一座巨大的阿茲特克神廟遺址上面，這根本是故意的吧？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">絕對是故意的，這是一種征服的象徵。而且你在看這段文字的時候，有沒有注意到作者用了一個很有趣的寫作節奏？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">呃，你是說那個一直重複出現的字嗎？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">對，我們一直重複使用 <strong>before</strong> 這個字。你看哦，<em>“before the President's
+                                Palace was built”</em>，然後 <em>“Before a Catholic Cathedral was built”</em>，最後一句是
+                            <em>“before it was the capital of Mexico, Mexico city was Tenochtitlan, the center of the
+                                Aztec Empire.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對對對，我剛剛就覺得這種連續的 before 讀起來有一種很奇妙的魔力。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">這是「厚重感」的絕佳例子。每一次作者說出 before，也就是「在什麼什麼之前」，它就不只是一個時間副詞了。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">那它像什麼？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">它更像是一把鏟子。第一把鏟子挖開了總統府，第二把鏟子挖開了天主教堂，然後第三把鏟子直接把整座現代首都掀開，讓你看到最底層的奇蹟。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">哇，特諾奇提特蘭（Tenochtitlan），也就是阿茲特克帝國的中心！用文字當做鏟子，這說法太生動了啦！但這也讓我產生了一個巨大的疑問呢。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">什麼疑問？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">既然西班牙殖民者把新的城市完完全全地覆蓋在這舊城之上，那這座被掩埋的特諾奇提特蘭原本到底長什麼樣子？它總不可能一開始就在地底吧？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">當然不是啊，它不僅不在地底，它甚至不完全在陸地上哦！這就是這座城市最瘋狂的工程奇蹟。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">不完全在陸地上？什麼意思啊？文本的第二段用了一個非常漂亮的句子來邀請我們想像，它是這樣寫的：<br><em>“To picture
+                                Tenochtitlan at its greatest, imagine an intricate system of canals that served
+                                as...”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">等一下，這句開場白 <em>picture</em> 什麼什麼，然後 <strong>imagine</strong> 這個句型，簡直是神來之筆耶。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">怎麼說？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">就是如果我們今天在做英文簡報，想要立刻把聽眾拉進我們的畫面裡，直接用
+                            <strong>imagine</strong>，也就是「想像」來開頭，瞬間就能打破那種台上台下的距離感啊。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">完全同意啊，這是一個非常有渲染力的動詞。而作者要我們想像的是一個 <strong>intricate</strong> system of
+                            canals，這裡出現了一個比較高級的單字：<strong>intricate</strong>。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble"><strong>intricate</strong> 這個字發音聽起來蠻有質感的，是什麼意思啊？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">意思是「錯綜複雜的、精細的」。搭配 canals，也就是運河，這就表示這不是幾條簡單的水溝哦，而是一個像微血管一樣密密交織的水上交通網。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">原來如此！但這篇文本的細節真的讓我有點傻眼，它接著說：<br><em>“The Aztec land was partly underwater, so
+                                the people built little islands.”</em> <br>土地有一部分是在水下的，所以人們建造了小島。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，在水裡蓋小島。不是啊，在水裡蓋島，這聽起來像是在海邊堆沙堡欸，水一沖不就散了嗎？他們到底是怎麼辦到的？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">哈哈，如果我們深入看文本裡的下一個動作，就能解開這個物理學謎團了。文本寫到：<br><em>“They could channel water in
+                                between these islands.”</em> <br>這裡出現了一個極度關鍵的動詞用法。<strong>Channel</strong>，這個字拼法是
+                            C-h-a-n-n-e-l，對吧？我們平常不是都把 channel 當作名詞的「電視頻道」或是「YouTube 頻道」來用嗎？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，但在這裡，阿茲特克人展現了他們高超的治水智慧，所以 <strong>channel</strong>
+                            變成了一個充滿力量的動詞，意思是「引導水流」。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">哦！把名詞當動詞用。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，他們不是傻傻地把土倒進湖裡，而是透過打木樁，編織蘆葦，然後把湖底的淤泥堆疊起來。最重要的是，他們精心設計了引導水流的路徑，讓多餘的水可以順利排走。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">呃，我懂了，這就像是治水不是靠堵，而是靠疏導。因為他們成功地 <strong>channel
+                                water</strong>（引導水流），所以文本接著說：<br><em>“These channels of water or canals made the land
+                                dry enough to be the foundation of the city.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，這些被引導的水道讓土地變得夠乾燥，進而成為整座城市的
+                            <strong>foundation</strong>。這就是我們在這裡要掌握的核心單字：<strong>foundation</strong>。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble"><strong>Foundation</strong>，意思是「基礎」或是「地基」，對吧？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，你可以想像一下，一座城市的 foundation 不是堅硬的岩石，而是建立在對水流的完美控制之上，這工程技術真的蠻誇張的。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">超強的！而且他們不只照顧船隻哦，文本說 <em>“sidewalks made of stone lined the canals to give
+                                pedestrians a way to travel”</em>，鋪成的石板人行道沿著運河邊緣，讓
+                            <strong>pedestrians</strong>，也就是行人可以通行。<strong>Pedestrians</strong> 這個字
+                            p-e-d-e-s-t-r-i-a-n-s 雖然有點長，但在國外的交通號誌上超級常見，一定要學起來。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">這畫面太美了吧，左邊是船隻在運河上穿梭，右邊是行人在石頭路上散步。甚至文本還說每個
+                            neighborhood，每個社區都有自己的神廟、學校跟政府委員會，這根本是 16 世紀的威尼斯加上現代化的高級住宅區啊！</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">確實如此，擁有這麼強大能從水上無中生有的 foundation，這座城市絕對不只是一個漂亮的水上花園而已，它支撐著一個極其龐大的社會運作。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">這就讓我更好奇了耶，既然基礎建設這麼完善，那住在這裡的人到底有多少？文本給出的數字真的嚇到我了！你來念看這段。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">好。第三段一開始說，<em>“more than 200,000 people walked about the land every
+                                day”</em>，每天有超過 20 萬人在這座城市走動。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">這裡最令人著迷的是，我們必須把這個數字放進歷史的座標裡來看。1519 年，當西班牙人第一次親眼目睹這城市時，你知道倫敦的人口大約是多少嗎？</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">多少？總有幾十萬吧。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">才大約 5 萬。而巴黎大約十幾萬。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">哇，所以特諾奇提特蘭的 20 萬人，極有可能是當時世界上最大的城市！</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">太扯了，難怪作者在描述這群人的時候，用了一個很有層次感的英文句型，文本說：<br><em>“Some lived in the city's
+                                neighborhoods, others came from the country to the bustling marketplace to trade their
+                                goods.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">這是一個很棒的觀察！當你要描述一個龐大複雜的群體時，用 <strong>some...
+                                others...</strong>，也就是「有些人怎樣怎樣，其他人怎樣怎樣」，這個句型就像是攝影機的平移鏡頭。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，畫面感十足！先帶你看一眼住在城裡的居民，接著鏡頭一轉，帶你看從鄉村湧入的人潮。而且從鄉村來的人是去哪裡呢？文本說他們去一個
+                            <strong>bustling marketplace</strong>。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">啊，<strong>bustling</strong> 這個字 b-u-s-t-l-i-n-g 念起來就有一種熱鬧充滿活力的感覺。熙熙攘攘的市場。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，你可以想一下那個畫面，沒有汽車引擎聲，取而代之的是 20 萬人的腳步聲、划船的水聲，以及在 bustling 市場裡交易各種農作物和黃金的喧鬧聲。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">這簡直像是古代美洲的紐約時代廣場嘛！而且在這種喧鬧聲中，其實還隱藏著一個至今未曾消亡的元素，那就是他們的語言。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，文本提到 <em>“though most Mexicans speak Spanish today, more than a million
+                                still speak the native language as their primary language.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">這句話有一種奇妙的衝擊感，雖然現在大部分墨西哥人說西班牙語，但居然還有超過 100 萬人把阿茲特克的 <strong>native
+                                language</strong>，也就是母語，當做他們的 <strong>primary language</strong> 主要語言。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">100 萬人，這數字其實蠻驚人的。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">對啊，100
+                            萬人呢，這比台灣很多縣市的人口還要多了。而且語言的影響力遠比我們想像的還要深遠，文本丟出了一個會讓所有人都恍然大悟的事實。它說，Mexico comes from...</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">原來如此！<strong>Mexico</strong> 這個字就是來自阿茲特克人的自稱
+                            <strong>Mexica</strong>。這代表著，即使西班牙人把天主教堂蓋在神廟上，試圖掩蓋一切，但每當現代人在地圖上指著這個國家喊出「墨西哥」時，他們其實都還在呼喚著那群古老的阿茲特克人。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">沒錯，語言本身就是一種無法被物理摧毀的
+                            foundation。不過既然這座城市如此繁榮，人口如此龐大，我們必須探究一個更深層的問題了。是什麼樣的精神力量在背後驅動這 20
+                            萬人？文本的最後一段就把我們帶進了這個文明的心臟地帶。它是這樣寫的：<br><em>“At the heart of the Aztec civilization were
+                                nature and natural forces.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">這裡的 <strong>at the heart of</strong> 是一個極具份量的片語。當你不用 <em>the most important
+                                thing is</em>，而是說 <em>at the heart of</em>，也就是「在什麼什麼的核心」時，你是在告訴聽眾一件很重要的事。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">什麼事？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">
+                            就是接下來我要說的，是這個事物跳動的脈搏，是它的靈魂。而阿茲特克的靈魂就是大自然與自然力量。這個點一開始聽起來很平對吧？文本解釋說：<br><em>“Gods were very
+                                important to the Aztecs because they represented things like the sun and rain, which is
+                                what made the crops grow.”</em><br>神明代表著太陽和雨水，這些是讓農作物生長的關鍵。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">
+                            對，聽起來就像是一個淳樸的農業社會，敬天畏天，感謝大自然的賜予。可是接下來才是真正有趣的地方。這正是我看這段文字時覺得最不可思議的邏輯轉折哦！文本接下來居然說：<br><em>“As
+                                part of their religion, Aztecs were fierce warriors.”</em></div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，<strong>fierce warriors</strong>，也就是兇猛的戰士。因為宗教的關係，他們成為了 fierce 戰士，而且文本還說
+                            <em>“during battle, they would capture natives from other tribes.”</em> 他們會在戰鬥中
+                            <strong>capture</strong>（俘虜）其他部落的人。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">而俘虜這些人要做什麼呢？文本給了非常殘酷的答案。它說，<em>“often these captives would be sacrificed at
+                                temples.”</em> 這些俘虜會被 <strong>sacrificed</strong>，也就是被獻祭。為什麼？因為 <em>“they thought that
+                                the gods needed sacrifices to stay happy.”</em> 他們認為神明需要人類的犧牲才能保持愉悅。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">對，<strong>human sacrifices</strong>，活人獻祭。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">
+                            嗯，等一下，我們來理清一下這個邏輯。前面說神明代表太陽和雨水，負責讓農作物生長，然後後面說神明需要活人獻祭才會開心。所以他們整個聽起來超恐怖的戰士文化，到處去打仗抓人，本質上居然是因為「農業焦慮」？
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">你精準地抓到了這個文明的心理核心！其實我們現代人很難想像那種生存壓力了，對阿茲特克人來說，太陽不是理所當然會升起的，雨水也不是理所當然會降下的。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">確實，如果遇到大旱災就完蛋了。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，如果神明不開心，宇宙就會停止運作，所有人都要餓死。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">
+                            哇，所以從他們的視角來看，這不是單純的殘暴欸，而是一種生死存亡的必然。生與死在這裡被綁死在一起了。大自然賜予農作物這個「生」，代價是他們必須用戰俘的「死」來償還。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">說得太好了。為了讓整個社會活下去，他們別無選擇，只能成為 <strong>fierce
+                                warriors</strong>。當你用這種方式去解讀英文背後的因果關係，那些單字突然就變得好有重量。你看 <strong>sacrifice</strong>
+                            不只是犧牲，它背後是一整個文明對宇宙運作的恐懼。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">
+                            這就是為什麼閱讀原文本這麼迷人。透過作者精確的用字，我們不只看到了這座水上城市的壯麗，更觸摸到了他們為了生存而產生的極端信仰。所以今天這趟深度解析的探索之旅，我們到底帶走了什麼？
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">我們不只像考古學家一樣用 before 這把鏟子挖開了現代墨西哥城的柏油路，看到了底下錯綜複雜的
+                            <strong>canals</strong>；我們還看到了 20 萬人在 <strong>bustling</strong> 熙熙攘攘的市場裡交易的繁華光景。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">最重要的是，我們跟著文本的邏輯理解了他們為什麼必須是 fierce 的戰士，而且在不知不覺中，你也掌握了如何用 imagine 來吸引聽眾，還有如何用
+                            <em>some... others...</em> 來描繪群體，還有如何用 <strong>at the heart of</strong> 來點出事物的本質。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">沒錯，這些英文用法現在在我們腦海裡都已經有了鮮活的歷史畫面，再也不需要死背了。而在我們結束今天這一集之前，有一件事一直在我腦海裡盤旋。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">哦？是什麼事？</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">
+                            我們剛剛說到西班牙殖民者把天主教堂蓋在阿茲特克的神廟上，試圖用實體的建築物來抹滅這個帝國的存在。但你仔細想，結果呢？結果這座現代城市的基底依然依賴著當年阿茲特克人引導水流所打下的
+                            <strong>foundation</strong>。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">不僅如此哦，那些高高在上的征服者，現在他們國家的名字 Mexico，用的卻是阿茲特克人的自稱。而且超過 100 萬的人口至今每天都還在用
+                            Nahuatl，也就是他們的 <strong>native language</strong> 交談。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">這個觀點真的蠻發人深省的。你可以用石頭和水泥覆蓋一座神廟，你可以抽乾一座運河，但你永遠無法掩埋民族的語言。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">沒錯，因為語言和文字或許才是真正不可摧毀的 foundation。下次當你走在現代化的大街上，不妨在腦海裡用英文問問自己：<em>What is at
+                                the heart of this place?</em> 這個地方的核心是什麼？說不定你的腳下也藏著一個等待被訴說的故事哦。</div>
+                    </div>
+                </div>
+
+                <div class="message host-b">
+                    <div class="avatar">🎧</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">來賓 (Host B)</div>
+                        <div class="bubble">真的強烈建議你把我們今天的英文文本再拿出來朗讀幾次，順著那些 canals
+                            的軌跡，感受一下文字裡的歷史脈動。恭喜你完成了今天的深度學習，期待在下一次的探索中，我們再一起發掘新知，下次見啦。</div>
+                    </div>
+                </div>
+
+                <div class="message host-a">
+                    <div class="avatar">🎙️</div>
+                    <div class="bubble-wrapper">
+                        <div class="speaker-name">主持人 (Host A)</div>
+                        <div class="bubble">下次見！</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '6_4.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

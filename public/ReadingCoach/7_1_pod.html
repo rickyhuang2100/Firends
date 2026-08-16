@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>被遺忘的騎士：Mabel Ping-Hua Lee 深度解析逐字稿</title>
+    <style>
+        :root {
+            --cream: #f6f1e6;
+            --paper: #fbf8f1;
+            --ink: #2b2419;
+            --ink-soft: #5c5346;
+            --purple: #4b2e6f;
+            --purple-deep: #33204c;
+            --gold: #b8902e;
+            --gold-soft: #e7d19c;
+            --line: #ddd2b8;
+            --rule: #c9bb95;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--cream);
+            background-image:
+                radial-gradient(circle at 15% 8%, rgba(75, 46, 111, 0.05), transparent 40%),
+                radial-gradient(circle at 85% 92%, rgba(184, 144, 46, 0.07), transparent 40%);
+            color: var(--ink);
+            font-family: "Noto Serif TC", "PMingLiU", "Songti TC", serif;
+            line-height: 1.9;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 24px 120px;
+        }
+
+        /* ===== Masthead ===== */
+        .masthead {
+            padding: 56px 0 28px;
+            text-align: center;
+            border-bottom: 3px double var(--purple);
+            margin-bottom: 36px;
+        }
+
+        .masthead .kicker {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            letter-spacing: .35em;
+            font-size: 11px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .masthead h1 {
+            font-size: 32px;
+            margin: 0 0 10px;
+            color: var(--purple-deep);
+            letter-spacing: .04em;
+            font-weight: 700;
+        }
+
+        .masthead .sub-en {
+            font-family: Georgia, "Times New Roman", serif;
+            font-style: italic;
+            color: var(--ink-soft);
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .masthead .meta {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: var(--ink-soft);
+            letter-spacing: .05em;
+        }
+
+        .masthead .meta span {
+            margin: 0 10px;
+        }
+
+        /* ===== Intro ribbon ===== */
+        .intro {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-deep) 100%);
+            color: var(--gold-soft);
+            padding: 26px 28px;
+            border-radius: 4px;
+            margin-bottom: 44px;
+            font-size: 15px;
+            line-height: 1.85;
+            box-shadow: 0 6px 18px rgba(51, 32, 76, 0.18);
+        }
+
+        .intro strong {
+            color: #fff;
+        }
+
+        /* ===== Section (per paragraph of the article) ===== */
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-label {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border-bottom: 1px solid var(--rule);
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .section-label .num {
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 20px;
+            color: var(--purple);
+            letter-spacing: 0;
+        }
+
+        /* English source excerpt */
+        .excerpt {
+            background: var(--paper);
+            border-left: 4px solid var(--gold);
+            padding: 18px 22px;
+            margin-bottom: 22px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 15.5px;
+            color: #3a3226;
+            line-height: 1.75;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .excerpt .tag {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* ===== Dialogue ===== */
+        .turn {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+            align-items: flex-start;
+        }
+
+        .avatar {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        .turn.a .avatar {
+            background: var(--purple);
+        }
+
+        .turn.b .avatar {
+            background: var(--gold);
+        }
+
+        .bubble {
+            flex: 1;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 2px 14px 14px 14px;
+            padding: 12px 18px;
+            font-size: 15.5px;
+        }
+
+        .turn.b .bubble {
+            border-radius: 14px 2px 14px 14px;
+        }
+
+        .speaker-name {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: .1em;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .turn.a .speaker-name {
+            color: var(--purple);
+        }
+
+        .turn.b .speaker-name {
+            color: #8a6a1c;
+        }
+
+        .bubble en {
+            font-family: Georgia, "Times New Roman", serif;
+            font-style: italic;
+            color: var(--purple-deep);
+        }
+
+        .bubble kw {
+            font-family: "Courier New", monospace;
+            background: var(--gold-soft);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-style: normal;
+            color: #5a441a;
+        }
+
+        /* ===== Divider ===== */
+        .ornament {
+            text-align: center;
+            color: var(--gold);
+            letter-spacing: .5em;
+            font-size: 12px;
+            margin: 44px 0;
+        }
+
+        /* ===== Closing ===== */
+        .closing-title {
+            text-align: center;
+            font-size: 22px;
+            color: var(--purple-deep);
+            margin: 0 0 24px;
+            letter-spacing: .06em;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--rule);
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            font-size: 11px;
+            color: var(--ink-soft);
+            letter-spacing: .1em;
+        }
+
+        @media (max-width:600px) {
+            .wrap {
+                padding: 0 16px 90px;
+            }
+
+            .masthead {
+                padding: 40px 0 22px;
+            }
+
+            .masthead h1 {
+                font-size: 24px;
+            }
+
+            .bubble {
+                font-size: 15px;
+                padding: 11px 14px;
+            }
+
+            .excerpt {
+                padding: 14px 16px;
+                font-size: 14.5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <div class="masthead">
+            <div class="kicker">Deep Dive · 雙語歷史深度解析</div>
+            <h1>被遺忘的騎士</h1>
+            <div class="sub-en">The Girl on the White Horse — Mabel Ping-Hua Lee</div>
+            <div class="meta"><span>逐字稿整理</span>|<span>紫 · 白 · 金：婦女參政運動的顏色</span></div>
+        </div>
+
+        <div class="intro">
+            想像一下這個畫面：<strong>1912
+                年，紐約第五大道。</strong>大約一萬名群眾浩浩蕩蕩走上街頭，為了爭取女性的投票權——這是非常重大的歷史事件。但最特別的是，在這浩大、幾乎全是白人組成的隊伍最前方，騎著白馬帶領全場的，居然是一位<strong>年僅
+                16 歲的華裔少女</strong>。這聽起來超像電影情節，但這不是電影，這是真實的歷史。<br><br>
+            這篇逐字稿整理自一集雙語 Podcast：兩位主持人一起朗讀、拆解一篇關於 <strong>Mabel Ping-Hua
+                Lee（李平華）</strong>的英文傳記短文，同時帶你認識這位被歷史低估的女性。如果你正從零開始學英文，這段內容是為你量身打造的。
+        </div>
+
+        <!-- ================= PARAGRAPH 1 ================= -->
+        <div class="section">
+            <div class="section-label"><span>信念的起點</span><span class="num">I.</span></div>
+            <div class="excerpt">
+                <span class="tag">原文節錄</span>
+                Mabel Ping-Hua Lee was a Chinese woman who lived most of her life in the U.S. and devoted her life to
+                fighting for gender equality. She began campaigning for women's suffrage, or the right to vote, at a
+                young age. She believed all people should be treated equally under the law. Lee wrote, marched, and
+                protested for women's rights.
+            </div>
+
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    這一句裡有一個很關鍵的片語——<kw>devoted her life to</kw>，意思是「將一生奉獻給」爭取性別平等的運動。對初學英文的聽眾來說，這裡有一個很容易踩到的文法陷阱：很多人看到
+                    <en>to</en>，直覺會想在後面加原形動詞。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    其實這個 <en>to</en> 是介系詞，就像一個箭頭，指向她奉獻的目標。所以文本後面接的是 <en>fighting</en>（動名詞）——<en>devoted her life to
+                        fighting</en>。她奮鬥的目標是 <kw>gender equality</kw>：gender「性別」+ equality「平等」，非常實用的搭配。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    文本接著說她從小就投入 <en>women's suffrage</en> 運動。這裡出現了一個學美國歷史絕對繞不開的進階單字——<kw>suffrage</kw>
+                    。它看起來很難，但文本很貼心，作者馬上用逗號加上 <en>the right to vote</en> 來解釋，所以 suffrage 就是「投票權、選舉權」。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    第一段最後一句是 <en>"treated equally under the law"</en>（在法律之下人人平等），treated 是「被對待」，equally
+                    是「平等地」。這是她一生最核心的信念。
+                </div>
+            </div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- ================= PARAGRAPH 2 ================= -->
+        <div class="section">
+            <div class="section-label"><span>九歲女孩的縫隙</span><span class="num">II.</span></div>
+            <div class="excerpt">
+                <span class="tag">原文節錄</span>
+                Mabel Ping-Hua Lee was born in southern China, not too far from Hong Kong on October 7, 1896. She
+                learned English at a missionary school and won an academic scholarship when she was nine years old. This
+                scholarship allowed her to move to the U.S. with her family. They settled in New York.
+            </div>
+
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    看到第二段關於她早年生活的背景時，我這裡有點轉不過來耶——1896 年出生，九歲贏得學術獎學金，那不就是 1905
+                    年左右？那個年代美國不是有極度嚴格的排華法案嗎？一個九歲的華人小女孩，是怎麼突破這個法律限制，還帶著全家人移民美國的？
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    這個問題切中要害。文本雖然平鋪直敘地寫著獎學金讓她搬到美國，但背後其實隱藏了當時複雜的移民機制：排華法案確實嚴格禁止華人「勞工」進入美國，但允許少數的學生、商人、外交官和老師入境。文本裡的 <kw>
+                        missionary school</kw>（教會學校），就成了那個年代有點像「仙丹」的角色。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    她展現了極高的天賦，因此獲得了 <kw>academic scholarship</kw>（學術獎學金）。這不僅是她個人的天賦，更是她巧妙利用了法律的豁免條款，全家才得以在紐約 <en>settled
+                    </en>（定居）下來。了解這段歷史背景後，再看這句話，重量完全不同了。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    是啊，她真的是在夾縫中求生存的極致代表。難怪她後來會如此強烈地主張——所有人都該被平等對待。
+                </div>
+            </div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- ================= PARAGRAPH 3 ================= -->
+        <div class="section">
+            <div class="section-label"><span>白馬上的政治訊息</span><span class="num">III.</span></div>
+            <div class="excerpt">
+                <span class="tag">原文節錄</span>
+                Lee was an excellent student who wanted to improve the lives of women and girls. By the time she was 16,
+                she was well known in the women's suffrage movement. Many newspapers wrote about this young activist. In
+                1912, a large parade was held in New York City to advocate for women's voting rights. Lee helped lead
+                the parade on horseback. Around 10,000 people attended! After the parade, The New York Times wrote an
+                article about her accomplishments and called her "the symbol of a new era, when all women will be free .
+                . . ."
+            </div>
+
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    她 16 歲時就已經 well-known（非常著名），各大報紙都在報導這位年輕的 <kw>activist</kw>。從零開始學的話可以拆開來看：active「活躍的、主動的」+ 字尾
+                    -ist「做這件事的人」，所以 activist 就是「倡議者」，或我們常說的「社運人士」。她不只是嘴上說，是真正採取行動的人——1912 年那場一萬人的大遊行，她就是在馬背上帶頭的人。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    這就是我覺得最不可思議的地方。為什麼一群白人女性社運領袖，會把一個 16
+                    歲的華裔少女放在隊伍最前方，還讓她騎馬？這難道是隨機的嗎？絕對不是——這其實是一場極度精算的政治公關操作。把時間點對齊：1912 年的前一年，也就是 1911
+                    年，中國爆發了辛亥革命，美國報紙大量報導中國女性在革命中爭取權利、甚至上戰場的消息。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    所以他們的潛台詞其實是——你看人家中國，一個我們認為傳統落後的國家，都開始給女性權利了，我們美國號稱民主，居然連投票權都沒有？把她放在馬背上、走在最前面，就是在向美國社會傳遞這個強烈的視覺與政治訊息。而
+                    Mabel 也非常聰明，她順水推舟，用了這個巨大的平台來放大自己的聲音。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    難怪遊行之後《紐約時報》稱她是 <kw>"the symbol of a new era, when all women will be free"</kw>
+                    ——「一個所有女性都將獲得自由的新時代的象徵」。要注意，這裡的 <en>when</en> 不是用來問「什麼時候」，很多初學者會踩到這個盲點。它其實像一座橋樑，文法上叫「關係副詞」，用來補充說明前面的
+                    <en>new era</en> 到底是一個什麼樣的時代。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    所以畫面感應該是：她是一個新時代的象徵，而在這個時代裡，所有的女性都將獲得自由。不過街頭運動雖然吸引目光，真正改變體制還需要更紮實的知識武器——這就引導我們進入她的學術生涯了。
+                </div>
+            </div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- ================= PARAGRAPH 4 ================= -->
+        <div class="section">
+            <div class="section-label"><span>一所因拒絕而誕生的學校</span><span class="num">IV.</span></div>
+            <div class="excerpt">
+                <span class="tag">原文節錄</span>
+                Mabel Ping-Hua Lee was just getting started! She studied at Barnard College, an all-women's school that
+                was founded after Columbia University refused to accept women into the university. At Barnard, Lee wrote
+                feminist essays for The Chinese Students' Monthly. One essay argued that democracy was only possible if
+                women could vote. She encouraged other Chinese women to join the suffrage movement. She also promoted
+                women's education.
+            </div>
+
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    這句話本身就是個充滿諷刺的歷史事實——她就讀的 Barnard College，之所以會成立，完全是因為哥倫比亞大學 <kw>refused</kw>
+                    （拒絕）招收女性。制度把女性關在門外，女性就自己建立一所學校。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    真的很猛。而她在學校裡也沒有停止倡議，寫下的文章主張只有女性能投票，<kw>democracy</kw>（民主）才有可能實現，並持續 <kw>promoted</kw>
+                    （提倡）女性教育。讀到這裡，大家可能會覺得這是一個充滿希望、最終迎來勝利的故事——但接下來這一段，可以說是整篇文章最殘酷、也最令人心碎的轉折。
+                </div>
+            </div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- ================= PARAGRAPH 5 ================= -->
+        <div class="section">
+            <div class="section-label"><span>推開卻進不去的門</span><span class="num">V.</span></div>
+            <div class="excerpt">
+                <span class="tag">原文節錄</span>
+                Even though Mabel Ping-Hua Lee helped the women's suffrage movement, she could not vote until decades
+                after most American women could vote. Women in New York were granted the right to vote in 1917. Then, in
+                1920, the 19th Amendment gave women the right to vote in all states. But many women of color were
+                excluded from this law. Lee was a Chinese woman. The Chinese Exclusion Act was a federal law that
+                prohibited Chinese people from becoming citizens and limited Chinese immigration. Because of this law,
+                Lee could not become a citizen and, therefore, could not vote. She and other Chinese suffragettes had
+                fought hard for a right they could not exercise! This discriminatory law was finally abolished in 1943,
+                more than 20 years after the 19th Amendment was passed.
+            </div>
+
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    <en>Even though</en>——即使她為女性投票權付出這麼多，她卻直到大多數美國女性都能投票的幾十年後，依然無法投票。紐約在 1917 年賦予女性投票權，1920 年第 19
+                    條修正案讓全美女性都獲得了投票權（<kw>granted the right to</kw>）。但關鍵在下一句：<kw>"many women of color were excluded from
+                        this law"</kw>——許多有色人種女性被這項法律排除在外。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    用字根拆解 <kw>excluded</kw>：<en>ex-</en> 有「向外、出去」的意思，就像 <en>exit</en>「出口」；<en>-clude</en>
+                    這個字根有「關閉」的意思。所以 excluded 的畫面感，不只是名單上漏掉你的名字那麼簡單——它是當大家都在慶祝終於可以走進投票所的時候，門卻當著 Mabel 的面重重關上了，她被鎖在了門外。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    具體鎖住她的，是 <kw>Chinese Exclusion Act</kw>
+                    （排華法案）——因為她是華人，這項法律嚴格禁止華人成為美國公民。但在美國，你必須是公民才能投票。這就是整個故事最荒謬的地方：她和其他華裔參政權運動者，為了一個她們自己無法 <kw>exercise
+                    </kw>（行使）的權利而奮戰。這裡的 exercise 不是「運動」，是「行使權利」的意思。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    這項<kw>discriminatory law</kw>（歧視性法律）直到 1943 年才被 <kw>abolished</kw>（廢除），整整過了 20
+                    多年。面對這種極端不公平，很多人可能會放棄，覺得「我都享受不到，我幹嘛還為這個社會努力」——但 Mabel 做出了完全不同的選擇。
+                </div>
+            </div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- ================= PARAGRAPH 6 ================= -->
+        <div class="section">
+            <div class="section-label"><span>頭尾呼應的一生</span><span class="num">VI.</span></div>
+            <div class="excerpt">
+                <span class="tag">原文節錄</span>
+                Mabel Ping-Hua Lee devoted the rest of her life to serving the Chinese community in the States. She was
+                the first Chinese woman to get a PhD in economics in the U.S. Lee created a Chinese community center
+                that offered English classes, a health clinic, and a kindergarten. No one knows if Mabel Ping-Hua Lee
+                ever became a U.S. citizen and cast her first vote. But she committed her life to fighting for gender
+                equality in the U.S.
+            </div>
+
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    這裡又出現了 <en>devoted to</en>——她將餘生都奉獻給在美國的華人社區，還成為美國第一位獲得經濟學博士學位的華裔女性。她創立了華人社區中心，提供 <kw>English
+                        classes</kw>（英文課程）、健康診所跟幼兒園。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    讀到她提供英文課程的時候，我心裡產生了一種奇妙的情感連結——Mabel
+                    在將近一百年前的紐約開設英文課程，幫助弱勢的華人移民獲得力量；而百年後的今天，身在台灣、正在聽這段解析的你，也正透過她一生的故事來學習英文。這就像一場跨越時空的傳承。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    文本最後兩句有兩個學習重點：<kw>cast her first vote</kw>，cast 在這裡是「投下」，cast a vote 是「投票」的固定用法；再來是結尾的 <kw>committed
+                        her life to</kw>。文章開頭用 devoted her life to，結尾換成 committed her life to——commit 更強調一種堅定不移的責任感與決心。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    這個頭尾呼應真的很有分量。我們不知道她在 1943 年法案廢除後，有沒有真的投下那神聖的第一票，但這已經不影響她的偉大了。
+                </div>
+            </div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- ================= CLOSING ================= -->
+        <div class="section">
+            <div class="closing-title">草根裡的改變</div>
+
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    恭喜正在收聽的你，完成了這次語言與歷史的雙重探索。今天你不僅學會了 <kw>activist</kw>、<kw>excluded</kw>、<kw>abolished</kw>、<kw>devoted
+                    </kw> 這些進階單字，更認識了一位被歷史低估的偉大女性。下次看到 excluded，你的大腦不會只浮現無聊的中文翻譯，而是會看見那個被重重關在投票所門外的 16 歲少女。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    這就是把單字放在有血有肉的故事裡的威力。在結束今天的解析之前，這段歷史讓我想到一個文本沒提到、但我一直忍不住去思考的問題：我們談到她 16
+                    歲帶領一萬人的大遊行，畫面很壯觀，但她後來成立的社區中心，是在 1920 年代的華人街——一個傳統、父權觀念更根深蒂固的地方，很多家庭根本不認為女孩需要唸書。
+                </div>
+            </div>
+            <div class="turn b">
+                <div class="avatar">B</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 B</div>
+                    在那個沒有網路、沒有社群媒體、不能發一篇貼文就號召群眾的年代，Mabel 是如何挨家挨戶敲門，面對保守移民父母的質疑與冷眼，最終說服他們讓女兒走進社區中心上英文課跟幼稚班的？這是非常艱難的草根工作。
+                </div>
+            </div>
+            <div class="turn a">
+                <div class="avatar">A</div>
+                <div class="bubble">
+                    <div class="speaker-name">主持人 A</div>
+                    真正的社運或許不是騎在白馬上接受萬人歡呼，而是在那些最不起眼、充滿偏見的暗巷裡，一步一步推動改變。帶著這個關於草根行動力的延伸思考，以及今天學到的所有英文單字，好好為大腦充個電，我們下次的深度解析見！
+                </div>
+            </div>
+        </div>
+
+        <footer>MABEL PING-HUA LEE · 1896–1966 · PODCAST TRANSCRIPT</footer>
+
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '7_1.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>

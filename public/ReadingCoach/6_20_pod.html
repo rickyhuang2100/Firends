@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地下鐵路的秘密｜AI Podcast 深度解析逐字稿</title>
+    <style>
+        :root {
+            --night-deep: #10141f;
+            --night-mid: #1b2a4a;
+            --star: #f4d35e;
+            --gold: #e0a800;
+            --bg: #f7f8fb;
+            --text: #232733;
+            --muted: #6c757d;
+            --accent: #8ecae6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.9;
+            color: var(--text);
+            background: linear-gradient(180deg, #eef1f8 0%, #f7f8fb 400px, #ffffff 100%);
+            margin: 0;
+            padding: 0 0 80px;
+        }
+
+        .wrap {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header.hero {
+            background: radial-gradient(circle at 20% 20%, #2b3a67 0, transparent 55%),
+                linear-gradient(135deg, var(--night-deep), var(--night-mid) 70%);
+            color: #fff;
+            padding: 56px 20px 46px;
+            text-align: center;
+            border-radius: 0 0 32px 32px;
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header.hero::before {
+            content: "★";
+            position: absolute;
+            top: 24px;
+            left: 15%;
+            color: var(--star);
+            font-size: 14px;
+            opacity: .8;
+        }
+
+        header.hero::after {
+            content: "★";
+            position: absolute;
+            bottom: 30px;
+            right: 18%;
+            color: var(--star);
+            font-size: 10px;
+            opacity: .6;
+        }
+
+        header.hero h1 {
+            margin: 0 0 10px;
+            font-size: 1.9em;
+            letter-spacing: .5px;
+        }
+
+        header.hero p.sub {
+            margin: 0;
+            font-size: 1em;
+            opacity: .9;
+        }
+
+        .audio-card {
+            max-width: 840px;
+            margin: -30px auto 30px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(16, 20, 31, .14);
+            padding: 18px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .audio-card .label {
+            font-size: .85em;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .audio-card audio {
+            width: 100%;
+        }
+
+        .intro-box {
+            background: #fff9e8;
+            border-left: 5px solid var(--gold);
+            padding: 20px 22px;
+            border-radius: 0 12px 12px 0;
+            margin: 0 0 34px;
+        }
+
+        .intro-box p {
+            margin: 0;
+        }
+
+        h2.section-title {
+            color: var(--night-mid);
+            font-size: 1.35em;
+            margin: 46px 0 18px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2.section-title .tag {
+            background: var(--night-mid);
+            color: #fff;
+            font-size: .5em;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h3.sub-title {
+            color: var(--gold);
+            font-size: 1.1em;
+            margin: 30px 0 12px;
+            padding-left: 12px;
+            border-left: 4px solid var(--star);
+        }
+
+        .en-block {
+            background: #f4f6fb;
+            border: 1px solid #dfe4f0;
+            border-left: 5px solid var(--night-mid);
+            padding: 16px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 16px 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.02em;
+            color: #2c3a5c;
+            line-height: 1.7;
+        }
+
+        .dialogue {
+            margin: 14px 0;
+        }
+
+        .line {
+            display: flex;
+            gap: 12px;
+            margin: 14px 0;
+            align-items: flex-start;
+        }
+
+        .speaker {
+            flex: 0 0 64px;
+            font-weight: 700;
+            font-size: .9em;
+            padding: 4px 0;
+            border-radius: 8px;
+            text-align: center;
+            height: fit-content;
+        }
+
+        .speaker.A {
+            color: #fff;
+            background: var(--night-mid);
+        }
+
+        .speaker.B {
+            color: #1b2a4a;
+            background: var(--star);
+        }
+
+        .bubble {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+            padding: 10px 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .03);
+        }
+
+        .en {
+            color: var(--night-mid);
+            font-weight: 600;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        .vocab {
+            display: inline-block;
+            background: var(--accent);
+            color: #0a2540;
+            padding: 1px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-family: Georgia, serif;
+        }
+
+        .callout {
+            background: #fefaf0;
+            border: 1px dashed var(--gold);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 30px 0;
+        }
+
+        .callout h4 {
+            margin: 0 0 8px;
+            color: var(--gold);
+        }
+
+        .think-question {
+            background: linear-gradient(135deg, var(--night-deep), var(--night-mid));
+            color: #eef4ff;
+            padding: 30px 26px;
+            border-radius: 16px;
+            margin: 50px 0 20px;
+        }
+
+        .think-question h3 {
+            margin-top: 0;
+            color: var(--star);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--muted);
+            font-size: .9em;
+        }
+
+        @media (max-width:600px) {
+            header.hero {
+                padding: 40px 16px 34px;
+                border-radius: 0 0 20px 20px;
+            }
+
+            header.hero h1 {
+                font-size: 1.4em;
+            }
+
+            .audio-card {
+                margin: -20px 12px 24px;
+                padding: 14px 16px;
+            }
+
+            .speaker {
+                flex-basis: 52px;
+                font-size: .8em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="hero">
+        <h1>⭐ 地下鐵路的秘密</h1>
+        <p class="sub">AI Podcast 深度解析逐字稿｜跟著北極星無痛學英文</p>
+    </header>
+
+    <div class="wrap">
+
+        <div class="intro-box">
+            <p><strong>不想再啃無聊的文法書？</strong>
+                這集節目收到一位台灣聽眾的留言，希望能從零開始學英文。於是我們把一段真實的美國歷史文本——「地下鐵路」——變成專屬於你的英文聽力與發音課。語言從來不只是印在紙上的黑色字母，它承載著血肉、恐懼與希望。</p>
+        </div>
+
+        <h2 class="section-title">原始英文文本 <span class="tag">SOURCE TEXT</span></h2>
+        <div class="en-block">
+            The Underground Railroad was not actually a railroad, and it was not underground. It was a secret network of
+            routes, safe houses, and brave people who helped enslaved African Americans escape to freedom in the years
+            before the American Civil War.
+            <br><br>
+            The Underground Railroad operated from the late 1700s to the 1860s. Enslaved people would travel at night,
+            often on foot, following the North Star to guide them north. They moved from one safe house to another,
+            sometimes hiding in barns, attics, or secret rooms. The safe houses were called "stations," and the people
+            who helped guide the escapees were called "conductors."
+            <br><br>
+            One of the most famous conductors was Harriet Tubman. Born into slavery in Maryland, Tubman escaped in 1849
+            and then risked her life many times to return to the South and help others escape. She made about 13 trips
+            and helped free approximately 70 people, including her own parents. Tubman was never caught and never lost a
+            passenger.
+            <br><br>
+            The journey north was extremely dangerous. If caught, escaped slaves could be severely punished or even
+            killed. People who helped them also faced harsh penalties. Despite the risks, thousands of people
+            participated in the Underground Railroad.
+            <br><br>
+            Historians estimate that between 25,000 and 100,000 enslaved people escaped through the Underground
+            Railroad. Many settled in northern states or continued to Canada, where slavery was illegal. The Underground
+            Railroad played an important role in the movement to end slavery in the United States.
+        </div>
+
+        <h2 class="section-title">深度解析逐字稿 <span class="tag">PODCAST</span></h2>
+
+        <div class="dialogue">
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">嗨，歡迎來到這次的深度解析。我們今天有一項非常特別的任務哦。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">沒錯，因為我們收到了一位台灣聽眾的留言，說想要從零開始學習英文。正在收聽的你，這一集就是為你量身打造的。我們今天不打算用那種很無聊的文法書來折磨你。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">真的，語言從來都不只是印在紙上的那些黑色字母，它其實是帶著血肉、還有恐懼與希望的載體。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">所以我們要直接把一段真實的美國歷史文本，變成你專屬的英文聽力與發音課。今天我們要看的是一段名為「地下鐵路」的歷史，英文叫做 <span
+                        class="vocab">the Underground Railroad</span>。</div>
+            </div>
+        </div>
+
+        <h3 class="sub-title">開場：一個名字，一層保護色</h3>
+        <div class="dialogue">
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">那我們直接來看文本的第一句話哦，我先請你念一下這段好嗎？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">沒問題，文本開頭是這樣寫的：</div>
+            </div>
+            <div class="en-block">The Underground Railroad was not actually a railroad, and it was not underground.
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">等一下，這個開場就很反差耶。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">對啊，它說 <span
+                        class="vocab">actually</span>（實際上）它不是一條鐵路，也不在地下。這有點像我們台灣人吃的鳳梨酥——你咬下去發現裡面其實沒有鳳梨，是用冬瓜做的一樣。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">哈，完全是個障眼法嘛？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">這個比喻蠻貼切的。其實歷史學家用這種否定句來開場，是因為這個名字本身就是一層完美的保護色。這裡有一個我們在英文口語中超常用的單字，就是 <span
+                        class="vocab">actually</span>——實際上的意思。當你想打破別人的既定印象，或是要揭露一個隱藏的真相時，這個字超級好用。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">哦，那既然它不是真的在地下跑的火車，那它到底是什麼？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">我們繼續看下一句：它是一個 <span class="vocab">secret network</span>——一個秘密網絡，由三種元素拼湊起來。第一個是 <span
+                        class="vocab">routes</span>，逃亡路線；第二個是 <span class="vocab">safe houses</span>，安全屋；</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">安全屋聽起來好像特務電影。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">對啊，然後最關鍵的是第三個——<span class="vocab">brave people</span>，勇敢的人。文本接著說：</div>
+            </div>
+            <div class="en-block">…who helped enslaved African Americans escape to freedom in the years before the
+                American Civil War.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">他們幫助的對象是 <span class="vocab">enslaved African Americans</span>，也就是被奴役的非裔美國人，幫助他們
+                    <span class="vocab">escape to freedom</span>（逃向自由），時間點是在美國南北戰爭爆發前的那些年。
+                </div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">等一下，我想問一個問題。我在學校裡學過 <span class="en">slave</span>，就是「奴隸」的意思，但這裡加了字首和字尾變成 <span
+                        class="vocab">enslaved</span>，這兩者有什麼差別嗎？聽起來好像不太一樣。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">哇，這個問題點出了這段文本的核心哦，差別其實非常巨大。如果你單純稱呼一個人為
+                    slave，語感上會有一種「他天生就是奴隸」的感覺，好像這是一個無法改變的身份。但當歷史學家刻意用 enslaved 這個字當形容詞時，強調的是「這些人原本是自由的」。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">啊，是被別人逼的。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">沒錯，是被暴力硬生生剝奪了自由。你看加了 en 和 ed，它就把一個名詞變成了一種「持續被壓迫」的狀態。先感受這個字背後那種無奈的感覺就好，不用急著死記。</div>
+            </div>
+        </div>
+
+        <h3 class="sub-title">夜行：北極星、閣樓與密碼</h3>
+        <div class="dialogue">
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">但這讓我想到一個很實際的問題。既然它不是真正的火車，那他們到底是如何在政府的眼皮底下移動的？總不可能走在大馬路上吧？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">當然不可能。我們來看第二段文本：</div>
+            </div>
+            <div class="en-block">The Underground Railroad operated from the late 1700s to the 1860s.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">所以這個網絡在暗處 <span class="vocab">operated</span>（運作），運作了將近一個世紀。文本寫道，enslaved 的人
+                    travel（移動）在夜間，而且 <span class="vocab">on foot</span>，徒步。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">在 1800 年代沒有路燈，也沒有 Google Maps 導航，在黑夜裡徒步，那不就是在充滿野獸的森林裡走嗎？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">真的是這樣，所以他們必須依賴大自然的指引。文本接著說：</div>
+            </div>
+            <div class="en-block">…following the North Star to guide them north.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble"><span class="vocab">Following the North Star</span>，跟隨北極星。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">哇，這畫面蠻震撼的，就是你只能把生存的希望全部寄託在夜空中的一顆小光點上。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">是啊。那白天怎麼辦呢？文本寫：</div>
+            </div>
+            <div class="en-block">They moved from one safe house to another, sometimes hiding in barns, attics, or
+                secret rooms.</div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble"><span class="vocab">hiding</span> 就是躲藏嘛，他們躲在哪裡？<span class="en">barns</span>
+                    是穀倉，<span class="en">attics</span> 是閣樓，還有 secret rooms（密室）。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">你想像一下 <span class="vocab">attic</span> 這個字，一般課本上它就是個三角形的屋頂空間。但在這段歷史裡，attic
+                    意味著你必須在裡面連續十幾個小時憋著氣，還要忍受夏天的酷熱或冬天的嚴寒，同時聽著樓下拿槍的追捕者的腳步聲。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">這樣一想，這個字簡直讓人喘不過氣來。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">這就是把單字放入情境裡的威力。接下來文本提到，為了掩人耳目，他們發明了一套密碼：</div>
+            </div>
+            <div class="en-block">The safe houses were called "stations," and the people who helped guide the escapees
+                were called "conductors."</div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble"><span class="vocab">stations</span> 跟 <span
+                        class="vocab">conductors</span>——安全屋被叫做「車站」，然後引導他們的人被叫做「列車長」。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">沒錯，這裡有個很好的文法重點：<span class="vocab">were
+                        called</span>，被動語態。中文我們可能會說「大家把他們叫做車站」，但英文用了被動——你想想看，為什麼不寫出是誰稱呼他們的？</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">嗯……為了保密？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">答對了，隱去主詞就創造了一種在黑暗中無處不在、大家心照不宣的隱蔽共識，這就是被動語態在這裡創造出的特務感。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">沒有人知道是誰開始叫的，但大家都懂，這種地下默契真的讓人起雞皮疙瘩。</div>
+            </div>
+        </div>
+
+        <h3 class="sub-title">列車長：哈莉特・塔布曼</h3>
+        <div class="dialogue">
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">那你知道這些被稱為 conductors（列車長）的人是些什麼人嗎？</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">我猜要在那個年代當嚮導，一定是有武裝部隊，或者一次帶幾百人衝過界吧，不然怎麼敢？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">完全相反，他們的行動超級安靜，而且每次都伴隨著致命的危險。文本介紹了一位真實人物：</div>
+            </div>
+            <div class="en-block">One of the most famous conductors was Harriet Tubman.</div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">Harriet Tubman，哈莉特・塔布曼。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">沒錯：</div>
+            </div>
+            <div class="en-block">Born into slavery in Maryland, Tubman escaped in 1849 and then risked her life many
+                times to return to the South and help others escape.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">這段訊息量有點大。<span class="vocab">born into slavery</span>，她一出生就是奴隸。然後她在 1849 年好不容易 <span
+                        class="en">escaped</span>（逃脫了），結果她又 <span class="vocab">risked her
+                        life</span>（冒著生命危險），多次回到南方——<span class="en">return to the South</span>。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">完全不符合人性啊，一個好不容易逃出火場的人，怎麼會一再往火場裡衝？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">因為她知道火場裡還有無數個渴望自由的靈魂啊。我們看看她的數字成就：</div>
+            </div>
+            <div class="en-block">She made about 13 trips and helped free approximately 70 people, including her own
+                parents.</div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">13 趟旅程，幫助了約 70 人，包含她自己的父母。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">這裡有個初學者可以學的字：<span class="vocab">approximately</span>。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">approximately 聽起來很高級耶。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">其實它就是「大約」的意思，跟 about 很像，但聽起來更正式，給人一種經過仔細估算的感覺。但這整段關於 Harriet Tubman
+                    的描述中，最有力量的是最後一句話：</div>
+            </div>
+            <div class="en-block">Tubman was never caught and never lost a passenger.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">她從未被抓，也從未失去過一位乘客。念起來是不是有一種節奏感？</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">有欸，像是在下某種絕對的保證。而且她把那些驚恐的逃亡者尊稱為 <span
+                        class="vocab">passenger</span>（乘客），這呼應了鐵路的密碼。而且用了兩次 never——不是說「有時候沒被抓」，是「從未」。這真的是超強的鋼鐵意志。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">但這種意志背後，也是深不見底的恐懼。</div>
+            </div>
+        </div>
+
+        <h3 class="sub-title">代價：被抓住的下場</h3>
+        <div class="dialogue">
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">如果逃亡失敗了會怎樣？代價到底多高？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">文本的最後部分揭示了這份殘酷：</div>
+            </div>
+            <div class="en-block">The journey north was extremely dangerous. If caught, escaped slaves could be severely
+                punished or even killed.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble"><span class="vocab">If caught</span>，如果被抓住的話，這是一個很簡短但很沉重的假設句。他們會被 <span
+                        class="vocab">severely punished</span>（嚴厲懲罰）或是 killed（被殺）。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">那那些幫手呢？提供閣樓的農夫總不會有事吧？</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">怎麼可能沒事：</div>
+            </div>
+            <div class="en-block">People who helped them also faced harsh penalties.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble"><span class="vocab">faced harsh penalties</span>，面臨嚴酷的處罰。<span
+                        class="en">harsh</span> 這個字形容氣候時是「嚴寒」，形容法律時就是「毫不留情」，被發現的話幫手也可能失去生命。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">等於所有人都在玩命嘛。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">沒錯，所以下一句的轉折很動人：</div>
+            </div>
+            <div class="en-block">Despite the risks, thousands of people participated in the Underground Railroad.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble"><span class="vocab">despite the risks</span>，儘管有風險，還是有 thousands of
+                    people（成千上萬人）參與。你想知道具體規模有多大嗎？歷史學家有估計過哦：</div>
+            </div>
+            <div class="en-block">Historians estimate that between 25,000 and 100,000 enslaved people escaped through
+                the Underground Railroad.</div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">25,000 到 10 萬人？蠻誇張的耶。在那個沒有網路、只能靠北極星的年代，十萬人就這樣在黑夜裡「蒸發」了。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">但他們逃去了哪裡？北方就安全了嗎？其實不完全安全，當時有《逃亡奴隸法》，所以文本說：</div>
+            </div>
+            <div class="en-block">Many settled in northern states or continued to Canada, where slavery was illegal.
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">Canada, where slavery was illegal，這裡有個關鍵字，<span
+                        class="vocab">illegal</span>。我平常最常聽到做壞事就是 illegal。</div>
+            </div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">對，<span class="en">legal</span> 是合法的，前面加上 <span class="en">il</span>
+                    就變成反義詞，illegal，違法的。所以在加拿大，奴隸制是違法的——只有踏上那裡，才算真正擺脫恐懼。最後文本總結了這個網絡的歷史定位：</div>
+            </div>
+            <div class="en-block">The Underground Railroad played an important role in the movement to end slavery in
+                the United States.</div>
+            <div class="line">
+                <div class="speaker B">來賓</div>
+                <div class="bubble">它在結束美國奴隸制度的運動中，扮演了不可或缺的重要角色。</div>
+            </div>
+            <div class="line">
+                <div class="speaker A">主持</div>
+                <div class="bubble">哦，這真的是一趟不可思議的旅程呢。</div>
+            </div>
+        </div>
+
+        <div class="callout">
+            <h4>📝 今天學到了什麼？</h4>
+            <p>
+                正在收聽的你，恭喜完成了一次非凡的英文挑戰！我們沒有死背枯燥的單字，但你應該已經在腦海中建構出了 <span class="vocab">secret network</span> 的畫面，感受到了
+                <span class="vocab">enslaved</span> 這個字的沉重，體會了躲在 <span class="vocab">attic</span> 裡的恐懼，也明白了 <span
+                    class="vocab">illegal</span> 這個字代表的真正自由。把單字跟血淚交織的歷史綁在一起，你的大腦自然會記住這些有生命力的字眼。
+            </p>
+        </div>
+
+        <div class="think-question">
+            <h3>💭 留給你的思考題</h3>
+            <p>這份文本讓我們看到，一個拯救了十萬人、甚至改變了美國歷史的偉大運動，居然完全沒有依靠強大的軍隊——它完全依賴於黑夜裡的秘密語言，還有無數個平凡人在暗處承擔巨大風險的善意。那些打開穀倉大門的農夫、冒死指路的人，他們絕大多數的名字都沒有留在歷史課本上。
+            </p>
+            <p>這世界有多少推動人類前進的力量，其實是源自於這些無名的普通人？下次當你在夜裡抬頭看著星星的時候，就像當年那些人死盯著北極星一樣，或許可以想一想這種隱藏在暗處的巨大勇氣。</p>
+        </div>
+
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '6_20.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
+                    virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
+                }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
+
+</html>
