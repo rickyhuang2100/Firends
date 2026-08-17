@@ -248,13 +248,122 @@
         .tab-content.active {
             display: block;
         }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg)
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg)
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>📖 Vegetal Patterns in Islamic Art</h1>
-
+        <a href="7_10_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCjCwiiQEH7TZulpLpyIqAlAfx2JyPYyVmDobfrRHEURpY?e=QfNNhJ"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -285,6 +394,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -507,9 +618,38 @@
                     </ol>
                 </div>
             </div>
+
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組遊戲</h3>
+                <div class="game-board">
+                    <div class="game-controls">
+                        <div>
+                            <button class="btn" onclick="playCurrentSentence()" id="playSentenceBtn">🔊 聽句子</button>
+                            <select id="gameMode" onchange="initGame()"
+                                style="padding: 5px; font-size: 16px; margin-left: 10px;">
+                                <option value="chunk">語塊模式 (簡單)</option>
+                                <option value="word">單字模式 (挑戰)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span id="gameProgress" style="font-size: 18px; font-weight: bold; color: #2196F3;">1 /
+                                5</span>
+                            <button class="btn" onclick="nextSentence()" id="nextBtn"
+                                style="display: none; margin-left: 10px;">下一題 ➡️</button>
+                        </div>
+                    </div>
+                    <div class="answer-area" id="answerArea">
+                        <!-- 答案會放在這裡 -->
+                    </div>
+                    <div class="word-bank" id="wordBank">
+                        <!-- 備選詞塊/單字 -->
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="reviewArea" style="margin-top: 20px; display: none;"></div>
+                </div>
+            </div>
         </div>
     </div>
-
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
         data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
         data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
@@ -750,6 +890,340 @@
         }
 
         // 頁面載入時初始化
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                "sentence": "The typical depiction of nature in Islamic art is abstract.",
+                "chunks": [
+                    "The typical depiction",
+                    "of nature",
+                    "in Islamic art",
+                    "is abstract."
+                ]
+            },
+            {
+                "sentence": "Vegetal patterns can be found everywhere in Islamic art.",
+                "chunks": [
+                    "Vegetal patterns",
+                    "can be found everywhere",
+                    "in Islamic art."
+                ]
+            },
+            {
+                "sentence": "Geometric patterns are an important part of Islamic art.",
+                "chunks": [
+                    "Geometric patterns",
+                    "are an important part",
+                    "of Islamic art."
+                ]
+            },
+            {
+                "sentence": "These designs can be seen on many historical buildings.",
+                "chunks": [
+                    "These designs",
+                    "can be seen",
+                    "on many historical buildings."
+                ]
+            }
+        ];
+        const chunkData = [
+            {
+                "chunk": "The typical depiction",
+                "meaning": "典型的描繪",
+                "collocations": "typical depiction of",
+                "synonyms": "the usual representation",
+                "pronunciation": "typical 重音在第一音節"
+            },
+            {
+                "chunk": "of nature",
+                "meaning": "大自然的",
+                "collocations": "beauty of nature",
+                "synonyms": "of the natural world",
+                "pronunciation": "nature 的 t 發 /tʃ/"
+            },
+            {
+                "chunk": "in Islamic art is abstract.",
+                "meaning": "在伊斯蘭藝術中是抽象的",
+                "collocations": "abstract art",
+                "synonyms": "is non-representational",
+                "pronunciation": "art is 連讀 /ɑrt ɪz/"
+            },
+            {
+                "chunk": "Vegetal patterns",
+                "meaning": "植物圖紋",
+                "collocations": "floral and vegetal patterns",
+                "synonyms": "plant motifs",
+                "pronunciation": "patterns 字尾 /z/"
+            },
+            {
+                "chunk": "can be found everywhere",
+                "meaning": "到處都能找到",
+                "collocations": "can be found in",
+                "synonyms": "are seen all over",
+                "pronunciation": "found everywhere 連讀"
+            },
+            {
+                "chunk": "in Islamic art.",
+                "meaning": "在伊斯蘭藝術中",
+                "collocations": "patterns in Islamic art",
+                "synonyms": "in Muslim art",
+                "pronunciation": "Islamic 重音第二音節"
+            }
+            ,
+            {
+                "chunk": "Geometric patterns",
+                "meaning": "幾何圖案",
+                "collocations": "complex geometric patterns",
+                "synonyms": "geometric designs",
+                "pronunciation": "Geometric 重音在第三音節"
+            },
+            {
+                "chunk": "are an important part",
+                "meaning": "是一個重要的部分",
+                "collocations": "an important part of",
+                "synonyms": "are a crucial element",
+                "pronunciation": "are an 連讀"
+            },
+            {
+                "chunk": "of Islamic art.",
+                "meaning": "伊斯蘭藝術的",
+                "collocations": "history of Islamic art",
+                "synonyms": "-",
+                "pronunciation": "Islamic 重音在第二音節"
+            },
+            {
+                "chunk": "These designs",
+                "meaning": "這些設計",
+                "collocations": "These beautiful designs",
+                "synonyms": "These patterns",
+                "pronunciation": "designs 字尾 /z/"
+            },
+            {
+                "chunk": "can be seen",
+                "meaning": "可以看到",
+                "collocations": "can be seen everywhere",
+                "synonyms": "are visible",
+                "pronunciation": "can 弱化為 /kən/"
+            },
+            {
+                "chunk": "on many historical buildings.",
+                "meaning": "在許多歷史建築上",
+                "collocations": "found on historical buildings",
+                "synonyms": "on old structures",
+                "pronunciation": "historical 重音在第二音節"
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentTargetWords = [];
+        let currentAnswer = [];
+        let isChunkMode = true;
+
+        function playGoogleTTS(text) {
+            if (!text) return;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+
+                let preferredVoice = null;
+                const isChinese = /[\u4e00-\u9fa5]/.test(text);
+
+                if (isChinese) {
+                    preferredVoice = voices.find(v => v.lang.includes('zh-TW') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.includes('zh-TW'));
+                } else {
+                    preferredVoice = voices.find(v => v.lang.includes('en-US') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.includes('en-US')) ||
+                        voices.find(v => v.lang.includes('en-GB'));
+                }
+
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                }
+
+                utterance.rate = 1.0;
+                synth.speak(utterance);
+            }, 50);
+        }
+
+        function initGame() {
+            currentGameIndex = 0;
+            const modeSelect = document.getElementById('gameMode');
+            isChunkMode = modeSelect.value === 'chunk';
+            loadGameSentence();
+        }
+
+        function loadGameSentence() {
+            if (!gameSentences || gameSentences.length === 0) return;
+            const currentData = gameSentences[currentGameIndex];
+            const wordBank = document.getElementById('wordBank');
+            const answerArea = document.getElementById('answerArea');
+            const progress = document.getElementById('gameProgress');
+            const reviewArea = document.getElementById('reviewArea');
+            const nextBtn = document.getElementById('nextBtn');
+            const status = document.getElementById('gameStatus');
+            const playBtn = document.getElementById('playSentenceBtn');
+
+            if (playBtn) playBtn.style.display = 'inline-block';
+            if (wordBank) wordBank.innerHTML = '';
+            if (answerArea) answerArea.innerHTML = '';
+            if (reviewArea) {
+                reviewArea.style.display = 'none';
+                reviewArea.innerHTML = '';
+            }
+            if (status) {
+                status.textContent = '';
+                status.className = 'game-status';
+            }
+            if (nextBtn) nextBtn.style.display = 'none';
+            currentAnswer = [];
+
+            if (progress) progress.textContent = (currentGameIndex + 1) + ' / ' + gameSentences.length;
+
+            let words = [];
+            if (isChunkMode) {
+                words = [...currentData.chunks];
+            } else {
+                words = currentData.sentence.replace(/[.,!?]/g, '').split(' ').filter(w => w.trim() !== '');
+            }
+
+            currentTargetWords = [...words];
+
+            // Shuffle words
+            words.sort(() => Math.random() - 0.5);
+
+            words.forEach(word => {
+                const block = document.createElement('div');
+                block.className = 'word-block';
+                block.textContent = word;
+                block.onclick = () => handleWordClick(block, word);
+                if (wordBank) wordBank.appendChild(block);
+            });
+
+            // setTimeout(() => playCurrentSentence(), 500); // Removed auto-play
+        }
+
+        function playCurrentSentence() {
+            if (gameSentences[currentGameIndex]) {
+                playGoogleTTS(gameSentences[currentGameIndex].sentence);
+            }
+        }
+
+        function handleWordClick(block, word) {
+            if (block.parentElement.id === 'answerArea') return;
+
+            const expectedWord = currentTargetWords[currentAnswer.length];
+            const status = document.getElementById('gameStatus');
+            const reviewArea = document.getElementById('reviewArea');
+            const answerArea = document.getElementById('answerArea');
+
+            if (word === expectedWord) {
+                // Correct
+                playGoogleTTS(word);
+                block.style.display = 'none';
+
+                const answerBlock = document.createElement('div');
+                answerBlock.className = 'word-block';
+                answerBlock.style.backgroundColor = '#e8f5e9';
+                answerBlock.style.borderColor = '#4CAF50';
+                answerBlock.style.cursor = 'default';
+                answerBlock.textContent = word;
+                if (answerArea) answerArea.appendChild(answerBlock);
+
+                currentAnswer.push(word);
+                if (status) {
+                    status.textContent = '✅ 正確！';
+                    status.className = 'game-status status-correct';
+                }
+
+                // Check for chunk review data
+                if (isChunkMode && reviewArea) {
+                    const match = chunkData.find(item => word.includes(item.chunk));
+                    if (match) {
+                        reviewArea.innerHTML = '<div class="info-box" style="background-color: #fff9e6; border-left-color: #ffc107; margin-top: 0;">' +
+                            '<h4 style="color: #f57c00; margin-bottom: 10px;">📌 語塊精解：' + match.chunk + '</h4>' +
+                            '<ul style="list-style: none; padding: 0;">' +
+                            '<li style="margin-bottom: 5px;"><strong>💡 中文語意：</strong>' + match.meaning + '</li>' +
+                            '<li style="margin-bottom: 5px;"><strong>🤝 母語者搭配：</strong>' + match.collocations + '</li>' +
+                            '<li style="margin-bottom: 5px;"><strong>🔄 同義替換：</strong>' + match.synonyms + '</li>' +
+                            '<li><strong>🗣️ 聽力連讀點：</strong>' + match.pronunciation + '</li>' +
+                            '</ul>' +
+                            '</div>';
+                        reviewArea.style.display = 'block';
+                    } else {
+                        reviewArea.style.display = 'none';
+                    }
+                }
+
+                if (currentAnswer.length === currentTargetWords.length) {
+                    handleSentenceComplete();
+                }
+            } else {
+                // Wrong
+                block.classList.add('error-shake');
+                if (status) {
+                    status.textContent = '❌ 順序不對喔，再聽一次！';
+                    status.className = 'game-status status-wrong';
+                }
+
+                if (gameSentences[currentGameIndex]) {
+                    playGoogleTTS(gameSentences[currentGameIndex].sentence);
+                }
+
+                setTimeout(() => {
+                    block.classList.remove('error-shake');
+                    if (status) status.textContent = '';
+                }, 1500);
+            }
+        }
+
+        function handleSentenceComplete() {
+            const status = document.getElementById('gameStatus');
+            const nextBtn = document.getElementById('nextBtn');
+            const answerArea = document.getElementById('answerArea');
+
+            if (status) {
+                status.textContent = '🎉 完美重組！';
+                status.className = 'game-status status-correct';
+            }
+
+            if (answerArea && gameSentences[currentGameIndex]) {
+                answerArea.style.backgroundColor = '#dcedc8';
+                answerArea.innerHTML = '<div style="font-size: 20px; font-weight: bold; color: #2e7d32; padding: 10px;">' + gameSentences[currentGameIndex].sentence + '</div>';
+            }
+
+            setTimeout(() => {
+                if (gameSentences[currentGameIndex]) {
+                    playGoogleTTS(gameSentences[currentGameIndex].sentence);
+                }
+            }, 500);
+
+            if (currentGameIndex < gameSentences.length - 1) {
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            } else {
+                if (status) {
+                    status.textContent = '🎊 恭喜完成所有聽音重組挑戰！';
+                }
+                const playBtn = document.getElementById('playSentenceBtn');
+                if (playBtn) playBtn.style.display = 'none';
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            const answerArea = document.getElementById('answerArea');
+            if (answerArea) answerArea.style.backgroundColor = '#f1f8e9';
+            loadGameSentence();
+        }
+
+
+        // hook initText to also initialize game
+        const originalInitText = initText;
+        initText = function () { originalInitText(); initGame(); };
+
         window.onload = initText;
     </script>
 

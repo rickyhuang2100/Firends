@@ -248,12 +248,122 @@
         .tab-content.active {
             display: block;
         }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg)
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg)
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>📖 Early People in the Central American Land Bridge</h1>
+        <a href="7_3_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBj6p68rttiSo1Hulsp6pDdAXZ-L1h-jQ9NKAEGQ0AoGkI?e=1JjCOZ"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -280,6 +390,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -819,9 +931,37 @@
                 </ol>
             </div>
         </div>
-    </div>
-    </div>
 
+        <div id="reconstruction" class="tab-content">
+            <h3>🎧 聽音重組遊戲</h3>
+            <div class="game-board">
+                <div class="game-controls">
+                    <div>
+                        <button class="btn" onclick="playCurrentSentence()" id="playSentenceBtn">🔊 聽句子</button>
+                        <select id="gameMode" onchange="initGame()"
+                            style="padding: 5px; font-size: 16px; margin-left: 10px;">
+                            <option value="chunk">語塊模式 (簡單)</option>
+                            <option value="word">單字模式 (挑戰)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span id="gameProgress" style="font-size: 18px; font-weight: bold; color: #2196F3;">1 / 5</span>
+                        <button class="btn" onclick="nextSentence()" id="nextBtn"
+                            style="display: none; margin-left: 10px;">下一題 ➡️</button>
+                    </div>
+                </div>
+                <div class="answer-area" id="answerArea">
+                    <!-- 答案會放在這裡 -->
+                </div>
+                <div class="word-bank" id="wordBank">
+                    <!-- 備選詞塊/單字 -->
+                </div>
+                <div class="game-status" id="gameStatus"></div>
+                <div id="reviewArea" style="margin-top: 20px; display: none;"></div>
+            </div>
+        </div>
+    </div>
+    </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
         data-category="Announcements" data-category-id="DIC_kwDORQOB6s4C2a-I" data-mapping="pathname" data-strict="0"
         data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom"
@@ -1079,6 +1219,338 @@ Archaeologists are still studying this part of the world. Hopefully in the years
         }
 
         // 頁面載入時初始化
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+          {
+                    "sentence": "People have been living in Central and South America for many, many years now.",
+                    "chunks": [
+                              "People have been living",
+                              "in Central and South America",
+                              "for many, many years now."
+                    ]
+          },
+          {
+                    "sentence": "Archaeologists studying the area of the Central American land bridge have been working to answer this question.",
+                    "chunks": [
+                              "Archaeologists studying the area",
+                              "of the Central American land bridge",
+                              "have been working to answer this question."
+                    ]
+          },
+          {
+                    "sentence": "It is the land that is now the countries of Costa Rica and Panama.",
+                    "chunks": [
+                              "It is the land",
+                              "that is now",
+                              "the countries of Costa Rica and Panama."
+                    ]
+          },
+          {
+                    "sentence": "These people left traces of their presence throughout the region.",
+                    "chunks": [
+                              "These people left traces",
+                              "of their presence",
+                              "throughout the region."
+                    ]
+          }
+];
+        const chunkData = [
+          {
+                    "chunk": "People have been living",
+                    "meaning": "人們一直居住著",
+                    "collocations": "have been living in",
+                    "synonyms": "have resided in",
+                    "pronunciation": "been 常弱讀為 /bɪn/"
+          },
+          {
+                    "chunk": "in Central and South America",
+                    "meaning": "在中南美洲",
+                    "collocations": "countries in Central America",
+                    "synonyms": "in the Americas",
+                    "pronunciation": "Central 重音在第一音節"
+          },
+          {
+                    "chunk": "for many, many years now.",
+                    "meaning": "已經很多很多年了",
+                    "collocations": "for many years now",
+                    "synonyms": "for a very long time",
+                    "pronunciation": "many 的 ny 連讀到下一個 many"
+          },
+          {
+                    "chunk": "Archaeologists studying the area",
+                    "meaning": "研究該地區的考古學家",
+                    "collocations": "archaeologists at the site",
+                    "synonyms": "researchers exploring the region",
+                    "pronunciation": "Archaeologists 重音在第三音節"
+          },
+          {
+                    "chunk": "of the Central American land bridge",
+                    "meaning": "中美洲陸橋的",
+                    "collocations": "the land bridge region",
+                    "synonyms": "the isthmus area",
+                    "pronunciation": "land bridge 連讀"
+          },
+          {
+                    "chunk": "have been working to answer this question.",
+                    "meaning": "一直致力於回答這個問題",
+                    "collocations": "working to answer questions",
+                    "synonyms": "trying to find the answer",
+                    "pronunciation": "working to 連讀 /wɜːkɪŋ tə/"
+          },
+          {
+                    "chunk": "It is the land",
+                    "meaning": "那就是這片土地",
+                    "collocations": "the land that is",
+                    "synonyms": "This refers to the territory",
+                    "pronunciation": "It is 連讀 /ɪt ɪz/"
+          },
+          {
+                    "chunk": "that is now",
+                    "meaning": "如今是",
+                    "collocations": "the area that is now",
+                    "synonyms": "which today is",
+                    "pronunciation": "that is 連讀"
+          },
+          {
+                    "chunk": "the countries of Costa Rica and Panama.",
+                    "meaning": "哥斯大黎加和巴拿馬",
+                    "collocations": "countries like Costa Rica",
+                    "synonyms": "modern-day Costa Rica and Panama",
+                    "pronunciation": "Costa Rica 兩字重音分開"
+          },
+          {
+                    "chunk": "These people left traces",
+                    "meaning": "這些人留下了痕跡",
+                    "collocations": "left traces of civilization",
+                    "synonyms": "these people left marks",
+                    "pronunciation": "left 的 t 輕聲"
+          },
+          {
+                    "chunk": "of their presence",
+                    "meaning": "他們存在的",
+                    "collocations": "traces of their presence",
+                    "synonyms": "evidence of them being there",
+                    "pronunciation": "presence 重音在第一音節"
+          },
+          {
+                    "chunk": "throughout the region.",
+                    "meaning": "遍布整個地區",
+                    "collocations": "found throughout the region",
+                    "synonyms": "across the area",
+                    "pronunciation": "throughout 重音在第二音節"
+          }
+];
+
+        let currentGameIndex = 0;
+        let currentTargetWords = [];
+        let currentAnswer = [];
+        let isChunkMode = true;
+
+        function playGoogleTTS(text) {
+            if (!text) return;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+
+                let preferredVoice = null;
+                const isChinese = /[\u4e00-\u9fa5]/.test(text);
+
+                if (isChinese) {
+                    preferredVoice = voices.find(v => v.lang.includes('zh-TW') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.includes('zh-TW'));
+                } else {
+                    preferredVoice = voices.find(v => v.lang.includes('en-US') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.includes('en-US')) ||
+                        voices.find(v => v.lang.includes('en-GB'));
+                }
+
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                }
+
+                utterance.rate = 1.0;
+                synth.speak(utterance);
+            }, 50);
+        }
+
+        function initGame() {
+            currentGameIndex = 0;
+            const modeSelect = document.getElementById('gameMode');
+            isChunkMode = modeSelect.value === 'chunk';
+            loadGameSentence();
+        }
+
+        function loadGameSentence() {
+            if (!gameSentences || gameSentences.length === 0) return;
+            const currentData = gameSentences[currentGameIndex];
+            const wordBank = document.getElementById('wordBank');
+            const answerArea = document.getElementById('answerArea');
+            const progress = document.getElementById('gameProgress');
+            const reviewArea = document.getElementById('reviewArea');
+            const nextBtn = document.getElementById('nextBtn');
+            const status = document.getElementById('gameStatus');
+            const playBtn = document.getElementById('playSentenceBtn');
+
+            if (playBtn) playBtn.style.display = 'inline-block';
+            if (wordBank) wordBank.innerHTML = '';
+            if (answerArea) answerArea.innerHTML = '';
+            if (reviewArea) {
+                reviewArea.style.display = 'none';
+                reviewArea.innerHTML = '';
+            }
+            if (status) {
+                status.textContent = '';
+                status.className = 'game-status';
+            }
+            if (nextBtn) nextBtn.style.display = 'none';
+            currentAnswer = [];
+
+            if (progress) progress.textContent = (currentGameIndex + 1) + ' / ' + gameSentences.length;
+
+            let words = [];
+            if (isChunkMode) {
+                words = [...currentData.chunks];
+            } else {
+                words = currentData.sentence.replace(/[.,!?]/g, '').split(' ').filter(w => w.trim() !== '');
+            }
+
+            currentTargetWords = [...words];
+
+            // Shuffle words
+            words.sort(() => Math.random() - 0.5);
+
+            words.forEach(word => {
+                const block = document.createElement('div');
+                block.className = 'word-block';
+                block.textContent = word;
+                block.onclick = () => handleWordClick(block, word);
+                if (wordBank) wordBank.appendChild(block);
+            });
+
+            // setTimeout(() => playCurrentSentence(), 500); // Removed auto-play
+        }
+
+        function playCurrentSentence() {
+            if (gameSentences[currentGameIndex]) {
+                playGoogleTTS(gameSentences[currentGameIndex].sentence);
+            }
+        }
+
+        function handleWordClick(block, word) {
+            if (block.parentElement.id === 'answerArea') return;
+
+            const expectedWord = currentTargetWords[currentAnswer.length];
+            const status = document.getElementById('gameStatus');
+            const reviewArea = document.getElementById('reviewArea');
+            const answerArea = document.getElementById('answerArea');
+
+            if (word === expectedWord) {
+                // Correct
+                playGoogleTTS(word);
+                block.style.display = 'none';
+
+                const answerBlock = document.createElement('div');
+                answerBlock.className = 'word-block';
+                answerBlock.style.backgroundColor = '#e8f5e9';
+                answerBlock.style.borderColor = '#4CAF50';
+                answerBlock.style.cursor = 'default';
+                answerBlock.textContent = word;
+                if (answerArea) answerArea.appendChild(answerBlock);
+
+                currentAnswer.push(word);
+                if (status) {
+                    status.textContent = '✅ 正確！';
+                    status.className = 'game-status status-correct';
+                }
+
+                // Check for chunk review data
+                if (isChunkMode && reviewArea) {
+                    const match = chunkData.find(item => word.includes(item.chunk));
+                    if (match) {
+                        reviewArea.innerHTML = '<div class="info-box" style="background-color: #fff9e6; border-left-color: #ffc107; margin-top: 0;">' +
+                            '<h4 style="color: #f57c00; margin-bottom: 10px;">📌 語塊精解：' + match.chunk + '</h4>' +
+                            '<ul style="list-style: none; padding: 0;">' +
+                            '<li style="margin-bottom: 5px;"><strong>💡 中文語意：</strong>' + match.meaning + '</li>' +
+                            '<li style="margin-bottom: 5px;"><strong>🤝 母語者搭配：</strong>' + match.collocations + '</li>' +
+                            '<li style="margin-bottom: 5px;"><strong>🔄 同義替換：</strong>' + match.synonyms + '</li>' +
+                            '<li><strong>🗣️ 聽力連讀點：</strong>' + match.pronunciation + '</li>' +
+                            '</ul>' +
+                            '</div>';
+                        reviewArea.style.display = 'block';
+                    } else {
+                        reviewArea.style.display = 'none';
+                    }
+                }
+
+                if (currentAnswer.length === currentTargetWords.length) {
+                    handleSentenceComplete();
+                }
+            } else {
+                // Wrong
+                block.classList.add('error-shake');
+                if (status) {
+                    status.textContent = '❌ 順序不對喔，再聽一次！';
+                    status.className = 'game-status status-wrong';
+                }
+
+                if (gameSentences[currentGameIndex]) {
+                    playGoogleTTS(gameSentences[currentGameIndex].sentence);
+                }
+
+                setTimeout(() => {
+                    block.classList.remove('error-shake');
+                    if (status) status.textContent = '';
+                }, 1500);
+            }
+        }
+
+        function handleSentenceComplete() {
+            const status = document.getElementById('gameStatus');
+            const nextBtn = document.getElementById('nextBtn');
+            const answerArea = document.getElementById('answerArea');
+
+            if (status) {
+                status.textContent = '🎉 完美重組！';
+                status.className = 'game-status status-correct';
+            }
+
+            if (answerArea && gameSentences[currentGameIndex]) {
+                answerArea.style.backgroundColor = '#dcedc8';
+                answerArea.innerHTML = '<div style="font-size: 20px; font-weight: bold; color: #2e7d32; padding: 10px;">' + gameSentences[currentGameIndex].sentence + '</div>';
+            }
+
+            setTimeout(() => {
+                if (gameSentences[currentGameIndex]) {
+                    playGoogleTTS(gameSentences[currentGameIndex].sentence);
+                }
+            }, 500);
+
+            if (currentGameIndex < gameSentences.length - 1) {
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            } else {
+                if (status) {
+                    status.textContent = '🎊 恭喜完成所有聽音重組挑戰！';
+                }
+                const playBtn = document.getElementById('playSentenceBtn');
+                if (playBtn) playBtn.style.display = 'none';
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            const answerArea = document.getElementById('answerArea');
+            if (answerArea) answerArea.style.backgroundColor = '#f1f8e9';
+            loadGameSentence();
+        }
+
+
+        // hook initText to also initialize game
+        const originalInitText = initText;
+        initText = function () { originalInitText(); initGame(); };
+
         window.onload = initText;
     </script>
 

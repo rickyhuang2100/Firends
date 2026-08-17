@@ -248,13 +248,122 @@
         .tab-content.active {
             display: block;
         }
+
+        .tab-reconstruct {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .tab.active.tab-reconstruct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .game-board {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .answer-area {
+            min-height: 80px;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f8e9;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .word-block {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+            color: #1976D2;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #f44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg)
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg)
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #ef5350 !important;
+            color: #d32f2f !important;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>📖 The Impact of Volcanoes on Weather</h1>
-
+        <a href="7_6_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQDxTZC0nLhNQ6F92J8vHyBYAYXxCtjVj9of1w4lVCV2_80?e=ce3V7A"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -285,6 +394,8 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -660,9 +771,38 @@
                     </ol>
                 </div>
             </div>
+
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組遊戲</h3>
+                <div class="game-board">
+                    <div class="game-controls">
+                        <div>
+                            <button class="btn" onclick="playCurrentSentence()" id="playSentenceBtn">🔊 聽句子</button>
+                            <select id="gameMode" onchange="initGame()"
+                                style="padding: 5px; font-size: 16px; margin-left: 10px;">
+                                <option value="chunk">語塊模式 (簡單)</option>
+                                <option value="word">單字模式 (挑戰)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span id="gameProgress" style="font-size: 18px; font-weight: bold; color: #2196F3;">1 /
+                                5</span>
+                            <button class="btn" onclick="nextSentence()" id="nextBtn"
+                                style="display: none; margin-left: 10px;">下一題 ➡️</button>
+                        </div>
+                    </div>
+                    <div class="answer-area" id="answerArea">
+                        <!-- 答案會放在這裡 -->
+                    </div>
+                    <div class="word-bank" id="wordBank">
+                        <!-- 備選詞塊/單字 -->
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="reviewArea" style="margin-top: 20px; display: none;"></div>
+                </div>
+            </div>
         </div>
     </div>
-
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
         data-category="Announcements" data-category-id="DIC_kwDORQOB6s4CgWk5" data-mapping="pathname" data-strict="0"
         data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-TW"
@@ -903,6 +1043,338 @@
         }
 
         // 頁面載入時初始化
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+            {
+                "sentence": "When a volcano erupts, it impacts the atmosphere around it.",
+                "chunks": [
+                    "When a volcano erupts,",
+                    "it impacts",
+                    "the atmosphere around it."
+                ]
+            },
+            {
+                "sentence": "Volcanic eruptions can affect the weather, temperature, and air quality.",
+                "chunks": [
+                    "Volcanic eruptions can affect",
+                    "the weather, temperature,",
+                    "and air quality."
+                ]
+            },
+            {
+                "sentence": "Sulfur dioxide released by volcanoes can combine with water vapor to form sulfuric acid.",
+                "chunks": [
+                    "Sulfur dioxide released by volcanoes",
+                    "can combine with water vapor",
+                    "to form sulfuric acid."
+                ]
+            },
+            {
+                "sentence": "Large volcanic eruptions can even lower the temperature of the entire planet.",
+                "chunks": [
+                    "Large volcanic eruptions",
+                    "can even lower the temperature",
+                    "of the entire planet."
+                ]
+            }
+        ];
+        const chunkData = [
+            {
+                "chunk": "When a volcano erupts,",
+                "meaning": "當火山爆發時",
+                "collocations": "when a volcano erupts violently",
+                "synonyms": "when an eruption occurs",
+                "pronunciation": "volcano 重音在第二音節"
+            },
+            {
+                "chunk": "it impacts",
+                "meaning": "它影響了",
+                "collocations": "it impacts the environment",
+                "synonyms": "it affects / it influences",
+                "pronunciation": "impacts 的 ts 連讀"
+            },
+            {
+                "chunk": "the atmosphere around it.",
+                "meaning": "周圍的大氣層",
+                "collocations": "the atmosphere above it",
+                "synonyms": "the air around the volcano",
+                "pronunciation": "atmosphere 重音在第一音節"
+            },
+            {
+                "chunk": "Volcanic eruptions can affect",
+                "meaning": "火山爆發可能影響",
+                "collocations": "eruptions that affect weather",
+                "synonyms": "eruptions impact",
+                "pronunciation": "eruptions 字尾 /z/"
+            },
+            {
+                "chunk": "the weather, temperature,",
+                "meaning": "天氣、溫度",
+                "collocations": "affect weather patterns",
+                "synonyms": "climate and heat levels",
+                "pronunciation": "temperature 常被發成 /ˈtempərətʃər/"
+            },
+            {
+                "chunk": "and air quality.",
+                "meaning": "和空氣品質",
+                "collocations": "air quality index",
+                "synonyms": "and pollution levels",
+                "pronunciation": "air quality 連讀"
+            },
+            {
+                "chunk": "Sulfur dioxide released by volcanoes",
+                "meaning": "火山釋放的二氧化硫",
+                "collocations": "sulfur dioxide emissions",
+                "synonyms": "SO2 from volcanic activity",
+                "pronunciation": "sulfur 重音在第一音節"
+            },
+            {
+                "chunk": "can combine with water vapor",
+                "meaning": "可以與水蒸氣結合",
+                "collocations": "combine with moisture",
+                "synonyms": "can mix with water in the air",
+                "pronunciation": "combine 重音在第二音節"
+            },
+            {
+                "chunk": "to form sulfuric acid.",
+                "meaning": "形成硫酸",
+                "collocations": "form acid rain",
+                "synonyms": "creating acidic compounds",
+                "pronunciation": "sulfuric 重音在第二音節"
+            },
+            {
+                "chunk": "Large volcanic eruptions",
+                "meaning": "大規模火山爆發",
+                "collocations": "massive volcanic eruptions",
+                "synonyms": "major eruptions",
+                "pronunciation": "volcanic 重音在第二音節"
+            },
+            {
+                "chunk": "can even lower the temperature",
+                "meaning": "甚至可以降低溫度",
+                "collocations": "lower global temperatures",
+                "synonyms": "can reduce the heat",
+                "pronunciation": "lower 的 w 不發音"
+            },
+            {
+                "chunk": "of the entire planet.",
+                "meaning": "整個地球的",
+                "collocations": "affect the entire planet",
+                "synonyms": "of the whole Earth",
+                "pronunciation": "entire 重音在第二音節"
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentTargetWords = [];
+        let currentAnswer = [];
+        let isChunkMode = true;
+
+        function playGoogleTTS(text) {
+            if (!text) return;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+
+                let preferredVoice = null;
+                const isChinese = /[\u4e00-\u9fa5]/.test(text);
+
+                if (isChinese) {
+                    preferredVoice = voices.find(v => v.lang.includes('zh-TW') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.includes('zh-TW'));
+                } else {
+                    preferredVoice = voices.find(v => v.lang.includes('en-US') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.includes('en-US')) ||
+                        voices.find(v => v.lang.includes('en-GB'));
+                }
+
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                }
+
+                utterance.rate = 1.0;
+                synth.speak(utterance);
+            }, 50);
+        }
+
+        function initGame() {
+            currentGameIndex = 0;
+            const modeSelect = document.getElementById('gameMode');
+            isChunkMode = modeSelect.value === 'chunk';
+            loadGameSentence();
+        }
+
+        function loadGameSentence() {
+            if (!gameSentences || gameSentences.length === 0) return;
+            const currentData = gameSentences[currentGameIndex];
+            const wordBank = document.getElementById('wordBank');
+            const answerArea = document.getElementById('answerArea');
+            const progress = document.getElementById('gameProgress');
+            const reviewArea = document.getElementById('reviewArea');
+            const nextBtn = document.getElementById('nextBtn');
+            const status = document.getElementById('gameStatus');
+            const playBtn = document.getElementById('playSentenceBtn');
+
+            if (playBtn) playBtn.style.display = 'inline-block';
+            if (wordBank) wordBank.innerHTML = '';
+            if (answerArea) answerArea.innerHTML = '';
+            if (reviewArea) {
+                reviewArea.style.display = 'none';
+                reviewArea.innerHTML = '';
+            }
+            if (status) {
+                status.textContent = '';
+                status.className = 'game-status';
+            }
+            if (nextBtn) nextBtn.style.display = 'none';
+            currentAnswer = [];
+
+            if (progress) progress.textContent = (currentGameIndex + 1) + ' / ' + gameSentences.length;
+
+            let words = [];
+            if (isChunkMode) {
+                words = [...currentData.chunks];
+            } else {
+                words = currentData.sentence.replace(/[.,!?]/g, '').split(' ').filter(w => w.trim() !== '');
+            }
+
+            currentTargetWords = [...words];
+
+            // Shuffle words
+            words.sort(() => Math.random() - 0.5);
+
+            words.forEach(word => {
+                const block = document.createElement('div');
+                block.className = 'word-block';
+                block.textContent = word;
+                block.onclick = () => handleWordClick(block, word);
+                if (wordBank) wordBank.appendChild(block);
+            });
+
+            // setTimeout(() => playCurrentSentence(), 500); // Removed auto-play
+        }
+
+        function playCurrentSentence() {
+            if (gameSentences[currentGameIndex]) {
+                playGoogleTTS(gameSentences[currentGameIndex].sentence);
+            }
+        }
+
+        function handleWordClick(block, word) {
+            if (block.parentElement.id === 'answerArea') return;
+
+            const expectedWord = currentTargetWords[currentAnswer.length];
+            const status = document.getElementById('gameStatus');
+            const reviewArea = document.getElementById('reviewArea');
+            const answerArea = document.getElementById('answerArea');
+
+            if (word === expectedWord) {
+                // Correct
+                playGoogleTTS(word);
+                block.style.display = 'none';
+
+                const answerBlock = document.createElement('div');
+                answerBlock.className = 'word-block';
+                answerBlock.style.backgroundColor = '#e8f5e9';
+                answerBlock.style.borderColor = '#4CAF50';
+                answerBlock.style.cursor = 'default';
+                answerBlock.textContent = word;
+                if (answerArea) answerArea.appendChild(answerBlock);
+
+                currentAnswer.push(word);
+                if (status) {
+                    status.textContent = '✅ 正確！';
+                    status.className = 'game-status status-correct';
+                }
+
+                // Check for chunk review data
+                if (isChunkMode && reviewArea) {
+                    const match = chunkData.find(item => word.includes(item.chunk));
+                    if (match) {
+                        reviewArea.innerHTML = '<div class="info-box" style="background-color: #fff9e6; border-left-color: #ffc107; margin-top: 0;">' +
+                            '<h4 style="color: #f57c00; margin-bottom: 10px;">📌 語塊精解：' + match.chunk + '</h4>' +
+                            '<ul style="list-style: none; padding: 0;">' +
+                            '<li style="margin-bottom: 5px;"><strong>💡 中文語意：</strong>' + match.meaning + '</li>' +
+                            '<li style="margin-bottom: 5px;"><strong>🤝 母語者搭配：</strong>' + match.collocations + '</li>' +
+                            '<li style="margin-bottom: 5px;"><strong>🔄 同義替換：</strong>' + match.synonyms + '</li>' +
+                            '<li><strong>🗣️ 聽力連讀點：</strong>' + match.pronunciation + '</li>' +
+                            '</ul>' +
+                            '</div>';
+                        reviewArea.style.display = 'block';
+                    } else {
+                        reviewArea.style.display = 'none';
+                    }
+                }
+
+                if (currentAnswer.length === currentTargetWords.length) {
+                    handleSentenceComplete();
+                }
+            } else {
+                // Wrong
+                block.classList.add('error-shake');
+                if (status) {
+                    status.textContent = '❌ 順序不對喔，再聽一次！';
+                    status.className = 'game-status status-wrong';
+                }
+
+                if (gameSentences[currentGameIndex]) {
+                    playGoogleTTS(gameSentences[currentGameIndex].sentence);
+                }
+
+                setTimeout(() => {
+                    block.classList.remove('error-shake');
+                    if (status) status.textContent = '';
+                }, 1500);
+            }
+        }
+
+        function handleSentenceComplete() {
+            const status = document.getElementById('gameStatus');
+            const nextBtn = document.getElementById('nextBtn');
+            const answerArea = document.getElementById('answerArea');
+
+            if (status) {
+                status.textContent = '🎉 完美重組！';
+                status.className = 'game-status status-correct';
+            }
+
+            if (answerArea && gameSentences[currentGameIndex]) {
+                answerArea.style.backgroundColor = '#dcedc8';
+                answerArea.innerHTML = '<div style="font-size: 20px; font-weight: bold; color: #2e7d32; padding: 10px;">' + gameSentences[currentGameIndex].sentence + '</div>';
+            }
+
+            setTimeout(() => {
+                if (gameSentences[currentGameIndex]) {
+                    playGoogleTTS(gameSentences[currentGameIndex].sentence);
+                }
+            }, 500);
+
+            if (currentGameIndex < gameSentences.length - 1) {
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            } else {
+                if (status) {
+                    status.textContent = '🎊 恭喜完成所有聽音重組挑戰！';
+                }
+                const playBtn = document.getElementById('playSentenceBtn');
+                if (playBtn) playBtn.style.display = 'none';
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            const answerArea = document.getElementById('answerArea');
+            if (answerArea) answerArea.style.backgroundColor = '#f1f8e9';
+            loadGameSentence();
+        }
+
+
+        // hook initText to also initialize game
+        const originalInitText = initText;
+        initText = function () { originalInitText(); initGame(); };
+
         window.onload = initText;
     </script>
 

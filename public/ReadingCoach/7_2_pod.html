@@ -1,107 +1,739 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '7_2.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 逐字稿：克里人的擊鼓文化</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --host-a-color: #2980b9;
+            --host-b-color: #d35400;
+            --english-bg: #e8f4f8;
+            --card-bg: #ffffff;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        body {
+            font-family: 'Segoe UI', "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 1.4em;
+        }
+
+        .english-text {
+            background-color: var(--english-bg);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            font-size: 1em;
+            color: #444;
+            border-left: 6px solid #3498db;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dialogue-container {
+            background: var(--card-bg);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .line {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .speaker {
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-bottom: 5px;
+        }
+
+        .speaker-a .speaker {
+            color: var(--host-a-color);
+        }
+
+        .speaker-b .speaker {
+            color: var(--host-b-color);
+        }
+
+        .text {
+            font-size: 1.05em;
+            padding: 12px 18px;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 95%;
+        }
+
+        .speaker-a .text {
+            background-color: #f0f8ff;
+            align-self: flex-start;
+            border-left: 4px solid var(--host-a-color);
+        }
+
+        .speaker-b .text {
+            background-color: #fff5e6;
+            align-self: flex-start;
+            border-left: 4px solid var(--host-b-color);
+        }
+
+        @media (max-width: 600px) {
+            .dialogue-container {
+                padding: 20px;
             }
         }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+    </style>
+</head>
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+<body>
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+    <h1>AI Podcast 逐字稿：克里人 (Cree) 的擊鼓文化</h1>
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+    <div class="english-text">
+        <h2 style="margin-top: 0; border-bottom: none; font-size: 1.2em;">原文參考 (English Text)</h2>
+        <p>The Cree are one of the largest Indigenous peoples in North America. They mostly live in Canada and parts of
+            the United States. One important aspect of Cree culture is drumming. For the Cree, like for many other
+            Indigenous peoples, drumming is a sacred activity. Drums are used in Cree ceremonies and rituals. Especially
+            in certain Plains Cree rituals, drum beats symbolize the heartbeat of Earth and the circle of life.</p>
+        <p>The Cree use different kinds of drums for different purposes. One important kind of drum is the frame drum.
+            Frame drums are small drums with one head, or drumming surface. These drums are used by one individual
+            player in ceremonies and rituals. To make these drums, the Cree use birch wood to create a frame for the
+            drum. Then, they stretch deer hide tightly around the frame. This creates a taut surface for drumming. One
+            special feature of these types of Cree drums is their tuning strings. Cree drum-makers attach special
+            twisted rawhide strings under the drum's surface. These strings change the sounds that the drum can make.
+            The drummer can vibrate these strings to create different sounds while drumming.</p>
+        <p>Another important type of drum used by Cree and other Plains Indigenous peoples is the powwow drum. Powwow
+            drums are large. Sometimes, they are one very large surface that multiple people can drum on. Sometimes they
+            have two heads, like a long tube with a drum head at each end. Powwow drums are often used in powwows and
+            other ceremonies.</p>
+        <p>One important ritual of some Cree ceremonies is the Round Dance. In the past, the Round Dance was a way for
+            Cree people to honor their deceased ancestors. Special songs were sung along with the drumming. People gave
+            offerings to divine forces and prayed for their deceased ancestors. Today, the Round Dance has evolved into
+            an important spiritual and social gathering. Many Indigenous peoples have their own versions of the Round
+            Dance. At a modern Cree Round Dance, Cree people of all ages gather. There, they play the drums and listen
+            to traditional Cree songs sung in the Cree language. These gatherings are important ways to keep celebrating
+            Cree culture.</p>
+        <p>Some musical groups today are bringing Cree traditional drumming to the rest of the world. One musical group,
+            called Northern Cree, is well known around the world for their drumming and singing. The musical group uses
+            Cree traditional drumming to connect with a wider audience. They have performed at the Grammys and have been
+            nominated for many awards. They also view traditional Cree songs as an important way to keep practicing the
+            Cree language. In this way, Northern Cree has joined a long heritage of cultural expression through
+            drumming.</p>
+    </div>
+
+    <h2>中文逐字稿 (Podcast 內容)</h2>
+
+    <div class="dialogue-container">
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">想像一下這個畫面哦，你現在人坐在 2017 年的葛萊美獎頒獎典禮現場，眼前就是全世界最頂級的流行巨星。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">嗯，那個場面通常都是最先進的電子合成器啊，或者是很炫目的雷射燈光。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對，還有那種重金打造的工業級音響設備。就是一個被現代流行文化還有商業完全統治的殿堂嘛。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">沒錯，是個非常現代化的場合。但就在這個時候，舞台中央突然出現了一群來自北美洲的原住民。他們沒有拿電吉他，也沒有合成器。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">他們帶了什麼？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">他們只帶著一面巨大的、用白樺木和鹿皮手工製作的鼓。當他們敲下第一擊的時候，那種純粹的、原始的震動瞬間就穿透了整個洛杉磯的場館。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">哇，那個瞬間哦，真的充滿了戲劇張力耶！這不只是一場音樂表演而已，它其實是一種文化跨越了時空，直接撞擊我們現代社會的證明。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對對對，所以這就是我們今天的深度探討要帶你了解的主題，我們要來聊聊北美最大的原住民族之一，也就是主要住在加拿大跟美國部分地區的克里人 (Cree)。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">嗯，克里人。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">沒錯，我們今天要特別看他們文化中最核心的元素，也就是剛剛提到，甚至能震撼葛萊美獎舞台的「擊鼓文化」。其實我們今天要帶你了解的真的不只是樂器而已。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">怎麼說？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對克里人，甚至對很多北美原住民族來說，擊鼓一直都是一項非常神聖的活動。在他們的儀式裡，鼓聲其實代表著「地球的心跳」。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">地球的心跳... 這個說法真的很美。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對啊，它也象徵著生命的循環，特別是在平原克里人的儀式當中，這個概念非常重要。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">好，那我們就來拆解一下這個概念。要理解克里人為什麼能把鼓聲帶向世界，我們可能得先回到源頭來看，也就是最基礎的樂器，對吧？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">沒錯，我們來看看一種非常個人化的神聖樂器，叫做單面鼓 (Frame Drum)。要理解單面鼓，你可能要先轉換一下對一般樂器的想像。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">怎麼說？它長得很特別嗎？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">它的體積通常比較小，而且有單一的一個鼓面。最重要的是，它是設計給單一位演奏者在儀式中獨自使用的。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">所以它不是那種大家一起敲的鼓。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">不是不是，克里人會使用樺木來製作這個鼓框。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">用樺木有什麼特別的原因嗎？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">主要是因為樺木很堅固嘛，然後他們會把鹿皮極度緊繃地拉伸，然後包覆在這個樺木框上。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">哦，所以會形成一個非常緊繃的敲擊面。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對，這樣才能敲出那種清脆又集中的聲音。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">講到這個構造，我本來以為它就是一面很單純的皮鼓，但當我看到資料裡面提到的一個特殊設計時，我真的嚇一跳。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">你是說那個調音弦嗎？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對，就是調音弦。等等... 鼓裡面裝弦？這聽起來完全違背了我對打擊樂器的認知啊！</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">很多人第一次聽到都會覺得很不可思議，沒錯，在單面鼓的鼓面下方，克里人的製鼓師會安裝幾條特殊的弦。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">這是什麼現代科技嗎？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">當然不是啊，這些弦是用扭曲的生皮，也就是 Rawhide 特製而成的。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">所以這在物理上到底怎麼運作？鼓手要一邊敲鼓一邊撥弦嗎？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">不是像彈吉他那樣啦！當鼓手敲擊鼓面的時候，這些生皮弦是可以跟著震動的。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">哦，產生共振。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對，然後鼓手就可以透過這些弦的震動，來改變這面鼓所發出的聲音。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">我的天，所以這根本就是一個完全由大自然材質打造的「原生合成器」嘛。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">這個比喻超貼切的，確實就是這樣。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">就是說鼓手不只是在敲擊節奏，它還能透過那些生皮弦來微調音色，這真的太精細了吧。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">這裡最令人著迷的地方是，這種精細的構造完全說明了克里人對聲音的敏銳度。他們其實是透過這些物質，像是樺木、鹿皮，還有生皮弦，來創造出各種不同的聲響。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">這真的是很深刻的個人儀式。不過這就產生了一個很有趣的問題哦。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">什麼問題？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">如果單面鼓是這麼私密、這麼個人化的樂器，那當克里人需要把整個社群聚集起來的時候，該怎麼辦？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">哦，你說大型集會的時候。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對啊，一面小小的單面鼓，聲音一定會被人群蓋過去嘛。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">沒錯。所以當需要將整個社群的力量聚集起來時，樂器和儀式也必須跟著放大。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">放大？所以有另外一種鼓嗎？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對，這就是克里人和許多平原原住民會使用的第二種重要的鼓，叫做 Powwow 鼓 (Powwow Drum)。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">沒錯，Powwow 鼓的尺寸就非常巨大了。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">有多大？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">有時候它是一個極大的單一鼓面，大到可以讓好幾個人同時圍在旁邊一起敲擊。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">哇塞，大家一起敲同一面鼓。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對，或者有時候它會像一根長長的管子一樣，兩端都有鼓面，聽起來氣勢就很驚人。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">那這種鼓主要是用在什麼場合？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">就像它的名字一樣，主要就是用於 Powwows 儀式，還有其他的慶典。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">講到慶典，資料裡有提到一個非常核心的儀式，叫做圓圈舞 (Round Dance)。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">嗯，圓圈舞在克里的儀式中扮演了非常關鍵的角色。不過我發現一個很反直覺的地方誒。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">怎麼說？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">我們通常會覺得傳統的祭祖應該都是很嚴肅、很莊嚴的對吧？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">確實，在過去，圓圈舞的主要目的的確是為了榮耀已經過世的祖先。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對嘛，資料上說人們會在鼓聲中唱特別的歌，向神聖的力量獻上祭品。然後他們也會在儀式中為死者祈禱，這在過去是一個非常神聖且莊嚴的過程。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">可是接下來才是真正有趣的地方哦。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">發生了什麼改變嗎？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對啊，到了今天，這個圓圈舞居然演變成了一個重要的精神與社交聚會。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">沒錯，很多原住民族現在都有他們自己版本的圓圈舞了。在現代的克里圓圈舞裡，所有年齡層的克里人都會聚集在一起，大家一起打鼓，一起聽克里語唱的傳統歌曲。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">就是一個跨越世代的大型聚會。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對啊，這根本就像是一個超大型的社交派對嘛！這種改變是不是反而拯救了這個文化啊？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">如果我們把這個現象跟更大的圖景連結起來看，你會發現這正是文化得以存活的關鍵。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">嗯，怎麼說？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">因為它保留了慶祝克里文化最核心的部分，也就是鼓聲跟語言。但是形式上變得更親民了。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">沒錯，它適應了現代人的社交需求。它讓傳統不再是放在博物館裡的死物，而是活生生地存在於所有年齡層的生活中。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">哇，這真的很令人感動，他們讓這個古老的儀式有了新的生命力。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">確實是這樣。那既然圓圈舞讓我們看到了克里文化有這麼強大的適應力，我們就把時間拉回現在。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">回到現代的全球化世界。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對，在當今這個充滿流行音樂跟網路的世界裡，這種強大的生命力會變成什麼樣子？這就要提到我們一開始在葛萊美獎場景裡提到的那群人了。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">啊，那個叫做「北方克里樂團」 (Northern Cree)。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">沒錯。今天有一些音樂團體正努力把克里族的傳統擊鼓音樂帶給全世界，北方克里就是最知名的一個。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對，他們在全世界都非常有名。他們利用傳統的擊鼓和吟唱跟廣大的觀眾產生了連結，甚至一路打進了葛萊美獎，還拿到了好多次的提名誒，這真的很不可思議耶。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">但其實他們這麼做背後，還有一個更深層的目的哦。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">哦，所以不只是為了表演音樂嗎？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">不只是這樣，對北方克里樂團來說，演唱傳統的克里歌曲，其實是他們持續練習，而且保存克里語的重要方式。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">等等，保存語言？所以這其實是一場用葛萊美獎舞台來進行的「語言保衛戰」呢！</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">可以這麼說，其實語言最寶貴的地方就在於它們被使用。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">嗯，如果不去用它，語言就會慢慢消失了。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">沒錯，北方克里樂團證明了一件事，要保存少數民族的語言，不一定要侷限在教室裡面。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">對，也不一定要死背文法或是課本。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">它可以透過震撼人心的鼓聲，在全球最具指標性的音樂殿堂裡被大聲地唱出來。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span
+                class="text">哇，這真的太熱血了，他們透過擊鼓把自己加入了這項文化表達的悠久傳承裡，而且還讓全世界都聽見了他們的聲音。今天這趟深度探討真的太精彩了，我們快速為大家回顧一下今天的旅程。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">好啊。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">我們一開始看到了那種體積很小，象徵著地球心跳的單面鼓，裡面居然還藏著能改變音色的生皮調音弦，簡直就是原生合成器。然後我們看到了能讓整個社群共襄盛舉的巨大 Powwow
+                鼓。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">對，還有那個從莊嚴祭祖演變成現代跨世代社交聚會的圓圈舞。最後我們一路跟著北方克里樂團的腳步，看見他們怎麼把傳統文化帶上葛萊美獎的舞台。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">真的是一段很不可思議的文化演進。其實這也提醒了我們一件事，無論科技怎麼進步，人類對於節奏還有對於心跳的共鳴，其實是刻在我們基因裡的。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">嗯，這不禁讓人想拋出一個值得深思的問題留給你去想一想。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">什麼問題？</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">當你今天戴上耳機，聽著你最愛的那首流行歌或者是電子舞曲的時候，那裡面是不是也隱藏著某種古老的、屬於你自身文化的心跳聲？</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">這是個很好的觀察。所以下一次當你被某個強烈的節奏感動到的時候，不妨問你自己，那是誰的心跳正跨越了時空在對你說話？非常值得思考。</span>
+        </div>
+
+        <div class="line speaker-a">
+            <span class="speaker">主持人 A</span>
+            <span class="text">感謝你加入今天的深度探討，我們下次見囉。</span>
+        </div>
+
+        <div class="line speaker-b">
+            <span class="speaker">主持人 B</span>
+            <span class="text">下次見。</span>
+        </div>
+
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '7_2.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>
