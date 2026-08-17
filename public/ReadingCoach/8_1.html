@@ -248,6 +248,175 @@
         .tab-content.active {
             display: block;
         }
+
+        /* === 🎧 聽音重組遊戲樣式 === */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+        .error-shake {
+            animation: shake 0.4s ease;
+            background: #ffcccc !important;
+            border-color: #e53935 !important;
+            color: #c62828 !important;
+        }
+        .game-board {
+            background: #f0f8ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+        .mode-btns { display: flex; gap: 10px; margin-bottom: 14px; }
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            background: #1976d2;
+            color: #fff;
+            border-color: #1976d2;
+        }
+        .game-progress {
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .answer-area {
+            min-height: 56px;
+            background: #e8f5e9;
+            border: 2px dashed #66bb6a;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+        }
+        .word-bank {
+            min-height: 56px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+        }
+        .word-block {
+            background: #e3f2fd;
+            border: 2px solid #90caf9;
+            border-radius: 20px;
+            padding: 7px 16px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+            user-select: none;
+        }
+        .word-block:hover {
+            background: #bbdefb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(25,118,210,0.2);
+        }
+        .word-block.placed {
+            background: #c8e6c9;
+            border-color: #66bb6a;
+            cursor: default;
+        }
+        .word-block.placed:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .game-status {
+            min-height: 24px;
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .win-banner {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: #fff;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .win-banner .en-text {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .win-banner .zh-text {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .review-card {
+            background: #fffde7;
+            border-left: 4px solid #fbc02d;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+        .review-card .rc-title {
+            font-weight: 700;
+            color: #f57c00;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .review-card .rc-row { margin-bottom: 4px; }
+        .review-card .rc-label { font-weight: 600; color: #333; }
+        #nextBtn {
+            display: none;
+            margin: 10px auto;
+            padding: 10px 30px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #nextBtn:hover { background: #1565c0; }
+        .hint-zh {
+            text-align: center;
+            color: #777;
+            font-size: 0.88em;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        .play-btn-game {
+            display: block;
+            margin: 0 auto 14px;
+            padding: 8px 24px;
+            background: #fff;
+            border: 2px solid #1976d2;
+            border-radius: 20px;
+            color: #1976d2;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .play-btn-game:hover {
+            background: #1976d2;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -287,6 +456,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction'); initGame();" style="background:#e3f2fd; color:#1565c0;">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -1125,6 +1295,24 @@
                     </ol>
                 </div>
             </div>
+
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組練習</h3>
+                <div class="game-board">
+                    <div class="mode-btns">
+                        <button id="btnChunkMode" class="mode-btn active" onclick="setGameMode('chunk')">🧩 語塊模式</button>
+                        <button id="btnWordMode" class="mode-btn" onclick="setGameMode('word')">🔤 單字模式</button>
+                    </div>
+                    <div class="game-progress" id="gameProgress">1 / 6</div>
+                    <button class="play-btn-game" onclick="playCurrentSentence()">🔊 播放句子</button>
+                    <div class="hint-zh" id="hintZh"></div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <button id="nextBtn" onclick="nextSentence()">下一句 ➡️</button>
+                    <div id="reviewArea"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -1364,6 +1552,297 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
+        }
+
+        // ============================================================
+        // 🎧 聽音重組遊戲
+        // ============================================================
+        const gameSentences = [
+            {
+                en: "I exercise a lot and try to keep healthy.",
+                zh: "我常運動並試著保持健康。",
+                chunks: ["I exercise a lot", "and try to keep healthy"],
+                reviewData: [
+                    {
+                        chunk: "exercise a lot",
+                        meaning: "大量運動、積極健身",
+                        collocation: "exercise regularly（定期運動）、exercise discipline（鍛鍊自律）",
+                        synonym: "work out / stay active",
+                        pronunciation: "exercise 中 x 發 /gz/，連讀 exercise a 時，/z/ 和 /ə/ 相連，聽起來像 /ˈeksərsaɪzə lɒt/"
+                    },
+                    {
+                        chunk: "try to keep healthy",
+                        meaning: "試著保持健康",
+                        collocation: "try to stay fit（試著保持體態）、keep fit（保持健康）",
+                        synonym: "maintain health / stay in shape",
+                        pronunciation: "try to 常縮讀成 /ˈtraɪtə/，keep 的 /p/ 接 healthy 的 /h/ 時幾乎消音"
+                    }
+                ]
+            },
+            {
+                en: "Recently, I learned about something called Obstacle Course Racing.",
+                zh: "最近，我得知了一種叫做『障礙賽跑』的運動。",
+                chunks: ["Recently", "I learned about something", "called Obstacle Course Racing"],
+                reviewData: [
+                    {
+                        chunk: "learned about something",
+                        meaning: "得知、了解到某件事",
+                        collocation: "learn about history（了解歷史）、learn about a topic（學習某主題）",
+                        synonym: "found out / discovered",
+                        pronunciation: "learned 字尾 /d/ 與 about 的 /ə/ 連讀，聽起來像 /lɜːrndəˈbaʊt/"
+                    },
+                    {
+                        chunk: "called Obstacle Course Racing",
+                        meaning: "叫做障礙賽跑（被稱為…）",
+                        collocation: "called + 名稱（被稱為）、known as + 名稱",
+                        synonym: "known as / referred to as",
+                        pronunciation: "called 字尾 /d/ 接 Obstacle 的 /ɒ/，連讀成 /kɔːldˈɒbstəkl/"
+                    }
+                ]
+            },
+            {
+                en: "You have to climb over walls and slide down ropes.",
+                zh: "你必須爬過牆壁並順著繩索滑下來。",
+                chunks: ["You have to", "climb over walls", "and slide down ropes"],
+                reviewData: [
+                    {
+                        chunk: "climb over walls",
+                        meaning: "攀爬越過牆壁",
+                        collocation: "climb over a fence（爬過柵欄）、climb over an obstacle（越過障礙）",
+                        synonym: "scale walls / get over walls",
+                        pronunciation: "climb 的 b 不發音 /klaɪm/，climb over 連讀聽起來像 /klaɪˈmoʊvər/"
+                    },
+                    {
+                        chunk: "slide down ropes",
+                        meaning: "順著繩索滑下",
+                        collocation: "slide down a hill（從山坡滑下）、slide down a pole（順柱滑下）",
+                        synonym: "rappel down / descend on ropes",
+                        pronunciation: "slide down 兩個 /d/ 相連只發一個，聽起來像 /slaɪˈdaʊn rəʊps/"
+                    }
+                ]
+            },
+            {
+                en: "When I found out about the Zombie 5K, I knew I had to train for this race and win it.",
+                zh: "當我發現殭屍 5K 時，我知道我必須為這場比賽進行訓練並贏得它。",
+                chunks: ["When I found out", "about the Zombie 5K", "I knew I had to train", "for this race and win it"],
+                reviewData: [
+                    {
+                        chunk: "found out",
+                        meaning: "發現、得知（某件事）",
+                        collocation: "find out the truth（找出真相）、find out about a secret（得知秘密）",
+                        synonym: "discovered / learned about",
+                        pronunciation: "found out 連讀，/d/ 接 /aʊ/，聽起來像 /faʊndˈaʊt/"
+                    },
+                    {
+                        chunk: "train for this race",
+                        meaning: "為這場比賽訓練",
+                        collocation: "train for a marathon（為馬拉松訓練）、train hard（努力訓練）",
+                        synonym: "prepare for / practice for",
+                        pronunciation: "train for 連讀，/n/ 接 /f/，聽起來像 /treɪnfər/"
+                    }
+                ]
+            },
+            {
+                en: "Amy was obviously really getting into the part, so I decided to play along.",
+                zh: "艾美顯然很入戲，所以我決定配合她演下去。",
+                chunks: ["Amy was obviously", "really getting into the part", "so I decided to play along"],
+                reviewData: [
+                    {
+                        chunk: "getting into the part",
+                        meaning: "非常投入角色、入戲",
+                        collocation: "get into character（進入角色）、get into the role（投入狀態）",
+                        synonym: "immersed in the role / in character",
+                        pronunciation: "getting into 連讀，/ŋ/ 接 /ˈɪntə/，聽起來像 /ˈɡetɪŋˈɪntə/"
+                    },
+                    {
+                        chunk: "play along",
+                        meaning: "配合、順著演下去",
+                        collocation: "play along with someone（配合某人）、play along with a joke（配合玩笑）",
+                        synonym: "go along with / cooperate",
+                        pronunciation: "play along 連讀，/eɪ/ 接 /əˈlɒŋ/，兩個音流暢相連，聽起來像 /pleɪəˈlɒŋ/"
+                    }
+                ]
+            },
+            {
+                en: "I grabbed onto the first monkey bar and swung as hard as I could.",
+                zh: "我抓住第一根單槓，盡力地往前盪。",
+                chunks: ["I grabbed onto the first monkey bar", "and swung as hard as I could"],
+                reviewData: [
+                    {
+                        chunk: "grabbed onto",
+                        meaning: "抓住、緊緊握住",
+                        collocation: "grab onto a rope（抓住繩子）、grab onto a railing（抓住扶手）",
+                        synonym: "seized / held onto / gripped",
+                        pronunciation: "grabbed 字尾 /d/ 接 onto 的 /ɒ/，連讀成 /ɡræbdˈɒntə/"
+                    },
+                    {
+                        chunk: "swung as hard as I could",
+                        meaning: "盡力地往前盪",
+                        collocation: "swing as hard as possible（盡力盪）、try as hard as you can（盡力嘗試）",
+                        synonym: "swung with all my strength / gave it everything",
+                        pronunciation: "swung 的 /ŋ/ 接 as 的 /æ/，連讀成 /swʌŋæz/；hard 的 /d/ 接 as 時也連讀"
+                    }
+                ]
+            }
+        ];
+
+        let currentGameIndex = 0;
+        let currentTargetWords = [];
+        let isChunkMode = true;
+        let answeredCount = 0;
+        let gameInitialized = false;
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function setGameMode(mode) {
+            isChunkMode = (mode === 'chunk');
+            document.getElementById('btnChunkMode').classList.toggle('active', isChunkMode);
+            document.getElementById('btnWordMode').classList.toggle('active', !isChunkMode);
+            loadGameSentence();
+        }
+
+        function loadGameSentence() {
+            const data = gameSentences[currentGameIndex];
+            document.getElementById('gameProgress').textContent = (currentGameIndex + 1) + ' / ' + gameSentences.length;
+            document.getElementById('hintZh').textContent = '💡 ' + data.zh;
+            document.getElementById('gameStatus').textContent = '';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = '';
+            answeredCount = 0;
+
+            const answerArea = document.getElementById('answerArea');
+            answerArea.innerHTML = '';
+            const wordBank = document.getElementById('wordBank');
+            wordBank.innerHTML = '';
+
+            const existingBanner = document.getElementById('winBanner');
+            if (existingBanner) existingBanner.remove();
+
+            let tokens;
+            if (isChunkMode) {
+                tokens = [...data.chunks];
+            } else {
+                tokens = data.en.toLowerCase().replace(/[.,!?"":]/g, '').split(/\s+/).filter(w => w.length > 0);
+            }
+            currentTargetWords = [...tokens];
+
+            const shuffled = shuffleArray(tokens.map((w, i) => ({ w, origIdx: i })));
+            shuffled.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'word-block';
+                btn.textContent = item.w;
+                btn.dataset.origIdx = item.origIdx;
+                btn.onclick = () => moveWord(btn);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(btn) {
+            const word = btn.textContent;
+            playGoogleTTS(word);
+
+            const origIdx = parseInt(btn.dataset.origIdx);
+            const answerArea = document.getElementById('answerArea');
+            const currentExpectedIdx = answerArea.children.length;
+
+            if (origIdx !== currentExpectedIdx) {
+                btn.classList.add('error-shake');
+                btn.addEventListener('animationend', () => btn.classList.remove('error-shake'), { once: true });
+                document.getElementById('gameStatus').textContent = '❌ 順序不對，請繼續找！';
+                return;
+            }
+
+            // 正確
+            document.getElementById('gameStatus').textContent = '';
+            const placed = document.createElement('span');
+            placed.className = 'word-block placed';
+            placed.textContent = word;
+            placed.style.cursor = 'default';
+            answerArea.appendChild(placed);
+            btn.remove();
+
+            // 語塊模式：顯示精解卡片
+            if (isChunkMode) {
+                const data = gameSentences[currentGameIndex];
+                const reviewItem = data.reviewData.find(item => word.includes(item.chunk));
+                if (reviewItem) {
+                    showReviewCard(reviewItem);
+                } else {
+                    document.getElementById('reviewArea').innerHTML = '';
+                }
+            }
+
+            answeredCount++;
+            if (answeredCount === currentTargetWords.length) {
+                onWin();
+            }
+        }
+
+        function showReviewCard(item) {
+            const area = document.getElementById('reviewArea');
+            area.innerHTML = `
+                <div class="review-card">
+                    <div class="rc-title">📌 語塊精解：${item.chunk}</div>
+                    <div class="rc-row"><span class="rc-label">🇹🇼 中文語意：</span>${item.meaning}</div>
+                    <div class="rc-row"><span class="rc-label">🤝 母語者搭配：</span>${item.collocation}</div>
+                    <div class="rc-row"><span class="rc-label">🔄 同義替換：</span>${item.synonym}</div>
+                    <div class="rc-row"><span class="rc-label">🎧 聽力連讀點：</span>${item.pronunciation}</div>
+                </div>`;
+        }
+
+        function onWin() {
+            const data = gameSentences[currentGameIndex];
+            document.getElementById('gameStatus').textContent = '✅ 完全正確！';
+            document.getElementById('nextBtn').style.display = 'block';
+
+            const banner = document.createElement('div');
+            banner.id = 'winBanner';
+            banner.className = 'win-banner';
+            banner.innerHTML = `<div class="en-text">${data.en}</div><div class="zh-text">${data.zh}</div>`;
+            document.getElementById('answerArea').insertAdjacentElement('afterend', banner);
+
+            setTimeout(() => { playGoogleTTS(data.en); }, 1500);
+        }
+
+        function nextSentence() {
+            currentGameIndex = (currentGameIndex + 1) % gameSentences.length;
+            loadGameSentence();
+        }
+
+        function playCurrentSentence() {
+            const data = gameSentences[currentGameIndex];
+            playGoogleTTS(data.en);
+        }
+
+        function playGoogleTTS(text) {
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const rateSlider = document.getElementById('rateSlider');
+                u.rate = rateSlider ? parseFloat(rateSlider.value) : 1.0;
+                u.lang = 'en-US';
+                const availableVoices = synth.getVoices();
+                const googleVoice = availableVoices.find(v => v.name.includes('Google') && v.lang.includes('en'));
+                if (googleVoice) u.voice = googleVoice;
+                synth.speak(u);
+            }, 50);
+        }
+
+        function initGame() {
+            if (gameInitialized) return;
+            gameInitialized = true;
+            currentGameIndex = 0;
+            isChunkMode = true;
+            document.getElementById('btnChunkMode').classList.add('active');
+            document.getElementById('btnWordMode').classList.remove('active');
+            loadGameSentence();
         }
 
         // 頁面載入時初始化
