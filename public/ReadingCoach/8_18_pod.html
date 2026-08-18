@@ -1,107 +1,439 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_18.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音的物理學大秀：棒球場上的聽覺之旅</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            font-size: 1.4em;
+        }
+
+        .english-section {
+            background-color: #f8fbff;
+            border-left: 5px solid #3498db;
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 40px;
+            font-family: Georgia, "Times New Roman", Times, serif;
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+
+        .transcript-section p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+
+        .speaker-a {
+            color: #1e6262;
+            font-weight: 500;
+        }
+
+        .speaker-b {
+            color: #b85042;
+            font-weight: 500;
+        }
+
+        .vocab {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, monospace;
+            font-weight: bold;
+            color: #856404;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>聲音的物理學大秀：棒球場上的聽覺之旅</h1>
+
+        <h2>英文原文閱讀 (English Transcript)</h2>
+        <div class="english-section">
+            <p>Human beings hear sounds constantly. Sounds are the result of vibrations. When an object vibrates, it
+                sets off a chain reaction of events that might end up inside a person’s ear. After a vibration of any
+                kind, the molecules of the object knock into the molecules of air that surround it, or possibly the
+                molecules of another object next to it. Air molecules bash into each other like millions of microscopic
+                Ping-Pong balls, transporting the sound through what becomes a sound wave. Depending on how strong or
+                soft the vibrations are, the sound’s volume and tone will vary. Eventually, a human’s ears hear the
+                vibrations.</p>
+
+            <p>A person’s ears pick up vibrations everywhere they go, but there might not be many places that offer as
+                many different sounds coming from so many different sources as a baseball game. While sitting in a seat
+                at a game, one of the first sounds someone might hear would be that of a hot dog vendor. “Hot dogs here!
+                Get your hot dogs here!” they might yell. The sound of their high-pitched voice begins in their voice
+                boxes. Inside people’s throats are wiry looking parts that vibrate when a person wants to make a sound
+                and communicate their thoughts to others. The voice box vibrates and the beginnings of sound waves that
+                shoot through the stadium’s air are rooted there. The energy created by the vibrations sends the air
+                molecules into unrest. In turn, this creates air pressure from all that wild movement of the molecules
+                smashing into one another, that nobody can see, but they can certainly hear. Finally, those sound waves
+                of vibrations make a connection inside a person’s ear. The brain then recognizes the waves as a person’s
+                voice, offering a warm, yummy traditional baseball game treat. Once that happens, a person might almost
+                have no choice but to yell back at the salesman using their own voice boxes, “I’ll have a hot dog,
+                please!”</p>
+
+            <p>Later in the game, if the home team has some men on base, what is known as a “rally” is beginning. The
+                team that just about everyone is there to cheer on might be close to scoring some runs. Inside the
+                stadium, there is an organ player, waiting for a chance to get the crowd riled up. The start of a rally
+                is the perfect time for him or her to do just that. One of the most popular and recognizable little
+                tunes that an organ player might use to get all of the fans to cheer is the jingle that signals everyone
+                to yell “Charge!” at its conclusion. Some quick, deep notes in a rhythm that gets faster and faster, and
+                higher and higher are played. For a moment, the music stops completely, but comes right back with a
+                high-pitched, racy tune, which everyone hears and just knows to shout “Charge!” at the end of. With any
+                luck, the home team will do so and score a run or two.</p>
+
+            <p>The organ located somewhere inside the building is hooked up electronically to tremendous speakers that
+                are usually built next to the scoreboard. Though they might be hard to see, behind the front of the
+                speakers’ covering are large circular parts called “cones.” The cones receive pulses from the organ
+                electrically that began when the organist hit the keys. The cones can transmit the sounds because they
+                are able to vibrate in just the right way for the sound waves to be created accurately. The cones are
+                different sizes so that they can properly send out different pitches, with the smaller ones vibrating
+                quicker, making high tones, while the big cones create low sounds. The combination of just the right
+                vibrations create sound waves that enter the atmosphere and reach the ears of the fans, making them
+                happy and ready to cheer.</p>
+
+            <p>One other favorite sound of many people at a baseball game is the crack of the bat when it hits a ball.
+                Usually, fans recognize that sound as something good happening for their team: a base hit, or maybe even
+                a home run. The pitcher throws his baseball towards home plate. The batter quickly decides if he should
+                swing or not. If he does and times everything perfectly, he will place his bat in front of the ball,
+                making a connection between the two. Because the ball was traveling in one direction and the bat forces
+                it back the other way, rapid vibrations in both the bat and the ball occur when they smack into each
+                other. Those vibrations quickly cause the air molecules to vibrate too and the sound waves are created.
+                Microseconds later, the fans in the seats hear the hit, and use their vocal chords to start new
+                vibrations of cheer!</p>
+        </div>
+
+        <h2>深入探討：Podcast 中文逐字稿</h2>
+        <div class="transcript-section">
+            <p><span class="speaker-a">【主持 A】</span>呃，想像一下哦，一顆時速 150
+                公里的棒球正朝著本壘板飛過來。打者扭腰揮棒，然後「咔」了一聲巨響，球就被掃向了外野。嗯，而且就在那個百萬分之一秒內啊，其實在你真正聽到那個清脆的撞擊聲之前，空氣中就已經發生了一場數百萬顆小粒子的瘋狂大亂鬥了。
+            </p>
+            <p><span class="speaker-b">【主持
+                    B】</span>沒錯，所以這就是我們今天要帶你進入的奇妙世界。我知道你正在收聽這一次的深入探討，因為你是一位中文為母語的台灣人，而且你下定決心，想要從零開始建立英文語感。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，其實通常學英文都會讓人聯想到那種死板的文法書，或是很無聊的單字卡，但那種方式真的只會把你的大腦變成一個沒有靈魂的資料庫了。</p>
+            <p><span class="speaker-b">【主持 B】</span>對啊，非常痛苦。你如果想要真正記住一種語言，你必須讓它在你的腦海裡就是活過來。</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，所以將語言學習跟這種具體的物理場景結合，絕對是大腦記憶最深刻的方式。當你理解了事物背後的運作機制，那些單字就不再只是紙上的墨水了。
+            </p>
+            <p><span class="speaker-b">【主持
+                    B】</span>嗯，他們會變成一個很立體的世界。所以我們今天的任務非常特別哦，你提供給我們的這份文本，表面上看起來是一篇英文教材，但骨子裡它其實是一場以棒球場為舞台的聲音物理學大秀。</p>
+            <p><span class="speaker-a">【主持 A】</span>是的，而且我們會一起拆解這些字彙，探討聲音到底是怎麼產生的，怎麼傳遞的。</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>對，所以我會用很清晰而且放慢的語速為你朗讀文本中最精華的英文句子，讓你先熟悉發音。我們就從這篇文本的第一段開始吧，聽好囉，這是一切聲音的起源，準備好了：<br>
+                <em>"Human beings hear sounds constantly. Sounds are the result of vibrations."</em><br>
+                我再念一次哦：<br>
+                <em>"Human beings hear sounds constantly. Sounds are the result of vibrations."</em><br>
+                意思是人類不斷的聽到聲音，聲音是震動的結果。
+            </p>
+
+            <p><span class="speaker-a">【主持 A】</span>哦，這裡出現了整篇文最核心的一個單字，就是 <span
+                    class="vocab">vibrations</span>。在你要硬背這個字之前呢，我想請你先試著唸唸看它的開頭。</p>
+            <p><span class="speaker-b">【主持 B】</span>嗯哼，要怎麼念比較好？就是把你上排的門牙輕輕放在下嘴唇上，然後發出 v 的聲音。你可以感受一下，你有感覺到嘴唇在發麻嗎？</p>
+            <p><span class="speaker-a">【主持 A】</span>嗯，v... 有耶，嘴唇的確在微微發抖。</p>
+            <p><span class="speaker-b">【主持 B】</span>對，那個發抖的物理感覺其實就是這個單字的意思，也就是震動。 <span class="vocab">Vibrations</span>
+                在科學上沒有 vibration 就絕對沒有聲音。</p>
+            <p><span class="speaker-a">【主持 A】</span>原來如此，那文本接著就有解釋到，當一個物體產生 vibration 的時候，它會去撞擊周圍的 <span
+                    class="vocab">molecules</span>，也就是分子。</p>
+            <p><span class="speaker-b">【主持 B】</span>沒錯，你可以把 molecules 想像成構成這個世界最小的積木，當物體震動的時候，它其實就是在推擠旁邊的空氣分子。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，而且這裡文本作者用了一個非常非常有畫面感的比喻，這個我一定要用英文念出來給你聽。</p>
+            <p><span class="speaker-b">【主持 B】</span>好啊，你唸唸看。</p>
+            <p><span class="speaker-a">【主持 A】</span><em>"Air molecules bash into each other like millions of microscopic
+                    ping-pong balls."</em> 意思是空氣分子互相撞擊，就像數百萬顆微小的乒乓球一樣。這個比喻真的超級生動。</p>
+            <p><span class="speaker-b">【主持 B】</span>對吧，就等於是說不管是音樂啊、噪音啊，還是我們現在說話的聲音，我們聽到的所有聲音，本質上都是無數顆隱形乒乓球在空中互相撞擊的結果嗎？
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，最後撞進我們耳朵裡。這裡其實非常精準的描述了聲波，也就是 <span class="vocab">sound
+                    wave</span> 傳遞的本質。</p>
+            <p><span class="speaker-b">【主持 B】</span>嗯，sound wave。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，第一顆乒乓球撞擊第二顆，然後第二顆再撞第三顆，就是這樣把能量一路傳遞下去。</p>
+            <p><span class="speaker-b">【主持 B】</span>哇，所以它是一個連鎖反應。</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，然後文本還特別補充說這些震動的強弱，英文是 strong or soft，這會決定聲音的音量與音調，也就是 <span
+                    class="vocab">volume and tone</span>。</p>
+            <p><span class="speaker-b">【主持 B】</span>哦，volume and tone。所以意思是妳敲得越用力，乒乓球撞擊的力道越大，聲音就越響，對吧？</p>
+            <p><span class="speaker-a">【主持 A】</span>對啊，然後撞擊的頻率越快的話，音調就會越高。</p>
+
+            <hr style="border:0; border-top:1px dashed #ccc; margin: 30px 0;">
+
+            <p><span class="speaker-b">【主持 B】</span>等一下，如果順著這個邏輯往下想，這衍生出一個我一直很想問的問題耶。</p>
+            <p><span class="speaker-a">【主持 A】</span>哦，什麼問題？</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>這是如果聲音說穿了，只是空氣分子像乒乓球一樣互相推擠，那為什麼一陣強風吹過來的時候，聽起來不會像是交響樂，也不像棒球棒擊中球的聲音啊？強風不也是極大量的空氣分子在移動嗎？</p>
+            <p><span class="speaker-a">【主持 A】</span>哇，這個反思非常敏銳，這兩者的關鍵其實在於他們移動的方式不一樣。</p>
+            <p><span class="speaker-b">【主持 B】</span>移動的方式怎麼說？</p>
+            <p><span class="speaker-a">【主持 A】</span>嗯，你想像一下一張巨大的撞球檯，上面擺滿了球，一陣強風，就像是你把整張桌子直接傾斜，所有的球都一起朝同一個方向滾過去。</p>
+            <p><span class="speaker-b">【主持 B】</span>哦，所以這是一種巨量的位移。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，但聲音完全不一樣，聲音是發生在平坦的桌面上。你拿著母球用力撞擊第一顆球，那顆球撞擊下一顆之後，它自己就停在原地了。</p>
+            <p><span class="speaker-b">【主持 B】</span>啊，我懂了。所以真正移動穿越整張桌子的其實不是球本身，而是能量。</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯。強風是空氣的搬家，但聲音是空氣分子在原地的推擠還有回彈。</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>原來是這樣，所以當我們聽到聲音的時候，撞進我們耳朵裡的那顆空氣分子，其實一開始就在我們耳朵旁邊，它只是接收了從遠處傳遞過來的撞擊能量而已。</p>
+            <p><span class="speaker-a">【主持 A】</span>完全說到點子上了，這也就是為什麼這篇文本會稱它為一場完美的連鎖反應啊。</p>
+            <p><span class="speaker-b">【主持 B】</span>哇，這太神奇了，既然我們現在已經釐清了這個微觀世界裡的乒乓球大戰，那我們現在把視角拉回來，回到這座充滿各種聲音的棒球場。</p>
+            <p><span class="speaker-a">【主持 A】</span>好啊，我們來看看人體是怎麼製造這些聲音的。</p>
+
+            <hr style="border:0; border-top:1px dashed #ccc; margin: 30px 0;">
+
+            <p><span class="speaker-b">【主持 B】</span>對，想像你現在坐在觀眾席上，周圍有點吵雜，然後突然一個非常經典的聲音穿透了人群。"Hot dogs here! 來了，來買熱狗哦！"
+                很生動。然後啊，作為一個已經飢腸轆轆的球迷，你幾乎是反射性地大喊回去："I'll have a hot dog, please! (請給我一份熱狗)"。這個場景真的很有趣啊，而且裡面藏著幾個很棒的英文單字哦。
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>嗯，文本裡面是怎麼形容這個攤販的聲音的？</p>
+            <p><span class="speaker-b">【主持 B】</span>文本形容這個叫賣聲，<span class="vocab">high-pitched</span>
+                在這裡指的是音調，合在一起就是高音調的或是尖銳的 high-pitched。那這個聲音到底是從我們身體的哪裡發出來的？</p>
+            <p><span class="speaker-a">【主持 A】</span>文本有給答案哦，叫做 <span class="vocab">voice boxes</span>，也就是我們的喉部或者是聲帶。</p>
+            <p><span class="speaker-b">【主持 B】</span>哦，voice boxes，我看文本裡面有形容，喉嚨裡面有一些線狀的構造。所以是攤販的大腦先發出訊號，讓這些線狀構造開始 vibrate
+                震動，才啟動了那場空氣乒乓球的連鎖反應囉。</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯沒錯，而且在背後還有一個極度迷人的、算是心理跟生理的轉換過程。</p>
+            <p><span class="speaker-b">【主持 B】</span>心理跟生理的轉換？</p>
+            <p><span class="speaker-a">【主持 A】</span>對，文本裡提到啊，聲帶的震動讓周圍的空氣陷入了一種動盪，英文用了一個很有張力的詞，叫做 <span
+                    class="vocab">unrest</span>。</p>
+            <p><span class="speaker-b">【主持 B】</span>Unrest，動盪不安的感覺。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，然後這些瘋狂撞擊的分子就產生了 <span class="vocab">air pressure</span>
+                氣壓，當這個我們看不見的氣壓，也就是聲波撞擊到那位球迷的耳膜時，大腦就瞬間介入，開始解碼了。</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>哇，這裡就是物理學交棒給神經科學的瞬間了耶，氣壓變成了聽覺神經的電訊號，然後大腦去翻找記憶庫，把這個高頻率的訊號翻譯成：「哇，那是球場傳統美食的聲音。」</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，而且最精彩的是文本接下來的推論哦。當大腦辨識出這個訊號，激發了飢餓感之後，球迷幾乎是別無選擇，英文是 <span
+                    class="vocab">have no choice</span>，只能立刻買熱狗了。</p>
+            <p><span class="speaker-b">【主持 B】</span>對，他只能立刻啟動他自己的 voice
+                boxes，製造出另一組完全不同的空氣震動，穿越人群精準的砸在哪個攤販的耳朵上。把我「要買熱狗」的訊息傳遞過去，這真的是一個天衣無縫的溝通循環呢，物理學的震動轉化成了人類心理的渴望，然後這股渴望又化為新的物理震動發射出去。
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，所以了解這個機制之後啊，當你下次在台灣的夜市聽到攤販大喊「雞排哦～」的時候，你腦海裡浮現的就不會只有雞排了，哈哈。</p>
+            <p><span class="speaker-b">【主持 B】</span>哈哈，我會想到 voice 還有 pressure 正在空氣中引發的 unrest。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>對，將情境跟單字綁定在一起，這絕對是建立直覺語感最快的捷徑啦。不過一個人的聲帶能推動的空氣分子畢竟還是有限的嘛，攤販的聲音頂多傳給幾排之外的觀眾而已。</p>
+            <p><span class="speaker-b">【主持 B】</span>嗯，這倒是真的。如果今天比賽來到九局下半，主場球隊落後一分，準備要發起最後反攻的時候，光靠幾個人的聲音絕對沒辦法激勵全場 5 萬球迷啊。
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>對，這時候我們就需要更龐大、更暴力的空氣推擠了。這裡我們剛好可以學到一個運動賽事裡面超級常出現的單字，叫做 <span
+                    class="vocab">rally</span>。</p>
+            <p><span class="speaker-b">【主持 B】</span>Rally。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，在棒球或是籃球裡面，當落後的隊伍開始連續得分，準備要發起反攻，重振旗鼓的時候，我們就會稱之為 rally。</p>
+            <p><span class="speaker-b">【主持 B】</span>懂了。所以當這種 rally 的氣氛開始醞釀的時候，球場裡的管風琴手就會開始彈奏，文本是這樣形容的：<em>"Quick deep
+                    notes in a rhythm that gets faster and faster, and higher and higher."</em> 嗯，節奏越來越快，音調越來越高。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，直到音樂猛然停住，全場 5 萬人在那一秒的寂靜之後，就會用盡全力齊大喊：<em>"Charge!"</em> 衝啊！</p>
+            <p><span class="speaker-b">【主持 B】</span>哇，Charge 這個字真的充滿了那種動態的破壞力，有衝鋒攻擊的意思。可是等一下哦，我在讀這段文本的時候其實有點卡住了。</p>
+            <p><span class="speaker-a">【主持 A】</span>怎麼說？哪裡卡住？</p>
+            <p><span class="speaker-b">【主持 B】</span>我們前面不是一直在強調，聲音是物體震動去推擠空氣分子嗎？可是文本裡面明確提到，管風琴是透過電子方式（英文是 <span
+                    class="vocab">electronically</span>）連接到計分板旁邊巨大的揚聲器。嗯哼，對，可是電子是在電線裡面跑的呀，它是不可能直接跑出來撞擊空氣的吧，那這些電子的脈衝到底是怎麼變成撞擊我們耳朵的聲波的呢？
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>哈哈，你問到核心了。這個跨越數位跟物理界線的魔法，其實藏在揚聲器網罩後方一個平常我們根本看不見的零件裡面。</p>
+            <p><span class="speaker-b">【主持 B】</span>什麼零件？</p>
+            <p><span class="speaker-a">【主持 A】</span>文本特別指出了這個字哦，叫做 <span
+                    class="vocab">cones</span>，也就是圓錐體。所以那些藏在喇叭裡面的圓錐體，就是搭起物理動作的橋樑囉。</p>
+            <p><span class="speaker-b">【主持 B】</span>沒錯，你可以把它想像成是一個超級巨大，然後是靠電力驅動的人造聲帶。</p>
+            <p><span class="speaker-a">【主持 A】</span>哦，人造聲帶。</p>
+            <p><span class="speaker-b">【主持 B】</span>對，當管風琴手按下琴鍵，電線就會將電子脈衝傳遞到揚聲器，然後這些圓錐體接收到之後，就會以極度精準的速度開始向前向後猛烈的推動。</p>
+            <p><span class="speaker-a">【主持 A】</span>也就是說它們實實在在的在 vibrate 震動。</p>
+            <p><span class="speaker-b">【主持 B】</span>沒錯，它們把揚聲器前方的空氣分子狠狠的給推出去。而且這邊文本還提供了一個絕佳的物理細節哦，完美解釋了 <span
+                    class="vocab">pitches</span>，也就是「音調」這個概念。</p>
+            <p><span class="speaker-a">【主持 A】</span>嗯，我記得文本有提到不同大小的圓錐體，對吧？為什麼大型喇叭裡面通常要放好幾種不同大小的？</p>
+            <p><span class="speaker-b">【主持 B】</span>這是我非常喜歡的一個科學概念，因為體積決定了物理運動的極限。文本裡面寫到，較小的圓錐體震動的非常快，負責產生高音，也就是 high
+                tones。</p>
+            <p><span class="speaker-a">【主持 A】</span>那巨大的圓錐體呢？</p>
+            <p><span class="speaker-b">【主持 B】</span>巨大的移動的比較慢，所以它負責產生低音，low sounds。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>啊，我好像可以想像那個畫面了，就好像如果你手裡拿著一把小巧的塑膠扇子，你可以非常快速、瘋狂的在臉前搧動，這就像小圓錐體在製造高頻率的推擠，對吧？</p>
+            <p><span class="speaker-b">【主持 B】</span>對，沒錯。再如果你手裡拿的是一塊跟門板一樣大的厚板，你根本快不起來啊，可是你每往前推一次，都會推動一波非常巨大而且沉重的空氣。</p>
+            <p><span class="speaker-a">【主持 A】</span>對，那種沉重感就是低音。</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>哇，這個扇子跟門板的比喻非常非常精確。管風琴手就是透過按鍵發送電子訊號，去指揮那些大大小小的圓錐體，讓它們以一秒幾百甚至幾千次的頻率在吹打空氣。</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，將不同音調的聲波合在一起，這就是電子擴音機能夠掀起球迷情緒狂潮的科學秘密啦。</p>
+
+            <hr style="border:0; border-top:1px dashed #ccc; margin: 30px 0;">
+
+            <p><span class="speaker-b">【主持 B】</span>真的太精彩了，那當管風琴把氣氛帶到了最高點，球迷也大喊完 Charge
+                之後，接下來會發生的絕對是棒球場上所有人最期待，也是具爆發力的一聲了。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>沒錯。重頭戲要來了。這個聲音哦，可以說是結合了我們前面提到的所有物理學，它是兩種極端力量的終極碰撞。我來用文本裡最具畫面感的一句話來描述它哦。</p>
+            <p><span class="speaker-b">【主持 B】</span>好，你念慢的哦。</p>
+            <p><span class="speaker-a">【主持 A】</span><em>"The crack of the bat when it hits a ball."</em> 意思是球棒擊中球的清脆聲響。
+            </p>
+            <p><span class="speaker-b">【主持 B】</span>哦，在學習這句話的時候啊，我們必須停下來好好感受一下 <span class="vocab">crack</span>
+                這個單字。這在語言學裡面叫做擬聲詞，擬聲詞就是模擬聲音的詞嗎？其實我發現當我念出 crack 的時候，舌頭的後半部會先頂住上顎，然後再發出 k 這個音的瞬間猛然放開，口腔裡面真的有一種空氣爆裂的感覺。</p>
+            <p><span class="speaker-a">【主持 A】</span>對啊，比起你很平淡的說 "sound of the bat"，"the crack of the bat"
+                真的能讓你立刻感覺到那種瞬間斷裂，極具破壞力的能量。</p>
+            <p><span class="speaker-b">【主持 B】</span>真的。語言的發音往往就模擬了物理的現實，我們可以試著用超慢動作來重現那個決定性的瞬間。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>好，投手投出一顆帶著極大動能的棒球，然後打者完美掌握了時機揮動那根堅硬的木質球棒。球棒帶著同樣巨大的力量迎頭撞上了那顆棒球。因為這是兩種相反方向的極端力量在瞬間接觸，所以棒球本身會在那一刻被擠壓變形，對不對？就像一顆被壓扁的彈簧一樣。
+            </p>
+            <p><span class="speaker-b">【主持 B】</span>沒錯。而且木頭球棒同時也承受著極大的反作用力，這兩種物質在接觸的瞬間，內部就產生了極快速的震動，文本用的是 <span
+                    class="vocab">rapid vibrations</span>。</p>
+            <p><span class="speaker-a">【主持 A】</span>Rapid 就是快速的意思。</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>對，這種極快速的震動，在一瞬間把原本平靜的氣體分子狠狠的往外推擠，創造出一道就像牆壁一樣堅硬的聲波往外炸開。然後文本用到了一個精準到讓人起雞皮疙瘩的單字欸，叫做 <span
+                    class="vocab">microseconds</span>，就是微秒，百萬分之一秒的意思。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>嗯，microseconds。文本說就在這幾微秒之間，看台上的球迷就聽到了這個巨大的撞擊聲。其實這裡稍微補充一下啦，聲音傳到看台還是需要一點點時間，通常是零點幾秒，但相對於人類的感知，它真的是快得幾乎不可思議。
+            </p>
+            <p><span class="speaker-b">【主持 B】</span>嗯，一瞬間的事。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>對，球迷的耳朵接收到這個強大的聲波，大腦的解碼器瞬間亮起，判定這是一支安打或者是全壘打。接著球迷就再次使用了我們前面學過的那個器官了，文本這裡的拼寫是 <span
+                    class="vocab">vocal cords</span>，也就是我們前面提到的 voice boxes 裡面的聲帶。</p>
+            <p><span class="speaker-b">【主持 B】</span>對，大腦下達指令，數萬名球迷的 vocal cords 同時收縮震動。</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>哇，這簡直是一場令人窒息的能量接力賽！木頭跟皮革的碰撞壓縮了空氣，創造出極速的震動，然後幾千萬顆隱形空氣乒乓球以音速飛行，猛烈撞擊球迷的耳膜，大腦在微秒內判定勝利，接著對著喉嚨的聲帶發出電子訊號。然後五萬人的聲帶再次引爆空氣，引發了巨大的歡呼聲。
+            </p>
+            <p><span class="speaker-b">【主持 B】</span>物理法則、人體解剖學，還有我們人類的情感，居然就在這一聲 crack 之中完美的融合在一起了。</p>
+            <p><span class="speaker-a">【主持 A】</span>這真的就是聲音的終極意義了，它不僅僅只是空氣分子的碰撞而已，它傳遞的是事件發生的那個瞬間全場共享的那種狂喜。</p>
+
+            <hr style="border:0; border-top:1px dashed #ccc; margin: 30px 0;">
+
+            <p><span class="speaker-b">【主持
+                    B】</span>這段旅程實在太震撼了，如果你正聽到這裡，我要向你致敬。作為一個想把英文學好的台灣人，你今天不僅完成了英文發音的練習，更成功跨出了一條全新的學習路徑。</p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯，我們今天沒有死背任何東西，但你現在絕對深深記住了 <span class="vocab">vibrations</span>
+                震動、<span class="vocab">molecules</span> 分子、<span class="vocab">cones</span> 圓錐體、<span
+                    class="vocab">microseconds</span> 微秒，還有 <span class="vocab">vocal cords</span>
+                聲帶這些詞彙。因為你現在已經了解了聲音背後的物理機制。這給了你的大腦一個非常堅固的鷹架，用來掛載這些英文單字。</p>
+            <p><span class="speaker-b">【主持
+                    B】</span>對。從今天起，每當你看到或者聽到這些字，你腦海裡浮現的就會是棒球場上飛舞的乒乓球、熱狗攤販的喉嚨，還有那個巨大的揚聲器圓錐體。千萬不要讓英文只停留在書本上哦，要讓它們成為你在現實世界中真正能感受到的物理現象。
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>沒錯。在我們結束這次的深入探討之前，我想留下一個挑戰給你。其實物理法則是沒有國界的。</p>
+            <p><span class="speaker-b">【主持 B】</span>怎麼說？</p>
+            <p><span class="speaker-a">【主持
+                    A】</span>下次當你走在台灣熱鬧的街頭，不管是你去巷口買杯手搖飲，還是逛著人聲鼎沸的夜市，當你聽到摩托車呼嘯而過，或是遠處傳來的流行音樂時，試著閉上眼睛幾秒鐘。去想像一下那些看不見的聲波。
+            </p>
+            <p><span class="speaker-b">【主持 B】</span>對，去想像一下在你周圍的空氣中，有多少顆以驚人速度飛舞的隱形空氣乒乓球。正穿越城市的喧囂，精準的把那個瞬間的故事傳遞到你的耳朵裡。
+            </p>
+            <p><span class="speaker-a">【主持 A】</span>當你再次睜開眼睛，你可以試著在心裡用今天學到的英文，像是 <span class="vocab">vibrations</span>,
+                <span class="vocab">air pressure</span>, <span class="vocab">molecules</span>
+                來描述你眼前的世界。我保證你對待英文，甚至聆聽這個世界的角度都會變得截然不同哦。</p>
+            <p><span class="speaker-b">【主持 B】</span>期待這份全新的視角，能成為你掌握這門語言最強大的動力。謝謝你將這段時間交給我們，陪我們一起拆解文本，探索聲音的微觀世界。</p>
+            <p><span class="speaker-a">【主持 A】</span>期待你將這些物理的震動化為未來脫口而出的流利英文，我們下次的深入探討見咯。</p>
+            <p><span class="speaker-b">【主持 B】</span>下次見。</p>
+        </div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_18.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
             }
-        }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

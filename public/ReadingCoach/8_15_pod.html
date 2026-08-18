@@ -1,107 +1,486 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_15.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 逐字稿：位能與動能的隱藏力量</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "PingFang TC", "微軟正黑體", sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .intro-text {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            color: #555;
+            border-left: 5px solid #3498db;
+        }
+
+        .dialogue {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .speaker {
+            font-weight: bold;
+            min-width: 60px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .host {
+            color: #e74c3c;
+        }
+
+        .co-host {
+            color: #2980b9;
+        }
+
+        .text {
+            flex-grow: 1;
+        }
+
+        .english {
+            font-family: "Georgia", serif;
+            color: #27ae60;
+            background-color: #eaeded;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .quote {
+            background-color: #f0f8ff;
+            border-left: 4px solid #2980b9;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-family: "Georgia", serif;
+            color: #2c3e50;
+            font-style: italic;
+        }
+
+        .section-title {
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.4em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎙️ AI Podcast 逐字稿：位能與動能的隱藏力量</h1>
+
+    <div class="intro-text">
+        <strong>節目簡介：</strong>本集節目從日常的雲霄飛車、棒球場上的投手，一路談到燃燒的壁爐與浩瀚宇宙中的彗星，最後探討人類工程奇蹟「胡佛水壩」。帶你透過充滿畫面感的英文單字，輕鬆理解「位能 (Potential
+        Energy)」與「動能 (Kinetic Energy)」的轉換奧秘。
+    </div>
+
+    <h2 class="section-title">第一部分：凝結的瞬間與爆發的位能</h2>
+
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">想像一下你現在正被緊緊綁在雲霄飛車的座位上。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">哇，這個開場很有畫面喔。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">對啊，你想像一下嘛，車廂緩緩爬升，發出那種咔咔咔卡的機械聲。然後最讓人冒冷汗的就是接下來的那個瞬間。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">沒錯，在抵達最高點的那一秒鐘，整台車完全停住了，你的身體懸在半空中，盯著眼前深不見底的軌道。整個心臟都要停了。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">對，在那令人屏息的一瞬間到底發生了什麼事？好，我們來拆解一下這個概念，歡迎來到這次的深度探索！今天我們要帶你潛入那些看似靜止，卻暗潮洶湧的隱藏力量。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">嗯，在那個看似靜止的瞬間，其實正發生著宇宙中最劇烈的物理拉扯。我們手邊這份文本探討的正是支配這一切的兩大主角，也就是「位能」跟「動能」。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">其實更有意思的是這份科學文本的用字遣詞簡直像是一部微電影，這也是我們今天深度探索的特殊任務。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">沒錯，這是專門為身為台灣人，一直想從零開始把英文學好的你所準備的雙語大師課。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">
+            對，看到整篇原文書，你可能會想直接放棄，但別擔心，我們不會教你死背那些刁鑽的文法。我們會把這些生動的段落切成好入口的小塊，帶你像看電影一樣，挑出裡面充滿畫面的英文單字。所以準備好了嗎？讓我們先把鏡頭從雲霄飛車切換到棒球場上。我來唸一下這段描述：
+        </div>
+    </div>
+
+    <div class="quote">
+        "The pitcher gets into her set. Her glove and pitching hand come together by her chin, and she then lowers them
+        to her belt. She looks at the catcher and nods."
+    </div>
+
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">這裡描述的是投手準備投球的靜止狀態。手套和投球的手在下巴處靠攏，然後降到腰際。他看著捕手點頭。看起來毫無殺傷力對吧？</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">聽起來蠻平靜的。但我們接著聽下去：</div>
+    </div>
+
+    <div class="quote">
+        "She brings her front leg up and pauses, standing perfectly balanced on her back leg. Then, in an instant, she
+        steps forward with her front leg. Her whole body lurches toward home plate and her pitching arm swings out after
+        it like a whip. At the furthest point, when a whip would crack, she lets the ball fly..."
+    </div>
+
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">等等，投手把前腳抬起來，金雞獨立、完美平衡的那一刻。文本說她 <span class="english">pauses</span>
+            就是停頓了，從物理學的角度來看，她明明就沒有在動，為什麼說這是一股強大的力量？</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">嘿，這就帶出了我們今天的第一個核心概念：「位能」，英文是 <span class="english">potential energy</span>。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">文本對位能的定義是：儲存在物體、原子或分子中的化學或物理能量。你可以把位能想像成一種「被封印」的狀態。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">被封印。對。當投手抬起腳，對抗地心引力維持平衡的那一秒鐘，她全身的肌肉其實都在瘋狂地工作，把能量一點一點的壓縮進去。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">哇，就像你在用力壓緊一根彈簧那樣。這不是休息，這是在蓄力！所以當她把這根彈簧鬆開的時候，英文文本用了一個超級有畫面的字來形容那個爆發力，就是 <span
+                class="english">lurches</span>。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">嗯，<span class="english">lurches</span>。文本說：<span class="english">her whole body lurches toward
+                home plate</span>。對於剛開始學英文的你，千萬不要只把這個字當作普通的移動喔。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">觀察得很敏銳，<span class="english">lurch</span>
+            這個字發音的時候嘴巴需要稍微用力。它絕對不是輕飄飄地走過去。它是指一種失去平衡、帶有強大爆發力的猛然前傾或蹣跚，你可以想像在一艘遇到大風浪的船上，整艘船突然往一邊傾斜，那就是 <span
+                class="english">lurch</span>。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">想像那個畫面，投手把累積在體內的位能，透過一個猛烈的 <span class="english">lurch</span> 瞬間釋放出來。接著文本說她的手臂 <span
+                class="english">swings out after it like a whip</span>，像鞭子一樣甩出。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">這裡讓人著迷的是，無論是人體的肌肉還是停在雲霄飛車頂端的那台車子，物理法則和英文的描述方式在這些瞬間都達到了完美的共鳴。這告訴我們，學英文的時候要去感受這些有重量感和方向感的動態動詞。
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">真的，與其生硬地說 <span class="english">she moves fast</span>，不如試著在腦海裡重現那個甩鞭子的畫面，你的英文會瞬間立體起來。</div>
+    </div>
+
+    <h2 class="section-title">第二部分：大自然的位能寶庫與能量守恆</h2>
+
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">我們剛才看到了人體肌肉和機械的能量，但其實大自然和宇宙裡也藏著同樣的機制。讓我們把視角從棒球場拉開，拉到你家客廳的壁爐，甚至一路飛向浩瀚的外太空。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">這個跨度蠻大的。我來唸一段關於壁爐的文本：<span class="english">A log resting in a fireplace just before it is
+                about to be lit, is a treasure trove of potential energy.</span></div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">哇，這句太美了吧。一塊還沒點燃的木材，安靜地躺在壁爐裡，文本居然形容它是一個 <span class="english">treasure trove</span>，位能的寶庫！
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">對啊，<span class="english">treasure</span> 是寶藏，<span class="english">trove</span>
+            是收藏品。在科學文章裡用到這麼像童話故事的字眼，這算正常嗎？</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">
+            在英文裡這是一種非常高明的名詞隱喻。即使是嚴肅的科普文章，作者也常常用具體的日常物品來幫助讀者理解抽象的概念。與其生硬地說這塊木頭含有很高的化學能量，不如說它是一個寶庫，這暗示了木材內部藏著某種珍貴的、等待被發掘的東西。
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">
+            那這個寶庫的鎖是怎麼被打開的呢？組成木頭的那些碳原子，原本像是一群小人緊牽著手。這股牽手的力量就是化學能。當火一燃燒，就等於是把他們的手強行扳開，化學鍵的斷裂就是打開寶庫的鑰匙，原本儲存在連結裡的能量就瞬間變成我們感受到的熱跟光釋放出來了。
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">如果我們把這個機制放大到宇宙尺度，文本給了我們另一個驚人的例子，關於彗星（<span class="english">comet</span>）。原文寫到：<span
+                class="english">As a comet approaches a planet or star, it slows, momentarily affected by the larger
+                body’s gravity.</span> 就是說彗星靠近大行星的時候會被大行星的重力影響暫時慢下來。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">接著重頭戲來了：<span class="english">The potential energy builds and then reaches a breaking point,
+                as the comet accelerates around the larger body and is slingshotted out the other side.</span>
+            等一下，這裡有一個字我一定要拿出來講：<span class="english">slingshotted</span>。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">這個字很有趣，我記得 <span class="english">slingshot</span> 是彈弓的意思對吧？就是小時候玩的那種 Y
+            字型的木頭玩具。這裡把名詞當作動詞來用，而且用的是被動語態 <span class="english">is
+                slingshotted</span>。代表彗星被大行星的重力像拉彈弓一樣拉到極限，然後啪的一聲被彈射出去！</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">這太生動了。經過了這兩段，我們其實已經見證了能量從位能轉換成動能（<span class="english">kinetic
+                energy</span>）的過程。動能顧名思義就是運動的能量。如果把這當作是一場金融交易，位能就像是存在銀行裡的定存，而動能就像是領出來揮霍的現金。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">但這就讓我想到一個問題了：在去銀行提款的過程中，錢會不會變少？會不會被扣手續費？我們來看看下一個關於射箭的段落。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">好啊，原文說：<span class="english">When an archer draws and holds her arrow, her bow is brimming
+                with stored potential energy.</span> 先停一下 <span class="english">brimming</span>
+            這個字。它的原意是液體滿到杯口快要溢出來的樣子。用在這裡代表那把拉開的弓裡面儲存的位能已經滿到極限，隨時會爆發。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">然後文本接著說能量轉換 <span class="english">is not a perfectly efficient
+                process</span>（並非完美高效的過程）。這是不是代表有一部分的能量在半空中憑空消失，被宇宙給刪除了？</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">這大概是所有人剛接觸物理時最常有的直覺誤解。宇宙這間銀行是不會把你的錢弄丟的。那那些手續費跑去哪了？文本解釋了：<span class="english">Instead, the
+                energy might be absorbed by the archer’s arm, causing it to jerk to the side...</span>
+            能量跑到了弓箭手的手臂上！難怪文本用了 <span class="english">jerk</span> 這個字，這是一種毫無預警的、短促的抽動或猛扯。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">沒錯，同時還有一部分變成了聲音：<span class="english">when the bow twangs</span>。<span
+                class="english">Twang</span> 這個字唸起來結尾有一個很重的鼻音，它根本就是一個自帶音效的擬聲詞！專門用來形容緊繃的弦被撥動後在空中震動發出的嗡嗡餘音。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">所以能量並沒有消失，而是變成了手臂抽動的動能以及震動空氣的聲波能量。這就是物理學的終極鐵律：能量守恆！文本用了一句非常有份量的話來做總結：<span
+                class="english">Therefore, the total sum of energy is still conserved.</span></div>
+    </div>
+
+    <h2 class="section-title">第三部分：馴服巨獸——胡佛水壩</h2>
+
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">既然能量總和是守恆的，永遠不會憑空消失，那我們人類能不能設計出一種超級巨大的裝置，把大自然裡那些像寶庫一樣的位能全部攔截下來，為我們所用？</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">這就把我們帶到了文本的最後一部分，人類史上最瘋狂的能量捕捉計畫：胡佛水壩（<span class="english">Hoover Dam</span>）。文本提到 <span
+                class="english">can also be harnessed to power homes...</span> 我們先看 <span class="english">harness</span>
+            這個字，它的原意是指套在馬匹身上的馬具。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">所以當文本說 <span class="english">harness energy</span>，它不只是「使用」能量，它帶有一種人類以極高的智慧去馴服、駕馭狂野自然力量的意味！
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">文本提到它是一個 <span class="english">arch-gravity
+                dam</span>（拱重力壩）。胡佛水壩擋住的是科羅拉多河，形成了全美國最大的水庫——米德湖（<span class="english">Lake
+                Mead</span>）。幾百億噸的水如果只是一堵平的牆，早就被水壓沖垮了。所以它必須是彎曲的拱形。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">當巨大的水壓推向水壩時，這個拱形結構會把力量向兩側分散，死死地頂住旁邊堅硬的黑峽谷岩壁。用峽谷的岩壁撐住兩邊，用自己的超大體積壓住底部，這根本是用物理來對抗物理！</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">因為被水壩攔截，水無處可去只能越積越高。地心引力不斷對這些高處的水施加拉力，每分每秒這座「位能寶庫」都在瘋狂膨脹。當水流透過洩洪道（<span
+                class="english">spillways</span>）或是進水塔（<span class="english">intake towers</span>）引導進入水閘門（<span
+                class="english">sluices</span>）時，就會以極度狂暴的動能往下衝！</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">這股巨大的動能會直接撞擊位於壩底的渦輪機，帶動發電機。就在這一瞬間，自然界的物理動能變成了能夠點亮加州、內華達州和亞利桑那州無數個夜晚的電力。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">不過這頭我們費盡心思馴服的能量巨獸，現在似乎面臨了危機。文本最後提到 <span class="english">electricity production varies
+                annually...</span> 因為進入了 <span class="english">prolonged period of seasonal droughts</span>（長期的季節性乾旱）。
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">這就像是我們前面提到的那個弓箭手，他現在因為嚴重缺水沒有力氣，再也無法把弓拉到最滿了。不管我們的通道蓋得多麼完美，只要大自然不給水，位能的定存帳戶就是空的。</div>
+    </div>
+
+    <h2 class="section-title">結語：釋放你內心的動能</h2>
+
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">今天這趟旅程真的太不可思議了。對於正在從零學習英文的你來說，我們完全跳脫了死背單字的窠臼。你跟著我們感受了 <span class="english">lurch</span>
+            那個猛然前傾的爆發力，體會了 <span class="english">plunge</span> 那種俯衝的重量感，還學會了用 <span class="english">treasure
+                trove</span> 寶庫與 <span class="english">slingshotted</span> 彈弓來解釋科學現象。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">只要你懂得在閱讀時去尋找這些有溫度的動態動詞和隱喻，英文就不再是一排排冷冰冰的字母，而是躍然紙上的真實世界了。在結束之前，我想留給你一個畫面，讓你想帶回現實生活中慢慢咀嚼。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">今天我們談論了外在世界的各種潛在能量：蓄勢待發的雲霄飛車、滿載的米德湖、拉滿的弓弦。但請你現在把視線拉回你自己身上。</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">你現在正在收聽我們拆解這些艱澀的英文文本，你腦海中那股強烈想要突破語言障礙、渴望看懂細節的企圖心，難道不就是一股無比巨大的「位能」嗎？</div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker host">主持人 A</div>
+        <div class="text">這股渴望一直儲存在你的體內，就像那塊還沒點燃的木材。當你今天試著跟我們一起在腦海裡唸出 <span
+                class="english">lurch</span>，感受那個發音的嘴型時，你就已經為這股能量找開了一條全新的通道！從你試著開口、試著理解上下文的那一刻起，你正在把這股無形的渴望，瞬間轉化為能夠推動人生前進的「動能」。
+        </div>
+    </div>
+    <div class="dialogue">
+        <div class="speaker co-host">主持人 B</div>
+        <div class="text">不要讓這股能量停下來。你準備好繼續釋放屬於你的動能了嗎？感謝你與我們一起經歷這次的深度探索，我們下次見囉！繼續一起拆解世界，發掘知識與強大力量，拜拜！</div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_15.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
             }
-        }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

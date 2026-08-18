@@ -245,23 +245,107 @@
             display: none;
         }
 
-        
+
         .tab-content.active {
             display: block;
         }
 
         /* 聽音重組樣式 */
-        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
-        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
-        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
-        .status-correct { color: #4CAF50; }
-        .status-wrong { color: #F44336; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
-        .game-controls { margin-top: 20px; text-align: center; }
+        .game-board {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+            min-height: 50px;
+        }
+
+        .answer-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+            margin-bottom: 20px;
+        }
+
+        .word-block {
+            background-color: #fff;
+            border: 2px solid #2196F3;
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1565c0;
+            user-select: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-status {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #F44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #f44336 !important;
+            color: #c62828 !important;
+        }
+
+        .game-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -269,7 +353,8 @@
     <div class="container">
         <h1>📖 Egypt, the Kingdom of Kush, and Mesopotamia</h1>
         <a href="8_24_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="" target="_blank">沈浸式閱讀程式</a>
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBr2r1Am3GIR416wahGSSv6AZBQpigB-6vyJYJZMpjJBfE?e=nfrEjh"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -299,7 +384,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
-                
+
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
@@ -777,45 +862,45 @@
                     </ol>
                 </div>
             </div>
+        </div>
+
+
+        <!-- 聽音重組分頁 -->
+        <div id="reconstruction" class="tab-content">
+            <h3>🎧 聽音重組挑戰</h3>
+            <div class="info-box">
+                <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
             </div>
-
-
-            <!-- 聽音重組分頁 -->
-            <div id="reconstruction" class="tab-content">
-                <h3>🎧 聽音重組挑戰</h3>
-                <div class="info-box">
-                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+            <div class="game-board">
+                <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                    <button type="button" id="btnChunkMode" class="btn"
+                        style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                        語塊模式</button>
+                    <button type="button" id="btnWordMode" class="btn"
+                        style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                        單字模式</button>
                 </div>
-                <div class="game-board">
-                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
-                        <button type="button" id="btnChunkMode" class="btn"
-                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
-                            語塊模式</button>
-                        <button type="button" id="btnWordMode" class="btn"
-                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
-                            單字模式</button>
-                    </div>
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <span id="gameProgress"
-                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
-                            6</span>
-                        <button type="button" class="btn" style="background-color: #2196F3;"
-                            onclick="playCurrentSentence()">🔊 播放此句</button>
-                    </div>
-                    <div class="answer-area" id="answerArea"></div>
-                    <div class="word-bank" id="wordBank"></div>
-                    <div id="reviewArea"></div>
-                    <div class="game-controls">
-                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
-                            onclick="nextSentence()">➡️ 下一句</button>
-                    </div>
-                    <div class="game-status" id="gameStatus"></div>
-                    <div id="translationHint"
-                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
-                    </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span id="gameProgress"
+                        style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                        6</span>
+                    <button type="button" class="btn" style="background-color: #2196F3;"
+                        onclick="playCurrentSentence()">🔊 播放此句</button>
+                </div>
+                <div class="answer-area" id="answerArea"></div>
+                <div class="word-bank" id="wordBank"></div>
+                <div id="reviewArea"></div>
+                <div class="game-controls">
+                    <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                        onclick="nextSentence()">➡️ 下一句</button>
+                </div>
+                <div class="game-status" id="gameStatus"></div>
+                <div id="translationHint"
+                    style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -1058,7 +1143,7 @@
         }
 
         // 頁面載入時初始化
-        
+
         // 頁面載入時初始化
         window.onload = () => {
             if (typeof initText === 'function') initText();
@@ -1067,143 +1152,143 @@
 
         // --- 聽音重組遊戲邏輯 ---
         const gameSentences = [
-          {
-                    "en": "Ancient Egyptians are now revered as the masters of desert agriculture, for their irrigation technology allowed them to cultivate crops during the dry months.",
-                    "zh": "古埃及人現在被尊崇為沙漠農業的大師，因為他們的灌溉技術使他們能夠在乾旱的月份裡種植農作物。",
-                    "chunks": [
-                              "Ancient Egyptians",
-                              "are now revered",
-                              "as the masters of desert agriculture,",
-                              "for their irrigation technology",
-                              "allowed them to cultivate crops",
-                              "during the dry months."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "are now revered",
-                                        "meaning": "如今被尊崇（revere = 高度敬仰）",
-                                        "collocation": "revered figure（被敬仰的人物）",
-                                        "synonym": "are now respected / are now admired",
-                                        "pronunciation": "revered 的重音在第二音節 /rɪˈvɪrd/，字尾 /d/ 輕放。"
-                              },
-                              {
-                                        "chunk": "to cultivate crops",
-                                        "meaning": "種植農作物（cultivate = 耕種）",
-                                        "collocation": "cultivate land（耕種土地）",
-                                        "synonym": "to grow crops / to farm",
-                                        "pronunciation": "cultivate 重音在第一音節 /ˈkʌl.tɪ.veɪt/，crops 的 /kr/ 連綴清楚。"
-                              }
-                    ]
-          },
-          {
-                    "en": "By diverting water, ancient Egyptians were able to keep it from washing onto un-farmable desert terrain, where it would essentially be wasted.",
-                    "zh": "透過引水，古埃及人能夠防止水沖刷到無法耕種的沙漠地形上，在那裡水基本上會被浪費掉。",
-                    "chunks": [
-                              "By diverting water,",
-                              "ancient Egyptians",
-                              "were able to keep it from",
-                              "washing onto un-farmable desert terrain,",
-                              "where it would essentially be wasted."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "By diverting water,",
-                                        "meaning": "透過引水、改變水流方向",
-                                        "collocation": "divert traffic（分流交通）",
-                                        "synonym": "by redirecting water / by channeling water",
-                                        "pronunciation": "diverting 的重音在第二音節 /daɪˈvɜːr.tɪŋ/，By diverting 連讀。"
-                              },
-                              {
-                                        "chunk": "where it would essentially be wasted.",
-                                        "meaning": "在那裡它基本上會被浪費掉",
-                                        "collocation": "essentially（本質上；基本上）",
-                                        "synonym": "where it would mostly go to waste",
-                                        "pronunciation": "essentially 重音在第二音節 /ɪˈsen.ʃl.i/，would 弱讀為 /wəd/。"
-                              }
-                    ]
-          },
-          {
-                    "en": "Cities thrived along the Nile, in large part because of the proximity to the obvious transportation, which facilitated trade.",
-                    "zh": "城市沿著尼羅河繁榮發展，在很大程度上是因為靠近這條顯而易見的交通要道，這促進了貿易。",
-                    "chunks": [
-                              "Cities thrived along the Nile,",
-                              "in large part because of",
-                              "the proximity to",
-                              "the obvious transportation,",
-                              "which facilitated trade."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "in large part because of",
-                                        "meaning": "在很大程度上是因為",
-                                        "collocation": "in large part due to（在很大程度上歸因於）",
-                                        "synonym": "mainly because of / largely due to",
-                                        "pronunciation": "large part 連讀，part 的 /t/ 輕放，because of 弱讀為 /bɪˈkɒzəv/。"
-                              },
-                              {
-                                        "chunk": "which facilitated trade.",
-                                        "meaning": "這促進了貿易（facilitate = 促進、使...更容易）",
-                                        "collocation": "facilitate communication（促進溝通）",
-                                        "synonym": "which enabled / which promoted trade",
-                                        "pronunciation": "facilitated 重音在第二音節 /fəˈsɪl.ɪ.teɪ.tɪd/，字尾 /d/ 輕放。"
-                              }
-                    ]
-          },
-          {
-                    "en": "An invasion by the Assyrians cut short the influence of Kush in Egypt, but the Kushites gained knowledge of ironwork.",
-                    "zh": "亞述人的入侵縮短了庫施在埃及的影響力，但庫施人卻獲得了鐵器製造的知識。",
-                    "chunks": [
-                              "An invasion by the Assyrians",
-                              "cut short",
-                              "the influence of Kush in Egypt,",
-                              "but the Kushites",
-                              "gained knowledge of ironwork."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "cut short",
-                                        "meaning": "縮短、中斷（慣用語）",
-                                        "collocation": "cut short a speech（縮短演講）",
-                                        "synonym": "ended abruptly / curtailed",
-                                        "pronunciation": "cut short 連讀，short 的 /ʃ/ 起音清楚，/t/ 字尾輕放。"
-                              },
-                              {
-                                        "chunk": "gained knowledge of ironwork.",
-                                        "meaning": "獲得了鐵器製造的知識",
-                                        "collocation": "gain knowledge（獲取知識）",
-                                        "synonym": "learned the skill of / acquired expertise in",
-                                        "pronunciation": "gained 的 /d/ 和 knowledge 的 /n/ 連讀，ironwork 重音在第一音節。"
-                              }
-                    ]
-          },
-          {
-                    "en": "The area experienced the same cyclical flooding periods that ancient Egypt and Kush did, and thus had to learn to adapt.",
-                    "zh": "該地區經歷了與古埃及和庫施相同的週期性洪水時期，因此必須學會適應。",
-                    "chunks": [
-                              "The area experienced",
-                              "the same cyclical flooding periods",
-                              "that ancient Egypt and Kush did,",
-                              "and thus",
-                              "had to learn to adapt."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "the same cyclical flooding periods",
-                                        "meaning": "同樣週期性的洪水時期",
-                                        "collocation": "cyclical pattern（週期性模式）",
-                                        "synonym": "the same recurring floods",
-                                        "pronunciation": "cyclical 重音在第一音節 /ˈsaɪk.lɪ.kl/，flooding 的 /fl/ 連綴清楚。"
-                              },
-                              {
-                                        "chunk": "had to learn to adapt.",
-                                        "meaning": "不得不學習適應",
-                                        "collocation": "adapt to change（適應變化）",
-                                        "synonym": "had to adjust / had to find ways to cope",
-                                        "pronunciation": "had to 弱讀為 /hæd.tə/，adapt 重音在第二音節 /əˈdæpt/。"
-                              }
-                    ]
-          }
-];
+            {
+                "en": "Ancient Egyptians are now revered as the masters of desert agriculture, for their irrigation technology allowed them to cultivate crops during the dry months.",
+                "zh": "古埃及人現在被尊崇為沙漠農業的大師，因為他們的灌溉技術使他們能夠在乾旱的月份裡種植農作物。",
+                "chunks": [
+                    "Ancient Egyptians",
+                    "are now revered",
+                    "as the masters of desert agriculture,",
+                    "for their irrigation technology",
+                    "allowed them to cultivate crops",
+                    "during the dry months."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "are now revered",
+                        "meaning": "如今被尊崇（revere = 高度敬仰）",
+                        "collocation": "revered figure（被敬仰的人物）",
+                        "synonym": "are now respected / are now admired",
+                        "pronunciation": "revered 的重音在第二音節 /rɪˈvɪrd/，字尾 /d/ 輕放。"
+                    },
+                    {
+                        "chunk": "to cultivate crops",
+                        "meaning": "種植農作物（cultivate = 耕種）",
+                        "collocation": "cultivate land（耕種土地）",
+                        "synonym": "to grow crops / to farm",
+                        "pronunciation": "cultivate 重音在第一音節 /ˈkʌl.tɪ.veɪt/，crops 的 /kr/ 連綴清楚。"
+                    }
+                ]
+            },
+            {
+                "en": "By diverting water, ancient Egyptians were able to keep it from washing onto un-farmable desert terrain, where it would essentially be wasted.",
+                "zh": "透過引水，古埃及人能夠防止水沖刷到無法耕種的沙漠地形上，在那裡水基本上會被浪費掉。",
+                "chunks": [
+                    "By diverting water,",
+                    "ancient Egyptians",
+                    "were able to keep it from",
+                    "washing onto un-farmable desert terrain,",
+                    "where it would essentially be wasted."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "By diverting water,",
+                        "meaning": "透過引水、改變水流方向",
+                        "collocation": "divert traffic（分流交通）",
+                        "synonym": "by redirecting water / by channeling water",
+                        "pronunciation": "diverting 的重音在第二音節 /daɪˈvɜːr.tɪŋ/，By diverting 連讀。"
+                    },
+                    {
+                        "chunk": "where it would essentially be wasted.",
+                        "meaning": "在那裡它基本上會被浪費掉",
+                        "collocation": "essentially（本質上；基本上）",
+                        "synonym": "where it would mostly go to waste",
+                        "pronunciation": "essentially 重音在第二音節 /ɪˈsen.ʃl.i/，would 弱讀為 /wəd/。"
+                    }
+                ]
+            },
+            {
+                "en": "Cities thrived along the Nile, in large part because of the proximity to the obvious transportation, which facilitated trade.",
+                "zh": "城市沿著尼羅河繁榮發展，在很大程度上是因為靠近這條顯而易見的交通要道，這促進了貿易。",
+                "chunks": [
+                    "Cities thrived along the Nile,",
+                    "in large part because of",
+                    "the proximity to",
+                    "the obvious transportation,",
+                    "which facilitated trade."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "in large part because of",
+                        "meaning": "在很大程度上是因為",
+                        "collocation": "in large part due to（在很大程度上歸因於）",
+                        "synonym": "mainly because of / largely due to",
+                        "pronunciation": "large part 連讀，part 的 /t/ 輕放，because of 弱讀為 /bɪˈkɒzəv/。"
+                    },
+                    {
+                        "chunk": "which facilitated trade.",
+                        "meaning": "這促進了貿易（facilitate = 促進、使...更容易）",
+                        "collocation": "facilitate communication（促進溝通）",
+                        "synonym": "which enabled / which promoted trade",
+                        "pronunciation": "facilitated 重音在第二音節 /fəˈsɪl.ɪ.teɪ.tɪd/，字尾 /d/ 輕放。"
+                    }
+                ]
+            },
+            {
+                "en": "An invasion by the Assyrians cut short the influence of Kush in Egypt, but the Kushites gained knowledge of ironwork.",
+                "zh": "亞述人的入侵縮短了庫施在埃及的影響力，但庫施人卻獲得了鐵器製造的知識。",
+                "chunks": [
+                    "An invasion by the Assyrians",
+                    "cut short",
+                    "the influence of Kush in Egypt,",
+                    "but the Kushites",
+                    "gained knowledge of ironwork."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "cut short",
+                        "meaning": "縮短、中斷（慣用語）",
+                        "collocation": "cut short a speech（縮短演講）",
+                        "synonym": "ended abruptly / curtailed",
+                        "pronunciation": "cut short 連讀，short 的 /ʃ/ 起音清楚，/t/ 字尾輕放。"
+                    },
+                    {
+                        "chunk": "gained knowledge of ironwork.",
+                        "meaning": "獲得了鐵器製造的知識",
+                        "collocation": "gain knowledge（獲取知識）",
+                        "synonym": "learned the skill of / acquired expertise in",
+                        "pronunciation": "gained 的 /d/ 和 knowledge 的 /n/ 連讀，ironwork 重音在第一音節。"
+                    }
+                ]
+            },
+            {
+                "en": "The area experienced the same cyclical flooding periods that ancient Egypt and Kush did, and thus had to learn to adapt.",
+                "zh": "該地區經歷了與古埃及和庫施相同的週期性洪水時期，因此必須學會適應。",
+                "chunks": [
+                    "The area experienced",
+                    "the same cyclical flooding periods",
+                    "that ancient Egypt and Kush did,",
+                    "and thus",
+                    "had to learn to adapt."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "the same cyclical flooding periods",
+                        "meaning": "同樣週期性的洪水時期",
+                        "collocation": "cyclical pattern（週期性模式）",
+                        "synonym": "the same recurring floods",
+                        "pronunciation": "cyclical 重音在第一音節 /ˈsaɪk.lɪ.kl/，flooding 的 /fl/ 連綴清楚。"
+                    },
+                    {
+                        "chunk": "had to learn to adapt.",
+                        "meaning": "不得不學習適應",
+                        "collocation": "adapt to change（適應變化）",
+                        "synonym": "had to adjust / had to find ways to cope",
+                        "pronunciation": "had to 弱讀為 /hæd.tə/，adapt 重音在第二音節 /əˈdæpt/。"
+                    }
+                ]
+            }
+        ];
 
         let currentGameIndex = 0;
         let currentWords = [];
@@ -1367,7 +1452,7 @@
                     finalSentence.style.textAlign = 'center';
                     finalSentence.style.whiteSpace = 'normal';
                     finalSentence.style.padding = '15px';
-                    
+
                     finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
                     wordBank.appendChild(finalSentence);
 

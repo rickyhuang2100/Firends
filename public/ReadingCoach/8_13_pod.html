@@ -1,107 +1,1069 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_13.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紐約校車大罷工：被遺忘的角落 - AI Podcast 逐字稿</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #333333;
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --host-bg: #ffffff;
+            --cohost-bg: #eaf2f8;
+            --english-text: #2980b9;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        body {
+            font-family: "Helvetica Neue", Arial, "LiHei Pro", "微軟正黑體", sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin-top: 30px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .intro-box {
+            background-color: #fff9e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #ffe082;
+        }
+
+        .english-word {
+            color: var(--english-text);
+            font-weight: 600;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .dialogue {
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .speaker-label {
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #7f8c8d;
+        }
+
+        .host {
+            background-color: var(--host-bg);
+            border: 1px solid #e0e0e0;
+        }
+
+        .co-host {
+            background-color: var(--cohost-bg);
+            border: 1px solid #d4e6f1;
+            margin-left: 40px;
+        }
+
+        /* 隱藏/顯示原文區塊的簡單樣式 */
+        details {
+            background-color: #f0f3f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .original-text {
+            margin-top: 15px;
+            font-family: Georgia, serif;
+            color: #555;
+            text-align: justify;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .co-host {
+                margin-left: 15px;
             }
         }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+    </style>
+</head>
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+<body>
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+    <div class="container">
+        <h1>紐約校車罷工事件：隱形社會的脆弱角落</h1>
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+        <div class="intro-box">
+            <strong>💡 學習重點整理：</strong><br>
+            本集 Podcast 探討 2013 年紐約校車司機罷工事件，不僅是一則新聞，更是檢視社會邊緣弱勢群體（特教生與特約治療師）處境的真實故事。請在聆聽時特別注意以下情境單字的使用語氣：
+            <ul>
+                <li><span class="english-word">Strike</span> (罷工)</li>
+                <li><span class="english-word">Scramble</span> (倉皇應付/拼命尋找)</li>
+                <li><span class="english-word">Holding my breath</span> (屏息以待/極度焦慮)</li>
+                <li><span class="english-word">Prolonged</span> (延長的/拖延的)</li>
+                <li><span class="english-word">Worst-case scenario</span> (最糟的情況)</li>
+                <li><span class="english-word">Vulnerable</span> (脆弱的/易受傷的)</li>
+            </ul>
+        </div>
+
+        <details>
+            <summary>📖 點擊展開：英文新聞原文 (Source Text)</summary>
+            <div class="original-text">
+                In January 2013, the four-week school bus drivers’ strike in New York City affected many people,
+                especially students with serious disabilities. These children weren’t able to get to school without
+                buses. Since many disabled students could not make it to school, the contract therapists who worked with
+                them didn’t have enough students to work with and were being sent home early. As a result, they had to
+                scramble to make up for lost pay. Students with disabilities were especially hurt by the school bus
+                strike, as special buses were the only way for many of them to get to school. Public transport and
+                regular taxis couldn’t accommodate their wheelchairs, and the more seriously disabled students needed a
+                nurse to go with them on the commute. Bridget Wilson works as a contract speech therapist at a New York
+                City school for children with special needs. Interviewed before the end of the strike, she said that
+                only a handful of her 15 students had made it to school since the strike had started on January 16th,
+                2013. Although Wilson did her best to make up hours with other kids who were able to get to school, it
+                got harder as the strike continued, she said. Wilson was worried about her students who needed constant
+                work to maintain certain skills such as drinking from a straw, which helps strengthen mouth muscles and
+                limits drooling. With too much time off, some students would have to start over again when they
+                returned. It may take a long time for some students to regain the skills they had been working on. “I’m
+                holding my breath to see where my little guys are when they get back to school,” Wilson said at the
+                time. Jessica Seldman, a speech therapist in Brooklyn, was also worried about her students. She said
+                that in the past, there had been snowstorms that have prevented children from getting to school, but it
+                had never lasted that long. “We’ve never experienced something like this, where it’s so prolonged,” she
+                said during the strike. As of January 30th, 2013, almost three-quarters of students with disabilities
+                were back in school as some parents found other types of transportation such as carpooling, according to
+                the Department of Education. Across the whole city, 91 percent of students were back in classes despite
+                the strike by January 30th. However, at a school called United Cerebral Palsy in Brooklyn, where Wilson
+                worked, only 37 of the 108 special needs students were back in school on January 31st, according to
+                Marianne Giordano, Assistant Executive Director of the school. As a result, the school’s therapists were
+                losing work hours. The school had been trying to help, offering them make-up work with students, but
+                that only stretched so far. To cut back on expenses, Wilson was spending less money on groceries and
+                going out to dinner with her husband less than she used to. Three-quarters of the school’s clinicians
+                were contract employees. Each one played an important role in a student’s physical, mental, and
+                emotional development. “If a child comes back after the strike and has a new therapist, or doesn’t have
+                one at all, that would be a horror,” said Giordano. While many clinicians wanted to stay in their
+                current positions for the sake of their students, they had their own responsibilities and families to
+                support as well. “There is a tremendous financial impact to them,” said Lillian Borsa, whose company
+                helped connect contract therapists with jobs, and who works with therapists at the Brooklyn school.
+                Borsa worried, “If there is no end in sight in a couple of weeks, then we’re really going to have to
+                look at some changes. Everyone is trying to hang in there right now; no one wants to leave.” Some
+                therapists from Borsa’s company worked to bear the weight of the strike together and took turns leaving
+                early, said Borsa. Still, they were nervous because they didn’t know how long the strike would last.
+                Many therapists considered leaving their jobs to be the worst-case scenario. If they left, it could mean
+                emotional, as well as developmental, setbacks for students. “When you have someone you are dealing with,
+                who is really in tune with where the child is—a vulnerable, vulnerable child—it’s hard to put into words
+                how difficult it could be,” said Borsa, “It’s hard to even know how hard it is since they can’t
+                communicate it, but we can feel it.” Fourteen-year-old Camille Clarke had not attended a single day of
+                school since the strike began, said her mother, Bernadette Tobierre. A special ambulette service took
+                Clarke to an afterschool program each day, but it wasn’t able to take her to school. Tobierre, who is a
+                nanny, couldn’t afford other options. Interviewed before the end of the strike, Tobierre was
+                increasingly frustrated. She had to ask for more hours at work to help afford the extra care for her
+                daughter. Even though Clarke was 14 years old, she could not feed herself, something the clinicians at
+                school helped her with. “I feel sorry that right now she is sitting at home, and she is supposed to be
+                in school working with a one-on-one therapist,” said Tobierre, a single mother. She noticed that her
+                normally happy, active daughter had been more quiet than usual. “I’m getting to that point. It’s very
+                emotional.”
+            </div>
+        </details>
+
+        <h2>🎙️ Podcast 逐字稿</h2>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            想像一下，如果今天你住的地方像是台北捷運或是公車，突然發生了超級大規模的全面罷工。你的第一反應會是什麼？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            嗯，一般人大概就是覺得天哪也太煩了吧。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對啊，就是可能通勤時間變超長，或是你得花很多錢去搭計程車嘛，就是一種生活上的不方便。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯，就是蠻困擾的。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            但是呢，對於紐約市一位叫做 Camille 的 14 歲女孩來說，這場罷工可不只是一個不方便哦，這場罷工讓他連自己吃飯的能力都失去了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哇，這聽起來真的很嚴重。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對。所以歡迎你來到今天的深入解析，我知道正在收聽的你是一位母語為中文的台灣人，而且你可能正下定決心，想要給自己一個全新的挑戰，也就是從零開始學習英文。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯，而我們一直都相信要學好一個全新的語言，真的不能只是死盯著單字卡或是那種很無聊的文法書。真的那個背不起來啦。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對啊，語言其實是我們用來生存、表達痛苦，還有建立連結的工具。所以當你把英文放進一個真實世界的脈絡裡面，那些單字就不再是需要硬背的符號了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯，它們會變成非常有溫度的故事。那今天我們要帶你走進的是一段真實的歷史，也就是 2013 年 1 月發生在紐約市的一場校車司機大罷工。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            嗯，我們今天的解析任務其實很特別哦，我們會為你挑出這篇真實報導裡面最核心的幾個英文句子。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對，而且會用很道地的發音朗讀出來。然後我們再一起拆解裡面的關鍵字，但我們不會只停留在表面的翻譯，我們要用這些英文單字當做鑰匙去解開一個社會的盲點。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這個盲點就是，當一個巨大的城市系統突然當機的時候，為什麼最先被壓垮的總是平常你根本看不見的那群人？好，我們就直接進入現場吧，這場罷工到底發生了什麼事？讓我們先來聽聽這篇報導是怎麼破題的，請你仔細聽這個句子的語調哦，這會是我們今天故事的起點。
+            <br><br>
+            <span class="english-word">"In January 2013, the four-week school bus drivers' strike in New York City
+                affected many people, especially students with serious disabilities."</span>
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            其實這裡有一個非常關鍵的字，也是這次整個事件的核心，就是你剛剛念的那個 <span class="english-word">strike</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，<span class="english-word">strike</span>，拼法是 S-T-R-I-K-E。發音的時候要稍微注意一下，中間那個母音不是短的 i 哦。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            也就是說不是發成 strick 這樣對不對？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，嘴巴要稍微張開，發出像是我們中文說「愛」的那個很飽滿的音，<span class="english-word">strike</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            <span class="english-word">strike</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            哎，很好。在日常生活中這個字其實有「打擊」的意思，就像打棒球的時候裁判喊的「好球」。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哦，對，<span class="english-word">strike out</span> 那個 <span class="english-word">strike</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，但在社會或是勞工議題的語境裡面，它就是罷工的意思。這是一場為期四週的紐約市校車司機罷工，英文就是 <span class="english-word">School Bus Drivers'
+                Strike</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            四週耶！整整一個月，這真的很久。而且文本剛剛有告訴我們，這場罷工受到最大衝擊的是 <span class="english-word">students with serious
+                disabilities</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，也就是患有嚴重身心障礙的學生。<span class="english-word">disabilities</span> 這個字，初學者看到可能會覺得，哇，好長，很難念。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            真的蠻長的。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            但如果我們看它的上下文，它指的不僅僅是身體上的不方便哦，它其實涵蓋了一個極度脆弱的生存狀態。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            嗯，報導後面其實有提到一個讓我非常有畫面的動詞。因為這些特教學生沒有辦法去學校嘛，所以那些專門協助他們的特約治療師，英文叫做 <span class="english-word">contract
+                therapist</span>，就被迫提早下班。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            因為沒有學生可以教了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對啊，結果這些治療師就必須 <span class="english-word">scramble to make up for lost pay</span>。我對 <span
+                class="english-word">scramble</span> 這個字超有印象的。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            哦，怎麼說？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            因為我去那種早午餐店點炒蛋的時候，英文菜單上面就是寫 <span class="english-word">scrambled eggs</span> 嘛。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，你把這個字連結得非常好。<span class="english-word">scramble</span> 的發音，開頭的 C (編按: 音為 k) 要輕快一點，然後接著一個像是蝴蝶音的 a，<span
+                class="english-word">scramble</span>，<span
+                class="english-word">scramble</span>。對，你想像一下炒蛋的畫面，就是把蛋液在鍋子裡面很快速、很混亂的攪拌嘛？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            感覺沒錯。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            所以當這個字用在人的行為上的時候，它描繪的就是一種倉皇應付或者是急忙尋找初路的混亂狀態。所以治療師因為學生沒辦法搭車來學校，他們就沒有個案可以接，失去收入，只好 <span
+                class="english-word">scramble</span>，也就是拚了命的去彌補失去的薪水。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            就是到處亂撞急著找錢的那種感覺。這其實也打破了很多人一開始的想像。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            真的，因為像我自己一開始看這篇報導的時候，我就想說校車不開，那就叫家長自己接送啊。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            一般人大概都會這樣想。或者是紐約計程車那麼多，搭一般的計程車就好了嘛。但現實根本不是換一種交通工具這麼簡單的問題。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，文本裡面有明確指出一般的車輛根本無法 <span class="english-word">accommodate their wheelchairs</span>。<span
+                class="english-word">Accommodate</span> 就是容納的意思，也就是說一般車輛裝不下他們的輪椅。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對，有些重度障礙的學生甚至在通勤的時候是需要有專業護理師隨車陪同的。所以這根本不是什麼切斷了交通樞紐而已。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            我想提出一個可能更貼切的比喻，這感覺就像是直接拔掉了一台維生儀器的插頭。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            這個比喻非常精準。校車一停，這些學生就等於被徹底困在原地的孤島上，哪裡都去不了了。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，因為這不僅僅是教育權被剝奪而已，這其實是一場牽一髮而動全身的骨牌效應。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            骨牌效應怎麼說？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            你想哦，司機罷工是第一張骨牌，特教專車停擺是第二張，學生受困家裡是第三張。而最後被壓倒的那第四張骨牌就是那些失去生計的特約治療師了。這兩群人也就是最脆弱的學生跟最基層的治療師，他們其實被緊緊綁在同一個系統裡面。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯，所以我們來聽聽第一線治療師的真實感受。這句話裡面有一個非常生動的片語。這位紐約市特教學校的語音治療師 Bridget Wilson 這麼說。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            她說了什麼？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            她說 <span class="english-word">"I'm holding my breath to see where my little guys are when they get back to
+                school."</span>
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            哦，<span class="english-word">holding my breath</span>。字面物理動作上就是憋氣，但是在日常英文的語境裡面，這是一個充滿極度情緒張力的慣用語哦。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            像是看恐怖片那樣嗎？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，當你說 <span class="english-word">I'm holding my breath</span>
+            的時候，想像你正在看一部超級驚悚的電影，主角正要打開那扇門，你是不是會不自覺地屏住呼吸，身體變得很緊繃。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            會，會這樣倒吸一口氣的感覺。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這個片語就是用來表達極度擔憂、提心吊膽或者是焦慮的屏息以待。Wilson 說她正提心吊膽地等著看當她的 <span class="english-word">little
+                guys</span>，也就是她的小傢伙們，她的學生...
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            就是那些需要特教資源的孩子們。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，當這些孩子終於回到學校時，狀況到底會變成什麼樣子？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哇，只聽著壓力超大。文本裡還有另一位布魯克林區的治療師 Jessica Seldman，她也用了一個形容詞來描述這種焦慮。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，她說以前其實也曾經因為暴風雪，也就是 <span class="english-word">snowstorms</span> 而停課。嗯哼，但從來沒有像這次罷工一樣這麼 <span
+                class="english-word">prolonged</span>。<span class="english-word">prolonged</span>，這個字好像跟 <span
+                class="english-word">long</span> 有關係，對不對？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對，注意那個 <span class="english-word">long</span> 的音哦，你要稍微拉長一點，<span
+                class="english-word">prolonged</span>，就像這場無止境的罷工一樣。它是由 <span class="english-word">long</span>
+            延伸出來的，意思是延長的、拖延的。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            了解。暴風雪停課可能頂多就是兩三天嘛。但這場罷工是從 1 月 16 日就開始了，變成了一個 <span class="english-word">prolonged</span>
+            的危機，時間真的拉得太長了。不過聽到這裡，我必須提出一個疑問。因為我想很多正在聽節目的台灣聽眾，包括我自己啦。小時候如果遇到颱風假停課...
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哦，最喜歡放颱風假了！
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對啊，或者是國外那種下大雪放假，我們在家打電動看電視都是超級開心的啊。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            真的，一般人大概都會覺得讓小孩再多休息幾個禮拜有什麼好提心吊膽的，就是當作放個長假嘛，這些治療師會不會有點太誇張了？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這就是我們對教育的認知落差了，也是這篇文本想要揭露的殘酷現實。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            怎麼說？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對於一般孩子來說，不上學可能只是數學進度落後兩頁，或者單字少背幾個。但對於這些有特殊需求的兒童來說，他們在學校學的是生存。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            生存。這麼嚴重。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            文本中特別提到了一個細節哦，Wilson 的學生是需要持續不斷的訓練，英文是 <span class="english-word">constant work</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            <span class="english-word">constant work</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，他們需要這樣的訓練來維持像是 <span class="english-word">drinking from a straw</span> 這樣的技能。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            等一下，用吸管喝水？這對我們來說不是像呼吸一樣自然嗎？這還需要訓練？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            是的，對這些患有嚴重腦性麻痺或其他障礙的孩子來說，用吸管喝水可以幫助強化口腔肌肉，英文是 <span class="english-word">strengthen mouth muscles</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哦，強化口腔肌肉。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，並且這能減少他們流口水的狀況，也就是 <span class="english-word">limit drooling</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            原來是這樣。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            如果中斷訓練太久，也就是 <span class="english-word">too much time off</span>，這些好不容易才建立起來的肌肉記憶就會消失。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            天哪，當他們回到學校時，一切都必須 <span class="english-word">start over again</span>，也就是從頭來過。他們失去的根本不是分數，而是身體的機能。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            哇，這真的讓人非常有感觸欸，這完全解釋了為什麼那個 <span class="english-word">holding my breath</span> 背後的情緒會這麼沉重。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯。而且這場罷工不只讓學生的身體機能退化，它其實也把這些治療師逼到了生存的邊緣。我們提到 Wilson 的 15 個學生中只有極少數，英文是 <span class="english-word">a
+                handful</span>，能勉強到校。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            幾乎都沒有學生來。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對啊，為了應付失去的收入，她甚至必須在買日用品的時候精打細算，並且取消跟丈夫出去吃飯的計畫。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這感覺是一個互相依賴的脆弱生態系。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            說得太好了，而當這個生態系面臨崩潰的時候，我們就會進入接下來要學的這個詞彙。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            什麼詞？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            媒合這些特約治療師的公司負責人 Lillian Borsa 說了一段很無奈的話。我們一起來聽。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            好。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            她說：<span class="english-word">"It's hard to even know how hard it is since they can't communicate it, but we
+                can feel it."</span> 也就是說，我們甚至很難知道這對孩子來說有多艱難，因為他們根本沒有辦法表達，但我們身為大人，我們能感受得到。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯。報導指出哦，因為實在是撐不下去了，很多治療師就開始考慮離職，而這個狀況被教育界視為 <span class="english-word">worst-case scenario</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            <span class="english-word">worst-case scenario</span>，這個詞是不是在職場上很常見？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，<span class="english-word">worst</span> 是最糟的，<span class="english-word">case</span> 是情況，<span
+                class="english-word">scenario</span> 是劇本或情境。組合起來就是我們中文說的「最糟的情況」或者是「作最壞的打算」。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            所以 <span class="english-word">worst-case scenario</span> 在職場或日常生活都很實用欸。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            完全正確。如果治療師因為經濟壓力而被迫離職，這將會對這些特教生造成情感上與發展上的 <span class="english-word">setbacks</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            <span class="english-word">Setbacks</span>，這個字是挫折或者是嚴重的倒退，對吧？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            是的。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            等等，我這裡真的有點卡住了。因為我們剛剛看文本裡面有一組數據嘛。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            你說那一組對比的數據嗎？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對，截至 2013 年 1 月 30 日，整個紐約市有高達 91% 的學生已經回到學校了，因為很多家長想辦法透過共乘，也就是 <span class="english-word">carpooling</span>
+            送小孩上學。嗯哼，那既然 91% 的人都回去了，聽起來這場罷工的危機基本上已經解決了，為什麼那個 Lillian Borsa 還要說治療師離職是所謂的「最糟的情況」？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這就是冰冷數據掩蓋掉的真相了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            怎麼說？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            你剛剛提到的那個 91%，他們其實是有能力自己找到替代方案的一般家庭。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哦，也就是家裡有車或者是可以找親戚朋友幫忙的家庭。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，但如果你看弱勢群體的數據哦，在 Wilson 任職的聯合腦性麻痺學校，截至 1 月 31 號，108 位特殊需求學生中，竟然只有 37 位能回到學校。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            天哪，連一半都不到。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            大部分的特教生還是被困在家裡。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            可是就算是這樣，如果舊的治療師離職了，學校再聘請新的治療師來教不就好了嗎？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這個想法把事情想得太簡單了。文本中副執行長 Marianne Giordano 用了一個很強烈的字眼。她說更換治療師會是一場 <span class="english-word">a horror</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            <span class="english-word">A horror</span>，一場恐怖。對。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            原因在於 Borsa 提到的一個核心片語叫做 <span class="english-word">in tune with</span>。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            <span class="english-word">in tune with</span>，那個 <span class="english-word">tune</span> 是不是像在調音或者是聽音樂的旋律那個
+            <span class="english-word">tune</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，把收音機調到對的頻率就是 <span class="english-word">tune</span>。當你說你與某個人 <span class="english-word">in tune
+                with</span> 的時候，意思是你們的頻率完全對上了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            就是我們說的「很合得來」、「很懂對方」這樣嗎？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            是的，你深刻了解，並且能敏銳感知對方的需求和情緒。這些佔了學校四分之三比例的特約臨床醫師，他們可是花了好幾個月甚至是好幾年的時間，才跟這些極度脆弱的兒童建立起信任的。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哦，你剛剛提到了一個字，脆弱的英文是 <span class="english-word">vulnerable</span>，對不對？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，<span class="english-word">vulnerable</span>。這個字非常值得我們深入體會，<span class="english-word">vulnerable</span>
+            的意思是脆弱的，易受傷的。對於這些無法用言語溝通的 <span class="english-word">vulnerable</span> 兒童來說，原本的治療師可能是這個世界上唯一真正懂他們的人了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯。所以換來一個新的治療師，他根本分辨不出孩子皺眉是因為身體痛，還是只是因為肚子餓。也就是說，你換掉的不是一個所謂的員工，你根本是拔掉了這個孩子的發聲筒。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            完全正確，這也就是為什麼我們絕對不能只從宏觀的角度來看這場罷工。現在讓我們用英文去認識一位真實處在這種困境中的母親。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            好，文本採訪了一位單親媽媽 Bernadette Tobierre，她就是那位我們開頭提到的 14 歲女孩 Camille 的母親。請聽她非常沉痛的心聲。嗯，她說 <span
+                class="english-word">"I feel sorry that right now she is sitting at home, and she is supposed to be in
+                school working with a one-on-one therapist."</span> 這裡有一個很直觀的詞，<span
+                class="english-word">one-on-one</span>，其實就是我們中文常說的一對一。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，這裡指的是一對一治療師 <span class="english-word">one-on-one
+                therapist</span>。這位媽媽感到非常難過而且抱歉，因為她的女兒現在只能枯坐在家，而她本來應該在學校接受一對一的治療。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            罷工開始之後哦，14 歲的 Camille 真的是一天學校都沒去過。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            一天都沒去，紐約難道沒有什麼特殊的交通服務可以幫忙嗎？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            其實紐約有一種叫做 <span class="english-word">ambulette service</span> 的服務，這是一種配備了輪椅升降設備的特殊醫療交通車。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            那為什麼不搭這個車去學校？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            因為這種車雖然每天被授權能接送 Camille 去課後班，也就是 <span class="english-word">afterschool
+                program</span>。嗯哼，但因為系統的僵化，他們卻沒有被授權在早上送她去原本的學校上課。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            蛤？這也太官僚了吧。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            對，所以所謂的 B plan 根本就不存在。而且這裡面還有一個讓人極度無奈的社會階級的諷刺。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            怎麼說？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            因為這位單親媽媽 Bernadette，她的職業是一位保姆，英文是 <span class="english-word">nanny</span>。她自己根本負擔不起任何昂貴的私人交通工具來送女兒上學。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            是啊。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            結果呢，為了支付女兒因為沒去學校而多出來的那種日間照護費用，她竟然必須要求她的雇主讓她增加保姆的工作時數。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，這真的是很殘酷的現實。也就是說她必須花更多時間去照顧別人的小孩，藉此賺錢來彌補自己小孩因為罷工而失去的照顧資源。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            這就是結構性的無奈。而整篇報導最讓人心碎的細節是，Camille 雖然已經 14 歲了，但她甚至無法自己進食，英文是 <span class="english-word">could not feed
+                herself</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            天哪。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            平常在學校裡是專業的臨床醫師一口一口幫助她進食的。所以這又回到我們前面提到的那個技能退化跟情緒封閉的問題。媽媽說她有注意到，原本那個很快樂、很活躍的女兒，現在坐在家裡變得比平常更安靜了，<span
+                class="english-word">more quiet than usual</span>。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯，當一位母親用很疲憊的聲音說出 <span class="english-word">"I'm getting to that point. It's very emotional."</span>
+            的時候，你真的可以聽出她已經被這個失能的系統逼到了極限。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            真的。這其實就是我們今天這場深入解析最核心的價值所在了。今天正在學習英文的你不僅僅是學到了像是 <span class="english-word">strike</span> 罷工、<span
+                class="english-word">scramble</span> 倉皇應付，還有 <span class="english-word">holding my breath</span>
+            屏息以待、<span class="english-word">prolonged</span> 拖延的，以及 <span class="english-word">worst-case
+                scenario</span> 最糟的情況，還有 <span class="english-word">vulnerable</span> 脆弱的，這些非常實用而且道地的英文詞彙。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，更重要的是你賦予了這些單字真實的重量。當你下次看到 <span class="english-word">holding my breath</span> 的時候，你腦海中浮現的就不會再只是字典裡的翻譯了。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            沒錯，而是一位特教老師對弱勢孩童深深的焦慮。當你用出 <span class="english-word">vulnerable</span> 這個字的時候，你也已經懂得了那是多少個像 Camille
+            這樣無法自己吃飯的孩子所拼湊出來的真實處境。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            在我們今天的節目結束之前，我想留給你一個深刻的思考。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            嗯，什麼樣的思考？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            這個關於 2013 年紐約校車罷工的故事，其實揭露了一個關於照顧工作的矛盾真相。你會發現我們整個社會的運作，往往高度依賴著那些最低薪、最缺乏保障的勞工。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            像是這篇報導裡的特約治療師、司機，或者是像那位媽媽一樣的保姆。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            對，往往是這群人在照顧這個社會中最脆弱的一群人。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            哇，這點真的很值得深思。當我們在台灣，走在我們自己居住的城市裡面的時候，是不是也有這樣一套隱形的支撐系統呢？
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            絕對有。可能是每天接送偏鄉孩童的專車司機，也可能是社區裡的特教老師。如果有一天，這套我們覺得理所當然的系統崩潰了，這個系統是會從最頂端開始瓦解，還是從最底層開始碎裂？誰又會是第一個被困在原地，甚至連發聲求救都做不到的人呢？
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            當你在學習英文這門新語言的時候，你其實也正在獲得一種全新的視角重新檢視這個世界。
+        </div>
+
+        <div class="dialogue host">
+            <div class="speaker-label">主持 A</div>
+            沒錯。希望你帶著今天學到的這些英文單字，以及我們一起挖掘出來的這份同理心，繼續探索這個世界更多隱藏在角落的故事。感謝你加入我們今天的深入解析。
+        </div>
+
+        <div class="dialogue co-host">
+            <div class="speaker-label">主持 B</div>
+            大家下次見囉。
+        </div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_13.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

@@ -1,107 +1,626 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_25.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 學習筆記：二戰通訊密碼與 PCM 數位音樂革命</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --primary-color: #2563eb;
+            --primary-light: #eff6ff;
+            --accent-color: #7c3aed;
+            --accent-light: #f5f3ff;
+            --border-color: #e2e8f0;
+            --speaker-a: #0284c7;
+            --speaker-b: #0d9488;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #ffffff;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+        }
+
+        header p {
+            margin: 0;
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 英文文章樣式 */
+        .article-text {
+            font-size: 1.05rem;
+            color: #1e293b;
+        }
+
+        .article-text p {
+            margin-bottom: 1.5em;
+        }
+
+        /* 逐字稿對話樣式 */
+        .dialogue-item {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .speaker-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .speaker-a .speaker-label {
+            color: var(--speaker-a);
+        }
+
+        .speaker-b .speaker-label {
+            color: var(--speaker-b);
+        }
+
+        .dialogue-bubble {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.98rem;
+        }
+
+        .speaker-a .dialogue-bubble {
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--speaker-a);
+        }
+
+        .speaker-b .dialogue-bubble {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--speaker-b);
+        }
+
+        /* 單字卡片樣式 */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .vocab-card {
+            background-color: var(--accent-light);
+            border: 1px solid #ddd6fe;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .vocab-card h3 {
+            margin: 0 0 6px 0;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .vocab-card .phonetic {
+            font-size: 0.85rem;
+            color: #6b21a8;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .vocab-card p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            background-color: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .tab-nav {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .tab-btn {
+                text-align: left;
+                width: 100%;
+            }
+
+            .tab-content {
+                padding: 15px;
             }
         }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>AI Podcast 學習對照筆記</h1>
+            <p>音訊檔：8_25.m4a ｜ 主題：二戰 SIGSALY 密碼通訊與現代 PCM 數位音樂</p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-podcast')">Podcast 對話逐字稿</button>
+            <button class="tab-btn" onclick="switchTab('tab-english')">英文原文閱讀 (Original Text)</button>
+            <button class="tab-btn" onclick="switchTab('tab-vocab')">重點單字與概念庫</button>
+        </div>
+
+        <!-- Tab 1: Podcast 逐字稿 -->
+        <div id="tab-podcast" class="tab-content active">
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">想像一下齁，現在是 1941 年。美國軍方正在使用他們認為就是世界上最安全的最高機密跨國電話網絡。嗯哼，他們深信絕對沒有任何人可以竊聽。</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">
+                    但他們完全不知道的是，在荷蘭海岸邊一座改建的青年旅館……對，青年旅館哦！真的超瞎的，一群納粹德國的間諜，正舒服地戴著耳機，就像在聽公開的廣播節目一樣，把美國軍方高層的機密對話聽得一清二楚。</div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">哇，這畫面真的很衝擊！這個令人毛骨悚然的資安漏洞，不僅僅改變了二戰的走向，它更是正在收聽節目的你，今天能夠用 Spotify 或是 Apple
+                    Music 的最直接原因。</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">
+                    沒錯！其實這是一個多數人都不知道的歷史盲區啦。而今天這場深度探討，我們是為了你量身打造的——希望透過這份探討二戰通訊歷史的文本，從零開始學習英文。比起死背那些枯燥的單字表，掌握語言最深刻的方式，其實是去拆解文本背後真正的機制與故事。
+                </div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">
+                    沒錯沒錯！這份文本記錄了人類的語音是如何在戰爭那種極度壓迫的情況下，首次被數位化。這絕對是一部非常硬核的科技驚悚片。那我們就直接朗讀文本裡面最關鍵的英文句子，帶你從真實語境中感受發音和單字的威力！
+                </div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">準備好了嗎？讓我們直接切入 1941 年 12 月 7 日的那個早晨。一開始就描繪了當時極度高壓的局勢：<br><span
+                        class="highlight">"War was imminent."</span></div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble"><span class="highlight">Imminent</span>. 發音是
+                    /ˈɪm.ə.nənt/。這個字的意思不只是「可能發生」，而是指「迫在眉睫、下一秒就會爆發」，急迫感非常強。當時美國陸軍密碼破譯員剛攔截並解密了日本領導人的通訊，得知外交談判已經徹底破裂，戰爭真的已經
+                    imminent。</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">美國陸軍參謀長馬歇爾將軍面臨極度焦慮的局面，他必須在最短時間內警告太平洋上的每個海軍基地（包含夏威夷珍珠港）準備迎戰。如果追求速度，標準程序是使用當時
+                    AT&T 的 A-3 語音繞頻器（Scrambler）。這是一套類比系統，把語音頻率切碎反轉，沒解碼器聽起來就像外星人講話。</div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">聽起來很安全啊！那為什麼馬歇爾將軍在倒數計時的生死關頭拒絕拿起這支電話？因為他有一種強烈的直覺：這個 A-3 系統就像大家以為很安全的公開
+                    Wi-Fi，其實早就被駭客入侵了！事實證明他的直覺準確得令人發毛——納粹早就破解了 A-3 的類比反轉邏輯，在荷蘭青年旅館監聽了所有內容。</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">為了防止警告落入敵軍手裡，馬歇爾改用極度緩慢但相對安全的電報密碼傳送。但為了安全付出了慘痛代價——日軍突襲珍珠港重創 21 艘艦艇、奪走 2,400
+                    多條人命。馬歇爾的警告電報直到日軍飛機飛走後才送達。</div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">這個慘痛代價讓美軍找上當時的科技巨頭——貝爾實驗室（Bell Labs）。他們開出明確條件：需要一個在數學和物理上絕對不可能被破解的通訊網路！這就是
+                    Project X，後來被稱為 SIGSALY（又名綠蜂俠 Green Hornet）。</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">文本這樣描述技術突破：<br><span class="highlight">"The engineers realized they could
+                        not rely on continuous analog signals. The voice had to be quantized."</span></div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble"><span
+                        class="highlight">Quantized</span>（量化）。傳統類比訊號就像一幅連續無縫的「油畫」，很難在不破壞它的情況下加密；而
+                    PCM（脈衝編碼調變）技術，就等於把油畫變成由微小「樂高積木」拼成的馬賽克圖案！系統以極快且固定的時間間隔去對聲音進行數位採樣（Digital samples）。文本用了一個生活化比喻：就像把 99
+                    美分四捨五入算作 1 美元一樣。</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">但把聲音變成 0 和 1 後，透過大西洋海底電纜傳送，間諜攔截一樣會收到數字啊？SIGSALY
+                    的核心防禦是使用了密碼學中最優雅的「一次性密碼本」（One-time Pad）。工程師將語音數字與一組「完全隨機生成」的背景噪音結合，這組噪音刻在兩張一模一樣的黑膠唱片上（華盛頓與倫敦各一張）。
+                </div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">傳輸時產生的嗡嗡背景聲，聽起來就像當時熱門廣播劇《青蜂俠》（The Green
+                    Hornet）的主題曲！竊聽者只會聽到嗡嗡聲；沒有倫敦那張完全同步的黑膠唱片來抵消噪音，數學上絕不可能還原原始語音。而且唱片用完即銷毀！</div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">這套系統第一台重達 50
+                    噸！發熱量驚人到五角大廈必須為它建獨立冷氣。文本裡還藏了一個八卦：原本想裝在白宮地下室，但羅斯福總統嚴詞拒絕，因為他知道英國首相邱吉爾超喜歡在半夜打漫長又沒重點的跨國電話！最後系統裝在倫敦
+                    Selfridges 百貨公司的地下室。二戰期間進行了超過 3,000 次機密對話，完全沒被破解過。</div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">二戰結束後，PCM 技術轉移到了民間音樂產業。1982 年，Billy Joel 的專輯《52nd Street》成為世界上第一張使用 PCM
+                    技術製作的商業 CD。但到了 2000 年代初期：<br><span class="highlight">"Consumers abandoned the physical form for
+                        compressed digital files."</span></div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble">請注意 <span class="highlight">Physical form</span>（實體形式）。CD 有實體塑膠圓盤，會刮傷且佔空間；而
+                    MP3 這類壓縮數位檔案沒有 physical form，大腦和演算法利用「心理聲學（Psychoacoustics）」刪除耳朵察覺不到的微弱聲音細節，把 50MB 的 CD 軌道壓縮成 5MB 的
+                    MP3。</div>
+            </div>
+
+            <div class="dialogue-item speaker-a">
+                <span class="speaker-label">主持人 A</span>
+                <div class="dialogue-bubble">演進到今天，隨著電腦運算速度、取樣率與位元深度的提升，文本給出結論：<br><span class="highlight">"Today's high
+                        resolution digital audio is almost indistinguishable from analog recording."</span></div>
+            </div>
+
+            <div class="dialogue-item speaker-b">
+                <span class="speaker-label">主持人 B</span>
+                <div class="dialogue-bubble"><span
+                        class="highlight">Indistinguishable</span>（難以區分的）。今天的高解析數位音樂，其積木已經微小到奈米等級，人類耳朵幾乎無法區分它跟連續類比訊號的差別了。當你理解了這段歷史脈絡，看到
+                    imminent（迫切）、quantized（量化）、physical form（實體形式）、indistinguishable（無異），你就再也不需要死背單字了！</div>
+            </div>
+        </div>
+
+        <!-- Tab 2: 英文原文本 -->
+        <div id="tab-english" class="tab-content">
+            <div class="article-text">
+                <p>It was the morning of December 7, 1941, and problems were mounting for General George Marshall.
+                    American Army code breakers had intercepted and deciphered conversations between Japanese leaders in
+                    which they announced they had given up on diplomacy with the United States. War now seemed
+                    <strong>imminent</strong>. As U.S. Army Chief of Staff, it was Marshall’s role to warn every U.S.
+                    Navy post in the Pacific, including the Hawaiian base at Pearl Harbor, that they should take
+                    immediate steps to prepare for an attack.</p>
+
+                <p>Ever since the 1920s the United States had relied on the coded A-3 Scrambler system, operated by the
+                    American Telephone and Telegraph Company in New York, for its most secure military communications.
+                    Marshall didn’t trust the Scrambler, and his instincts were right. Years later it was discovered
+                    that the Germans had already cracked the code for the Scrambler, and were able to listen in on all
+                    conversations between American military leaders and their units using a listening station built in a
+                    former youth hostel on the Dutch coast.</p>
+
+                <p>To avoid having his critical message fall into Japanese hands, Marshall decided against using the
+                    Scrambler and instead sent his orders to Hawaii via telegraph code, a safer but slower system. That
+                    morning the Japanese launched a surprise air attack on the U.S. Naval base at Pearl Harbor. They
+                    sank or severely damaged 21 ships and boats and killed 2,402 people. Marshall’s orders to prepare
+                    the base’s defenses did not arrive until after the last Japanese plane disappeared over the Western
+                    horizon.</p>
+
+                <p>The disaster at Pearl Harbor confirmed what Marshall and other military leaders already knew: they
+                    needed a secure system for communication with their troops, one that could not be cracked by enemy
+                    forces. They turned to a company called Bell Labs, which in the 1920s had developed the Vocoder, an
+                    early voice encoding machine which took analog recordings, capturing the sounds as they were
+                    naturally emitted. The Vocoder recorded people’s voices and divided them by frequency into different
+                    pieces. It sent those pieces separately via radio waves to a machine on the other end, which
+                    received the different pieces and spliced them together to recreate the original sound.</p>
+
+                <p>The analog Vocoder became the basis of a newer, digitized version. With digital signals, the flow of
+                    sound is divided into segments, and each note is assigned its own unique binary value. Early methods
+                    of digital recording and playback had fewer values, which meant that when they were replayed, the
+                    recording sounded like a series of short segments with gaps in between. Advances in computing power
+                    allowed for more values to be added to the equation, so that conversations and other sounds could be
+                    replayed continuously and without gaps.</p>
+
+                <p>The new, digital version of the Vocoder was called various names, including Project X and SIGSALY. It
+                    also was called the Green Hornet. That’s because the different signals were sent by cable along with
+                    a buzzing noise made to sound like random background static, further disguising the transmission.
+                    Once the signals were received and spliced back together to recreate the entire conversation, the
+                    buzzing sound remained. People thought the resulting noise sounded similar to the theme song from
+                    The Green Hornet radio show, which was popular at the time.</p>
+
+                <p>Like the Vocoder, SIGSALY broke human speech down into multiple parts. Unlike Vocoder, however,
+                    SIGSALY was a digital system. Bell Labs engineers took digital samples of analog sounds recorded at
+                    uniform intervals and converted those sounds into numeric code. Each sample was
+                    <strong>quantized</strong> to the nearest value within a series of digital steps, much as you might
+                    round 99 cents up to a dollar. This process is called pulse-code modulation, and today it remains
+                    the method used by computers, MP3 players, and compact discs to translate sounds into digital form
+                    for later recreation into analog sound. The quality of that sound has to do with two properties: the
+                    sampling rate, which means the number of times per second a sample is taken; and the bit depth,
+                    which measures the number of possible values sounds can be divided into, along the audible continuum
+                    of frequencies (the more possible values, the closer each individual sound will be to the original).
+                </p>
+
+                <p>By March 1943, the first SIGSALY machine was built by Western Electric and shipped to Washington,
+                    D.C., where it was installed in the Pentagon. (Rumor has it the first machine was originally planned
+                    to be installed in the basement of the White House, but President Roosevelt decided against it
+                    because he knew of British Prime Minister Winston Churchill’s fondness for long, late-night phone
+                    calls.) The system was so large and generated so much heat that it required its own separate air
+                    conditioning system. Four months later, a twin system was installed in the basement of Selfridges
+                    Department Store in London, connected by cable to Churchill’s war cabinet room a mile away. The two
+                    systems were connected by a cable under the Atlantic.</p>
+
+                <p>Though cumbersome and expensive to operate, the SIGSALY system appears to have worked well during the
+                    war. More than 3,000 high-level conversations happened over SIGSALY, covering troop movements,
+                    equipment drops and strategy, and no record has ever been found of the German or Japanese militaries
+                    deciphering its coded messages. The system became the first transmission of speech using pulse-code
+                    modulation, and the first effective use of bandwidth compression to recreate speech. SIGSALY’s
+                    room-sized terminals were eventually set up in 10 places including Hawaii, Paris, Algiers and Guam.
+                    In addition, a mobile system was built to operate on a Navy ship that would accompany General
+                    MacArthur’s campaign across the Pacific Ocean, which military strategists had envisioned as the only
+                    way to beat Japan until the atomic bomb was dropped on Hiroshima in 1945.</p>
+
+                <p>After the war ended, SIGSALY was used to coordinate the return of troops and the repositioning of
+                    units across Europe at the start of the Cold War. SIGSALY was taken out of service in 1946. While
+                    pulse-code modulation continued to be used in coded military communications for decades, it wasn’t
+                    until 1972 that the technique was used in music to manufacture digital master copies of phonograph
+                    records. The first commercial music release using pulse-code modulation didn’t come until a decade
+                    later, when Billy Joel’s album, 52nd Street was issued on compact disc.</p>
+
+                <p>CDs sales, however, started to dwindle by the early 2000s when consumers began switching over to
+                    digital music files, the most common format of which is probably the MP3. MP3s possess a similar
+                    sound quality of a CD, and are recorded using the same method of digital sampling. The primary
+                    difference between them is their <strong>physical form</strong>, or lack thereof—CD’s have one,
+                    whereas MP3s exist only as computer files. Because they have no physical presence, MP3s can be saved
+                    and played on a variety of devices, reducing the risk of physical damage to disks and greatly
+                    reducing the cost, weight, and space required to maintain a music collection. Because the data in
+                    MP3 files is compressed to save memory space on most devices, however, the sound quality and range
+                    is generally lower than music played during a live performance or recorded onto records and CDs.</p>
+
+                <p>While some audiophiles claim that digital recording and playback of music can never fully recreate
+                    the full sound of music the way that a fully analog phonograph record can, improvements in
+                    processing speed, sampling rates, and bit depth mean that today, a digital recording is almost
+                    <strong>indistinguishable</strong> from an analog one.</p>
+            </div>
+        </div>
+
+        <!-- Tab 3: 重點單字庫 -->
+        <div id="tab-vocab" class="tab-content">
+            <h2>Podcast 核心強調智慧 (Vocabulary)</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <h3>Imminent</h3>
+                    <span class="phonetic">/ˈɪm.ə.nənt/ (adj.)</span>
+                    <p><strong>中文：</strong> 迫在眉睫的、即將爆發的</p>
+                    <p><strong>語境：</strong> "War was imminent." 指危機已經到了下一秒就會發生的極度緊迫狀態。</p>
+                </div>
+
+                <div class="vocab-card">
+                    <h3>Quantized</h3>
+                    <span class="phonetic">/ˈkwɑːn.taɪzd/ (v./adj.)</span>
+                    <p><strong>中文：</strong> 量化的、分階取的</p>
+                    <p><strong>語境：</strong> 將連續的聲音波形切碎，強制分配到最接近的數字數值中（像將 99 美分四捨五入為 1 美元）。</p>
+                </div>
+
+                <div class="vocab-card">
+                    <h3>Physical form</h3>
+                    <span class="phonetic">/ˈfɪz.ɪ.kəl fɔːrm/ (n.)</span>
+                    <p><strong>中文：</strong> 實體形式</p>
+                    <p><strong>語境：</strong> CD 具有實體塑膠圓盤的 physical form，而 MP3 則僅為無形的數位檔案。</p>
+                </div>
+
+                <div class="vocab-card">
+                    <h3>Indistinguishable</h3>
+                    <span class="phonetic">/ˌɪn.dɪˈstɪŋ.ɡwɪ.ʃə.bəl/ (adj.)</span>
+                    <p><strong>中文：</strong> 難以區分的、無法辨識差異的</p>
+                    <p><strong>語境：</strong> 現今高品質數位錄音與傳統類比聲音已經精細到「幾乎無法區分」。</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 30px;">關鍵科技概念 (Key Concepts)</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card" style="background-color: #f0f9ff; border-color: #bae6fd;">
+                    <h3 style="color: #0369a1;">SIGSALY (Project X)</h3>
+                    <p>二戰時期貝爾實驗室研發的頂級機密數位語音加密系統，重達 50 噸，利用一次性密碼本黑膠唱片混合隨機噪音（綠蜂俠嗡嗡聲）實現絕對無法破解的通訊。</p>
+                </div>
+
+                <div class="vocab-card" style="background-color: #f0f9ff; border-color: #bae6fd;">
+                    <h3 style="color: #0369a1;">PCM (Pulse-Code Modulation)</h3>
+                    <p>脈衝編碼調變。將連續類比聲音訊號進行「採樣」與「量化」轉換為數位二進位代碼（0與1）的技術，為現代 CD、MP3 與數位音樂的底層核心。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+        function switchTab(tabId) {
+            // 隱藏所有 tab 內容
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+            // 取消所有按鈕的 active 狀態
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            // 顯示指定的 tab 內容並將對應按鈕設為 active
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_25.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

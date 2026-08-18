@@ -245,23 +245,107 @@
             display: none;
         }
 
-        
+
         .tab-content.active {
             display: block;
         }
 
         /* 聽音重組樣式 */
-        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
-        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
-        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
-        .status-correct { color: #4CAF50; }
-        .status-wrong { color: #F44336; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
-        .game-controls { margin-top: 20px; text-align: center; }
+        .game-board {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+            min-height: 50px;
+        }
+
+        .answer-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+            margin-bottom: 20px;
+        }
+
+        .word-block {
+            background-color: #fff;
+            border: 2px solid #2196F3;
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1565c0;
+            user-select: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-status {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #F44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #f44336 !important;
+            color: #c62828 !important;
+        }
+
+        .game-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -269,7 +353,8 @@
     <div class="container">
         <h1>📖 Genetic Basis of Butterflies</h1>
         <a href="8_21_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="" target="_blank">沈浸式閱讀程式</a>
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQCBurw4TyzNQasV1zARd0hfAUiCiIuTEw8KhiwU2RimafA?e=UBqnzs"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -299,7 +384,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
-                
+
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
@@ -692,45 +777,45 @@
                     </ol>
                 </div>
             </div>
+        </div>
+
+
+        <!-- 聽音重組分頁 -->
+        <div id="reconstruction" class="tab-content">
+            <h3>🎧 聽音重組挑戰</h3>
+            <div class="info-box">
+                <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
             </div>
-
-
-            <!-- 聽音重組分頁 -->
-            <div id="reconstruction" class="tab-content">
-                <h3>🎧 聽音重組挑戰</h3>
-                <div class="info-box">
-                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+            <div class="game-board">
+                <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                    <button type="button" id="btnChunkMode" class="btn"
+                        style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                        語塊模式</button>
+                    <button type="button" id="btnWordMode" class="btn"
+                        style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                        單字模式</button>
                 </div>
-                <div class="game-board">
-                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
-                        <button type="button" id="btnChunkMode" class="btn"
-                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
-                            語塊模式</button>
-                        <button type="button" id="btnWordMode" class="btn"
-                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
-                            單字模式</button>
-                    </div>
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <span id="gameProgress"
-                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
-                            6</span>
-                        <button type="button" class="btn" style="background-color: #2196F3;"
-                            onclick="playCurrentSentence()">🔊 播放此句</button>
-                    </div>
-                    <div class="answer-area" id="answerArea"></div>
-                    <div class="word-bank" id="wordBank"></div>
-                    <div id="reviewArea"></div>
-                    <div class="game-controls">
-                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
-                            onclick="nextSentence()">➡️ 下一句</button>
-                    </div>
-                    <div class="game-status" id="gameStatus"></div>
-                    <div id="translationHint"
-                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
-                    </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span id="gameProgress"
+                        style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                        6</span>
+                    <button type="button" class="btn" style="background-color: #2196F3;"
+                        onclick="playCurrentSentence()">🔊 播放此句</button>
+                </div>
+                <div class="answer-area" id="answerArea"></div>
+                <div class="word-bank" id="wordBank"></div>
+                <div id="reviewArea"></div>
+                <div class="game-controls">
+                    <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                        onclick="nextSentence()">➡️ 下一句</button>
+                </div>
+                <div class="game-status" id="gameStatus"></div>
+                <div id="translationHint"
+                    style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -973,7 +1058,7 @@
         }
 
         // 頁面載入時初始化
-        
+
         // 頁面載入時初始化
         window.onload = () => {
             if (typeof initText === 'function') initText();
@@ -982,140 +1067,140 @@
 
         // --- 聽音重組遊戲邏輯 ---
         const gameSentences = [
-          {
-                    "en": "Their bright color makes them easily noticeable to predators, but also acts as a warning that they are poisonous if eaten.",
-                    "zh": "牠們鮮豔的顏色使牠們很容易被掠食者注意到，但也作為一種警告，表示如果吃掉牠們是有毒的。",
-                    "chunks": [
-                              "Their bright color",
-                              "makes them easily noticeable",
-                              "to predators,",
-                              "but also acts as a warning",
-                              "that they are poisonous if eaten."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "makes them easily noticeable",
-                                        "meaning": "使牠們容易被注意到",
-                                        "collocation": "easily noticeable difference（明顯的差異）",
-                                        "synonym": "makes them visible / makes them stand out",
-                                        "pronunciation": "makes them 連讀，them 弱讀為 /ðəm/，noticeable 的重音在第一音節 /ˈnoʊ.tɪ.sə.bəl/。"
-                              },
-                              {
-                                        "chunk": "acts as a warning",
-                                        "meaning": "充當警告（act as = 扮演...的角色）",
-                                        "collocation": "act as a reminder（充當提醒）、act as a deterrent（充當威懾）",
-                                        "synonym": "serves as a warning / functions as a signal",
-                                        "pronunciation": "acts as 連讀，as 弱讀為 /əz/，warning 的 /w/ 清楚圓唇。"
-                              }
-                    ]
-          },
-          {
-                    "en": "The poison of monarch butterflies can be traced back to a plant they feed on during an earlier stage in their lives.",
-                    "zh": "帝王斑蝶的毒素可以追溯到牠們在生命早期階段所食用的一種植物。",
-                    "chunks": [
-                              "The poison of monarch butterflies",
-                              "can be traced back",
-                              "to a plant",
-                              "they feed on",
-                              "during an earlier stage in their lives."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "can be traced back",
-                                        "meaning": "可以追溯（被動語態）",
-                                        "collocation": "trace back to its origins（追溯其起源）",
-                                        "synonym": "can be attributed to / has its roots in",
-                                        "pronunciation": "traced 的 /st/ 字尾輕放，back 的 /k/ 清楚結尾。"
-                              },
-                              {
-                                        "chunk": "they feed on",
-                                        "meaning": "牠們以...為食",
-                                        "collocation": "feed on insects（以昆蟲為食）",
-                                        "synonym": "they eat / they consume",
-                                        "pronunciation": "feed on 連讀，on 弱讀為 /ɒn/，feed 的 /d/ 輕放。"
-                              }
-                    ]
-          },
-          {
-                    "en": "Unlike other butterflies, monarch butterflies rely on their bright coloration to keep them safe.",
-                    "zh": "與其他蝴蝶不同，帝王斑蝶依賴牠們鮮豔的體色來保護自己安全。",
-                    "chunks": [
-                              "Unlike other butterflies,",
-                              "monarch butterflies",
-                              "rely on their bright coloration",
-                              "to keep them safe."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "rely on their bright coloration",
-                                        "meaning": "依賴牠們鮮豔的體色",
-                                        "collocation": "rely on each other（互相依賴）",
-                                        "synonym": "depend on their vivid colors",
-                                        "pronunciation": "rely on 連讀，on 弱讀為 /ɒn/，coloration 重音在第三音節 /ˌkʌl.əˈreɪ.ʃn/。"
-                              },
-                              {
-                                        "chunk": "to keep them safe.",
-                                        "meaning": "以保護牠們的安全",
-                                        "collocation": "keep someone safe（保護某人安全）",
-                                        "synonym": "to protect them / to defend them",
-                                        "pronunciation": "keep them 連讀，them 弱讀為 /ðəm/，safe 的 /f/ 字尾清楚。"
-                              }
-                    ]
-          },
-          {
-                    "en": "Once the butterfly is fully developed, the chrysalis splits apart, and the butterfly emerges.",
-                    "zh": "一旦蝴蝶完全發育，硬殼就會裂開，蝴蝶就會出現。",
-                    "chunks": [
-                              "Once the butterfly",
-                              "is fully developed,",
-                              "the chrysalis splits apart,",
-                              "and the butterfly emerges."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "is fully developed,",
-                                        "meaning": "完全發育成熟了",
-                                        "collocation": "fully developed plan（完整的計畫）",
-                                        "synonym": "has matured completely",
-                                        "pronunciation": "fully 的 /l/ 清楚，developed 的重音在第二音節 /dɪˈvel.əpt/。"
-                              },
-                              {
-                                        "chunk": "the butterfly emerges.",
-                                        "meaning": "蝴蝶破殼而出、出現",
-                                        "collocation": "emerge from the cocoon（從繭中破殼而出）",
-                                        "synonym": "the butterfly appears / comes out",
-                                        "pronunciation": "emerges 的重音在第二音節 /ɪˈmɜːr.dʒɪz/，字尾 /z/ 清楚發出。"
-                              }
-                    ]
-          },
-          {
-                    "en": "But no matter the pattern, the blueprints for each of the 20,000 different species' development are written in their genetic codes.",
-                    "zh": "但無論模式如何，兩萬種不同物種發展的藍圖都寫在牠們的遺傳密碼中。",
-                    "chunks": [
-                              "But no matter the pattern,",
-                              "the blueprints",
-                              "for each of the 20,000 different species'",
-                              "development",
-                              "are written in their genetic codes."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "no matter the pattern,",
-                                        "meaning": "無論模式如何（no matter + 名詞）",
-                                        "collocation": "no matter the cost（不論代價）",
-                                        "synonym": "regardless of the design",
-                                        "pronunciation": "no matter 的 /r/ 在美式英文中捲舌，pattern 的 /t/ 發彈舌音。"
-                              },
-                              {
-                                        "chunk": "written in their genetic codes.",
-                                        "meaning": "寫在牠們的遺傳密碼中",
-                                        "collocation": "genetic code（基因密碼）",
-                                        "synonym": "encoded in their DNA",
-                                        "pronunciation": "written 的 /tt/ 在美式英文中發彈舌音 /ˈrɪt̬.n/，genetic 重音在第二音節 /dʒɪˈnet.ɪk/。"
-                              }
-                    ]
-          }
-];
+            {
+                "en": "Their bright color makes them easily noticeable to predators, but also acts as a warning that they are poisonous if eaten.",
+                "zh": "牠們鮮豔的顏色使牠們很容易被掠食者注意到，但也作為一種警告，表示如果吃掉牠們是有毒的。",
+                "chunks": [
+                    "Their bright color",
+                    "makes them easily noticeable",
+                    "to predators,",
+                    "but also acts as a warning",
+                    "that they are poisonous if eaten."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "makes them easily noticeable",
+                        "meaning": "使牠們容易被注意到",
+                        "collocation": "easily noticeable difference（明顯的差異）",
+                        "synonym": "makes them visible / makes them stand out",
+                        "pronunciation": "makes them 連讀，them 弱讀為 /ðəm/，noticeable 的重音在第一音節 /ˈnoʊ.tɪ.sə.bəl/。"
+                    },
+                    {
+                        "chunk": "acts as a warning",
+                        "meaning": "充當警告（act as = 扮演...的角色）",
+                        "collocation": "act as a reminder（充當提醒）、act as a deterrent（充當威懾）",
+                        "synonym": "serves as a warning / functions as a signal",
+                        "pronunciation": "acts as 連讀，as 弱讀為 /əz/，warning 的 /w/ 清楚圓唇。"
+                    }
+                ]
+            },
+            {
+                "en": "The poison of monarch butterflies can be traced back to a plant they feed on during an earlier stage in their lives.",
+                "zh": "帝王斑蝶的毒素可以追溯到牠們在生命早期階段所食用的一種植物。",
+                "chunks": [
+                    "The poison of monarch butterflies",
+                    "can be traced back",
+                    "to a plant",
+                    "they feed on",
+                    "during an earlier stage in their lives."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "can be traced back",
+                        "meaning": "可以追溯（被動語態）",
+                        "collocation": "trace back to its origins（追溯其起源）",
+                        "synonym": "can be attributed to / has its roots in",
+                        "pronunciation": "traced 的 /st/ 字尾輕放，back 的 /k/ 清楚結尾。"
+                    },
+                    {
+                        "chunk": "they feed on",
+                        "meaning": "牠們以...為食",
+                        "collocation": "feed on insects（以昆蟲為食）",
+                        "synonym": "they eat / they consume",
+                        "pronunciation": "feed on 連讀，on 弱讀為 /ɒn/，feed 的 /d/ 輕放。"
+                    }
+                ]
+            },
+            {
+                "en": "Unlike other butterflies, monarch butterflies rely on their bright coloration to keep them safe.",
+                "zh": "與其他蝴蝶不同，帝王斑蝶依賴牠們鮮豔的體色來保護自己安全。",
+                "chunks": [
+                    "Unlike other butterflies,",
+                    "monarch butterflies",
+                    "rely on their bright coloration",
+                    "to keep them safe."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "rely on their bright coloration",
+                        "meaning": "依賴牠們鮮豔的體色",
+                        "collocation": "rely on each other（互相依賴）",
+                        "synonym": "depend on their vivid colors",
+                        "pronunciation": "rely on 連讀，on 弱讀為 /ɒn/，coloration 重音在第三音節 /ˌkʌl.əˈreɪ.ʃn/。"
+                    },
+                    {
+                        "chunk": "to keep them safe.",
+                        "meaning": "以保護牠們的安全",
+                        "collocation": "keep someone safe（保護某人安全）",
+                        "synonym": "to protect them / to defend them",
+                        "pronunciation": "keep them 連讀，them 弱讀為 /ðəm/，safe 的 /f/ 字尾清楚。"
+                    }
+                ]
+            },
+            {
+                "en": "Once the butterfly is fully developed, the chrysalis splits apart, and the butterfly emerges.",
+                "zh": "一旦蝴蝶完全發育，硬殼就會裂開，蝴蝶就會出現。",
+                "chunks": [
+                    "Once the butterfly",
+                    "is fully developed,",
+                    "the chrysalis splits apart,",
+                    "and the butterfly emerges."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "is fully developed,",
+                        "meaning": "完全發育成熟了",
+                        "collocation": "fully developed plan（完整的計畫）",
+                        "synonym": "has matured completely",
+                        "pronunciation": "fully 的 /l/ 清楚，developed 的重音在第二音節 /dɪˈvel.əpt/。"
+                    },
+                    {
+                        "chunk": "the butterfly emerges.",
+                        "meaning": "蝴蝶破殼而出、出現",
+                        "collocation": "emerge from the cocoon（從繭中破殼而出）",
+                        "synonym": "the butterfly appears / comes out",
+                        "pronunciation": "emerges 的重音在第二音節 /ɪˈmɜːr.dʒɪz/，字尾 /z/ 清楚發出。"
+                    }
+                ]
+            },
+            {
+                "en": "But no matter the pattern, the blueprints for each of the 20,000 different species' development are written in their genetic codes.",
+                "zh": "但無論模式如何，兩萬種不同物種發展的藍圖都寫在牠們的遺傳密碼中。",
+                "chunks": [
+                    "But no matter the pattern,",
+                    "the blueprints",
+                    "for each of the 20,000 different species'",
+                    "development",
+                    "are written in their genetic codes."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "no matter the pattern,",
+                        "meaning": "無論模式如何（no matter + 名詞）",
+                        "collocation": "no matter the cost（不論代價）",
+                        "synonym": "regardless of the design",
+                        "pronunciation": "no matter 的 /r/ 在美式英文中捲舌，pattern 的 /t/ 發彈舌音。"
+                    },
+                    {
+                        "chunk": "written in their genetic codes.",
+                        "meaning": "寫在牠們的遺傳密碼中",
+                        "collocation": "genetic code（基因密碼）",
+                        "synonym": "encoded in their DNA",
+                        "pronunciation": "written 的 /tt/ 在美式英文中發彈舌音 /ˈrɪt̬.n/，genetic 重音在第二音節 /dʒɪˈnet.ɪk/。"
+                    }
+                ]
+            }
+        ];
 
         let currentGameIndex = 0;
         let currentWords = [];
@@ -1279,7 +1364,7 @@
                     finalSentence.style.textAlign = 'center';
                     finalSentence.style.whiteSpace = 'normal';
                     finalSentence.style.padding = '15px';
-                    
+
                     finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
                     wordBank.appendChild(finalSentence);
 

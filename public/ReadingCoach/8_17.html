@@ -245,23 +245,107 @@
             display: none;
         }
 
-        
+
         .tab-content.active {
             display: block;
         }
 
         /* 聽音重組樣式 */
-        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
-        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
-        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
-        .status-correct { color: #4CAF50; }
-        .status-wrong { color: #F44336; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
-        .game-controls { margin-top: 20px; text-align: center; }
+        .game-board {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+            min-height: 50px;
+        }
+
+        .answer-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+            margin-bottom: 20px;
+        }
+
+        .word-block {
+            background-color: #fff;
+            border: 2px solid #2196F3;
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1565c0;
+            user-select: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-block:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-status {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .status-correct {
+            color: #4CAF50;
+        }
+
+        .status-wrong {
+            color: #F44336;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .error-shake {
+            animation: shake 0.3s ease-in-out;
+            background-color: #ffebee !important;
+            border-color: #f44336 !important;
+            color: #c62828 !important;
+        }
+
+        .game-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -269,7 +353,8 @@
     <div class="container">
         <h1>📖 Judaism and Monotheistic Morality</h1>
         <a href="8_17_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="" target="_blank">沈浸式閱讀程式</a>
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQAJfdoNNNx_T4fd9aO5ERU4AbPpWjo4jiih4WsGXHq4WTs?e=uy5hCe"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -299,7 +384,7 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
-                
+
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
                 <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
@@ -888,45 +973,45 @@
                     </ol>
                 </div>
             </div>
+        </div>
+
+
+        <!-- 聽音重組分頁 -->
+        <div id="reconstruction" class="tab-content">
+            <h3>🎧 聽音重組挑戰</h3>
+            <div class="info-box">
+                <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
             </div>
-
-
-            <!-- 聽音重組分頁 -->
-            <div id="reconstruction" class="tab-content">
-                <h3>🎧 聽音重組挑戰</h3>
-                <div class="info-box">
-                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+            <div class="game-board">
+                <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                    <button type="button" id="btnChunkMode" class="btn"
+                        style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                        語塊模式</button>
+                    <button type="button" id="btnWordMode" class="btn"
+                        style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                        單字模式</button>
                 </div>
-                <div class="game-board">
-                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
-                        <button type="button" id="btnChunkMode" class="btn"
-                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
-                            語塊模式</button>
-                        <button type="button" id="btnWordMode" class="btn"
-                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
-                            單字模式</button>
-                    </div>
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <span id="gameProgress"
-                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
-                            6</span>
-                        <button type="button" class="btn" style="background-color: #2196F3;"
-                            onclick="playCurrentSentence()">🔊 播放此句</button>
-                    </div>
-                    <div class="answer-area" id="answerArea"></div>
-                    <div class="word-bank" id="wordBank"></div>
-                    <div id="reviewArea"></div>
-                    <div class="game-controls">
-                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
-                            onclick="nextSentence()">➡️ 下一句</button>
-                    </div>
-                    <div class="game-status" id="gameStatus"></div>
-                    <div id="translationHint"
-                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
-                    </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span id="gameProgress"
+                        style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                        6</span>
+                    <button type="button" class="btn" style="background-color: #2196F3;"
+                        onclick="playCurrentSentence()">🔊 播放此句</button>
+                </div>
+                <div class="answer-area" id="answerArea"></div>
+                <div class="word-bank" id="wordBank"></div>
+                <div id="reviewArea"></div>
+                <div class="game-controls">
+                    <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                        onclick="nextSentence()">➡️ 下一句</button>
+                </div>
+                <div class="game-status" id="gameStatus"></div>
+                <div id="translationHint"
+                    style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -1169,7 +1254,7 @@
         }
 
         // 頁面載入時初始化
-        
+
         // 頁面載入時初始化
         window.onload = () => {
             if (typeof initText === 'function') initText();
@@ -1178,140 +1263,140 @@
 
         // --- 聽音重組遊戲邏輯 ---
         const gameSentences = [
-          {
-                    "en": "Judaism has been around for over 3,000 years, starting in the Middle East and eventually spreading all across the globe.",
-                    "zh": "猶太教已經存在了3000多年，起源於中東，最終傳遍全球。",
-                    "chunks": [
-                              "Judaism has been around",
-                              "for over 3,000 years,",
-                              "starting in the Middle East",
-                              "and eventually spreading",
-                              "all across the globe."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "has been around",
-                                        "meaning": "已存在、已有（現在完成式）",
-                                        "collocation": "have been around for decades（存在數十年）",
-                                        "synonym": "has existed / has been in existence",
-                                        "pronunciation": "been 弱讀為 /bɪn/，around 重音在第二音節 /əˈraʊnd/。"
-                              },
-                              {
-                                        "chunk": "all across the globe.",
-                                        "meaning": "遍及全球",
-                                        "collocation": "across the country（全國各地）",
-                                        "synonym": "throughout the world / worldwide",
-                                        "pronunciation": "across 的 /s/ 和 the 的 /ð/ 連讀，globe 的 /l/ 要清楚發出。"
-                              }
-                    ]
-          },
-          {
-                    "en": "Judaism is a monotheistic faith, believing in only one god, as opposed to many.",
-                    "zh": "猶太教是一神論信仰，只相信一個神，而不是多個神。",
-                    "chunks": [
-                              "Judaism is",
-                              "a monotheistic faith,",
-                              "believing in only one god,",
-                              "as opposed to many."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "a monotheistic faith,",
-                                        "meaning": "一神論信仰",
-                                        "collocation": "monotheistic religion（一神論宗教）",
-                                        "synonym": "a one-god religion",
-                                        "pronunciation": "monotheistic 的重音在第四音節 /ˌmɒn.ə.θiːˈɪs.tɪk/，需要慢慢分音節練習。"
-                              },
-                              {
-                                        "chunk": "as opposed to many.",
-                                        "meaning": "而不是許多（對比句型）",
-                                        "collocation": "as opposed to（相對於；而不是）",
-                                        "synonym": "rather than many / in contrast to polytheism",
-                                        "pronunciation": "opposed 的 /d/ 和 to 的 /t/ 連讀，many 的 /m/ 清楚起音。"
-                              }
-                    ]
-          },
-          {
-                    "en": "The system of Judaic ethics has had a large impact on Western ideas of morality and justice.",
-                    "zh": "猶太倫理體系對西方道德和正義觀念產生了巨大影響。",
-                    "chunks": [
-                              "The system of Judaic ethics",
-                              "has had a large impact",
-                              "on Western ideas",
-                              "of morality and justice."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "has had a large impact",
-                                        "meaning": "已產生巨大的影響（現在完成式）",
-                                        "collocation": "have an impact on（對...產生影響）",
-                                        "synonym": "has greatly influenced",
-                                        "pronunciation": "has had 連讀為 /həz hæd/，large 的 /dʒ/ 字尾清楚發出。"
-                              },
-                              {
-                                        "chunk": "of morality and justice.",
-                                        "meaning": "關於道德與正義",
-                                        "collocation": "sense of justice（正義感）",
-                                        "synonym": "of ethics and fairness",
-                                        "pronunciation": "morality 重音在第二音節 /məˈræl.ɪ.ti/，justice 重音在第一音節 /ˈdʒʌs.tɪs/。"
-                              }
-                    ]
-          },
-          {
-                    "en": "Some of these sects broke off and became their own religion, like Christianity.",
-                    "zh": "其中一些教派脫離出來，成為他們自己的宗教，就像基督教一樣。",
-                    "chunks": [
-                              "Some of these sects",
-                              "broke off",
-                              "and became",
-                              "their own religion,",
-                              "like Christianity."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "broke off",
-                                        "meaning": "脫離、分裂出去",
-                                        "collocation": "break off relations（斷絕關係）、break off a piece（折斷一塊）",
-                                        "synonym": "split away / separated",
-                                        "pronunciation": "broke 的 /k/ 和 off 的 /ɒ/ 緊密連接為 /kɒf/。"
-                              },
-                              {
-                                        "chunk": "their own religion,",
-                                        "meaning": "他們自己的宗教",
-                                        "collocation": "their own identity（他們自己的認同）",
-                                        "synonym": "a separate faith",
-                                        "pronunciation": "their 弱讀為 /ðər/，own 的 /oʊ/ 清楚拉長。"
-                              }
-                    ]
-          },
-          {
-                    "en": "Kings and rulers would use Judaism to solidify and legitimize their power and authority over their subjects.",
-                    "zh": "國王和統治者會利用猶太教來鞏固和使他們對臣民的權力和權威合法化。",
-                    "chunks": [
-                              "Kings and rulers",
-                              "would use Judaism",
-                              "to solidify and legitimize",
-                              "their power and authority",
-                              "over their subjects."
-                    ],
-                    "reviewData": [
-                              {
-                                        "chunk": "to solidify and legitimize",
-                                        "meaning": "鞏固並使...合法化",
-                                        "collocation": "solidify one's position（鞏固地位）",
-                                        "synonym": "to strengthen and justify",
-                                        "pronunciation": "solidify 重音在第二音節 /səˈlɪd.ɪ.faɪ/，legitimize 重音在第二音節 /lɪˈdʒɪt.ɪ.maɪz/。"
-                              },
-                              {
-                                        "chunk": "their power and authority",
-                                        "meaning": "他們的權力與權威",
-                                        "collocation": "abuse of power（濫用權力）",
-                                        "synonym": "their control and dominance",
-                                        "pronunciation": "power 的 /r/ 和 and 連讀，authority 重音在第二音節 /ɔːˈθɒr.ɪ.ti/。"
-                              }
-                    ]
-          }
-];
+            {
+                "en": "Judaism has been around for over 3,000 years, starting in the Middle East and eventually spreading all across the globe.",
+                "zh": "猶太教已經存在了3000多年，起源於中東，最終傳遍全球。",
+                "chunks": [
+                    "Judaism has been around",
+                    "for over 3,000 years,",
+                    "starting in the Middle East",
+                    "and eventually spreading",
+                    "all across the globe."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "has been around",
+                        "meaning": "已存在、已有（現在完成式）",
+                        "collocation": "have been around for decades（存在數十年）",
+                        "synonym": "has existed / has been in existence",
+                        "pronunciation": "been 弱讀為 /bɪn/，around 重音在第二音節 /əˈraʊnd/。"
+                    },
+                    {
+                        "chunk": "all across the globe.",
+                        "meaning": "遍及全球",
+                        "collocation": "across the country（全國各地）",
+                        "synonym": "throughout the world / worldwide",
+                        "pronunciation": "across 的 /s/ 和 the 的 /ð/ 連讀，globe 的 /l/ 要清楚發出。"
+                    }
+                ]
+            },
+            {
+                "en": "Judaism is a monotheistic faith, believing in only one god, as opposed to many.",
+                "zh": "猶太教是一神論信仰，只相信一個神，而不是多個神。",
+                "chunks": [
+                    "Judaism is",
+                    "a monotheistic faith,",
+                    "believing in only one god,",
+                    "as opposed to many."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "a monotheistic faith,",
+                        "meaning": "一神論信仰",
+                        "collocation": "monotheistic religion（一神論宗教）",
+                        "synonym": "a one-god religion",
+                        "pronunciation": "monotheistic 的重音在第四音節 /ˌmɒn.ə.θiːˈɪs.tɪk/，需要慢慢分音節練習。"
+                    },
+                    {
+                        "chunk": "as opposed to many.",
+                        "meaning": "而不是許多（對比句型）",
+                        "collocation": "as opposed to（相對於；而不是）",
+                        "synonym": "rather than many / in contrast to polytheism",
+                        "pronunciation": "opposed 的 /d/ 和 to 的 /t/ 連讀，many 的 /m/ 清楚起音。"
+                    }
+                ]
+            },
+            {
+                "en": "The system of Judaic ethics has had a large impact on Western ideas of morality and justice.",
+                "zh": "猶太倫理體系對西方道德和正義觀念產生了巨大影響。",
+                "chunks": [
+                    "The system of Judaic ethics",
+                    "has had a large impact",
+                    "on Western ideas",
+                    "of morality and justice."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "has had a large impact",
+                        "meaning": "已產生巨大的影響（現在完成式）",
+                        "collocation": "have an impact on（對...產生影響）",
+                        "synonym": "has greatly influenced",
+                        "pronunciation": "has had 連讀為 /həz hæd/，large 的 /dʒ/ 字尾清楚發出。"
+                    },
+                    {
+                        "chunk": "of morality and justice.",
+                        "meaning": "關於道德與正義",
+                        "collocation": "sense of justice（正義感）",
+                        "synonym": "of ethics and fairness",
+                        "pronunciation": "morality 重音在第二音節 /məˈræl.ɪ.ti/，justice 重音在第一音節 /ˈdʒʌs.tɪs/。"
+                    }
+                ]
+            },
+            {
+                "en": "Some of these sects broke off and became their own religion, like Christianity.",
+                "zh": "其中一些教派脫離出來，成為他們自己的宗教，就像基督教一樣。",
+                "chunks": [
+                    "Some of these sects",
+                    "broke off",
+                    "and became",
+                    "their own religion,",
+                    "like Christianity."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "broke off",
+                        "meaning": "脫離、分裂出去",
+                        "collocation": "break off relations（斷絕關係）、break off a piece（折斷一塊）",
+                        "synonym": "split away / separated",
+                        "pronunciation": "broke 的 /k/ 和 off 的 /ɒ/ 緊密連接為 /kɒf/。"
+                    },
+                    {
+                        "chunk": "their own religion,",
+                        "meaning": "他們自己的宗教",
+                        "collocation": "their own identity（他們自己的認同）",
+                        "synonym": "a separate faith",
+                        "pronunciation": "their 弱讀為 /ðər/，own 的 /oʊ/ 清楚拉長。"
+                    }
+                ]
+            },
+            {
+                "en": "Kings and rulers would use Judaism to solidify and legitimize their power and authority over their subjects.",
+                "zh": "國王和統治者會利用猶太教來鞏固和使他們對臣民的權力和權威合法化。",
+                "chunks": [
+                    "Kings and rulers",
+                    "would use Judaism",
+                    "to solidify and legitimize",
+                    "their power and authority",
+                    "over their subjects."
+                ],
+                "reviewData": [
+                    {
+                        "chunk": "to solidify and legitimize",
+                        "meaning": "鞏固並使...合法化",
+                        "collocation": "solidify one's position（鞏固地位）",
+                        "synonym": "to strengthen and justify",
+                        "pronunciation": "solidify 重音在第二音節 /səˈlɪd.ɪ.faɪ/，legitimize 重音在第二音節 /lɪˈdʒɪt.ɪ.maɪz/。"
+                    },
+                    {
+                        "chunk": "their power and authority",
+                        "meaning": "他們的權力與權威",
+                        "collocation": "abuse of power（濫用權力）",
+                        "synonym": "their control and dominance",
+                        "pronunciation": "power 的 /r/ 和 and 連讀，authority 重音在第二音節 /ɔːˈθɒr.ɪ.ti/。"
+                    }
+                ]
+            }
+        ];
 
         let currentGameIndex = 0;
         let currentWords = [];
@@ -1475,7 +1560,7 @@
                     finalSentence.style.textAlign = 'center';
                     finalSentence.style.whiteSpace = 'normal';
                     finalSentence.style.padding = '15px';
-                    
+
                     finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
                     wordBank.appendChild(finalSentence);
 

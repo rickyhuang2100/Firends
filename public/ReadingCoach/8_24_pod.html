@@ -1,107 +1,1233 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_24.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 逐字稿｜古代河流帝國與生存遊戲</title>
+    <style>
+        :root {
+            --bg-main: #f4f4f5;
+            --card-bg: #ffffff;
+            --text-dark: #27272a;
+            --text-muted: #71717a;
+            --accent-teal: #0d9488;
+            --accent-orange: #ea580c;
+            --spk-a-bg: #f0fdfa;
+            --spk-a-border: #14b8a6;
+            --spk-b-bg: #fff7ed;
+            --spk-b-border: #f97316;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #18181b, #27272a);
+            color: #ffffff;
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin: 0 0 12px 0;
+            font-size: 1.8rem;
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin: 0 0 20px 0;
+            color: #a1a1aa;
+            font-size: 1rem;
+        }
+
+        audio {
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background-color: #e4e4e7;
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: #d4d4d8;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-teal);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            margin-bottom: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 英文文本樣式 */
+        .english-text {
+            font-size: 1.1rem;
+            color: #3f3f46;
+            text-align: justify;
+        }
+
+        .english-text p {
+            margin-bottom: 1.6em;
+        }
+
+        .english-text p:first-letter {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--accent-teal);
+            float: left;
+            margin-right: 6px;
+            line-height: 1;
+        }
+
+        /* 逐字稿對話樣式 */
+        .dialogue {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chat-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 88%;
+        }
+
+        .chat-row.spk-a {
+            align-self: flex-start;
+        }
+
+        .chat-row.spk-b {
+            align-self: flex-end;
+        }
+
+        .speaker-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            padding: 0 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .spk-a .speaker-label {
+            color: var(--accent-teal);
+        }
+
+        .spk-b .speaker-label {
+            color: var(--accent-orange);
+            text-align: right;
+        }
+
+        .bubble {
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .spk-a .bubble {
+            background-color: var(--spk-a-bg);
+            border-left: 5px solid var(--spk-a-border);
+            border-top-left-radius: 4px;
+        }
+
+        .spk-b .bubble {
+            background-color: var(--spk-b-bg);
+            border-right: 5px solid var(--spk-b-border);
+            border-top-right-radius: 4px;
+        }
+
+        .eng-quote {
+            font-family: "Georgia", serif;
+            color: #18181b;
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+
+            .chat-row {
+                max-width: 95%;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>AI Podcast：古代河流帝國的生存之道與英文解析</h1>
+            <p>音訊檔案載入中：8_22.m4a</p>
+            <audio controls>
+                <source src="8_22.m4a" type="audio/mp4">
+                您的瀏覽器不支援音訊播放元件。
+            </audio>
+        </header>
+
+        <nav>
+            <button class="tab-btn active" onclick="switchTab('transcript')">Podcast 雙語逐字稿</button>
+            <button class="tab-btn" onclick="switchTab('original')">英文原始文本</button>
+        </nav>
+
+        <!-- 雙語 Podcast 逐字稿區塊 -->
+        <div id="transcript" class="section-card">
+            <div class="dialogue">
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">想像一下哦，那個你要在一片寸草不生的荒漠中心建立一座超級富裕，然後有巨大神廟跟超多人口的大都會。哇，這聽起來根本就是開啟了生存遊戲的困難模式吧。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，而且你唯一的生存籌碼是一場每年大概只會發生 100 天的洪水，如果你算錯了時間或者沒控制好那個水量，整座城市的人都會跟著遭殃。這風險真的太高了啦。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">
+                        對啊，但這其實不是什麼科幻小說的情節，這是古代帝國真實上演的歷史。所以今天我們這場深度探討就是要帶你，也就是正在收聽節目的你，來看看古代人類是怎麼在這種極端條件下開外掛的。真的，這是一場與大自然的豪賭，而且今天這探索還有一個非常特別的任務哦。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哦，什麼任務？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">我們知道正在收聽節目的你是一位母語是中文的台灣人，而且你最近剛好下定決心想要從零開始學英文。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">啊對，這很重要，所以我們今天不會只是講歷史故事而已。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，我們會直接拿這段描述古代河流帝國的原文本當做你的專屬教材。我會在節目裡親自為你朗讀關鍵的英文句。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">就是讓你直接熟悉那個發音還有語感，然後我們再一起拆解裡面的精華，對吧？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">是的，這絕對比你盯著教科書死背單字有趣得多。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">絕對是，與其看著單字卡發呆，我們不如直接切入今天的核心概念，也就是「水」。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">嗯，水真的是一切的根本。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，我們今天要看的三個古文明，也就是美索不達米亞、埃及還有庫施王國，他們的命運基本上就是被水給徹底綁定的。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，這其實引出了一個很根本的問題：大自然每年就是只給你三分之一時間的降雨，那你到底是怎麼利用這一點水，撐過另外三分之二超痛苦的乾旱的？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">誒對耶，要回答這個問題，我們是不是得先把目光放到那個叫做「肥沃月灣」的地方？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，從春末夏初開始，肥沃月灣這裡會經歷大約 100 天的降雨，這就直接導致了埃及的尼羅河氾濫。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">嗯，古埃及人之所以能成為我們眼中的沙漠農業大師，關鍵就在於他們沒有傻傻地被動等待洪水退去，而是主動去接住這些水。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">等一下，洪水來了通常不是要趕快逃跑嗎？他們是怎麼接住洪水的啊？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">這就是技術厲害的地方了。你想想，如果洪水只是漫過土地然後就流走了，那水分很快就會在烈日下被蒸發掉嘛。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對啊，沙漠那麼熱。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">所以呢，古埃及人建造了非常龐大的堤防，英文叫做 <span class="eng-quote">dikes</span>，還有運河系統就是 <span
+                            class="eng-quote">canals</span>。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哦，<span class="eng-quote">dikes</span> 跟 <span class="eng-quote">canals</span>。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，當洪水湧入的時候，他們把水引導，並且困在這些人工挖掘的盆地或溝渠裡面。這樣一來，水就會慢慢往下滲透，徹底浸透原本乾旱的土地。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哇塞，這等於是強迫大地喝水就對了。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，這樣他們就能在秋天播種，然後春天迎來大豐收。不過更重要的是這場洪水不只帶來了水分，它還帶來了一個極度珍貴的副產品。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">如果讓我這個母語是中文的人來形容這個副產品，我大概會用很笨拙的英文說，這是一種有很多營養、而且是河流帶來的土壤。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">嗯，雖然意思到了，但是在英文寫作裡，文本肯定有更精準而且漂亮的說法。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">那既然我們今天要學英文，你趕快教教我們文本是怎麼寫的。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">好，為了讓你聽清楚發音，我來慢慢朗讀文本中描述這個土壤的原句。你仔細聽這幾個字的發音跟節奏哦。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">好，我準備好了。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble"><span class="eng-quote">"Nutrient-rich, river-born soil called silt."</span>
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哦，這句話的意思是「富含營養、由河水帶來的土壤稱為淤泥」。<span class="eng-quote">nutrient-rich, river-born
+                            soil called silt</span> 這裡面的那個 <span class="eng-quote">silt</span> 就是淤泥的意思對吧？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，發音很標準哦。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">學啦，但我特別注意到你剛剛讀前面的 <span class="eng-quote">nutrient-rich</span> 跟 <span
+                            class="eng-quote">river-born</span> 的時候聽起來有種很俐落的節奏感耶。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">你的語感真的很好，這正是這句話的精華所在。在英文裡 <span class="eng-quote">nutrient</span> 是營養，<span
+                            class="eng-quote">rich</span> 是豐富。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">嗯，這個我知道。然後 <span class="eng-quote">river</span> 是河流，<span
+                            class="eng-quote">born</span> 是出生或孕育。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">作者利用連字號也就是 hyphen，把名詞和形容詞結合起來創造出 <span class="eng-quote">nutrient-rich</span> 還有
+                        <span class="eng-quote">river-born</span> 這兩個複合形容詞。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哇，所以就是「富含營養的」，還有「河流孕育的」。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，比起你剛剛那種落長的解釋，這樣的寫法在視覺跟聽覺上都極具衝擊力，而且非常簡練。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">誒，這學起來真的太實用了啦，以後我要形容一杯珍珠很多、台灣發明的奶茶，說不定我就可以造出 <span class="eng-quote">boba-rich,
+                            Taiwan-born tea</span> 這樣的詞了。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哈哈，完全可以，非常生動！對吧，不過說實在掌握了這些 <span
+                            class="eng-quote">silt</span>，也就是淤泥，古埃及人就能從單純的農夫直接進化成偉大帝國嗎？這中間的跳躍到底是怎麼發生的？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">其實關鍵就在於「餘」這兩個字。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">餘？怎麼說？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">當堤防和運河系統讓農作物的產量大幅提高之後，他們就不再需要每天為了下一餐發愁了。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哦，就是有剩餘的糧食了。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，他們把多餘的小麥、大麥存進巨大的糧倉裡面，也就是 <span
+                            class="eng-quote">granaries</span>。一旦有了這種穩定的糧食儲備，整個社會就開始分工了。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">我懂了，就是說不是每個人都需要去種田了。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">是的，於是就出現了專門從事亞麻布交易的商人，或者是建造神廟的工匠，甚至是專門記錄水位的祭司。所以你看，水資源的管理直接催生了商業的繁榮還有城市的崛起。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">這邏輯真的很完美，而且因為埃及的地形相對比較平坦嘛，尼羅河氾濫的時候水很自然的就會淹進他們挖好的溝渠裡。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">嗯，沒錯。但是如果你不是住在這種完美的地形呢？如果你的土地比河水還要高，你要怎麼在沙漠裡種田啊？總不能靠地心引力吧。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哇，你問到了一個非常關鍵的技術突破哦，這時候我們就要把視角沿著尼羅河往南移。來到現今埃及南部跟蘇丹北部的「庫施王國」。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">庫施王國？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，也就是歷史上的努比亞。庫施的首都是納帕塔（Napata）還有麥羅埃（Meroe），他們同樣是依河而建，但他們面對的地形確實更具挑戰性。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">所以他們到底是怎麼把水往上送的？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">為了解決水往低處流的問題，他們引進了一種被稱為 <span class="eng-quote">saqia</span> 的水車。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">saqia</span>？但我印象中的水車就是一個大輪子在河水裡面轉啊轉的，這真的能解決把水運到高處的問題嗎？
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哦，<span class="eng-quote">saqia</span> 可不是你想像中那種簡單的木輪哦，這是一種由動物（通常是牛啦）去驅動的複雜機械。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">用牛去拉？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">想像一下，牛在平地上拉著一根桿子繞著圈轉。這個水平的轉動呢，會透過一組木製的齒輪，帶動一個垂直的大輪子。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哇塞，還有齒輪系統！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，然後這個垂直的輪子上綁著一長串的罐子。潛入河裡舀滿水，然後被齒輪帶動著拉到高處，倒進上面的灌溉渠道裡。接著空罐子又轉回河裡，這是一個不斷的自動提水系統。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">太誇張了吧，這等於是他們發明了古代的抽水馬達耶！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">真的是這樣。有了這個 <span class="eng-quote">saqia</span>，庫施人就能把水運送到地勢更高更遠的地方。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">那他們的耕地面積不就大增了嗎？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，倍增！他們不只種小麥和扁豆，甚至還能在沙漠的邊緣種植椰棗和芒果。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">在古代的沙漠邊緣吃芒果，這真的是科技帶來的奢侈耶。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哈哈，完全是。不過那個，我看文本的時候發現一個很違背常理的歷史事件耶。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哦，什麼事件？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">文本提到說庫施王國後來被北方的「亞述人」入侵，甚至失去了對埃及地區的影響力。遭強悍的外族入侵還失去領土，這國家應該要走向滅亡了吧？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">一般來說是這樣，沒錯。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對啊，但文本的意思好像是說，這場入侵反而讓庫施王國的農業開了外掛，變得超級繁榮，這到底是什麼神展開？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">歷史充滿戲劇性的地方就在這裡。這場軍事上的挫敗促成了一場重要的「技術轉移」。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">技術轉移？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯。我來念一段描述這個轉折的優美句子，你仔細聽它的語氣變化。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">好。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">"Midway through the golden years, the arrival of iron
+                            changed farming forever."</span></div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哇，那個 <span class="eng-quote">Midway through</span>
+                        這個起手式聽起來真的好有畫面感哦，就像是看電影看到一半，突然一個大事件就這樣切進來。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">完全正確，<span class="eng-quote">Midway through</span>
+                        是一個非常有戲劇張力的片語，它能瞬間把聽眾拉進正在進行中的時代洪流裡面。對於正在學英文的你來說，這絕對是個很棒的寫作技巧。但他們從亞述人那裡學到了當時最尖端的技術，也就是鐵工 <span
+                            class="eng-quote">ironwork</span>。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">這真的是天上掉下來的禮物誒。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對啊，而且超幸運的是，他們的新首都麥羅埃附近剛好就富含鐵礦。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">我懂了，有了鐵他們就不必再用那種容易磨損的木頭或者是石頭當農具了。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">正是如此。當庫施人開始將鐵礦鑄成鐵質的鋤頭（也就是 <span class="eng-quote">hoes</span>）還有犁（<span
+                            class="eng-quote">plows</span>）的時候，這對傳統農業來說簡直是一場降維打擊。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">怎麼說，因為比較鋒利嗎？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，鐵犁能夠深深翻開過去木犁根本挖不動的堅硬土壤，這讓農作物的產量呈現爆炸性的成長。庫施王國靠著這些農具還有農產品的貿易，迎來了前所未有的繁榮。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">失去了一片領土，卻迎來了一場技術革命，這運氣也太好了。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">歷史的轉折就是這麼奇妙。好，那我們看完了尼羅河流域的埃及跟庫施，現在讓我們跨過紅海和沙漠來到現今伊拉克境內的「美索不達米亞」。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">好的。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">呃，如果說古埃及人面對的是一條會定期帶來禮物的尼羅河，那美索不達米亞面對的簡直就是兩頭暴走的野獸吧。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">嗯，你這個暴走野獸的比喻非常貼切哦，這也是我們學習一個重要英文單字的好機會。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哦，什麼單字？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">美索不達米亞的名字本身就藏著它的地理密碼，<span class="eng-quote">Mesopotamia</span> 這個字源自古希臘文，<span
+                            class="eng-quote">Meso</span> 意思是中間。而 <span class="eng-quote">potamia</span> 跟河流有關。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">所以它的字面意思就是兩條河中間。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，正是 <span class="eng-quote">land between
+                            rivers</span>，也就是兩河之間的土地，這兩條河就是底格里斯河跟幼發拉底河。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">Land between
+                            rivers</span>，聽起來是很浪漫啦，但實際上這兩條河根本就不按牌理出牌，對吧？我記得他們的氾濫時間跟尼羅河不一樣，而且水量非常不穩定。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，有時候洪水太猛，甚至會把整個村莊直接沖走。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這根本就是困難模式中的困難模式啊。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，他們面對的洪水是猛烈而且難以預測的，但即使在這種惡劣的條件下，他們依然成功的建立了像烏爾（Ur）還有巴比倫（Babylon）這樣超級富裕的城市。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">他們到底是怎麼辦到的？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">文本在這裡使用了一個我覺得整篇文章中最生動的動詞，來描述他們是如何馴服這兩條狂暴的河流，我來念給你聽哦。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">好，洗耳恭聽。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble"><span class="eng-quote">"Mesopotamians coaxed water into typically drier regions
+                            with canals."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">coaxed water</span>
+                        意思是美索不達米亞人利用運河將水「哄騙」進了通常較乾燥的地區？等一下，<span class="eng-quote">coaxed</span>？我如果沒記錯的話 <span
+                            class="eng-quote">coax</span> 這個字通常是用在人或者動物身上吧？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哦？你舉個例子？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">比如說手裡拿著一塊肉去 <span
+                            class="eng-quote">coax</span>，就是引誘一隻躲在車底下很害怕的流浪狗出來？把這個字用在狂暴的河水上合理嗎？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">這就是作者用字最高明的地方了。你想想看，如果作者用 <span class="eng-quote">forced</span> 強迫或者單純用 <span
+                            class="eng-quote">moved</span> 移動，那這句話是不是就完全失去了那種智慧的感覺？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哎對，聽起來就很生硬。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，用 <span class="eng-quote">coax</span>
+                        這個字賦予了冰冷的治水工程一種生命力，這暗示了美索不達米亞人並不是用蠻力去築高牆阻擋洪水。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">因為面對大自然的力量硬碰硬一定會被沖垮的。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">完全正確，相反地，他們是順應水勢，透過精密設計的運河網絡，就像是在安撫野獸一樣，輕柔地把水勢分流，一步一步「哄騙」進乾燥的農地裡。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這個動詞實在用得太精彩了！順利哄騙了河水之後，他們也同樣獲得了淤泥的滋養，然後種出了大麥啦，葡萄啦，蘋果，甚至靠著兩條河的便利交通，讓商人們累積了極大的財富。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">是的，非常的繁榮。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">聽到這裡，這三個文明簡直都找到了完美的生活方程式，文本甚至還稱他們為 <span class="eng-quote">self-sustaining
+                            metropolises</span>，就是自給自足的大都會。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">嗯，聽起來是很美好了。但是我們都知道歷史從來不會就這樣停在「從此過著幸福快樂的日子」。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，大自然是有極限的。當我們把視野拉遠，這些曾經輝煌一時的繁華都會，最終都迎來了衰亡。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">到底發生了什麼事？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">文本給出了一個非常殘酷的環境科學解釋：世世代代極高強度的農業開墾，還有為了養活龐大人口而進行的過度放牧，也就是 <span
+                            class="eng-quote">overgrazing</span>，最終徹底耗盡了土地的養分。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">其實這不難想像，就像你不斷從銀行帳戶裡面提款，卻從來不存錢進去，破產真的只是遲早的事。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這個比喻很好。但我比較好奇的是庫施王國耶，他們不是有那個開外掛的鐵器嗎？怎麼也難逃衰敗的命運？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">庫施的衰敗恰恰就是因為那個讓他們強大的「鐵」。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">蛤？為什麼？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">製造鐵器可不像我們中秋節烤肉那麼簡單哦，要把鐵礦石融化，需要極度的高溫，普通的木材是燒不出這種溫度的。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">那要用什麼燒？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">你必須把大量的木材在缺氧的環境下悶燒成木炭，也就是 <span class="eng-quote">charcoal</span>，然後再用木炭來煉鐵。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">呃，等一下，要燒出足夠煉鐵的木炭，那需要砍掉多少棵樹啊？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">非常龐大的數量，這正是致命的連鎖反應。為了解鎖鐵器的力量，庫施人進行大規模的森林砍伐，英文叫做 <span
+                            class="eng-quote">deforestation</span>。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哇，當大片大片的樹林消失，樹根不再能夠抓住土壤，接著而來的降雨和狂風就造成了毀滅性的土壤侵蝕，<span
+                            class="eng-quote">erosion</span>。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">這根本是一場自己造成的生態災難。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這真的是歷史上最大的諷刺耶，為了製造能挖開土地的鐵，他們竟然砍光了保護土地的樹林，結果最後連可以耕種的土地都沒了。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">真的是非常諷刺。那文本是怎麼描述這場可怕的悲劇的？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">作者在這裡用了兩個非常值得你記下來的高階詞彙，我先來朗讀這段話：<br><span class="eng-quote">"The downfall of
+                            these cities was also woven with the success and failure of the
+                            agriculture."</span><br>接著作者寫到，<br><span class="eng-quote">"As land morphed from oasis to
+                            desert..."</span></div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">第一句裡面的 <span class="eng-quote">woven with</span>，那個 <span
+                            class="eng-quote">weave</span> 是編織的意思，對吧？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，這句話的意思是這些城市的衰亡也與農業的成敗交織在一起。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble"><span class="eng-quote">Woven with</span> 這片語好有畫面感。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，它暗示了繁榮與毀滅其實並不是兩件獨立的事。它們就像是命運織布機上的毛線，早就緊緊纏繞編織在同一塊布上了。成功裡面早就包藏著失敗的種子。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哇，這解釋得好有哲理。那第二句的 <span class="eng-quote">morphed from oasis to desert</span>
+                        呢？<span class="eng-quote">Oasis</span> 是綠洲，那 <span class="eng-quote">morphed</span> 是什麼意思？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">Morph</span> 意思是漸變或變形。這句話是說，當土地從綠洲變形（演變）成為沙漠。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">為什麼不用 <span class="eng-quote">changed</span> 就好？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這就是用字的精準度了。作者沒有用單純的 <span class="eng-quote">changed</span> 改變或者是 <span
+                            class="eng-quote">turned into</span> 變成，而是用 <span
+                            class="eng-quote">morphed</span>，這個字帶有一種漸進但徹底改變形態的意味。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">漸進但徹底。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，它讓你彷彿看著一部縮時攝影，看著原本生機勃勃的綠洲，一點一滴不可逆轉地被黃沙給吞噬。當土地沒有東西可種的時候，城市也就失去了所有的權力。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">聽著生機盎然的綠洲 <span class="eng-quote">morphed</span> 成死亡的沙漠，這畫面感真的太強烈，太可怕了。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">是啊。好了，那我們來統整一下今天的兩大收穫。對於想要從零開始學英文的你，我們今天不只聽了道地的英文朗讀，還學到了很多超生動的表達。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯，像是利用連字號創造俐落感的 <span class="eng-quote">nutrient-rich, river-born</span>
+                        也就是富含營養、河流孕育的。還有充滿敘事張力的 <span class="eng-quote">midway through</span> 在什麼什麼的中期。以及充滿說服藝術的 <span
+                            class="eng-quote">coax</span> 引誘或哄騙。最後是帶有漸變絕望感的 <span class="eng-quote">morph</span>，演變或是變形。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">而在歷史層面上呢，我們看到了人類是如何運用無比的智慧，不管是挖掘複雜的運河系統，還是發明了 <span
+                            class="eng-quote">saqia</span> 水車來掌控大自然的水源，建立起偉大的帝國。但同時我們也看到了過度榨取自然資源是如何讓一切繁華化為塵土的。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯。其實這也帶出了我們今天深度探討最後想留給你的思考題。文本的最後一句話說，儘管擁有這麼先進的農業技術，這些古文化 <span
+                            class="eng-quote">cannot combat dust for long</span>。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這句話真的深深震撼了我，你看看我們現在的社會，我們同樣是依傍著水源和港口建立起超級大的現代都市。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對。然後我們同樣為了解鎖更強大的技術，不管是半導體製造啦，還是訓練最先進的 AI 運算模型，我們不斷地消耗超級龐大的電力跟純水資源。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">就像當年的庫施王國一樣。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">
+                        沒錯。我們是不是也正為了追求更先進的鐵器而在不知不覺中大量砍伐著我們的森林？現代科技真的能讓我們永遠戰勝塵土嗎？還是說我們其實也在慢慢的將我們的綠洲哄騙成另一片沙漠呢？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">
+                        真的是發人深省的省思。帶著這個歷史的迴音，我們今天的深度探討就到這裡，希望今天這種結合文本朗讀跟故事拆解的方式能讓你的英文學習之旅有了一個超棒的開始，我們下次見囉。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">拜拜！</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 英文原始文本區塊 -->
+        <div id="original" class="section-card hidden english-text">
+            <p>Imagine a life directly defined by roughly a third of a year of rain and flooding. The people of ancient
+                Mesopotamia, Egypt, and the Kingdom of Kush all lived that life: their economies, power, and simple
+                survival depended on the seasons of the rivers that ran through each empire. Ancient Egypt and
+                Mesopotamia made up parts of the area known as the Fertile Crescent, which experienced rain every year
+                for about 100 days, beginning in the late spring or early summer.</p>
+            <p>For ancient Egypt, this caused the Nile River to flood, which saturated the normally arid land around it
+                with water and nutrient-rich, river-born soil called silt. Ancient Egyptians are now revered as the
+                masters of desert agriculture, for their irrigation technology allowed them to cultivate crops during
+                the dry months, from a fall-season sowing to springtime harvest. Their expertise started with simply
+                monitoring weather patterns and gauging the rise and fall of the Nile’s water levels, practices by which
+                the nation’s people were able to plan their planting and harvest seasons accordingly. Some special
+                inventions revolving around the rainy season included the system of dikes and canals built to contain
+                and direct the floodwaters of the Nile. By diverting water, ancient Egyptians were able to keep it from
+                washing onto un-farmable desert terrain, where it would essentially be wasted. Instead, the ability to
+                move water to the crops that needed it allowed for a productive growing season and higher crop yield.
+            </p>
+            <p>Ancient Egyptians grew a variety of crops, and they were able to build cities around the abundance. They
+                traded grains (and in surplus years, could store excess in granaries as well), made linen from flax, and
+                sustained themselves on garden crops grown in smaller plots, often part of personal households. Cities
+                thrived along the Nile, in large part because of the proximity to the obvious transportation, which
+                facilitated trade. As the fruits of farm labor were traded, city merchants grew wealthier, and the
+                metropolis thrived.</p>
+            <p>The same sort of growth was characteristic of the nearby kingdom of Kush, also known as Nubia. Kush was
+                situated just south of ancient Egypt, in what is now southern Egypt and northern Sudan. Kush’s two
+                capitals, first Napata and then Meroe, were each situated along the Nile. The Kushites employed many of
+                the same irrigation techniques as the ancient Egyptians did, taking advantage of the rainy season to
+                keep the land fertile. Using dams and cataracts, the Kushites directed the flow of water to grow wheat,
+                barley, lentils, peas, and even dates and mangoes. Waterwheels known as “saqia” allowed for even further
+                movement of water to higher ground.</p>
+            <p>Midway through the golden years of Kush (called, too, the “Land of Gold” for its gold trade), the arrival
+                of iron changed farming forever. An invasion by the Assyrians cut short the influence of Kush in Egypt,
+                but while they lost power over their Northern neighbors, the Kushites gained knowledge of ironwork. The
+                deserts east of the Nile near the city of Meroe were rich in iron ore, and as Kush began to make tools
+                such as hoes and plows, crop yields increased. Again, with the proximity of the harvest to the river—the
+                main means of trade and travel—cities like Napata and Meroe grew and enjoyed prosperity with the
+                agriculture-driven commerce.</p>
+            <p>Located across the Red Sea and the Syrian Desert from Kush, there was the famous region of the Fertile
+                Crescent called Mesopotamia. Framed by the Tigris and Euphrates rivers, it occupied what is now Iraq.
+                The area experienced the same cyclical flooding periods that ancient Egypt and Kush did, and thus had to
+                learn to adapt. The difference is, this “land between rivers” (the meaning of the origin of the name
+                “Mesopotamia”) had the flooding of not just one waterway but an entire flowing border to harness.</p>
+            <p>However, like ancient Egypt and Kush, its location made it an ideal site for irrigation practices: as the
+                people of the Nile did, Mesopotamians coaxed water into typically drier regions with canals. The land
+                was routinely fertilized by rich silt washed up by the rivers; Mesopotamia supported the harvest of
+                barley, onions, grapes, apples, and turnips. Cattle and sheep grazed on fertile grassland, and fishermen
+                made a living selling and trading their catch. Like the famous cities of Thebes, Meroe, and Napata,
+                Mesopotamian cities such as Ur and Babylon sat near the rivers, again seeing success on the water
+                because of the agricultural and trade possibilities making commerce possible and merchants rich.</p>
+            <p>In each city, and in each kingdom, success and power were facilitated by both agricultural advancements
+                (such as iron tools and irrigation) and the means to trade and sell a harvest (the rivers). The reigns
+                of ancient Egypt, Mesopotamia, and Kush were all dependent on an uncomplicated but involved cycle: the
+                rivers provided the water needed to grow crops like wheat, technology made irrigation, plowing, and
+                harvest possible, and trade generated income to the cities along the river. In this way, waterfront
+                settlements in each region became seats of commerce and power: they were self-sustaining metropolises.
+            </p>
+            <p>The downfall of these cities was also woven with the success and failure of the agriculture of ancient
+                Egypt, Mesopotamia, and Kush. Generations of tough farming and overgrazing sapped land of nutrients, and
+                in Kush, the deforestation that accompanied the mining of iron ore caused devastating erosion. As land
+                morphed from oasis to desert, cities lost their power: there was nothing left to grow, and nothing left
+                to trade. In spite of their tremendous advances in agricultural technology, these ancient cultures could
+                not combat dust for long, and when farms dried out, so too did the power and success of ancient
+                Egyptian, Kushian, and Mesopotamian cities.</p>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            const transcriptEl = document.getElementById('transcript');
+            const originalEl = document.getElementById('original');
+            const buttons = document.querySelectorAll('.tab-btn');
+
+            if (tabId === 'transcript') {
+                transcriptEl.classList.remove('hidden');
+                originalEl.classList.add('hidden');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
             } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                transcriptEl.classList.add('hidden');
+                originalEl.classList.remove('hidden');
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
             }
         }
     </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_24.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

@@ -1,107 +1,1064 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_16.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紐約 vs. 蒙特婁：貝果大戰 Podcast 逐字稿</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #e4e6eb;
+            padding-bottom: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #65676b;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+        }
+
+        .message.host-a {
+            align-self: flex-start;
+        }
+
+        .message.host-b {
+            align-self: flex-end;
+        }
+
+        .speaker-name {
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #65676b;
+            margin-bottom: 4px;
+            padding: 0 10px;
+        }
+
+        .host-b .speaker-name {
+            text-align: right;
+        }
+
+        .bubble {
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 1.05em;
+            letter-spacing: 0.5px;
+        }
+
+        .host-a .bubble {
+            background-color: #f1f0f0;
+            color: #1c1e21;
+            border-bottom-left-radius: 4px;
+        }
+
+        .host-b .bubble {
+            background-color: #0084ff;
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>紐約 vs. 蒙特婁：貝果大戰</h1>
+        <div class="subtitle">AI Podcast 雙人對談逐字稿</div>
+
+        <div class="chat-container">
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">呃，想像一下哦，如果你今天跑到台南的街頭，然後開了一家標榜「絕對不加糖」。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哇，那真的很勇敢誒。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，不止不加糖，你還保證說這是正宗北部口味的滷肉飯。然後你還大肆宣傳說這才是真正的美味啦。你覺得結果會怎樣？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">講真的，在地人大概會直接忽略這家店吧，或者是把它當成某種都市傳說來看。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">真的，搞不好還會引起當地美食保衛者們的強烈抵制。絕對會！這種店要是在台南，我跟你說恐怕撐不到幾個月就得關門大吉了。因為這已經不是好不好吃的問題了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">嗯嗯，這根本是觸犯了某種神聖的在地飲食法則嘛。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">說得太準了，其實口味這種東西哦，有時候真的比信仰還要堅定誒。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">沒錯，當一種食物跟一座城市的靈魂綁定在一起的時候，任何外來標榜的那種「正宗」都會被在地人視為一種挑釁。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯，一種很直接的冒犯。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">
+                    對。那今天這趟為你準備的深度探索，我們就是要帶你潛入這樣一個充滿煙硝味的世界，我知道你一直對這種跨文化的現象非常有興趣嘛。所以這次為你挑選的素材，紀錄的正是一場橫跨北美洲的終極美食大戰。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">哦，這場戰爭可是非常有名的。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，也就是紐約跟蒙特婁之間長達數十年的貝果戰爭。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這真的是一個極度迷人的主題，你可以想像嗎？兩個世界級的大城市竟然為了一個中間有洞的麵團爭論不休。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">超扯的，就是為了麵包而已啊。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對啊，所以我們今天的任務就是要帶你拆解這場戰爭背後的核心，這其實不僅僅是食譜的差異而已哦，它還牽涉到歷史根源，還有那個工業革命與工匠精神的對決。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">嗯，這點真的很值得探討，然後還有最深沉的就是我們到底是如何透過食物來定義自己是誰。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">沒錯，那我們就直接把時間倒回戰火最猛烈的 1995 年夏天吧。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">好的，回到 90 年代。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">那一年，有一家叫做「貝果村 (Bagelville)」的麵包店，他們就浩浩蕩蕩的在加拿大的蒙特婁開幕了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">Bagelville。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，這家店的招牌打得超響亮，主打提供熱騰騰的正宗紐約客風格貝果。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">嗯，照理說啦紐約貝果在全世界的知名度極高嘛，進軍其他城市的時候，當地人通常都是排隊搶著買啊。畢竟是紐約來的嘛。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對啊，但在蒙特婁情況完全失控了。蒙特婁的人反應堪稱激烈，他們不僅沒有去排隊哦，甚至可以說是被徹底激怒了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">傻眼，有這麼嚴重嗎？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">真的就是這麼嚴重，這家代表著紐約美食驕傲的店鋪在蒙特婁遭遇了前所未有的冷落。結果你知道嗎？不到一年的時間就倒了嘛。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，就黯然倒閉了。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">哇，這就像我們剛剛說的那家開在台南的無糖滷肉飯一樣，直接被市場淘汰出局。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">毫無懸念地被淘汰。但我還是很好奇，為什麼蒙特婁人的反應會極端到這種程度？紐約貝果到底哪裡惹到他們了？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">其實如果你去追溯蒙特婁當地的飲食歷史，你會發現他們早就擁有一套極度自豪而且完全獨立發展的貝果傳統了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哦，他們本來就有自己的貝果。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，而且這個傳統至少從 1919 年就開始了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，1919 年那真的是百年歷史。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">沒錯，所以要理解蒙特婁人的憤怒，我們得先把他們的貝果放上手術台，看看這兩種貝果在解剖學上到底有什麼根本的不同。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">好，來解剖一下，蒙特婁的貝果，比起美國的表親有幾個非常獨特的物理特徵。第一，它的體積明顯比較小。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯，比較迷你。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">第二，它的密度比較低，但是咬起來卻非常有嚼勁。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">哦，口感不一樣。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">然後第三，這也是最容易辨認的一點，就是蒙特婁貝果中間的那個洞非常非常大。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">等一下，這個洞大到什麼程度？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">我看到的資料是說，因為他們是純手工把麵團揉捏成橢圓形的圓環嘛，據說那個圈圈大到你可以直接把它像手環一樣戴在手腕上。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，真的是像手環一樣。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">太誇張了吧。那你如果把一個紐約貝果戴在手上，大概只會卡在手指上吧？紐約貝果的洞很小啊。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">沒錯，這就帶出了最關鍵的部分了，為什麼它會有這種特殊的質地和形狀？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">為什麼？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這完全取決於蒙特婁獨特的製程，在進入烤爐之前哦，蒙特婁的貝果必須先在滾燙的蜂蜜水中煮過。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">等等，為什麼要用水煮？一般我們烤麵包不是揉好麵團就直接進烤箱了嗎？放進蜂蜜水裡煮，這背後的科學原理到底是什麼？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這其實是一個非常聰明的化學反應，當你把麵團丟進沸水裡的時候，表面的澱粉會瞬間糊化。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">糊化。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，糊化。這就在麵團的外層形成了一道很堅韌的屏障。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哦，把水分鎖住的意思嗎？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">沒錯，這層屏障在後續烘烤的時候能把水分牢牢鎖在裡面，這就造就了貝果內部那種無可取代的嚼勁。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">原來如此，那加蜂蜜又是為了什麼？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">水裡加了蜂蜜不僅讓麵團表面附著了一層微甜的糖分，這層糖分在接觸到高溫的時候還會產生梅納反應。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">就是烤肉會有的那種香氣，對不對？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對對對，所以才能烤出那種帶著焦糖香氣的深色脆皮。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">而且據我所知，他們用的不是一般的烤箱誒，是燃木烤爐。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">是的，蜂蜜水煮過之後直接送進燃木烤爐，那個木材燃燒的高溫還有不均勻的熱輻射，讓蒙特婁貝果的外皮變得比一般麵包更硬，還帶著淡淡的煙燻味。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">聽起來真的很好吃，但這裡我想提出一個質疑啦。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">請說。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">你看哦，紐約貝果在全世界其他地方都賣得嚇嚇叫，這代表它的口味是受到大眾市場絕對認可的嘛，對吧？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯，絕對是。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">那蒙特婁人連一年的機會都不給，直接讓人家倒閉，這會不會太排外了？這難道不是一種極端的美食保護主義？難道只要不是在地的傳統就一定是錯的嗎？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這個問題很好，其實如果你單純從商業競爭的角度來看，這確實很像是一種排外的保護主義。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對啊，就很像拒絕外來物種。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">但如果我們換個角度把食物視為一種文化遺產，那情況就完全不同了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">怎麼說？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">你想哦，從 1919 年傳承下來的味道，對蒙特婁人來說，早就不是早餐桌上的一塊碳水化合物了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">嗯，它是歷史。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    沒錯，當他們咬下那個帶有蜂蜜甜和燃木香的貝果時，他們是在品嚐這座城市的集體記憶，那是他們祖父母那一輩流傳下來的生活印記啊。所以紐約貝果的大舉入侵，對他們而言根本是在挑戰他們的身分認同。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">完全正確。所以他們是用拒絕消費這一招來捍衛自己的文化主權，這真的很有意思，這也讓我們必須往更深處挖了。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯哼，到底是什麼原因讓這兩座距離其實不算太遠的北美城市，發展出截然不同的貝果演化樹？如果你走進他們的廚房去看，你會發現這根本是兩個不同宇宙的碰撞。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">真的完全是兩個世界。這其實是一場工匠藝術與工業效率的對決。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">確實如此，那讓我們先來看看蒙特婁這邊是如何堅持所謂的工匠精神的。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">好啊。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">在蒙特婁有一家極受歡迎，幾乎是觀光客必朝聖的聖維亞特貝果店 (St. Viateur)。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">St. Viateur。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，這家店的原始店面呈現出一個非常驚人的景象。一家超級名店哦，裡面居然連一張讓客人坐下來吃東西的桌椅都沒有。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">誒，連桌椅都沒有，那裡面都是什麼？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">全部都是工作區域。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哇，所以客人只能外帶就對了。我看資料說店裡只有幾個穿著 T-shirt、因為高溫而汗流浹背的男人，在那個超狹窄的空間裡瘋狂的製作芝麻和罌粟子貝果。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，然後門外永遠都是大排長龍的顧客，大家就眼巴巴地隔著玻璃看著裡面。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">感覺那種視覺衝擊很強。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">他們的生產過程簡直像是一場充滿力與美的勞動表演，揉好的麵團圓環被整齊的排在長長的木板上，然後師傅用盡力氣一把將木板推入那座磚造的燃木烤爐深處。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">而且烤的時候還要一直顧著吧？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">當然，在短短 20 分鐘的烘烤過程裡，師傅還必須非常精準的把每一個貝果翻面確保它們受熱均勻。烤好之後，他們會直接把熱騰騰的貝果從木板上甩進收銀機旁邊的箱子裡。
+                </div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">直接甩進去！那個流暢度聽起來真的很不可思議，但最讓我驚訝的其實是產量誒。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯，產量怎麼了？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">在這種高強度的純手工勞動下，他們一個小時能產出多少？大概只有 40 打而已耶。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">40 打聽起來好像不少。但你把它跟另一家蒙特婁最古老的貝果店費爾蒙 (Fairmount) 對照來看，你就會知道這背後的成本有多高了。費爾蒙的老闆歐文·史拉富曼
+                    (Irwin Shlafman) 說過一句很有名的話。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">什麼話？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">他說：「你必須是一位藝術家才能在燃木烤爐裡烘烤。」</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">藝術家！烤個麵包需要到藝術家？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">因為這完全是一項憑藉感官和直覺的古老技術啊。那個 1949 年由他祖父親手建造的烤爐，上面根本沒有溫度計，也沒有什麼電子按鈕。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">那他們怎麼知道溫度夠不夠？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">烤爐到底有多熱？全靠那個負責添加木材、移動木材的師傅來控制，你知道嗎？木材的濕度、當天的氣溫、火焰的走向，每一個變數都在考驗師傅的經驗。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">難怪老闆甚至說他們店裡的培訓過程嚴苛到極點，一個新人進來至少要看、要學整整一年，才有資格真正碰到烤爐參與烘烤。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">沒錯，這完全是中世紀那種師徒制的傳承了，沒有捷徑，只有時間和汗水。這就是蒙特婁貝果的靈魂啊，原始、依賴火焰、充滿勞動的汗水，而且絕對不對效率妥協。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">但如果你習慣了現代社會的運作方式，你現在腦中浮現的貝果大概不是長這個樣子。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">當然不是。因為當我們把目光轉向紐約的時候，你會看到一場徹頭徹尾的工業革命。紐約走的就是另一條截然不同的賽道了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">我們現在在連鎖店看到的那些蓬鬆巨大、每一個形狀都一模一樣的貝果。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯，其實大部分都是機器製造，並且在旋轉式的瓦斯烤爐中烘烤出來的。歷史的分水嶺其實是發生在 1960 年代。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哦，是誰發明了什麼嗎？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">有一位名叫丹尼爾·湯普森 (Daniel Thompson) 的加州發明家，很有趣的是他自己剛好也是一位麵包師傅的兒子。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">這麼巧！</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">他就發明了製作貝果的機器，這台機器啊可以說是徹底改變了紐約貝果的 DNA，甚至改變了全世界對貝果的認知。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">這機器的威力有多驚人你知道嗎？現在那些大型生產公司使用的雙排機器，每小時能夠吐出 400 打貝果！</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">400 打！</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，400 打，換算下來機器每分鐘可以產出高達 80 個貝果。你還記得我們剛剛說蒙特婁那群揮汗如雨的師傅一小時做多少嗎？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">40 打。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，紐約的產量直接是蒙特婁的十倍。為了配合這種恐怖的機器運作，麵團的配方也必須跟著改變。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">怎麼改？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">麵團需要變得更堅韌、更穩定，才能順利通過機器那些冰冷的輸送帶和滾輪而不會變形。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">哦，所以不能像手工麵團那麼軟。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，結果就是紐約貝果的體積變得越來越大，幾乎是蒙特婁貝果的兩倍，而且內部的口感也變得更加蓬鬆柔軟，像是一般的美式麵包一樣。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這裡我就忍不住要挑戰一下蒙特婁的堅持了。你看哦，紐約的機器每小時 400 打，不用訓練一年，不用流汗燒木材，而且做出來的貝果又大又軟，甚至行銷到全世界。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">嗯，商業上非常成功。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    對啊，從商業擴張和人類飲食傳播的角度來看，紐約風格是不是在現實世界裡贏得了壓倒性的勝利？蒙特婁那種堅持藝術家訓練的浪漫，會不會其實只是一種固執的枷鎖，反而限制了他們的美食世界？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">你點出了一個非常殘酷的商業現實，的確在資本化和工業化標準下，紐約模式絕對是大贏家。對嗎？它標準化、容易複製、成本又低廉，這正是它可以輕易征服全球的原因，但是...
+                </div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">但是什麼？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">
+                    食物的價值真的只能用產量和市佔率來衡量嗎？蒙特婁的固執其實是在對抗一種去人性化的過程。當食物被放上輸送帶，它就失去了一種真實感。蒙特婁人寧願忍受產量上的瓶頸，寧願貝果的形狀不完美，也要保留那種伴隨著木材香氣、帶著師傅手感溫度的工藝。
+                </div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這不是枷鎖。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">對，這不是枷鎖。這是他們對待食物的一種尊嚴。拒絕把食物變成輸送帶上的工業產品。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這真的是一種很深刻的反叛呢。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">沒錯，但也正因為這兩種貝果的製程理念完全是南轅北轍，無可避免地，這兩座城市的居民對彼此的貝果產生了極深的誤解。甚至可以說他們互相嫌棄到了一個不可思議的地步。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">真的，在心理學上這其實可以用所謂的「定錨效應」來解釋。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">定錨效應。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，簡單來說就是我們的大腦會把我們第一次接觸到，或者最常接觸到的標準設定為正常的基準點，這個就是那個錨。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哦，一旦這個錨拋下去了，任何偏離這個標準的事物，大腦都會自動把它判定為錯誤或是次等的。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">沒錯，難怪曼哈頓那家非常有名的 Ess-a-Bagel 店，他們的聯合創辦人佛羅倫斯·威爾朋 (Florence Wilpon)，她分享的一段經驗就完全詮釋了定錨效應。
+                </div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">她發生了什麼事？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    她有一次去蒙特婁看當地人烤貝果，她回憶說，當她看到那些蒙特婁貝果從木烤爐裡拿出來的時候，她簡直不敢相信自己的眼睛。在她看來，那些東西又焦硬、形狀又怪異。哼，她當時甚至忍不住對著蒙特婁的師傅驚呼說：「你們為什麼要把這東西扔進火裡？！」
+                </div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">
+                    超好笑，她真的覺得那是被毀掉的麵包，因為在她的認知裡，貝果就是應該像紐約那樣用瓦斯烤爐烤得白胖、巨大無比啊。她從沒看過燃木烤爐，也沒見過這麼小的尺寸。紐約人還常抱怨說蒙特婁的貝果出爐不到一天就會變乾變硬，而且蜂蜜水讓它吃起來太甜了。
+                </div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    對，他們覺得真正的貝果怎麼能像甜甜圈一樣。在佛羅倫斯腦海中，巨大、蓬鬆、柔軟就是貝果的錨點，所以蒙特婁那種保留了原始炭火痕跡、形狀不規則的手工貝果，在她的認知系統裡就是一場烘焙災難。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">但反過來其實也是一樣的哦，蒙特婁人對紐約貝果的評價也毫不客氣。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，聖維亞特的老闆文斯 (Vince)
+                    就非常篤定地說：「蒙特婁貝果店在紐約絕對行不通，紐約人就是愛紐約貝果，事情就是這樣。」費爾蒙的老闆施拉福曼也觀察到一個很有趣的現象，他說經常有紐約客來到蒙特婁，帶著一點優越感，勉強試他們的貝果。
+                </div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">吃完了呢？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    吃完之後這些紐約客通常會聳肩說：「嗯，還行吧。」但是施拉福曼心裡知道，當這些人回到紐約，他們其實會偷偷慶幸，終於能吃回他們口中所謂真正的貝果了。這讓想到我們台灣聽眾一定懂的南北部飲食大戰。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">哦，你是說肉粽或是滷肉飯那種嗎？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    對啊，你想想看，如果你是一個從小在北部吃鹹香口味肉羹湯的人，第一次到台南喝到那種勾芡很濃、帶著明顯甜味的肉羹湯時，你的第一反應絕對是：「這根本是甜點吧，這怎麼能叫羹湯？」真的一種口味的蜜糖，真的是另一種口味的毒藥啊。
+                </div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">這個比喻非常精準。這說明了，當我們在爭論食物的時候，我們其實根本不是在客觀比較味覺。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">那我們在爭什麼？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">我們捍衛的其實是我們成長的背景，我們的生活方式，以及我們對家鄉的認同感。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">說到家鄉認同感，有一個例子真的是把這種城市自豪感發揮到了極致，甚至可以說是有點瘋狂了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">沒錯，這確實是一個極具象徵意義的歷史事件。有一位出生於蒙特婁的太空人叫做格瑞格·查米托夫 (Greg Chamitoff)。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">當他準備登上國際太空站，執行那種每一個重量都必須精確計算、極度嚴肅的太空任務時，你猜他堅持隨身攜帶了什麼？</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">總不可能是貝果吧。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">他竟然帶了一打半，也就是整整 18 個沾滿芝麻的蒙特婁貝果一起上太空！</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">哇，我們真的可以試著想像一下那個畫面，在距離地球 400
+                    公里高，浩瀚無垠而且冰冷孤獨的國際太空站裡，這位太空人漂浮在無重力狀態下，然後咬下一口帶著蒙特婁燃木香氣和蜂蜜微甜的貝果。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">太感人了。在那一刻，這 18 個貝果早就不是單純的熱量了。那是情感的牽絆。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">
+                    沒錯，那是連接他與地球、與他出身的城市蒙特婁之間最強的情感連結。他帶上太空的其實是他的家鄉。連上太空都不能放棄家鄉的味道，紐約和蒙特婁的這場貝果戰爭真的是名副其實的打到外太空去。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">真的。這也讓我們來到今天這場深度探索的尾聲了，我們拆解了這麼多歷史、科學和文化，最後無可避免地要面對一個終極問題。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">那就是到底哪一種貝果比較好？</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">這個問題的答案其實非常誠實，但也非常深刻，答案完全取決於你來自哪裡，以及你的大腦被什麼樣的味道給定錨了。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">也就是說沒有標準答案。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">
+                    對，這場貝果大戰是永遠無法定論的。世界上根本沒有所謂客觀上最優越的貝果，存在的只有對自己城市的文化與傳統，保持著深深依戀的市民。機器量產的紐約貝果，以它的蓬鬆和巨大餵飽了快節奏的都會靈魂；而堅持手工、拒絕妥協的蒙特婁貝果，則用火焰和汗水保留了一座城市的歷史溫度。
+                </div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">講得真好。他們各自服務了不同的人群，也沒有誰比誰更高尚了。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">非常感謝你提供這個精彩的素材，讓我們能帶你潛入這段歷史。雖然今天的討論絕對無法阻止世界上的人們繼續爭論到底哪裡的東西最好吃。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這是一定會繼續爭啦。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">但它確實讓我們看見了，在看似平常的麵團背後那股強大的文化牽絆。下次當你為了捍衛台灣的某樣在地小吃，像是肉圓到底要蒸的還是炸的，或是粽子一定要吃南部還北部...
+                </div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">對，而跟朋友爭得面紅耳赤的時候，或許你可以回想一下這場橫跨北美洲的貝果大戰。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">
+                    理解食物背後的脈絡，去看看那些堅持背後的故事，真的會讓我們對不同的飲食文化多一份包容與欣賞。在節目的最後，我想留給你一個問題，一個值得你慢慢思考的有趣問題。如果我們口中所謂的「最好吃」、「最正宗」，其實只不過是我們出生的地理位置和成長過程中的文化習慣所造成的偶然產物...
+                </div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">嗯。</div>
+            </div>
+
+            <div class="message host-b">
+                <div class="speaker-name">主持人 B</div>
+                <div class="bubble">
+                    那麼這個世界上真的存在所謂客觀的「好品味」嗎？或者每一次我們為了某種食物的正宗與否拼死捍衛時，我們真正想要保護的，其實只是我們記憶中那個無可取代的童年，那股熟悉的家鄉味。</div>
+            </div>
+
+            <div class="message host-a">
+                <div class="speaker-name">主持人 A</div>
+                <div class="bubble">這是一個很棒的反思。這個沒有標準答案的問題就留給你自己去探索了。今天的深度探索就到這裡，我們下次見。</div>
+            </div>
+
+        </div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_16.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
             }
-        }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

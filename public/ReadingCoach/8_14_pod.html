@@ -1,107 +1,906 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_14.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Selection - AI Podcast 學習手冊與雙語逐字稿</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #eff6ff;
+            --secondary-color: #0d9488;
+            --secondary-light: #f0fdf4;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.75;
+            padding: 20px 15px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.25);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            color: #93c5fd;
+        }
+
+        .audio-card {
+            background: var(--card-bg);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .audio-card label {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* 英文文章樣式 */
+        .article-text {
+            font-size: 1.05rem;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .article-text p {
+            margin-bottom: 18px;
+        }
+
+        .highlight-word {
+            background-color: #fef08a;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* 單字卡區塊 */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .vocab-card {
+            background: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .vocab-card .word {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .vocab-card .meaning {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-top: 4px;
+        }
+
+        /* 逐字稿樣式 */
+        .transcript-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dialogue-row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .avatar {
+            min-width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .host-a .avatar {
+            background-color: var(--primary-color);
+        }
+
+        .host-b .avatar {
+            background-color: var(--secondary-color);
+        }
+
+        .bubble {
+            padding: 12px 18px;
+            border-radius: 12px;
+            max-width: 85%;
+            font-size: 0.98rem;
+        }
+
+        .host-a .bubble {
+            background-color: var(--primary-light);
+            border: 1px solid #dbeafe;
+        }
+
+        .host-b .bubble {
+            background-color: var(--secondary-light);
+            border: 1px solid #dcfce7;
+        }
+
+        .speaker-name {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .english-quote {
+            font-style: italic;
+            color: #1e40af;
+            background: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-color);
+            margin: 6px 0;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            section {
+                padding: 20px 15px;
+            }
+
+            .bubble {
+                max-width: 100%;
+            }
+
+            .dialogue-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
             }
         }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+    </style>
+</head>
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+<body>
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+    <div class="container">
+        <header>
+            <h1>Natural Selection 自然擇滅與演化</h1>
+            <p>AI Podcast 英語學習專題手冊</p>
+        </header>
+        <!-- 英文文章區塊 -->
+        <section>
+            <h2>英文閱讀文本 Original Text</h2>
+            <div class="article-text">
+                <p>A few hundred million years ago, the competition for food between fishes was <span
+                        class="highlight-word">fierce</span>. So much so that gradually, some fish developed the ability
+                    to get out of the water and reach food sources that none of the other fish could get to. They
+                    survived long enough to successfully <span class="highlight-word">reproduce</span>, and passed this
+                    characteristic on to future generations. In fact, from these fish eventually originated the animals
+                    with two pairs of limbs, including human beings. This is an example of natural selection. An
+                    organism that develops a <span class="highlight-word">trait</span> that helps it survive in its
+                    environment will have a better chance of reproducing and passing that trait on to the next
+                    generation. As a consequence, organisms with this helpful trait will become more prominent while
+                    other organisms of the same species die out.</p>
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                <p>Why do giraffes have long necks? Why do rabbits produce so many offspring? Natural selection can help
+                    us understand why some species are the way they are. The term “natural selection” was coined by
+                    Charles Darwin, who developed the scientific theory of evolution. Darwin was born in England in 1809
+                    and spent his life observing animals and plants from around the world. He explained the theory in
+                    his landmark book <em>On the Origin of Species</em>.</p>
+
+                <p>Sometimes, the changes that occur among a group of organisms will seem very small but still play an
+                    important role in their survival. Take, for example, the peppered moth. The peppered moth was light
+                    in color and had speckled wings. It was hard to pick out against many of the trees and buildings in
+                    England and could <span class="highlight-word">camouflage</span> itself easily. But during the
+                    Industrial Revolution, London became polluted, and the smog turned everything black. Now the moths
+                    could be seen more easily by predators; they had nowhere to hide. Around this time, dark-colored
+                    peppered moths, which are almost invisible against a dark background, began to appear and soon
+                    became <span class="highlight-word">widespread</span>. The lighter moths, on the other hand, became
+                    scarce in these sooty industrial areas.</p>
+
+                <p>Another case that has to do with survival through camouflage involves the little deer mouse.
+                    Typically, deer mice are dark brown, which makes it easier for them to hide from owls and other
+                    predators in the dark soil of the woods. The deer mouse that lives in Nebraska’s light-colored Sand
+                    Hills, however, has gone from brunette to blonde so it can <span class="highlight-word">blend
+                        in</span> and have a better chance at survival. It took thousands of years for these mice to
+                    change the color of their coats, which may sound like a long time, but when it comes to evolution,
+                    that’s pretty quick!</p>
+
+                <p>One interesting case study is that of the Galápagos finches, about 14 species of bird that were
+                    studied by Darwin on the Galápagos Islands. Often referred to as “Darwin’s finches,” these birds
+                    look very much alike. The most significant difference among them is the size and shape of their
+                    beaks. Every different beak evolved the way it did so as to be suited to a particular feeding task.
+                    When, in 1977, a drought hit the island, vegetation withered and the only seeds left were large and
+                    tough. The finches with deeper, stronger beaks were able to crack through these seeds, and many more
+                    of them survived than their smaller-beaked brothers. However, in the mid-1980s, during an especially
+                    rainy time, smaller, softer seeds <span class="highlight-word">flourished</span>. The birds best
+                    adapted to eat them had smaller beaks and they fared much better.</p>
+
+                <p>Where have all the dull male peafowl (peacocks) gone? Well, female peafowl (peahens) choose their
+                    mates based on the color and brightness of their plumage. This means that peacocks with impressive
+                    tail feathers are able to find mates more easily. A few thousand years ago, there were many more
+                    males with dull feathers, but they kept getting passed over by the females and did not reproduce.
+                    Their numbers therefore began to <span class="highlight-word">dwindle</span>. These days, they’re
+                    quite rare.</p>
+
+                <p>Darwin’s theory teaches us that an animal or plant that adapts to its environment and remains alive
+                    long enough to procreate will thrive. The dodo bird, which has gone <span
+                        class="highlight-word">extinct</span>, was not lucky in this respect. A lack of predators for
+                    thousands, and maybe even millions, of years meant that the dodos never learned to fly. When humans
+                    finally arrived to their home on the island of Mauritius, the dodos had no way of protecting
+                    themselves and, in the 17th century, were <span class="highlight-word">wiped out</span>. It isn’t
+                    easy being on the wrong side of natural selection. Fortunately for us humans, the fish with the
+                    fleshy, leg-like fins came out on top.</p>
+            </div>
+        </section>
+
+        <!-- 核心重點單字 -->
+        <section>
+            <h2>核心彙整 Key Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="word">fierce</div>
+                    <div class="meaning">adj. 激烈的、兇猛的</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">reproduce</div>
+                    <div class="meaning">v. 繁殖、繁衍後代</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">trait</div>
+                    <div class="meaning">n. 特徵、特性</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">camouflage</div>
+                    <div class="meaning">v./n. 偽裝、保護色</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">widespread</div>
+                    <div class="meaning">adj. 廣泛的、普及的</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">blend in</div>
+                    <div class="meaning">phr. 融入環境、不突兀</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">flourish</div>
+                    <div class="meaning">v. 繁榮、蓬勃發展</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">dwindle</div>
+                    <div class="meaning">v. 逐漸減少、縮小</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">extinct</div>
+                    <div class="meaning">adj. 滅絕的、絕種的</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="word">wipe out</div>
+                    <div class="meaning">phr. 徹底抹去、消滅</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Podcast 雙語逐字稿區塊 -->
+        <section>
+            <h2>Podcast 雙語對照逐字稿 Podcast Transcript</h2>
+            <div class="transcript-container">
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        學習一項全新技能的時候啊，呃，那個陣痛期總是難熬的。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        哦，真的很難熬，就是會有一種很不舒服的感覺。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        沒錯。想像一下哦，你原本在水裡面游得好好的，然後突然之間水不夠了，你被迫要爬上那個乾燥的陸地，去學著用完全不同的方式去呼吸啊、去移動身體。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        嗯，因為你的大腦和身體正在面對一個完全沒有前例可循的環境嘛。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        對對，舊的生存法則已經失效了，那如果你不馬上發展出新的應對機制，面臨的可能就是直接被淘汰。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        真的，那種離開舒適圈的笨拙感絕對會讓人懷疑人生啦。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        其實這完美呼應了我們今天這場深度探討的核心。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        沒錯。這是一項非常特別的任務，是專門為正在收聽節目的你，也就是這位來自台灣的聽眾所打造的。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        嗯。你告訴我們說，你想從零開始挑戰學習英文。然後你傳來了一段非常引人入勝的英文文本，希望我能把它當做你學習發音跟智慧的起點。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        不得不說，你選的這段文本非常有品味耶。它表面上看起來是一段語言學習素材，但骨子裡其實在探討查爾斯·達爾文的物競天擇還有演化論，這根本是一段關於生命如何在絕境中尋找出路的科學史啊。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        哇，被你這麼一說，整個熱血沸騰了。所以今天呢，我們就來一場結合生物演化與英文解析的雙軌探索。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        太棒了。我們會把這段文本拆解成一小塊一小塊的，為你示範自然的英文發音跟語調，同時也咀嚼裡面的核心概念。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        嗯。就像我們剛剛提到的那條被迫爬上陸地的魚，你的文本開篇其實正是從這個極具戲劇性的時刻開始的。那我先來讀一下前兩句哦：
+                        <span class="english-quote">"A few hundred million years ago, the competition for food between
+                            fishes was fierce."</span>
+                        這個 <strong>fierce</strong> 就是激烈的、兇猛的意思。競爭超激烈。接著他說：
+                        <span class="english-quote">"So much so that gradually, some fish developed the ability to get
+                            out of the water and reach food sources that none of the other fish could get to."</span>
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        這裡點出了一個很殘酷的動力，就是競爭嘛。數億年前的海洋其實擁擠不堪，資源面臨嚴重的枯竭。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        大家都吃不飽了。對，但那些身體構造剛好發生變異的魚，比如說魚鰭長得特別粗壯，或者能在淺灘泥濘中稍微挪動身體的魚，牠們就突然發現了一個完全沒有競爭者的新天地。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        也就是陸地。沒錯，因為牠們吃到別的魚吃不到的食物，所以活下來了。文本接著解釋了這件事的後續效應哦，他說：
+                        <span class="english-quote">"...survived long enough to successfully reproduce and pass this
+                            characteristic on..."</span>
+                        活得夠久還成功繁衍了後代。包含人類擁有兩對四肢的動物，最終都是源自於這些上岸的魚類。不過看到這段，我其實一直有一個疑問。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        怎麼說？
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        就是「物競天擇」這個概念呢，聽起來好像大自然是一個很有威嚴的裁判，站在那邊拿著積分板對著魚說：「嗯，你很努力爬上陸地，我決定挑選你成為贏家。」挑選這個詞確實很容易讓人誤會。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        對啊，但這背後的機制應該不是這麼有意識的吧？
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        其實這大概是演化論最常被誤解的地方了。大自然完全沒有意識，它更像是一個無情而且被動的綠網（濾網）。那條長出粗壯魚鰭的魚，並不是因為他心裡想著「我要上岸」才長出那樣的鰭，而是在基因隨機突變的過程中，他剛好擁有了這個特徵。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        哦，所以是瞎貓碰上死耗子的概念嗎？
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        差不多就是這樣！而這個特徵幫助他穿過了當時水中食物短缺這個「環境綠網」。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        原來如此。所以文本裡面總結：
+                        <span class="english-quote">"An organism that develops a trait that helps it survive in its
+                            environment will have a better chance of reproducing and passing that trait on..."</span>
+                        擁有能適應環境特徵的生物就有更大的機會繁衍後代。這裡出現了兩個極度關鍵、也是你學習英文必須要掌握的單字：第一個是 <strong>reproduce</strong>，第二個是
+                        <strong>trait</strong>。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        沒錯，我們先來拼聽 reproduce 這個字的節奏好了。它的意思就是繁殖、繁衍後代，你看它的字首 <code>re-</code> 代表「再一次」，然後
+                        <code>produce</code> 是生產。所以一再地生產就是繁衍。發音的時候，它的重音要落在最後一個音節：repro<strong>DUCE</strong>。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        我試試看：repro<strong>DUCE</strong>。感覺最後那個 duce 有一個往上推的爆發力。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        對對對，就是那個推上去的感覺！另外一個字是
+                        <strong>trait</strong>，意思是特徵或者是特性。這個字不僅可以用在像長頸鹿有長脖子這種物理特徵上，其實也可以用來形容一個人的性格特徵。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        發這個音的時候開頭的 TR 聽起來有點像中文注音的「出」，接著是一個長的 A 的音，最後用一個很輕巧乾淨的 T
+                        來結尾：<strong>Trait</strong>。其實就像你現在主動學習英文一樣啊，你正在為自己發展一項新的 trait，好讓你自己的可以順利穿過全球化這個巨大的環境綠網。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        這個比喻非常棒，謝謝。那這套綠網機制的觀察者，也就是查爾斯·達爾文，他在 1859 年出版的《物種起源》這本書裡面正式提出了這個理論。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        沒錯，這是一本改變人類認知的巨作。不過演化有時候好像不需要像魚爬上陸地那樣經歷個好幾億年這麼久，如果環境的綠網突然在一夜之間被替換掉，生存規則可是會瞬間改寫的。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        文本給了我們一個非常有名的案例，叫做樺尺蛾（<strong>peppered
+                            moth</strong>）。工業革命之前的英國樹幹上其實長滿了灰白色的地衣，所以這種淺色身上帶有斑點的蛾停在樹上的時候，鳥類根本就看不見牠們，這是一種近乎完美的保護色。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        但工業革命以來，整個平衡就被打破了。文本說：
+                        <span class="english-quote">"But during the Industrial Revolution... they had nowhere to
+                            hide."</span>
+                        無處可躲。這個畫面感太強了啦！這就好比你原本穿著白色的雪衣在雪地裡面隱身，結果雪突然全部融化變成黑泥巴，那你瞬間就會變成最顯眼的目標了。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        而在這個時候，最戲劇性的反轉就出現了。在原本的蛾群裡面，其實偶爾會出現因為基因突變而變成深黑色的個體。原本這類黑蛾很快會被吃掉，但現在樹幹被煤灰染黑了！
+                        <span class="english-quote">"...dark-colored peppered moths, which are almost invisible against
+                            a dark background, began to appear and soon became widespread."</span>
+                        原本的劣勢基因，因為環境綠網突然改變，瞬間就變成了保命符！
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        這裡我們遇到兩個很棒的英文單字哦：<strong>camouflage</strong> 跟 <strong>widespread</strong>。第一個
+                        C-A-M-O-U-F-L-A-G-E，最後那個 -age 是像年紀 age 的發音嗎？
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        這其實是個很常見的陷阱，因為 camouflage 這個字是來自法文，所以它的結尾發音會稍微柔和一點，帶有點氣音的
+                        <code>/flɑːʒ/</code>，重音放在最前面：<strong>CAM-ou-flage</strong>。意思是偽裝或者是保護色。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        那另外一個 <strong>widespread</strong> 應該就直觀多了吧？ wide 是寬廣的，spread 是散布，結合起來形容某個事物變得非常廣泛普及。了解！
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        文本接下來探討了演化的超車道，提到鹿鼠（deer
+                        mice）。一般的鹿鼠是深褐色的，但生活在內布拉斯加州淺色沙丘裡的鹿鼠，毛色卻從深色（brunette）變成了金黃色（blonde），就是為了要 <strong>blend
+                            in</strong>（融入環境）。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        不過文本接著寫說「花了幾千年改變毛色，在演化上算非常快」，這對我們人類來說幾千年根本是好幾個朝代更迭的漫長歲月了吧！
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        哈哈，這就好比你要去徹底改寫一個正在全球運作的跨國銀行底層程式碼，而且過程中銀行還不能停止運作，結果工程師只用了一個晚上的系統更新就解決了！在動輒以千萬年計算的地質尺度裡，幾千年真的堪比「一夜更新」。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        <strong>Blend in</strong> 這個片語真好用！blend 是混合，blend in 就是融入背景不突兀。比如你參加休閒派對結果穿著燕尾服，你就會覺得自己很難 blend
+                        in。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        接著是加拉巴哥群島上的「達爾文雀」。14 種雀鳥長得很像，最大的差異是鳥喙（beak）的大小與形狀。1977 年大旱災時，只剩下大而堅硬的種子，喙大而強壯的雀鳥就能 crack through
+                        存活下來；但到了 1980 年代雨季，小而軟的種子蓬勃生長（<strong>flourished</strong>），小鳥喙的雀鳥反而過得更好（fared much better）。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        <strong>Flourished</strong> 這個字很漂亮，意思是繁榮、茂盛。發音前面像麵粉（flour），後面是清晰的 <code>-ished</code>
+                        氣音，傳達出一種生機勃勃不可擋的感覺。我相信經過你這樣不斷練習，你的英文能力也一定會 flourish！
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        最後兩個例子展示了演化的另一種極端——「性擇」（sexual
+                        selection）。像雌孔雀是外貌協會，根據羽毛亮麗程度挑選伴侶。羽毛暗淡的雄孔雀雖然可能很會躲避獵食者，但因為一直被忽視（passed over），數量就開始
+                        <strong>dwindle</strong>（逐漸減少）。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        <strong>Dwindle</strong> 念起來很像沙漏裡的沙子逐漸流失的感覺。那渡渡鳥（Dodo bird）呢？
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        渡渡鳥是因為環境太過安逸而走向毀滅。在模里西斯島上幾百萬年沒有天敵，牠們逐漸放棄了飛行能力。當人類登陸後，牠們毫無防禦能力，在 17 世紀就被徹底 <strong>wiped
+                            out</strong> 了。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        這裏出現了兩個強烈的字眼：<strong>extinct</strong>（滅絕的，較客觀科學）與 <strong>wiped
+                            out</strong>（像拿抹布把黑板上的字抹得一乾二淨，充滿慘烈的視覺感）。
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        這整篇達爾文理論的精髓就在於：無論你目前處於什麼樣的狀態，只要你能持續適應環境的變動，存活下來並繁衍，你就能夠
+                        flourish。你選擇從零開始學習英文，主動把自己放進一個不舒服、充滿挑戰的新環境，這個舉動本身就是你在為自己發展適應未來世界的特徵啊！
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-a">
+                    <div class="avatar">男</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 A</div>
+                        沒錯，雖然正在經歷語言能力的演化陣痛期，但我們都確信你最終一定會順利度過並且
+                        flourish。最後留一個思考題給你：幾百萬年來一直是大自然在篩選生物，但現在主導這個星球物競天擇的力量，究竟還是大自然那道無形的綠網，還是早就已經變成我們人類自己了呢？
+                    </div>
+                </div>
+
+                <div class="dialogue-row host-b">
+                    <div class="avatar">女</div>
+                    <div class="bubble">
+                        <div class="speaker-name">主持人 B</div>
+                        這個問題留給你去慢慢咀嚼了。好好消化今天學到的這些單字跟發音，我們下次的深度探討見！
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_14.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

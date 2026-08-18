@@ -1,107 +1,1003 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_19.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 逐字稿：紙張的歷史與英文學習</title>
+    <style>
+        :root {
+            --bg-color: #F0F4F8;
+            --container-bg: #FFFFFF;
+            --text-main: #334155;
+            --primary-color: #3B82F6;
+            --host-a-bg: #E0F2FE;
+            --host-a-text: #0369A1;
+            --host-b-bg: #F3F4F6;
+            --host-b-text: #374151;
+            --highlight-bg: #FEF08A;
+            --highlight-text: #B45309;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        body {
+            font-family: 'Helvetica Neue', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 20px 10px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1E293B;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748B;
+            font-size: 1em;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E2E8F0;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .english-original {
+            background-color: #F8FAFC;
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 40px;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.05em;
+            color: #475569;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chat-bubble {
+            padding: 15px 22px;
+            border-radius: 20px;
+            max-width: 85%;
+            position: relative;
+            font-size: 1.05em;
+        }
+
+        .host-a {
+            background-color: var(--host-a-bg);
+            color: var(--host-a-text);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .host-b {
+            background-color: var(--host-b-bg);
+            color: var(--host-b-text);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .speaker-name {
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        .vocab {
+            background-color: var(--highlight-bg);
+            color: var(--highlight-text);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            margin: 0 2px;
+            display: inline-block;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .chat-bubble {
+                max-width: 95%;
             }
         }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+    </style>
+</head>
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+<body>
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+    <div class="container">
+        <h1>📚 AI Podcast：紙張的歷史與英文學習</h1>
+        <div class="subtitle">聽故事、學語感，重新認識改變世界的偉大發明</div>
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+        <h2>📜 英文原始文本 (Original Text)</h2>
+        <div class="english-original">
+            Legend has it that two Chinese papermakers were captured during the battle and brought to Samarkand, where
+            they were ordered to establish a paper manufacturing center in the heart of the Muslim empire. Whether or
+            not this was wholly true, it is probable that Muslim warriors encountered papermaking during their battles
+            with China. Seeing its usefulness immediately, they returned home with the technology to share with their
+            scribes.<br><br>
+            The Muslim empire was a culture that placed great importance on words. The Muslims’ holy book, the Qur’an,
+            was a great poetic work, and devout Muslims were expected to memorize parts of it to be recited during
+            religious ceremonies. One of their most famous art forms was calligraphy, a style of decorative writing, and
+            their great mosques were decorated not with images of people, but the words of the Qur’an itself. It is no
+            surprise that a society which so valued words would fall in love with paper.<br><br>
+            Compared to parchment and papyrus, even rudimentary paper—much rougher and thicker than the pages of a book
+            today—was a great improvement. Unlike parchment, which could only be made from the skins of animals, paper
+            could be manufactured relatively cheaply and easily. Unlike papyrus, paper did not crack when it was bent.
+            It was also thinner, which made the binding of books much simpler than it had been before. Perhaps most
+            importantly, paper absorbed ink, which meant that anything written on paper could not be erased. That's not
+            very useful when you're trying to solve a math problem, but when writing official government documents,
+            permanence is crucial. Just as it had been in China, paper was originally used mainly by the Arab
+            government.<br><br>
+            At a time when Europe was broken into a number of disorganized kingdoms, the Abbasid Caliphate, which
+            stretched from Afghanistan to North Africa, might have been the greatest power on Earth. This sprawling
+            empire contained dozens of great cities, millions of people, and several different, often conflicting,
+            cultures. Although the empire's official language was Arabic, its people spoke many different languages—from
+            Persian in the East to Berber in the West. Now those disparate regions could be united by the written
+            word.<br><br>
+            Paper's use spread quickly. By the end of the 8th century, a paper mill had been set up in Baghdad. Over the
+            next 200 years, the technology spread to Syria, North Africa, and even Spain—which was partially ruled by
+            Muslims from 711 to 1492. Although the Abbasid Caliphate and other ruling houses of the Arab empire were
+            skilled in war, they prized learning above all else. The Abbasids took inspiration from a well-known saying,
+            "The ink of a scholar is holier than the blood of a martyr." To this end, the Abbasids did everything they
+            could to encourage scientific achievement.<br><br>
+            As Europe languished in the Dark Ages, when even literacy was limited mainly to monks, the Muslim world
+            entered a scientific golden age. Building on the knowledge of the ancient Greeks, Muslim scholars made great
+            advances in geometry, astronomy, and mathematics. As paper became more widespread, so did knowledge. The
+            tedious process of writing books by hand was made easier by an adoption of assembly-line-style techniques,
+            which allowed a group of scribes to produce finished books faster than ever before. Great libraries were
+            established across the Muslim world, and in capitals like Baghdad and Cairo, booksellers flourished.
+            Scholars and poets were supported by the government, and for perhaps the first time in history, it became
+            possible to make a living by reading and writing alone.<br><br>
+            Even as paper became widespread, there was one place where its dominance was resisted: religion. Because
+            paper was less expensive than parchment, it was initially considered unfit to bear the holy words of the
+            Qur’an. However, the demand for copies of the Qur’an grew along with the population's literacy. Eventually,
+            that demand, along with the improved quality of the paper, made the new material considered suitable for
+            religious use. The oldest known Qur’an written on paper dates from 971-972.<br><br>
+            The western spread of paper didn’t end in the Arab empire. From there, the technology to manufacture paper
+            made its way through Europe. It was not until the middle of the 15th century that a German blacksmith named
+            Johannes Gutenberg invented a printing press that allowed for mass production of the Christian Bible. Most
+            of Gutenberg's Bibles were printed on paper, becoming one of the most famous early works on paper in
+            history.
+        </div>
+
+        <h2>🎧 Podcast 中文解析逐字稿</h2>
+        <div class="chat-container">
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哎，你知道嗎？當我們現在談到什麼改變世界的革命性科技的時候，腦海中浮現的通常都是極其精密複雜的那種東西。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，像是什麼奈米級的 <span class="vocab">Silicon chip</span> 啊，或者是量子電腦這種。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                沒錯沒錯，或者是那種佈滿海底的巨大光纖網路嘛，我們總覺得要顛覆世界，這項技術就必須看起來非常的有未來感。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                確實是這樣，我們大眾對科技一直都有一種刻板印象啦，就是覺得它必須閃閃發光，充滿金屬光澤，或者至少至少得插上電才能運作，對吧？
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                真的，大家都喜歡那種視覺上立刻就能帶來震撼的發明啊。但是啊，如果我們把時間倒轉回到1000多年前，當時地表上最具顛覆性、最能改變人類文明軌跡的那個所謂的高科技產品，其實看起來非常的不起眼。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，它表面粗糙，很容易撕破，而且最奇妙的是它的原料... 對，它的原料居然只是一堆搗碎的植物纖維，然後還有破布耶。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                但那絕對是人類歷史上最迷人的一次技術升級了。這項看似脆弱的發明，它不僅承載了整個帝國的重量，後來甚至重新定義了我們人類大腦運作、記憶儲存，還有知識傳播的方式哦。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯啦，歡迎來到我們今天的深度探討。這次的解析任務非常特別哦，因為我們知道正在收聽的你是一位母語為中文的台灣聽眾，而且你給了我們一個超棒的挑戰，就是你想從零開始學習英文。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                這真的是個非常棒的學習切入點，因為大家也知道學習語言最有效的方式從來都不是那種死背單字卡嘛。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對啊，那超痛苦的。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                是啊，最好是把語言放進一個非常引人入勝的情境裡面，當你理解了背後的脈絡，那些英文單字和句型就會自然而然地烙印在你的腦海中囉。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，所以今天的節奏會是這樣的：我們會沿著這段歷史的軌跡前進，然後我會挑選幾個文本中關鍵的英文句子，帶著你慢慢朗讀，順便拆解一下發音和語感。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                同時呢，我們也會一起深入挖掘這些文字背後，那些連歷史課本都不一定會告訴你的精彩細節哦。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                嗯，準備好邊聽故事邊學英文了嗎？那我們就直接回到1000多年前的歷史現場，那是一場發生在中國邊境的戰役。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                對，傳說在那個戰役當中啊，有兩名中國的造紙工匠被俘虜了，他們隨後就被帶到了一個叫做撒馬爾罕 (Samarkand) 的地方。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                撒馬爾罕聽起來超遙遠的。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                對，然後他們就被下令，必須在這個穆斯林帝國的心臟地帶建立一個造紙中心。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                哇。一項足以改變世界的技術，居然是透過這種戰俘有點非自願的方式傳播出去的。這點真的很有戲劇張力。而且當時的穆斯林戰士們顯然非常有那個商業跟科技頭腦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                沒錯，他們立刻就看出了造紙術的價值，然後就把這項技術帶回家鄉，分享給他們的抄寫員。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                不過為什麼他們反應可以這麼快啊？這就來到了我們今天要帶你學習的第一個關鍵英文句子囉。你可以仔細聽，然後試著跟著我念一次。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                嗯，大家可以跟著念念看。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                <span class="vocab">The Muslim empire was a culture that placed great importance on words.</span>
+                我再念一次：The Muslim empire was a culture that placed great importance on words. 意思是穆斯林是一個非常重視文字的文化。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                這個句子裡有一個非常棒的片語哦。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，這裡有一個超實用的片語，就是 <span class="vocab">place great importance on</span>，也就是「非常重視」的意思。這裡的 place
+                不是當作地方哦，它是動詞「放置」的意思，然後 importance 就是重要性嘛。把極大的重要性放在某個東西上，那當然就是非常重視啦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                沒錯沒錯，你可以用在很多生活場景啊，比如說 I place great importance on learning English，就是我非常重視學英文。但是回到歷史背景，我其實一直有個疑問。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                什麼疑問？
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                就是為什麼這個穆斯林帝國會對文字重視到這種不可思議的程度啊？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                哦，這其實是一個非常核心的文化現象，如果你去觀察當時的穆斯林社會，你會發現他們對文字有一種近乎神聖的敬畏。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                神聖的敬畏怎麼說？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                首先啊，他們的聖典古蘭經 (<span class="vocab">Qur'an</span>)
+                本身就是一部非常偉大的詩歌作品，對於虔誠的信徒來說，他們必須背誦裡面的段落，以便在宗教儀式中吟唱。所以文字對他們來說不僅僅是記錄資訊的工具而已，它本身就是他們信仰的一部分囉。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                完全正確。這就讓我想到我們常聽到的另一個很美的英文單字，<span class="vocab">calligraphy</span>，發音是
+                calligraphy，也就是書法。我記得這是一種裝飾性的書寫方式，英文是 <span class="vocab">decorative writing</span>，對吧？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，decorative writing。而且你知道嗎？當時他們那些偉大宏偉的清真寺裡面裝飾的其實不是人物畫像哦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                等一下，不是畫像，那是什麼？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                是古蘭經的文字本身。這在藝術史和宗教史上非常關鍵，因為伊斯蘭教義通常是反對偶像崇拜的嘛。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哦，所以你不會在清真寺裡面看到什麼神明啊，或者是聖人的雕像或畫像。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，取而代之的是，那些藝術家把所有的創造力全部傾注在文字上面。書法就成為了他們最著名、最崇高的藝術形式，文字就是他們的視覺藝術，也是他們跟神溝通的橋樑。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哇，所以讓我打個比方好了，對當時的穆斯林社會來說，他們本來就是一群極度狂熱的文字狂熱粉，對吧？他們的生活、信仰、藝術全部都被文字包圍著。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，真的是文字狂熱粉無誤。然後突然之間從遙遠的東方傳來了一種叫做紙的全新載體。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                難怪當時的文本有個說法是，一個如此重視文字的社會會 <span class="vocab">fall in love with paper</span>（愛上紙張），他們簡直是跟這項新科技絕配了嘛。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                哈哈，這個比喻非常精準，紙張就像是為這群文字狂熱粉量身打造的最強硬體設備。但是我們其實必須釐清一個觀念哦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                嗯，什麼觀念？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                就是在紙張出現之前，他們並不是沒有東西可以寫哦，只是舊有的這個硬體設備有著非常大的缺陷。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                這就引發我的好奇心了，既然他們這麼愛寫字，那在紙來之前他們到底用什麼？文本裡好像有提到兩種東西，羊皮紙跟莎草紙。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，主要就是 <span class="vocab">parchment</span> 跟 <span
+                    class="vocab">papyrus</span>。好，那我們先帶你來練習這兩個單字的發音，你可以在心裡或跟著我念哦。羊皮紙是 parchment，parchment。莎草紙是
+                papyrus，papyrus。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                我本來一直以為莎草紙就是古代最完美的書寫工具了耶，畢竟它是植物做的，應該很便宜才對啊，這兩個舊科技到底出了什麼問題？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                最大的問題其實就是成本還有它的物理限制。我們先說羊皮紙，也就是 parchment 好了，它只能用動物的皮來製作嘛。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哇，那你可以想像一下那個成本有多高昂，要寫一整本書，你可能真的需要屠宰一整群的羊呢。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                是的，這就讓書籍成為了極度奢華的物品。只有最頂層的皇室或者修道院才負擔得起。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                一本書等於一個牧場的代價，這真的太誇張了。那莎草紙呢？papyrus 應該沒有這個成本問題了吧。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                莎草紙確實是用植物纖維壓製的，沒錯，但它有一個致命的物理弱點，我們可以用一句很簡單的英文來形容紙張相對的優勢哦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                好，大家注意聽這句英文哦。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                <span class="vocab">Paper did not crack when it was bent.</span> 我再說一次：Paper did not crack when it was
+                bent。意思是紙張在彎折時不會破裂。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                沒錯，這句話反過來說就是在暗示莎草紙一旦被彎折，它就會 <span class="vocab">crack</span>，也就是破裂或是斷裂。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                原來如此，這代表莎草紙只能捲成那種長長的卷軸，你根本沒辦法把它摺疊裝訂成我們現在熟悉的書本形式嘛。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                對，所以當早期的紙，也就是 <span class="vocab">rudimentary paper</span>
+                出現的時候，那完全是一種降維打擊呀。雖然這種早期的紙可能比我們今天摸到的書頁還要粗糙厚重得多，但它便宜、容易製作，而且更薄，這讓書籍的裝訂，英文是 <span class="vocab">binding of
+                    books</span>，變得簡單太多了。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，binding of books 變得可行了。不過說到紙張的特性啊，文本裡有一段描述讓我稍微停頓了一下，我覺得非常有意思，我想念給你聽看看哦，這是一段關於墨水的描述。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哦，哪一段？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                <span class="vocab">Perhaps most importantly, paper absorbed ink.</span>
+                意思是，也許最重要的是紙張會吸收墨水。這意味著寫在紙上的任何東西都無法被擦除。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                嗯，這段非常關鍵，你想像一下，你在解數學題寫錯了，卻不能用橡皮擦，這其實挺崩潰的吧。為什麼這種無法修改（也就是 <span class="vocab">cannot be
+                    erased</span>），還有吸水（<span class="vocab">absorbed ink</span>）的特性，對當時統治廣大領土的阿拉伯政府來說，反而成為了殺手級的應用啊？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                解數學題不能擦確實很痛苦，但對於政府來說，這牽涉到信任與權力的運作啦。你想想看哦，羊皮紙雖然很昂貴，但它的表面其實非常平滑。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哦，表面平滑會怎樣嗎？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                這代表墨水其實只是附著在表面而已，並沒有吃進去。如果有人想要篡改政府的稅收記錄啦，或者是將軍的軍事命令，他只要拿把小刀把表面的墨水輕輕刮掉，就可以重新寫上新的數字了。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                等一下，所以羊皮紙其實是有被駭客入侵的風險的哦，只要一把小刀就能篡改歷史，這也太沒有資安概念了吧。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                一點也沒錯，但是紙張完全不同。因為紙張是由植物纖維交織而成的嘛，當墨水滴上去的時候，它會 <span class="vocab">absorb</span>，也就是吸收進去，滲透到纖維的內部。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                原來是這樣。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                如果你試圖刮掉字，你就會把整張紙給弄破，這等於賦予了紙張一種極高的防偽功能，也就是所謂的永久性，英文是 <span class="vocab">permanence</span>。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                是的，對於一個需要管理龐大領土、收稅、傳遞官方政令的政府來說，這種防篡改的特性絕對是維持帝國運作的基石啊。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                難怪紙張最初主要是被政府機關拿來使用的。這完全是一種強大的統治工具嘛。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                這就帶我們看到了當時地球上最大力量的擴張了。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，當時歐洲還分裂成許多分崩離析的小王國哦，但是阿拔斯哈里發國，也就是 <span class="vocab">Abbasid Caliphate</span>，卻是一個從阿富汗一路延伸到北非的超級帝國。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                那個帝國的規模在當時真的是難以想像欸，它包含了幾十座大城市，數百萬的人口，還有許多不同，甚至經常發生衝突的文化。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，雖然帝國的官方語言是阿拉伯語，但老百姓其實說著各種不同的語言，從東方的波斯語（<span class="vocab">Persian</span>），一路到西方的柏柏語（<span
+                    class="vocab">Berber</span>）。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                要治理這麼龐大且迥然不同的人群，絕對是統治者的噩夢啦，你要怎麼把他們整合在一起啊？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                歷史其實給了我們一個極具力量的答案哦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                是的。紙張發揮了作用。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                這也是我今天要帶你學習的第三個重要英文句子，你可以仔細感受一下這個句子的張力哦。<span class="vocab">Now those disparate regions could be united
+                    by the written word.</span> 我再慢慢念一次：Now those disparate regions could be united by the written
+                word，現在這些截然不同的地區可以透過書面文字團結起來。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                這句話真的很美。我們來拆解裡面兩個很漂亮的單字哦，第一個是 <span class="vocab">disparate</span>，發音是
+                disparate，重音在最前面，意思是截然不同的、迥然相異，這比單純用 different 高級很多，它強調的是本質上的巨大差異。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，差異極大的意思。然後第二個單字是 <span class="vocab">united</span>，意思是團結、聯合。所以那些原本天差地遠的區域，就是 disparate
+                regions，因為有了一致的書面文件系統，終於被團結，也就是 united 起來了。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                所以說紙張簡直就是當時的網際網路，對吧？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                確實如此啊，紙張就是八世紀的寬頻網路。因為資訊傳遞的成本大幅降低了嘛，紙張的使用就迅速蔓延開來，到了八世紀末，巴格達就已經建立了一座造紙廠哦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哇，巴格達欸，那接下來呢？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                在接下來的200年裡，這項技術就像野火一樣蔓延到了敘利亞、北非，甚至傳到了由穆斯林統治的西班牙。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                所以當帝國的基礎設施，也就是紙張系統整個建置完畢之後，統治階層就把焦點轉向了學習，這直接帶來了伊斯蘭的科學黃金時代。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，這是一段非常輝煌的時期。我這文本裡有一句話我覺得極具詩意也非常震撼，超級適合你拿來練習英文的語感跟節奏。聽好了：<span class="vocab">The ink of a scholar is
+                    holier than the blood of a martyr.</span> Wow!
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                The ink of a scholar is holier than the blood of a martyr. 意思是學者的墨水比殉道者的鮮血更神聖。<span
+                    class="vocab">Ink</span> 是墨水，<span class="vocab">scholar</span> 是學者，<span
+                    class="vocab">holier</span> 是更神聖的，然後 <span class="vocab">blood of a martyr</span> 就是殉道者的鮮血。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                把求知做學問的地位放得比為宗教犧牲生命還要高，這對當時的世界來說真的是非常前衛的思想耶。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                超前衛的，這句話完美地總結了那個時代的精神了。他們真的是不遺餘力在鼓勵科學成就。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                其實啊，這裡有一個非常強烈的歷史對比，當穆斯林世界進入科學黃金時代，在幾何學、天文學，還有數學上取得巨大進步的時候，你知道歐洲正處於什麼狀態嗎？
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                歐洲那時候在幹嘛？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                歐洲那時候正陷在黑暗時代的泥淖中哦。當時歐洲的識字率，也就是 <span class="vocab">literacy</span>，極度低落，幾乎只有修道院裡的少數僧侶才懂得閱讀和寫作。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哇，所以歐洲還在為了昂貴的羊皮紙苦苦掙扎的時候，穆斯林世界已經在量產了耶。我看到文本裡有一個詞讓我大吃一驚，就是 <span class="vocab">assembly-line-style
+                    techniques</span>，裝配線式的技術。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，assembly-line-style。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                等一下。我們通常以為裝配線是20世紀福特汽車工廠才發明的東西，他們在10世紀就在用裝配線做書了，這到底是什麼畫面啊？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                雖然當時沒有那種機械的輸送帶啦，但分工合作的概念是完全一樣的哦。你可以想像一下，在巴格達或開羅的圖書館和書店裡面，他們把抄寫工作徹底拆解了。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                怎麼拆解？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                可能是一個聲音很洪亮的人負責在前面大聲朗讀，然後前面坐著幾十個抄寫員，英文是 <span
+                    class="vocab">scribes</span>，大家同時快速在紙上記錄。接著呢，有人專門負責校對。有人專門裁切，有人負責裝訂。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                哇塞，這簡直就是人肉裝配線嘛，這讓一本書的生產速度達到了前所未有的境界。這等於創造人類歷史上第一個全新的職業生態。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，單靠閱讀和寫作就能謀生了，政府支持這些學者和詩人，然後書商也蓬勃發展。知識不再只是少數貴族的特權，它變成了一個龐大的產業。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                但是啊，歷史的發展總是充滿戲劇性的轉折。當你以為紙張已經勢如破竹，完全征服了政府、科學、商業和藝術的所有領域的時候，居然有一個領域最初是強烈抗拒紙張的。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                嗯，那個領域就是宗教 <span class="vocab">Religion</span>。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                這聽起來超級反直覺的耶。我們前面不是才說他們是一個極度熱愛文字的宗教社會嗎？既然紙張這麼好用，為什麼他們反而會抗拒把最神聖的古蘭經寫在紙上？
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                關鍵其實就在於價格。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                價格。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                對，因為紙張比羊皮紙便宜太多了，所以在最一開始的時候，它被認為不配，也就是 <span class="vocab">unfit</span>，用來承載神聖的文字。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                居然是因為太便宜。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                是啊，羊皮紙雖然貴，但那種昂貴、厚重，而且需要犧牲生命來製作的材質，在當時的人眼中才顯得夠莊重、夠神聖啦。紙張太廉價了，用它來寫古蘭經，感覺就有點像...
+                就有點像用隨手撕下來的便條紙來寫聖旨一樣輕浮，對不對？
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                我的天啊，所以便宜反而成了原罪，這完全顛倒了我的想像。但顯然啦，這種宗教上的堅持最終還是得向現實妥協的。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                怎麼說？是因為需求量太大了嗎？
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                沒錯，隨著人口識字率（就是 literacy）不斷提升，人們對古蘭經副本的需求就急遽增加了嘛。羊皮紙根本就供不應求，加上紙張的品質也不斷改善，最終宗教界也只能張開雙臂接受紙張了。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                有記錄嗎？
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                有的，目前已知最古老的紙本古蘭經大概可以追溯到西元 971 到 972 年左右。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                哇，那當最後一道防線，也就是宗教也被紙張攻破之後，紙張向西方傳播的腳步，英文是 <span class="vocab">western spread</span>，就再也無法阻擋了嘛。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                對，這項技術就從阿拉伯帝國一路傳入了歐洲，而這也為我們這趟歷史之旅最後的高潮搭起了舞台。我們終於來到了15世紀中葉的歐洲了，一位德國鐵匠登場了，他的名字叫約翰尼斯·古騰堡，就是 <span
+                    class="vocab">Johannes Gutenberg</span>。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                大家都聽過的名字。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                對，他發明了 <span class="vocab">Printing Press</span>，也就是印刷機，這項發明允許了基督教聖經的 <span class="vocab">Mass
+                    production</span>，大量生產。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                其實這裡有一個極具詩意的歷史循環哦。你想想幾個世紀前，紙張最初是因為太便宜，而被伊斯蘭宗教界拒絕用來抄寫聖典嘛。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                對啊，他們嫌棄它。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                但是幾個世紀後，正是因為紙張夠便宜、夠輕薄，才能配合古騰堡的金屬活字印刷機，成為了大量生產基督教聖經的最佳載體。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                真的。大多數古騰堡的聖經都是印在紙上的，這也成為了歷史上最著名的早期宗教紙本著作之一了。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，從手抄本的人肉裝配線，一直到真正的金屬印刷機，紙張其實一直默默地扮演著那個承載一切的基礎設施。你想想看沒有紙張的話，印刷機發明出來也沒有意義啊，因為你不可能把又厚又硬的羊皮塞進印刷機裡面去大量壓印吧，硬塞進去會壞掉吧。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                所以紙張這個起源於中國邊境的粗糙發明，就這樣繞了地球大半圈，最終引發了歐洲的知識與宗教革命。這真是一趟不可思議的旅程。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                確實是非常精彩的一段歷史。那正在收聽的你，剛剛不僅跟著我們走過了一段橫跨千年的歷史，更完成了一次高強度的英文雙重學習哦。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                我們從零開始一起拆解了像是 <span class="vocab">placed great importance on</span> 非常重視、<span
+                    class="vocab">parchment</span> 羊皮紙、<span class="vocab">papyrus</span> 莎草紙、還有 <span
+                    class="vocab">disparate</span> 迥然不同的、<span class="vocab">assembly-line-style</span> 裝配線式的，以及 <span
+                    class="vocab">mass production</span> 大量生產，這些充滿份量的英文詞彙。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                更重要的哦，你現在擁有了去解釋這些單字背後歷史脈絡的能力了。當你下次看到 <span class="vocab">calligraphy</span>
+                書法這個字的時候，你腦海中浮現的就不會只是一張單調的中文字卡了。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                沒錯，你會想到那個因為不畫人像而將文字藝術推向極致的穆斯林文化。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                還有當你看到 <span class="vocab">permanence</span> 永久性這個字的時候，你就會想起那些為了防止篡改稅收記錄而堅持使用會吸墨的紙張的阿拉伯官僚。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                在你今天學習英文、掌握文字力量的同時啊，希望你不要忘記這段歷史傳達的最核心精神：文字與知識擁有跨越語言與文化隔閡，將截然不同的世界重新連接起來的力量。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                沒錯，這才是最珍貴的。不過在我們今天這趟解析結束之前，我想留下一個延伸思考給你。在節目的最開頭，我們有提到千年前那種表面粗糙、廉價、看起來毫不費力的早期紙張，最終徹底打破了知識的階級壁壘。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                改變了人類文明。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                嗯，它引發了巨大的效應。那麼在我們這個資訊爆炸、充滿各種高科技的時代，會不會也有某種我們現在覺得粗糙、錯誤，甚至有點廉價的新科技？比如說可能是某個初階的 AI 模型啊，或是某種我們現在還看不上眼的底層技術。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                有可能哦。這些技術是不是正悄悄地像當年的紙張一樣，為人類下一場全球溝通革命搭建著全新的舞台呢。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                這真的是一個非常值得深思的問題。歷史啊，總是喜歡在最不起眼的地方給我們最大的驚喜。
+            </div>
+
+            <div class="chat-bubble host-a">
+                <div class="speaker-name">主持人 A</div>
+                謝謝你今天跟我們一起完成這堂特別的深度探討。請繼續在學習英文的路上保持這份好奇心，把每一個英文句子都當作一扇通往新世界的窗戶哦。我們下次見。
+            </div>
+
+            <div class="chat-bubble host-b">
+                <div class="speaker-name">主持人 B</div>
+                下次見。
+            </div>
+
+        </div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_19.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
+
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
+
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

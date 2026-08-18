@@ -1,107 +1,884 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_21.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蝴蝶生存密碼與英文解碼 - AI Podcast 逐字稿</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --host-bg: #e3f2fd;
+            --host-text: #0d47a1;
+            --guest-bg: #fff3e0;
+            --guest-text: #e65100;
+            --english-bg: #ffffff;
+            --accent-color: #3498db;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .english-text {
+            background-color: var(--english-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid var(--accent-color);
+            font-family: Georgia, serif;
+            font-size: 1.1em;
+            color: #444;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .dialogue-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 15px 22px;
+            border-radius: 20px;
+            font-size: 1.05em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .speaker-a {
+            background-color: var(--host-bg);
+            color: var(--host-text);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .speaker-b {
+            background-color: var(--guest-bg);
+            color: var(--guest-text);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .en-word {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c0392b;
+        }
+
+        .speaker-label {
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🦋 蝴蝶生存密碼與英文解碼</h1>
+    <p class="subtitle">AI Podcast 雙語沉浸式語音實驗室 逐字稿</p>
+
+    <h2 class="section-title">📄 Original English Text (英文原文)</h2>
+    <div class="english-text">
+        If you’ve ever been in a park during the summer, you may have seen butterflies flitting from flower to flower.
+        They are quite beautiful, and like humans, seem to have individual traits. There are orange butterflies with big
+        brown eyes, blue butterflies with black markings on their wings, and white butterflies with small black
+        antennae. According to some butterfly experts, there are approximately 20,000 kinds of butterflies in the world.
+        Each species (or type) of butterfly has its own genetic information that dictates what characteristics it will
+        have and distinguishes it from other butterflies. Inherited genetic information explains why certain species
+        look different from others.<br><br>
+        Monarch butterflies, orange butterflies with black markings and white spots on their wings, are most common in
+        Mexico and the United States. Their bright color makes them easily noticeable to predators, but also acts as a
+        warning that they are poisonous if eaten. The poison of monarch butterflies can be traced back to a plant they
+        feed on during an earlier stage in their lives. What we think of as butterflies are the adult versions of
+        caterpillars. As caterpillars, monarchs feed on milkweed, which contains a toxin that is poisonous to most
+        vertebrates but not to monarch caterpillars. When the caterpillars become adult monarch butterflies, the
+        milkweed in their bodies is poisonous to any predators that might try to eat them. An unsuspecting predator that
+        did not know the monarch butterfly was poisonous would soon realize its mistake. After tasting the poisonous
+        bug, most predators quickly spit out the monarch and learn not to eat them again.<br><br>
+        Unlike other butterflies, whose genetic information (and therefore their coloration) helps them blend into their
+        habitats in order to defend themselves from predators, monarch butterflies rely on their bright coloration to
+        keep them safe. An interesting fact: another species of butterfly, the viceroy, mimics the coloration of the
+        monarch in order to keep predators from eating it!<br><br>
+        Even though there are many kinds of butterflies that look very different, all butterflies share a certain number
+        of traits, which are also determined by their genetic information. They all have the same life cycle. First a
+        caterpillar hatches from an egg. The caterpillar eats plants and grows bigger. Then it covers itself in a hard
+        case called a chrysalis, and it enters a stage of transformation. During this stage, the insect is called a
+        pupa. Inside the chrysalis, the pupa grows the legs, wings, and other parts of an adult butterfly. Once the
+        butterfly is fully developed, the chrysalis splits apart, and the butterfly emerges.<br><br>
+        All butterflies have four wings—two upper, two lower—that are covered in tiny colored scales. A butterfly’s
+        genes determine the color of its scales, and more—they dictate the insect’s size and shape as well. Colorful
+        decorations are key to the survival of the monarch butterfly. Vivid colors signal danger to the predators which
+        might otherwise eat the butterfly. Other species of butterfly, with different genes, rely on different survival
+        strategies, and have their own distinctive designs. But no matter the pattern, the blueprints for each of the
+        20,000 different species’ development are written in their genetic codes.
+    </div>
+
+    <h2 class="section-title">🎙️ Podcast Transcript (中文對話逐字稿)</h2>
+    <div class="dialogue-container">
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            下次當你在夏天的公園裡看到那個蝴蝶輕盈飛舞的時候啊，你可以仔細看一下他們那種斑斕的翅膀。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，其實很多人都只會覺得很漂亮啦。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，但是那可能不單純只是為了漂亮哦。牠其實是一張大剌剌寫著「吃我會死」的這種致命警告標語。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            沒錯，大自然其實是很殘酷的。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            真的。那今天我們在這場深度探討裡有一項雙重任務，我們不僅要破解大自然最冷酷的生存密碼，還要將這份精密的生物學文本轉化為你專屬的英文解碼課。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對，這點非常特別。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯。如果你是一位中文為母語，然後想從零開始學好英文的台灣朋友，請把我們接下來這段時間當作你的沉浸式語音實驗室。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯。其實我們今天探討的素材表面上是在分析蝴蝶的基因、生存策略與生命週期。聽起來很像生物課本。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            確實有點像，但它的文字結構極度精確，而且非常富有邏輯。對於一個剛起步的英文學習者來說，與其死背單字本，不如透過這些充滿戲劇張力的真實生物事件來感受英文單字是如何在句子裡「活著」的。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            「活著的單字」，這個說法很讚。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對啊，所以我們今天會輪流朗讀關鍵的句子，然後拆解裡面的發音與字根，讓語言和知識可以一起印在你的腦海裡。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            了解，那我們就先從一個蠻驚人的數字開始好了，世界上大約有兩萬種，也就是 <span class="en-word">20,000 kinds</span> 的蝴蝶。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            兩萬種，這數量真的蠻龐大的哦。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            超多。你看哦，有那種長著棕色大眼睛的橘色蝴蝶，也有翅膀帶著黑色斑紋的藍色蝴蝶，還有長著黑色小觸角的白色蝴蝶。對了，觸角的英文是 <span class="en-word">antennae</span>。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            <span class="en-word">Antennae</span>，沒錯，這兩萬種截然不同的造型全都是由牠們體內的遺傳基因資訊，也就是 <span class="en-word">genetic
+                information</span> 所控制的。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，為了精確描述這個控制過程呢，我們可以來聽文本中最經典的英文，請仔細聽一下發音與語調，你也可以試著在心裡跟著念哦。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            好，我準備好了。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            <span class="en-word">"Each species or type of butterfly has its own genetic information..."</span>
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哇，這句聽起來真的很重分量。好，我們來拆解一下這個概念，這句話裡面有兩個動詞，聽起來超級強勢的。第一個是 <span class="en-word">dictates</span>。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，重音在第一音節，<span class="en-word">dictates</span>。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，這個字其實遠比我們常用的 <span class="en-word">decides</span>（決定）還要強烈很多。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            怎麼說？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            如果你去拆解字根的話，在拉丁文裡就是「說話」的意思。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            喔！像是 <span class="en-word">dictator</span>（獨裁者）那個字嗎？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，就是那個字。所以當我們說基因 <span class="en-word">dictates</span> 蝴蝶的特徵時，它傳達的是一種絕對的權威，就是基因就像一位總司令對著細胞下達那種不容置疑的指令。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哇塞，這個動詞選得太精準了吧！那第二個動詞 <span class="en-word">distinguishes</span> 呢？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            <span class="en-word">Distinguishes</span>，它的發音有四個音節。它的意思是「區分」或是「辨別」。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            了解。<span class="en-word">distinguishes</span> 在文本的結構是 <span class="en-word">distinguishes it from other
+                butterflies</span>，意思就是把這隻蝴蝶和其他蝴蝶區分開來。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哦，所以這兩個字完美定義了基因的雙重任務耶！對內它 <span class="en-word">dictates</span> 發號施令，對外它 <span
+                class="en-word">distinguishes</span> 建立物種的獨特性。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            完全正確。其實過去我們常把基因比喻成烤蛋糕的食譜。就是決定了蛋糕的口味跟外觀。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            很常見的比喻。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對啊，但聽完 <span class="en-word">dictate</span> 這個字，我覺得這根本不是什麼溫馨的食譜啦。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            那你覺得像什麼？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            這根本是一本歷經千萬年演化，由無數戰死沙場的祖先不斷修改出來的終極軍事手冊。它冷酷地決定了這隻蝴蝶出生之後要配備什麼顏色的裝甲。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哈哈，這個軍事手冊的比喻非常貼切哦，因為大自然本來就是一個戰場。這本手冊不但決定了裝甲的顏色，它也決定了牠們要如何面對天敵。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哎，說到這個，這就引發了一個我覺得很有趣的矛盾誒。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            什麼矛盾？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            如果大自然是個戰場，那為什麼有些蝴蝶的基因手冊會命令牠們長出像霓虹燈一樣顯眼的橘色翅膀啊？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            你是指哪一種蝴蝶？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            就是那種常見於北美洲的帝王斑蝶 <span class="en-word">Monarch
+                Butterflies</span>。在綠色的森林裡面穿著亮橘色又帶著黑斑的外衣。這不就是在對著掠食者大喊：「我在這快來吃我」嗎？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            嗯，生物學家其實稱這種現象為「警戒色」，英文是 <span class="en-word">aposematism</span>。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            警戒色。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，帝王斑蝶確實是在大喊沒錯，但牠喊的不是「快來吃我」，而是「我很毒，吃了你會付出慘痛代價」。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哇，所以這種極度亮眼的顏色本質上是一種心理戰。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，就是一種大剌剌的威脅。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            等等，這裡有一個機制，我一直覺得說不通耶。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            你說說看。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            我了解帝王斑蝶的毒素是來自於牠們還是幼蟲，也就是 <span class="en-word">caterpillar</span> 時期所吃的那個馬利筋植物（<span
+                class="en-word">Milkweed</span>）。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，馬利筋。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            聽說這種植物含有強烈的心臟毒素，對鳥類和大部分的脊椎動物（<span class="en-word">vertebrates</span>）都是致命的嘛。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            但我的問題是，毛毛蟲自己不也是生物嗎？為什麼這隻小蟲子狂吃這種劇毒植物卻不會死？這就像是一個人每天把毒藥當水喝，卻安然無恙一樣瘋狂耶。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            呃，這就是演化軍備競賽最令人敬畏的地方了。其實毛毛蟲的細胞本來也是會被毒死的。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            咦，真的假的？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對啊，但在漫長的演化過程中呢，帝王斑蝶的基因發生了微小，卻非常關鍵的突變。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            什麼樣的突變？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            牠們體內的細胞幫浦結構改變了形狀，導致那個馬利筋的毒素無法結合上去。結果就是這隻毛蟲不僅對毒素免疫，牠的消化系統還能將這些毒素安全地儲存在體內，直到牠羽化成美麗的成蝶，毒素依然存在。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            我的天吶，這簡直是把敵人的生化武器直接吞進肚子裡，然後變成自己的防彈衣，太扯了吧。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            大自然就是這麼神奇。那如果有一隻不知情的鳥看到這隻鮮豔的蝴蝶，一口咬下去的時候會發生什麼事？文本是怎麼寫的？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            文本裡有一句充滿張力的英文，我們來聽聽看哦。<span class="en-word">"An unsuspecting predator that didn't know the Monarch
+                butterfly..."</span>
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            嗯，這句話聽起來很有戲劇張力耶。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            沒錯，這句話展現了英文寫作中很棒的一種寫作技巧，叫做「延遲滿足感」。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            延遲滿足感？怎麼說？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            我們先來看主詞 <span class="en-word">an unsuspecting predator</span>。它的發音是 <span
+                class="en-word">unsuspecting</span> 對吧？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            是的，<span class="en-word">suspect</span> 是懷疑的意思，字首的 <span class="en-word">un-</span> 表示否定，字尾加上 <span
+                class="en-word">ing</span> 變成形容詞。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哦，所以它是指一隻毫無防備的，完全沒有起疑心的掠食者。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，這句話現在開頭描繪了一隻開心準備吃大餐的鳥，然後在句尾才重擊 <span class="en-word">would soon realize its
+                mistake</span>，很快就會意識到牠犯了致命的錯誤。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哇，這對比好強烈，那這些鳥到底會怎樣？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            因為吃下帝王斑蝶的鳥會產生非常劇烈的嘔吐反應啦，這段痛苦的記憶會深深印在鳥的腦海裡，讓牠這輩子再也不敢碰橘色的蝴蝶。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            原來如此。可是如果這個「把自己變毒」的策略這麼完美，我們剛剛說世界上有兩萬種蝴蝶嘛。為什麼牠們不乾脆全都去吃毒草讓自己變毒就好了？大家一起毒啊。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哈哈，這是一個非常敏銳的科學問題哦，答案其實很簡單。就是製造或儲存毒素在生物學上是極度昂貴的。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            昂貴是指消耗能量嗎？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，這需要消耗巨大的能量去維持特殊的生理機制。有些蝴蝶的基因並沒有這種突變，牠們也承受不起這種能量消耗。所以牠們就只能自求多福了。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            所以牠們只能選擇最傳統也最便宜的防禦機制。我猜是「偽裝」，對不對？與環境融為一體。文本裡的英文描述為 <span class="en-word">blend into their habitats</span>。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            <span class="en-word">Blend into their habitats.</span> 沒錯，但是呢，大自然裡永遠有另一種投機分子。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哦，投機分子。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            既然有帝王斑蝶花巨大能量把自己變毒，那你有沒有想過會不會有一種蝴蝶本身完全無毒，卻選擇在翅膀上畫上跟帝王斑蝶一模一樣的圖案，藉此來嚇跑鳥類呢？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            誒，這不就是詐騙集團嗎？文本裡有提到這個嗎？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            有的，這就是大名鼎鼎的副王蛺蝶 <span class="en-word">Viceroy</span>。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            <span class="en-word">Viceroy</span>！這種蝴蝶完全是個騙子耶，牠根本沒有經歷過那種吞噬毒草、改造細胞的艱辛過程，牠只是盜用了帝王斑蝶的商標，假裝自己有毒。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，這在人類世界就是智慧財產權盜竊了。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對啊，但回到演化機制上，這到底是如何發生的？副王蛺蝶又沒有鏡子，牠不可能看著帝王斑蝶說：「我要把我的鱗片長得跟你一樣」吧？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            當然不可能。這裡的機制其實是無情的天擇。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            怎麼個天擇法？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            在過去的幾萬年裡，副王蛺蝶的祖先可能長得各種顏色都有。但那些長得不像帝王斑蝶的全都被鳥吃掉了。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哇，好慘。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，只有那些基因突變，剛好翅膀顏色長得稍微像一點橘色黑斑的個體，幸運逃過一劫活下來繁衍後代。所以經過無數代的篩選，副王蛺蝶的外觀就被雕刻得與帝王斑蝶幾乎一模一樣了。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            是的，這在生物學上被稱為「貝氏擬態」，<span class="en-word">Batesian mimicry</span>。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            那文本是怎麼呈現這種截然不同的生存策略的？文本用了一段展示，我們來聽一下。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            好。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            <span class="en-word">"Unlike other butterflies whose genetic information helps them blend into... monarch
+                butterflies rely on their bright coloration..."</span>
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，這是對比帝王斑蝶跟一般偽裝的蝴蝶。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，然後接著是關於副王蛺蝶的描述哦。<span class="en-word">"Mimics the coloration of the monarch."</span>
+            這裡有兩個動詞片語，對於我們這種正在建立英文語感的學習者來說，感覺非常重要。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            沒錯。第一個是剛剛提到的 <span class="en-word">blend into</span> 融入。當你在念這兩個字的時候啊，你可以嘗試把 d 和 i 連起來念 <span
+                class="en-word">blend into</span>。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            <span class="en-word">blend into</span>。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對，這個連音本身就有一種悄悄滑進背景，消失不見的那種聽覺感受。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哇，真的耶，念起來很滑順。那相對的副王蛺蝶使用的策略是 <span class="en-word">mimic</span> 對吧？發音是 <span class="en-word">mimic</span>。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            是的。<span class="en-word">mimic</span> 這個字源自希臘文的 <span class="en-word">Mimos</span>，也就是默劇演員或是模仿者的意思。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哦，難怪。它帶有一種刻意為之精準複製的意味。所以在寫作時善用 <span class="en-word">unlike</span>（也就是「不像...」）來做開頭，然後在句子裡放入像 <span
+                class="en-word">blend into</span> 和 <span class="en-word">mimic</span> 這樣具備強烈畫面反差的動詞，就能讓你的英文句子瞬間立體起來。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            真的，畫面感超強。所以我們現在看到了三種截然不同的軍事策略哦。有的像忍者一樣隱身在樹皮上，有的像裝著重裝甲的毒氣坦克，大方展示自己的警戒色，還有的像個間諜完美 <span
+                class="en-word">mimic</span> 坦克的塗裝來狐假虎威。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            總結得非常好。可是這兩萬種蝴蝶看似各自為政，但其實牠們全都受制於一個古老而且絕對不可違逆的生命法則，對吧？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            沒錯，那就是牠們的生命週期 <span class="en-word">Life Cycle</span>。不管你的基因手冊裡寫了多麼花俏的防禦策略，每一隻蝴蝶都必須經歷四個嚴格的階段：卵 <span
+                class="en-word">egg</span>、幼蟲或毛蟲 <span class="en-word">caterpillar</span>、蛹 <span
+                class="en-word">chrysalis</span> 或是 <span class="en-word">pupa</span>，最後才是成蝶。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            是的。呃，其實我們都知道毛毛蟲會結蛹，然後變成蝴蝶嘛，這聽起來很像小學自然課的常識。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對，大家小時候都學過。但如果我們真的用生物學的微觀角度來看這個 <span class="en-word">chrysalis</span>（也就是蛹）裡面發生的事情，那其實是一場極度暴力的「重開機」過程，對吧？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            正確。許多人以為毛毛蟲在蛹裡面只是慢慢長出翅膀而已。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            我以前也是這樣以為的。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            事實上當毛毛蟲進入蛹，牠會釋放酵素，把自己大部分的身體組織徹底溶解掉，變成一團富含蛋白質的「生物湯」。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            生物湯聽起來有點噁心，又有點酷。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，而在這碗湯裡呢，只有少數被稱為成蟲盤，也就是 <span class="en-word">imaginal discs</span> 的細胞群倖存下來。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            那這些倖存的細胞會幹嘛？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            這些細胞群會利用這碗生物湯裡的養分快速分裂，重新生長出眼睛、腿、觸角，以及由微小彩色鱗片，也就是 <span class="en-word">scales</span> 所覆蓋的四片翅膀。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哇，所以牠真的是經歷了粉身碎骨才換來最終的形態耶。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，這是一個打掉重練的過程。那等這個宛如魔法般的 3D 列印過程結束之後，那層堅硬的外殼就會裂開嘛，我們來聽聽文本裡這句描述重生的優美英文。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            好，這句是這樣的：<span class="en-word">"Once the butterfly is fully developed, the chrysalis splits apart and the
+                butterfly emerges."</span>
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            在這短短一句話裡，我覺得蘊含了描述發展過程的最高級技巧耶。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哦，你有注意到什麼嗎？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            首先是 <span class="en-word">once</span> 這個字，對於像我這樣英文起步的人來說，我們很習慣用 <span
+                class="en-word">when</span>，也就是「當什麼什麼的時候」。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，這是很常見的習慣。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            但在這裡文本用了 <span class="en-word">once</span>，感覺表達的是一種條件的完成，意思是「一旦」這隻蝴蝶完全發育成熟，帶有一種不可阻擋的必然性。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            沒錯，分析得很棒。然後接著外殼 <span class="en-word">splits apart</span>（裂開），接著整段文本最漂亮的一個動詞出現了，就是 <span
+                class="en-word">emerges</span> 對不對？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            發音是 <span class="en-word">emerges</span>。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對，<span class="en-word">emerges</span>。其實我們在描述蝴蝶離開蛹的時候非常容易用 <span class="en-word">comes
+                out</span>，也就是「出來」形容。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對啊，<span class="en-word">the butterfly comes out</span> 聽起來很普通。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            但這個字的字根 <span class="en-word">e-</span> 代表 <span class="en-word">out</span>，就是向外，而 <span
+                class="en-word">merge</span> 在拉丁文裡是 <span class="en-word">plunge</span>，進入、沉浸的意思。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            哦，所以它有更深的含義。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            是，所以不只是單純走出來，它隱含著「從某種隱蔽的、黑暗的、深水的狀態中掙脫而出，最終顯露於世人眼前的強大動態美感」。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            <span class="en-word">Emerges</span>！當你念出這個字的時候，你彷彿能看到那對沾滿體液的翅膀，在陽光下緩緩展開的畫面耶。這就是精準用字的力量。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            <span class="en-word">So, what does this all mean?</span> 把這些所有的知識統整起來，我們今天在這次的解析中到底獲得了什麼？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            我覺得我們解開了兩層密碼。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哪兩層？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            第一層是在生物學層面，我們看到了大自然的殘酷與奇妙。帝王斑蝶如何透過基因突變將致命毒草轉化為防禦武器，而副王蛺蝶又如何透過天擇不費吹灰之力地盜用這層保護傘。這是生物密碼，那第二層呢？
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            在語言層面，我們看見了英文動詞的精準度，從展現絕對權威的 <span class="en-word">dictate</span> 到表示完美融入的 <span class="en-word">blend
+                into</span>，再到經歷黑暗最終破繭而出的 <span
+                class="en-word">emerge</span>。其實我覺得這是一條非常明確的學習路徑，當你在從零開始學英文的時候不要只把牠當作一堆需要死記硬背的符號，每一個單字背後都像大自然的演化一樣，有它為什麼會長成這樣、發這個音的歷史軌跡。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，語言的學習和生物的演化在機制上這麼驚人的相似。這就讓想到今天最後一個我覺得滿值得大家深思的觀點。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，請說。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            剛才我們聊到副王蛺蝶 <span class="en-word">Viceroy</span> 的那個貝氏擬態嘛，牠透過完美 <span
+                class="en-word">mimic</span>（也就是模仿）帝王斑蝶來騙過鳥類。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            對，很聰明的策略。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            但你想哦，這種欺騙策略要能成功，其實有一個絕對的數學前提。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            什麼前提？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            那就是大自然裡有毒的「真貨」數量必須遠大於無毒的「假貨」。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            啊，確實如此。如果有一天副王蛺蝶繁殖得太多，滿天都是這種無毒的假貨，鳥類隨便抓一隻都發現根本沒毒嘛，那麼這種模仿的保護力就會瞬間崩潰。所有的副王蛺蝶都會迎來滅頂制裁。生物學上稱這個為「頻率依賴型選擇」，<span
+                class="en-word">frequency-dependent selection</span>。假貨絕對不能多於真貨，否則系統就會瓦解。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對，這對語言學習來說是個極為震撼的比喻，怎麼說呢？你現在身為一個從零開始學英文的台灣學習者，在起步階段，你絕對需要像副王蛺蝶一樣去 <span class="en-word">mimic</span>，去模仿。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            嗯，模仿是學習的第一步。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            你模仿母語人士的發音，借用他們寫好的漂亮句型，套用 <span class="en-word">once</span> 或是 <span class="en-word">unlike</span>
+            這樣的結構，這能讓你安全而且快速地融入這個新的語言環境。這是一個很棒的起手式。但是如果你的整個英文學習生涯都只停留在模仿別人說過的話，從來沒有試著把你真實的想法、你獨特的觀點、你的靈魂注入到這些句型裡的話...
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            那會怎麼樣？
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            那麼你產出的語言就只是一堆安全的空殼。就像滿天飛舞卻沒有毒素的副王蛺蝶一樣，這樣的溝通是沒有衝擊力，沒有重量的，別人一聽就會發現那只是一套公式而已。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            哇，換句話說，初學時你需要 <span class="en-word">mimic</span> 來求生。但要真正掌握一門語言，你必須發展出屬於你自己的 <span class="en-word">genetic
+                information</span>。你必須用這門語言說出只有你才能說出的真相。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            沒錯，只有當你把真實的情感和思想注入到你辛苦學來的句型中，你的語言才具備了真正的「毒性」，那種能深深震撼聽眾，讓他們永遠記住你的力量。
+        </div>
+        <div class="bubble speaker-b">
+            <div class="speaker-label">Speaker B</div>
+            說得太好了。到了那一天，你就不再只是一個模仿者，你已經成功溶解了過去的自己，破除了那層限制你的蛹，真正在另一個語言的世界裡 <span class="en-word">emerge</span>，破繭而出。
+        </div>
+        <div class="bubble speaker-a">
+            <div class="speaker-label">Speaker A</div>
+            對。下次當你在夏天的公園裡看到一隻蝴蝶，不妨問自己：我今天的學習還停留在安全的模仿，還是我已經準備好要用這門語言破繭而出了呢？感謝你參與這次的深度探討，我們下次見。
+        </div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_21.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
             }
-        }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

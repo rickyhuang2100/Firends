@@ -1,107 +1,841 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_23.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 逐字稿｜萊特兄弟與英文學習啟示錄</title>
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --accent-blue: #2563eb;
+            --accent-pink: #db2777;
+            --spk-a-bg: #eff6ff;
+            --spk-a-border: #3b82f6;
+            --spk-b-bg: #fdf2f8;
+            --spk-b-border: #ec4899;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.75;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.6rem;
+            line-height: 1.3;
+        }
+
+        header p {
+            margin: 0 0 20px 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        audio {
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #e2e8f0;
+            color: var(--text-dark);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 英文文本樣式 */
+        .english-text {
+            font-size: 1.05rem;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .english-text p {
+            margin-bottom: 1.5em;
+        }
+
+        /* 逐字稿對話樣式 */
+        .dialogue {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+        }
+
+        .chat-row.spk-a {
+            align-self: flex-start;
+        }
+
+        .chat-row.spk-b {
+            align-self: flex-end;
+        }
+
+        .speaker-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            padding: 0 4px;
+        }
+
+        .spk-a .speaker-label {
+            color: var(--accent-blue);
+        }
+
+        .spk-b .speaker-label {
+            color: var(--accent-pink);
+            text-align: right;
+        }
+
+        .bubble {
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .spk-a .bubble {
+            background-color: var(--spk-a-bg);
+            border-left: 4px solid var(--spk-a-border);
+            border-top-left-radius: 2px;
+        }
+
+        .spk-b .bubble {
+            background-color: var(--spk-b-bg);
+            border-right: 4px solid var(--spk-b-border);
+            border-top-right-radius: 2px;
+        }
+
+        .eng-quote {
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #0f172a;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+
+            .chat-row {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>AI Podcast 深度探討：萊特兄弟與英文學習</h1>
+            <p>收聽音訊檔案：8_23.m4a</p>
+            <audio controls>
+                <source src="8_23.m4a" type="audio/mp4">
+                您的瀏覽器不支援音訊播放元件。
+            </audio>
+        </header>
+
+        <nav>
+            <button class="tab-btn active" onclick="switchTab('transcript')">Podcast 雙語逐字稿</button>
+            <button class="tab-btn" onclick="switchTab('original')">英文原始文本</button>
+        </nav>
+
+        <!-- 雙語 Podcast 逐字稿區塊 -->
+        <div id="transcript" class="section-card">
+            <div class="dialogue">
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">想像一下哦，你現在正準備要打造人類史上第一架飛機。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">嗯，這聽起來就是一個不可能的任務。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，而且更誇張的是，你手邊唯一的參考資料，只有幾隻鳥，還有一台腳踏車。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哈，鳥跟腳踏車，這聽起來根本是來亂的吧！</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">沒錯，聽起來超級荒謬對吧？但其實哦，這正是萊特兄弟當年發明飛機的真實起點。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哇，真的是這樣。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">而今天呢，歡迎來到這次的深度探討，我們就是要用這一段不可思議的歷史，來幫你破解另一個對很多台灣人來說也是覺得不可能的任務。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">就是從零開始學英文，對嗎？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，這集我們要幫你打造專屬於你的「英文語感引擎」。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">其實我們都知道，學習一門新語言，尤其是對母語是中文的你來說，常常會覺得無從下手。背了一堆單字、學了文法，結果一開口就直接墜機。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，腦袋瞬間一片空白！但你可能不知道，你現在遇到的這種語言困境，跟早期人類試圖飛上天空遇到的挫折，其實有著非常驚人的相似之處。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">所以啊，這一次的深度探討我們不走那種死板板的傳統教科書路線，我們要來點不一樣的。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對，我們拿到了一份關於萊特兄弟發明飛機的原始英文文本，我們不僅要帶你回到 19 世紀末的歷史現場，還要把它當成你的專屬英文教材。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">
+                        沒錯，我會直接為你朗讀這段英文文本，你不僅可以聽聽看道地的英文發音是怎麼念的，我們還會把裡面的關鍵句子抽絲剝繭地解析給你聽。然後你會發現，萊特兄弟當年解決飛行難題的那種底層思維，居然完全可以套用在你的英文學習上哦。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">那我們就直接進入文本吧！回到 19 世紀末，其實那時候已經有很多人在嘗試發明飛機了，大家都想飛上天嘛。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，文本是這樣描述那個瘋狂的時代的：<br><span class="eng-quote">"By this time, many people had
+                            been trying to invent an airplane that worked. Some airplanes were steam-powered; others had
+                            flapping wings, like birds."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">欸，我剛聽到了 <span
+                            class="eng-quote">steam-powered</span>，蒸汽動力。這聽起來比較像是把一台蒸汽火車頭硬拔下來，然後裝上翅膀。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哈哈對！而且後面還寫說 <span class="eng-quote">flapping wings like birds</span>。<span
+                            class="eng-quote">flapping</span> 是拍打嘛，難道他們真的做出那種會在空中像鳥一樣上下拍打翅膀的巨大機械？這也太卡通了吧。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">其實完全正確，那時候的發明家真的都在瞎子摸象。<span class="eng-quote">Steam-powered</span>，steam
+                        就是蒸汽，powered 是由什麼提供動力；至於 <span class="eng-quote">flapping</span> 就是拍打，大家都在嘗試各種很極端的設計啦。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">可以想像當時一定摔得很慘。不過當時真的有一位引起轟動的德國大人物，文本裡提到：<br><span class="eng-quote">"The German
+                            inventor Otto Lilienthal, also known as 'The Glider King,' was appearing in all the papers,
+                            showing off his gliding machine..."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">The Glider King</span>（滑翔機之王），所以 <span
+                            class="eng-quote">glider</span> 就是滑翔機囉？動詞 <span class="eng-quote">glide</span>
+                        就是滑翔的意思。這位德國發明家 Lilienthal 在當時可是超級巨星哦！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哦？他有什麼特別厲害的地方嗎？文本有特別描述他機器的運作原理：<br><span class="eng-quote">"Though his gliders
+                            had no motors, instead coasting purely on air..."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">我得打斷你一下，這裡有個詞讓我非常困惑。就是那個 <span class="eng-quote">coasting purely on
+                            air</span>，我一直以為 <span class="eng-quote">coast</span> 當名詞是指海岸，什麼東海岸西海岸的。那他這裡當動詞 <span
+                            class="eng-quote">coasting</span>，難道是在空氣的海灘上衝浪嗎？這畫面有點詭異啊。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哈哈！其實這是一個極度生動的動詞用法。你試著想像一下哦：當你在騎腳踏車下坡的時候，你是不是會完全停止踩踏板，雙腳放開，讓地心引力跟慣性直接帶著你往下衝？
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">對！就是那種迎著風滑下去、完全不用出力的感覺。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯！那種不靠額外的動力、順著勢頭往前進的物理動作，在英文裡面就是用 <span class="eng-quote">coasting</span> 這個字。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">哇，原來如此！所以 <span class="eng-quote">purely on air</span>
+                        指的就是這台滑翔機根本沒有任何引擎馬達，純粹就是靠著空氣的浮力跟往下滑行的力道在空中前進。這真的超有畫面，把這個字跟騎腳踏車下坡的肌肉記憶連接在一起，比去死背什麼「滑行」的中譯深刻太多了。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對吧，這就是語感啊！不過這位很厲害的滑翔機之王後來怎麼了？他有成功造出飛機嗎？結局非常遺憾，文本記錄了這個悲劇的轉折：<br><span
+                            class="eng-quote">"When Lilienthal made headlines again by plunging to his death in August
+                            of 1896 during a gliding accident, inventors knew they had to improve upon his designs, or
+                            else."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">Plunging to his death</span>（墜機身亡）。那是 1896
+                        年，那時候根本沒有網路，沒有 Google 可以查資料。遠在美國的萊特兄弟怎麼會知道這位德國大師到底在設計上做錯了什麼？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">這就是萊特兄弟最與眾不同的地方了，他們沒有在那邊自己瞎猜。他們直接寫信給美國的史密森尼學會（Smithsonian
+                        Institution），索取所有早期飛行先驅的研究資料。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">
+                        哇，直接要資料！這其實對我們學習英文來說也是個超大的啟發——不要急著自己去發明輪子，去看看別人是怎麼「墜機」的，了解其他人最常犯的文法錯誤或是發音盲點，能幫你省下超級多摸索的時間。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">真的！那他們拿到歷史資料之後到底發現了什麼秘密？他們開始了瘋狂的鑽研，文本是這樣形容的：<br><span class="eng-quote">"They
+                            pored over everything they could find, from Lilienthal’s designs to the diagrams of Leonardo
+                            da Vinci..."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">等一下，你剛念的那個 <span class="eng-quote">pored over</span>，發音聽起來很像倒水的 <span
+                            class="eng-quote">pour</span> 耶？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">音完全一樣，但拼法不一樣哦，是 P-O-R-E。<span class="eng-quote">pore over</span>
+                        是非常地道的片語，意思是全神貫注地鑽研或仔細閱讀。你可以想像整張臉快要貼到書本上、用目光傾注在每一個字上面的感覺。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">懂了，就像倒水一樣把注意力全部傾注在上面！而且文本說他們連達文西的草圖都拿來鑽研了，超級認真。但鑽研了這些大師的設計之後，他們把目光轉向了大自然。</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對，文本寫道：<br><span class="eng-quote">"One big difference between birds and early
+                            gliders, the brothers noticed, was that birds were able to 'roll' right or left as the winds
+                            changed..."</span><br><span class="eng-quote">roll</span> 就是翻滾。接著還有更關鍵的：<br><span
+                            class="eng-quote">"Much like a person riding a bicycle, they thought birds could 'bank' or
+                            lean into turns..."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">等一下！這段資訊量太大了。裡面說鳥類轉彎的時候會 <span class="eng-quote">bank</span>，可是對剛學英文的人來說，<span
+                            class="eng-quote">bank</span> 不是存錢的銀行嗎？鳥類在天空轉彎跟銀行到底有什麼關係啊？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">哈哈，這就是學英文最有趣、但也最常讓人覺得挫折的地方——一詞多意！在這裡 <span class="eng-quote">bank</span>
+                        絕不是銀行，它其實是航空和物理學上很常出現的動詞，意思是「傾斜」。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">傾斜？你是說像那種騎重機「壓車過彎」的那種傾斜嗎？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">精準完全命中！你回想一下騎腳踏車轉彎的畫面，如果你轉彎時只是直挺挺地坐在車上、把龍頭死命往左轉，會發生什麼事？</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">我會因為離心力的關係直接被甩出去，摔個狗吃屎！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯！所以為了抵抗離心力，你的身體還有腳踏車的車身都必須跟著向左邊「傾斜」。這個傾斜的動作就是 <span
+                            class="eng-quote">bank</span>。萊特兄弟觀察到，鳥在空中轉彎時絕不是平平地只轉動頭部，牠們會改變翅膀的角度，讓整個身體向一側傾斜（<span
+                            class="eng-quote">bank</span>）或翻轉（<span class="eng-quote">roll</span>），藉著這種方式順應風勢轉彎。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">
+                        哇，這真的是突破盲點的時刻！不過這讓我想到一個很矛盾的問題：當時其他的工程師都在研究火車或輪船，大家都在拚命想說要把引擎做大、馬力做強。為什麼萊特兄弟偏偏要把飛機跟「腳踏車」聯想在一起？這兩者的底層邏輯也差太多了吧！
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">你這個問題完全問到了飛機發明史上最關鍵的核心差異！我們看看文本怎麼說：<br><span class="eng-quote">"Other engineers
+                            were studying trains or ships, and thus, spent most of their time building stronger
+                            engines... As it turned out, the Wright brothers had the winning approach."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">As it turned out</span>，事實證明萊特兄弟贏了！可是為什麼是腳踏車贏了火車？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">
+                        因為你想哦，火車是在固定的鐵軌上面跑的嘛，根本不需要考慮平衡問題，只要引擎夠力就會一直往前衝。但是腳踏車跟飛機一樣，都是在一個極度不穩定的三度空間裡面移動。萊特兄弟本身就是開腳踏車店的，所以他們深切明白一個物理法則：對於不穩定的載具來說，「控制與平衡」才是真正的核心！如果沒有控制的能力，裝再強大的引擎上去，也只是讓你用更快的速度去撞毀而已。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">天啊，這段話完全打中了台灣人學英文的痛點！很多人學英文就像研究火車的工程師一樣，拚命背了幾千幾萬個艱深的單字，以為單字量就是強大的引擎，引擎越大英文就一定越好。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">可是如果你不懂文法邏輯，不懂得要怎麼依照不同語境去 <span
+                            class="eng-quote">bank</span>（傾斜轉彎）、調整句型和語氣，當你遇到外國人想進行真實對話時，龐大的單字量只會讓腦袋瞬間失去平衡，最後句子亂成一團直接「對話墜機」。所以語感跟文法結構，其實才是能讓你保持平衡的「控制系統」。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">講得太好了！那既然他們找到了「控制」這個關鍵，萊特兄弟接下來到底是怎麼實際去測試的？總不可能在自家後院直接飛吧？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">肯定不行！俄亥俄州的風力也不足以支撐滑翔機飛起來。所以他們採取了非常科學的手段。文本這樣寫：<br><span class="eng-quote">"After
+                            writing to the U.S. Weather Bureau, analyzing the weather data for various areas... the
+                            Wright brothers decided that Kitty Hawk in North Carolina would be the best place..."</span>
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">真的寫信給美國氣象局（U.S. Weather Bureau），還去撈數據做分析！那他們到底在找什麼樣的氣候條件啊？風大一點不就好了嗎？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">
+                        不只是風大，他們需要的是穩定而且持續的「逆風」（headwinds）。在空氣動力學裡，飛機需要空氣流過翅膀產生升力，在你還沒有裝上強大引擎推動飛機往前跑之前，就必須靠大自然提供那種穩定迎面吹來的風。北卡羅萊納州的
+                        Kitty Hawk 小鎮不僅有時速 15 到 20 英里的完美海風，最重要的是那邊有非常柔軟的沙丘！</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">柔軟的沙丘真的很重要，因為他們絕對摔了無數次。在測試期間，他們是怎麼漸漸把理論變成現實的？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">文本寫道：<br><span class="eng-quote">"From 1900 to 1903, they set up camp at Kitty
+                            Hawk, testing designs by making 'glider kites' that could be flown without pilots for
+                            safety... Many were still crashing, but the brothers tried not to become frustrated."</span>
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">一直墜毀，但兄弟倆努力不讓自己沮喪！而且聽說他們回到老家時，連在街上都不放過測試的機會？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對！文本說：<br><span class="eng-quote">"On some days, they could be seen pedaling
+                            bicycles equipped with wings down the streets and startling
+                            passersby."</span><br>把腳踏車裝上巨大的翅膀踩街，這一定把路人嚇壞了！<span class="eng-quote">startling
+                            passersby</span> 就是驚嚇路人。注意 <span class="eng-quote">passersby</span>（路人）的複數，S 是加在 passer
+                        後面，因為主體是「人」（passer）。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">學到了！不過說真的，這整段文本裡最觸動我的是這句：<br><span class="eng-quote">"Many were still crashing,
+                            but the brothers tried not to become
+                            frustrated."</span><br>在學語言的過程中，我們太常因為講錯一句話或聽不懂老外說話就感到極度沮喪。其實這是一場心理戰！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">
+                        對！大部分人看到墜毀覺得「完蛋了失利了」，但萊特兄弟把每一次墜毀都當做是「數據的收集」。摔下來只是代表某個空氣動力學的參數需要微調而已。講錯文法或用錯單字不是你個人的失敗，那只是一個信號告訴你：這裡的語法參數需要微調而已。這種把挫折轉化為數據的「科學家心態」，才是語言學習的終極解藥。
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">太棒了！那我們即將進入這段歷史的最高潮：他們在 Kitty Hawk 摔了那麼多次，到底發明了什麼終極武器才解決了控制問題？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">關鍵就在於他們認知到了空間的「維度」！文本寫道：<br><span class="eng-quote">"The biggest difference
+                            between riding a bicycle and flying a plane, they realized, was that machines on the ground
+                            only had to move forward or backward. An airplane had to be controlled in three
+                            dimensions..."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble"><span class="eng-quote">Three dimensions</span>，三維空間！腳踏車是在平面的 2D 世界移動，但飛機是在 3D
+                        世界，要控制機頭上下（pitch）、左右偏航（yaw），還要控制機身翻滾（roll），一次要顧三個維度，難度太高了吧！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">所以萊特兄弟發明了至今都還應用在現代航空的「三軸控制系統」（<span class="eng-quote">three-axis
+                            control</span>）。文本介紹了三個關鍵部件：<br>第一是針對翻滾的 <span
+                            class="eng-quote">wing-warping</span>（機翼扭曲）。<span class="eng-quote">warp</span>
+                        就是彎曲、變形，他們透過鋼繩拉動讓木頭與帆布機翼邊緣產生扭曲，一邊抓取更多空氣產生升力、另一邊減少升力，就能像鳥一樣控制傾斜。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這設計太聰明了！那第二個部件呢？</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">第二個叫做 <span class="eng-quote">forward elevator</span>。<span
+                            class="eng-quote">elevator</span> 在飛機上叫升降舵，放在前方是用來控制機頭朝上或朝下。第三個則是將船上的方向舵（<span
+                            class="eng-quote">ship rudder</span>）拿來用！用在轉彎時抵消阻力、穩定機身，防止飛機在轉彎時失去平衡而翻覆。</div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">這三個系統協同運作，就是人類史上第一次完全掌握了天空的控制權！到了 1902 年，他們已經成功進行了近千次受控滑翔。到這個時候他們都還沒有裝引擎！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">對！直到萬無一失了，他們才把最後一塊拼圖——引擎引進來。他們請腳踏車店的好朋友 Charlie Taylor 幫忙，短短六週就造出了飛機引擎：<br><span
+                            class="eng-quote">"Just one year after they created their three-axis system, the brothers
+                            made their first motorized flight, and by doing so, made history."</span></div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">最震撼的其實是萊特兄弟的「順序」——在百分之百確定自己能駕馭沒有動力的滑翔機、完全掌握三軸控制之後才賦予動力。掌握了控制，動力才有意義！</div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">沒錯！今天我們拆解了文本，也理解了 <span class="eng-quote">bank</span>（傾斜）、<span
+                            class="eng-quote">coast</span>（順勢滑行）、<span
+                            class="eng-quote">warp</span>（扭曲）這些充滿動態感的單字。大腦現在已經把這些單字跟萊特兄弟在沙丘上搏鬥的畫面綁定在一起了，比死背中譯深刻 100 倍！
+                    </div>
+                </div>
+
+                <div class="chat-row spk-a">
+                    <div class="speaker-label">主持人 A</div>
+                    <div class="bubble">
+                        節目最後想留給你一個思考題：萊特兄弟之所以能成為第一組飛上天的人，是因為巧妙地把「修理腳踏車的平衡感」這種跨界技能應用到了未知飛行領域。那麼你呢？在過往的生命經歷中，有哪些看似跟學語言無關的技能或興趣——例如學樂器的節奏感、打籃球預判對手的直覺、打電動死掉無數次也要找破關機制的執著？
+                    </div>
+                </div>
+
+                <div class="chat-row spk-b">
+                    <div class="speaker-label">主持人 B</div>
+                    <div class="bubble">仔細找找看這些隱藏特質，或許就是你能從零開始打造專屬「英文控制系統」的秘密武器哦！帶著這個想法，繼續你的英文起飛之旅吧！我們下次深度探討見，拜拜！</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 英文原始文本區塊 -->
+        <div id="original" class="section-card hidden english-text">
+            <p>By this time, many people had been trying to invent an airplane that worked. Some airplanes were
+                steam-powered; others had flapping wings, like birds. The German inventor Otto Lilienthal, also known as
+                “The Glider King,” was appearing in all the papers, showing off his gliding machine, which he’d built
+                based on his studies of storks. Though his gliders had no motors, instead coasting purely on air, they
+                could keep a pilot hanging in the air under the right conditions. When Lilienthal made headlines again
+                by plunging to his death in August of 1896 during a gliding accident, inventors knew they had to improve
+                upon his designs, or else.</p>
+
+            <p>There was no Internet to research designs back in 1896, so the brothers had to write letters to the
+                Smithsonian Institution (today the world’s largest museum and research complex) to request more
+                information about early flight pioneers. They pored over everything they could find, from Lilienthal’s
+                designs to the diagrams of Leonardo da Vinci, who had sketched designs for both gliders and helicopters
+                as early as the 1400s. And like many inventors before them, they watched a lot of birds.</p>
+
+            <p>One big difference between birds and early gliders, the brothers noticed, was that birds were able to
+                “roll” right or left as the winds changed, and turned by shifting the angles of their wings. Much like a
+                person riding a bicycle, they thought birds could “bank” or lean into turns, while still remaining
+                stable and upright. By contrast, a glider pilot did not have the same level of control as a bird,
+                leading him or her to topple over or crash, as Lilienthal did. The Wright brothers loved experimenting
+                with flight, but they certainly didn’t want to die trying, so from the beginning, they focused on
+                bringing more control to the flying experience. The brothers drew from their research of flying machines
+                and utilized the design principles from the bicycle world. Once they figured out how to control the
+                movement of a machine as well as their bird friends could control their bodies, the brothers thought
+                they could easily find the right parts to add onto wings and motors to create a viable flying machine.
+            </p>
+
+            <p>This approach was very different from the approaches of other would-be airplane inventors of the day.
+                Other engineers were studying trains or ships, and thus, spent most of their time building stronger
+                engines (as it was thought that a strong engine could propel a plane into the air more easily) or
+                ship-like rudders to guide the airplanes along. As it turned out, the Wright brothers had the winning
+                approach.</p>
+
+            <p>Once the brothers had decided to begin testing their experiments with gliders, they needed to find a
+                better place to glide as Ohio wasn’t quite windy enough. After writing to the U.S. Weather Bureau,
+                analyzing the weather data for various areas and asking other inventors for advice, the Wright brothers
+                decided that Kitty Hawk in North Carolina would be the best place to take advantage of sea breezes for
+                gliding practice. From 1900 to 1903, they set up camp at Kitty Hawk, testing designs by making “glider
+                kites” that could be flown without pilots for safety.</p>
+
+            <p>Still comparing human innovations with birds in flight, the brothers changed each small part of their
+                design. Some had giant wings; some came without tails. Many were still crashing, but the brothers tried
+                not to become frustrated. During one winter, they returned home to Ohio, where they tried different ways
+                of testing that weren’t so expensive. On some days, they could be seen pedaling bicycles equipped with
+                wings down the streets and startling passersby. On others, they'd create tiny airplane prototypes to
+                test in the Ohio wind. Over time, the brothers discovered many errors in the designs of the inventors
+                that had come before them, including Lilienthal, and fixed them by using their own calculations.</p>
+
+            <p>The biggest difference between riding a bicycle and flying a plane, they realized, was that machines on
+                the ground only had to move forward or backward in order to get going. An airplane had to be controlled
+                in three dimensions: it could point up or down, curve from side to side, and roll upside-down. So they
+                knew their final design had to have elements that controlled movement in each of these three ways to
+                keep them from crashing. The resulting design was called “three-axis control,” and it is still used
+                today.</p>
+
+            <p>The Wright brothers designed three-axis control to help the pilot guide the plane in all three
+                dimensions. They created one innovation called “wing-warping” which allows the pilot to bend (or “warp”)
+                the wings and help to turn the plane like a bird might do with its wings. They created another
+                innovation called the “forward elevator” which helps the pilot to turn the plane upwards, toward the
+                sky, or downward, toward the ground. And finally, they figured out a way to use that ship rudder after
+                all: it could be used during turns to keep the plane from flipping over, as it had done in earlier
+                gliding experiments.</p>
+
+            <p>By 1902, the Wright brothers were piloting hundreds of well-controlled glider flights (between September
+                and October of 1902, they made between 700 and 1,000 glides). They finally felt confident enough to
+                patent their “three-axis control” system. And they were ready to add engines to the equation. After
+                searching around for the right motor for weeks, the brothers asked their bike-shop buddy, Charlie
+                Taylor, to try his hand at creating a motor for an airplane. In six weeks, he had it ready. Just one
+                year after they created their three-axis system, the brothers made their first motorized flight, and by
+                doing so, made history.</p>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            const transcriptEl = document.getElementById('transcript');
+            const originalEl = document.getElementById('original');
+            const buttons = document.querySelectorAll('.tab-btn');
+
+            if (tabId === 'transcript') {
+                transcriptEl.classList.remove('hidden');
+                originalEl.classList.add('hidden');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
             } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                transcriptEl.classList.add('hidden');
+                originalEl.classList.remove('hidden');
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
             }
         }
     </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_23.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
+            }
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
+
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>

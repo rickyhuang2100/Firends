@@ -1,107 +1,646 @@
-<div id="audio-panel"
-    style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-    <audio id="bg-audio" controls style="width: 100%;">
-        <source src="" type="audio/mp4">
-        您的瀏覽器不支援音訊播放。
-    </audio>
-    <script>
-        (function () {
-            var filename = '8_22.m4a';
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            document.getElementById('bg-audio').src = isLocal
-                ? filename
-                : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
-            const audio = document.getElementById('bg-audio');
-            audio.load();
-            audio.play();
-        })();
-    </script>
-    <!-- 用來切換與更新按鈕狀態的 JavaScript -->
-    <script>
-        function toggleBgAudio() {
-            const audio = document.getElementById('bg-audio');
-            if (audio.paused) audio.play();
-            else audio.pause();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast 逐字稿：全宇宙最貴的豪宅 ISS</title>
+    <style>
+        body {
+            font-family: 'PingFang TC', 'Heiti TC', '微軟正黑體', sans-serif;
+            line-height: 1.8;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
         }
-        function updateAudioBtn(isPlaying) {
-            const btn = document.getElementById('bg-audio-toggle');
-            if (isPlaying) {
-                btn.innerHTML = '🔊⏸️';
-                btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
-            } else {
-                btn.innerHTML = '🔊▶️';
-                btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dialogue-row {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .speaker-a .name {
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .speaker-b .name {
+            color: #059669;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .content {
+            background-color: #f9fafb;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .speaker-a .content {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .speaker-b .content {
+            border-left: 4px solid #10b981;
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>全宇宙最貴的豪宅：國際太空站 (ISS)</h1>
+        <div class="subtitle">AI Podcast 深度探討逐字稿</div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">想像一下哦，在你頭頂上方大概 400 公里的高空，有一棟造價高達 1500 億美元的超級豪宅。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">嗯，而且這棟豪宅哦，它正以時速 28000 公里的速度在無盡的黑暗中狂飆。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">對，這個速度真的超誇張的，但最荒謬的是住在這棟全宇宙最貴房子裡的頂尖科學家，他們今天最渴望的可能只是一顆發育不良的普通地球蘋果。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯，這聽起來蠻諷刺。但這確實是真實的太空生活。所以在我們今天的深度探討中，我們要來拆解這份由正在收聽的你，也就是我們的聽眾所提供的精彩文獻。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">這份資料非常豐富哦，切角也蠻特別的。我們要帶大家潛入這座大約有一個美式足球場那麼大的國際太空站，也就是大家都聽過的 ISS，去看看它到底是怎麼在極端環境下被拼裝起來的。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">還有那些違反生物本能的太空日常，以及為了維持這座工程奇蹟，人類在地球上其實面臨著非常殘酷的資金跟政治拉扯。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">真的，我在讀這份資料的時候，視線一直離不開 1500 億美元這個數字，這筆錢幾乎可以買下好幾座地球上的小城市了吧。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">絕對可以，這完全是一個天文數字了。所以我第一個直覺反應就是，這真的有必要嗎？如果我們只是想做科學實驗，為什麼不發射一堆便宜的無人探測器就好？</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">嗯，很多人的第一個疑問都是這個。把人類這種需要空氣、水，還要吃喝拉撒的脆弱生物送上去，然後花千億美元來維持他們活著，這在工程邏輯上真的說得通嗎？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                其實如果你單純從短期的成本效益來看，你的質疑非常合理。無人探測器的確便宜很多。但文獻裡面有明確點出國際太空站的三大核心任務，就是支持科學研究，幫助太空人持續探索太空，還有教育大眾。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">
+                「持續探索太空」這個蠻關鍵的。沒錯，如果人類的終極目標是去火星，甚至是建立月球基地，我們就必須知道人體在長期微重力環境下到底會發生什麼事。因為機器人沒辦法告訴我們骨頭痠痛或是骨質流失的感覺。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">對，機器人也測不出人類在幽閉空間裡的心理壓力。所以這 1500 億，與其說是蓋房子的錢，不如說是人類為了跨出地球必須繳交的極端生存學費。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">原來如此，既然這筆學費這麼天價，這就解釋了文獻中提到的一個有趣現象，就是沒有任何單一國家有能力獨自買單。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯，這筆帳單真的太沉重了。所以原本在太空領域互相競爭的美國、俄羅斯、日本、加拿大，還有歐洲的實體，最後只好坐下來談判，選擇合併計畫，因為不合作誰也上不去。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">就是這種現實的經濟壓力，迫使各國放下了冷戰以來的太空競賽思維。他們盤算過後發現，與其各自燒錢蓋出功能很陽春的小太空站，不如把資金池合併。也就是說大家一起合資蓋豪宅的概念。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">對，這不僅僅是分攤成本，更是在共享彼此最頂尖的航太資源。不過這份文獻中最讓我感到頭皮發麻的其實是它的建造過程。1998
+                年開始動工，但這可不是在地球上找一塊空地打地基耶。這完全是另外一個次元的難度。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">對啊，他們是利用各國的太空船把零件分批送上軌道去對接。你在地球上組裝 IKEA 家具少個螺絲，最糟也就是跑一趟五金行。哈哈，太空裡可沒有五金行。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯，在太空中美國製造的模組和俄羅斯製造的模組如果在軌道上公差對不上，是沒有退貨機制的。這到底需要多可怕的地面協調？</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">這正是整座國際太空站最瘋狂的工程成就。你想想，來自不同國家使用不同測量單位，有時候甚至是公制與英制的差異。哇塞，連單位都不一樣，這太崩潰了吧。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">對，這些工程團隊各自在地球的不同角落製造出龐大的金屬艙體。因為重量和體積的限制，這些艙體在地球上根本沒辦法進行完整的實體組裝測試。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">等一下，你的意思是他們在地球上從來沒有真正組合過？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯。他們第一次真正碰面就是以時速 28000 公里在太空中飛行的時候。工程師必須確保每一個對接口、管線都能完美契合。這根本是在盲測中進行外科手術嘛。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">文獻提到他們首先送上去的是作業系統與硬體骨架。然後過了整整兩年，也就是西元 2000 年，俄羅斯的火箭才把居住艙送上去。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">是的，那個居住艙包含了床鋪和廚房。對，然後同年遠征一號迎來了兩位俄羅斯太空人，一位美國太空人。這代表在那兩年的空窗期，這座未完工的太空站就這樣無人看管的繞著地球飛。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">沒錯，這段期間地球上的控制中心必須不斷透過遠端指令去維持這些模組的軌道高度，不然它可能會掉下來。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">哇，壓力超大。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">
+                對，直到居住艙對接成功，生命維持系統正式上線，人類才算真正能夠在裡面駐留。但我們剛剛談的其實都還是組裝，也就是把房子蓋起來。不過我們都知道太空絕對不是一個對生命友善的社區。可以說是非常充滿敵意的一個環境。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">文獻裡有提到，為了讓太空站能運作，工程師要精準定位部件來接收太陽能發電。能源有了，那防禦呢？我看到資料寫，這棟千億豪宅居然只有七扇窗戶。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">沒錯，窗戶數量非常少。而且為了抵禦流星體的撞擊，還裝上了堅固的防護百葉窗。我稍微停頓了一下，1500 億的工程，窗戶卻這麼少，這背後顯然有某種極端的工程妥協吧。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">這完全是出於生存的必要了。我們在地球上其實很難直觀地感受到微流星體的威脅，因為我們有濃厚的大氣層保護啊，大部分隕石都燒掉了。但在 400
+                公里的高空，即便是幾毫米大小、大概像沙粒一樣的微流星體，破壞力都非常驚人。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">等一下，一顆沙粒以那種速度撞上來，破壞力大概有多大？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">它的動能啊，大概等同於一顆從摩天大樓頂端砸下來的保齡球。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">真的假的？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                真的，或者說威力完全不亞於穿甲彈。如果太空站的外殼只是普通的強化玻璃，瞬間就會被擊穿。那一擊穿就完蛋了，艙內會失壓。這對太空人來說是絕對致命的。所以這就是為什麼要有防護百葉窗，這絕對不是為了遮擋陽光好讓他們睡午覺，這是攸關生死的裝甲。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">那這個百葉窗具體是怎麼防禦這種宇宙子彈的？很扛嗎？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">工程師其實採用了一種非常聰明的「雙層碎裂」機制。簡單來說，外層的防護裝甲並不是要硬擋下撞擊，它是設計成在被擊中時，利用撞擊的能量，讓流星體瞬間粉碎，甚至氣化。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">哦，就是讓它碎掉，分散它的力量。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯，這樣一來原本集中於一點的巨大動能，就會變成一片細小的碎片雲，然後被內部更厚實的主艙體外殼給吸收了。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">原來如此，用犧牲外層來化解動能。這就是為什麼窗戶必須少，因為每一塊透明的區域都是防禦結構上的潛在落點。對的，安全永遠是第一考量。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                除了這種被動防禦，我看到文獻也提到了一些主動設備，像是能穩穩抓住對接飛船的機械手臂，還有讓太空船進出的停泊艙。這些都是維持太空站日常運作不可或缺的硬體。甚至為了對抗微重力這個看不見的敵人，站內還塞滿了運動器材，太空人每天都要強迫鍛鍊，避免肌肉萎縮，他們每天至少要運動兩個小時，這是一項硬性規定。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">這就讓我好奇了，既然把致命的宇宙環境隔絕在外，又把維生設施打好了，那在這種極端封閉的環境下，他們每天到底都在做什麼？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">除了花很多時間維護太空站本身修修補補之外，他們大部分的精力都投入在科學實驗中。文獻特別點出了日本實驗艙，叫做希望號
+                (Kibo)。在這個艙段裡，太空人進行各種複雜的任務，從天文觀測到生物醫學都有。最讓人驚嘆的是他們甚至在裡面種植物，並且養魚。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">這就是我想深入探討的地方。在太空中養魚？我們在地球上用水族箱養魚，水是靠重力留在缸裡的。在無重力狀態下，水不會變成一顆到處亂飄的水球嗎？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">確實需要特製的封閉水族箱啦，水才不會亂飄啊。那他們為什麼要大費周章在太空中養魚？這跟我們人類去火星有什麼關係？總不會是想在火星上吃生魚片吧？</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">當然不是。專家們選擇特定品種的魚類送上太空，主要就是為了研究微重力環境如何影響生物的內耳平衡系統，還有骨骼發育。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">內耳平衡？所以魚也會暈機？</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">沒錯，在無重力下，魚一開始會失去方向感，甚至在水裡不斷翻滾繞圈。這跟人類剛到太空時會經歷的太空暈眩症機制非常類似。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">原來如此，所以是拿魚來當人類的替身。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">對，透過觀察這些生物如何在神經層面上適應微重力，科學家就能找到方法來減緩人類在長期太空飛行中骨質流失和神經失調的問題。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                哇，這真的蠻有貢獻的。而且少了重力引起的熱對流，蛋白質分子在空中可以生長出比地球上完美數倍的晶體，這對研發新藥有革命性的幫助。所以他們不是為了休閒娛樂才養魚，這一切都是為了人類的未來鋪路。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">
+                但這就產生了一個極其強烈的對比耶。你想哦，你在希望號裡操作著能改變人類醫療歷史的完美蛋白質結晶，你觀察著太空魚的適應機制，但當你結束了一天頂尖的科研工作，漂回餐桌準備吃飯的時候...</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">我知道你要說什麼了。你面對的依然是裝在鋁箔密封袋裡加水還原的乾燥食品，這也太慘了吧。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">這就是太空生活中最骨感的現實。儘管技術再怎麼先進，你要把食物完好的送上太空，又沒有大冰箱可以長期保存。脫水和密封幾乎是唯一的選擇。每天吃這種東西心情一定蠻差的。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">是的，飲食的單調往往是太空人心理壓力的一大來源，完全可以理解。所以文獻有提到，太空人們日常最期盼的就是補給飛船的到來。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">沒錯。補給任務對士氣非常重要。以前是等太空梭，現在應該是等像 SpaceX 的 Dragon
+                飛船之類的，對吧？不管載具怎麼換，最讓太空人興奮的永遠是飛船艙門打開那一刻，跟著補給品一起送來的新鮮水果。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">現代的商業補給任務接手了這個重責大任。你可以想像太空站內部是一個高度封閉的循環系統，空氣是過濾的，水是回收的。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">就是連呼吸的空氣都是好幾個月前的。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯，幾個月下來，所有的氣味都變得極度一致而且沉悶。當補給飛船送來幾顆新鮮的蘋果或柳橙時，那個專屬於地球植物的天然香氣會瞬間瀰漫艙內。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">哇，那一定超感動的。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                對太空人來說，這不僅僅是味覺的享受，更是心理上巨大的慰藉。這種生物跟母星之間的連結，真的是無論多高科技的裝甲都切不斷的。不過這種連結不僅僅表現在對水果的渴望上，更殘酷的展現在地球上的帳單裡。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">嗯，這確實是很現實的一面，文獻指出，維持太空站運作最大的挑戰其實從來都不在太空，而是在地球。這是一針見血的觀察。工程師解決了流星體和微重力的問題，他們無法解決全球經濟的波動。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                就是錢不夠燒了嘛？對，建造與維持太空任務是一個國家所能承擔的最昂貴的項目之一。文獻中明確提到，隨著時間推移，部分參與計畫的國家在財務貢獻上已經越來越吃力了。當資金成為壓力時，合作關係的摩擦就會浮現。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">不同國家的工程師在文化背景、做事方法上本來就不同，對解決硬體問題也常常意見不合，當預算緊縮，這種分歧一定會被放大。說到底就是資源有限的問題。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">既然政府的口袋見底了，文獻中提到了一個解決方案，也是目前爭議最大的焦點，就是「太空商業化」。資料說有人提議向太空遊客收取高昂費用，或者讓企業在飛往 ISS 的火箭上打廣告。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">這引起了蠻大的討論。但我們都知道現在的商業化早就已經不僅僅是賣門票給富豪或是貼貼贊助海報這麼表層的操作了吧？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">確實如此，我們現在看到的商業化已經深入到運作邏輯的核心了。例如 NASA 早就開始把發射任務外包給私營企業，也就是商業載人計畫。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">對，把發射交給民間來做。這不僅大幅降低了政府的發射成本，更讓 SpaceX 這樣的私人太空公司開始籌備將他們自己的商業模組對接到國際太空站上。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">但文獻裡也有提到，有許多反對者強烈認為這種商業行為背離了 ISS 最初設立的科學與教育目的。學界蠻擔憂這一點。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">可是容我提出一個反向的思考，如果今天連各國政府都已經快要負擔不起這 1500
+                億美元後續的維持費用了，向資本市場靠攏，難道不是唯一的活路嗎？這是一個很殘酷但很真實的考量。如果讓企業進駐，讓私人公司承接發射任務能有效降低成本，甚至為我們籌到前往火星的龐大資金，那我們是不是應該放下對所謂「純粹科學殿堂」的浪漫，畢竟活下來科學實驗才能繼續做下去啊。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">你的推論直接點出了目前航太政策最尖銳的矛盾。反對者擔憂的是，一旦資本介入，太空站上的實驗資源將不再由科學價值決定，而是由誰出的錢多來決定。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">沒錯，但正如你所說的，支持者認為如果沒有這些私營企業的注入與效率，這座太空站可能提早幾年就得面臨報廢的命運了。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">所以不管這場辯論最後結果怎樣，文獻給出了一個非常清晰的結論。就是沒有任何一個國家或個人可以獨自承擔這個龐大太空計畫的代價。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">也就是說 1500 億美元的壓力像一個強大的引力場，強迫人類必須跨越國界，甚至是跨越公領域與私領域的界線去合作。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">
+                精準。國際太空站迫使我們在技術標準上妥協，在文化差異中尋求共識。而這份配合合作的成果其實是非常顯著的。它帶來了微重力下突破性的醫學與材料科學發現，它讓我們測試了未來升空探索需要的維生系統。而且最重要的是，它在過去這
+                20 多年裡成功的維持了各國之間在太空領域的和平與交流。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">
+                對，這些成就最終都實實在在地使全人類受益。經過今天對這份文獻的深度拆解，我們從這座無重力實驗室嚴苛的組裝過程聊到了流星體防禦的工程智慧，再從太空魚的科學價值看見了太空人對一顆地球蘋果的深切渴望。最後我們也直面了龐大資金帶來的商業化拉扯。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯。但這也讓我忍不住向正在收聽的你拋出一個在文獻之外，卻跟這一切息息相關的問題。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">嗯，是什麼問題？</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">任何硬體設備都有它的金屬疲勞與使用極限，國際太空站的壽命終究是有盡頭的。未來有一天，它終將會面臨退役，脫離軌道，然後墜入大氣層，化為一團絢麗的火球。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">那絕對會是一個歷史性的時刻。</div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">是啊。那麼當這座象徵著全人類被迫團結的最昂貴房子消失之後，下一個太空時代會是什麼樣子呢？這真的很難預測。我們人類是會記取這 20
+                多年來跨國合作的成功經驗，共同籌資建造一座更宏偉、真正超越所有國界的宇宙新家嗎？</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">
+                還是說，在商業化與各國財務吃緊的推波助瀾下，未來的近地軌道將會變成房地產市場，被各大私人企業與對立的陣營分割。未來的太空站上將掛滿不同的招牌與互相叫囂的國旗，讓我們又倒退回那個在太空中各自為政、劃地為王的時代。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">這是一個極具重量的問題。當國際太空站這個將我們綁在一起的實體紐帶消失後，人類的凝聚力是不是也會跟著在太空中解體，這絕對是下一個十年我們必須密切關注的發展。</div>
+        </div>
+
+        <div class="dialogue-row speaker-a">
+            <div class="name">主持人 A</div>
+            <div class="content">
+                真的。非常感謝今天帶來這份充滿知識含金量的文本，並與我們一起完成這次的深度探究。請繼續保持你的好奇心，因為無論是在這個藍色星球的表面，還是在黑暗深邃的星辰之間，永遠都有更多隱藏的機制與故事等著我們去挖掘。
+            </div>
+        </div>
+
+        <div class="dialogue-row speaker-b">
+            <div class="name">主持人 B</div>
+            <div class="content">沒錯，宇宙永遠充滿驚喜。下次當你抬頭看向星空時，別忘了那裡不只有星星，還有一座人類為了走向宇宙而共同搭建的脆弱，卻偉大的前哨站。我們下次的深度探討見。</div>
+        </div>
+    </div>
+    <div id="audio-panel"
+        style="width: 100%;position: fixed; top: 0px; left: 0px; background: rgba(44, 62, 80, 0.6); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1000; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';">
+
+        <audio id="bg-audio" controls style="width: 100%;">
+            <source src="" type="audio/mp4">
+            您的瀏覽器不支援音訊播放。
+        </audio>
+        <script>
+            (function () {
+                var filename = '8_22.m4a';
+                const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                document.getElementById('bg-audio').src = isLocal
+                    ? filename
+                    : 'https://raw.githubusercontent.com/rickyhuang2100/Firends/main/public/ReadingCoach/' + filename;
+                const audio = document.getElementById('bg-audio');
+                audio.load();
+                audio.play();
+            })();
+        </script>
+        <!-- 用來切換與更新按鈕狀態的 JavaScript -->
+        <script>
+            function toggleBgAudio() {
+                const audio = document.getElementById('bg-audio');
+                if (audio.paused) audio.play();
+                else audio.pause();
             }
-        }
-    </script>
-</div>
-<div id="auto-scroll-panel"
-    style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
-    onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
-    onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
-        style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
-        ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
-        style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
-        style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
-</div>
-<p>
-    <script>
-        //let isScrolling = false;
-        let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
-        let scrollSpeed = 0.15;
-        let animationFrameId;
-        let virtualScrollY = window.scrollY;
+            function updateAudioBtn(isPlaying) {
+                const btn = document.getElementById('bg-audio-toggle');
+                if (isPlaying) {
+                    btn.innerHTML = '🔊⏸️';
+                    btn.style.background = '#e74c3c'; // 播放中顯示紅色暫停鈕
+                } else {
+                    btn.innerHTML = '🔊▶️';
+                    btn.style.background = '#27ae60'; // 暫停時顯示綠色播放鈕
+                }
+            }
+        </script>
+    </div>
+    <div id="auto-scroll-panel"
+        style="position: fixed; bottom: 20px; right: 20px; background: rgba(44, 62, 80, 0.6); color: white; padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 1001; font-family: sans-serif; transition: opacity 0.3s; opacity: 0.5;"
+        onmouseover="this.style.opacity='1'; this.style.background='rgba(44, 62, 80, 0.9)';"
+        onmouseout="this.style.opacity='0.5'; this.style.background='rgba(44, 62, 80, 0.6)';"><button id="scroll-toggle"
+            style="padding: 4px 10px; cursor: pointer; border: none; border-radius: 20px; background: #27ae60; color: white; font-size: 13px; font-weight: bold; transition: background 0.3s; white-space: nowrap;">
+            ▶️ </button> <input type="range" id="speed-control" min="0.01" max="1.5" step="0.01" value="0.15"
+            style="cursor: pointer; width: 70px; margin: 0; height: 4px;"> <span id="speed-display"
+            style="font-size: 11px; min-width: 25px; text-align: left; color: #ecf0f1;">0.15</span>
+    </div>
+    <p>
+        <script>
+            //let isScrolling = false;
+            let isScrolling = true; // 【修改 1】初始狀態直接設為 true (開啟)
+            let scrollSpeed = 0.15;
+            let animationFrameId;
+            let virtualScrollY = window.scrollY;
 
-        const toggleBtn = document.getElementById('scroll-toggle');
-        const speedControl = document.getElementById('speed-control');
-        const speedDisplay = document.getElementById('speed-display');
+            const toggleBtn = document.getElementById('scroll-toggle');
+            const speedControl = document.getElementById('speed-control');
+            const speedDisplay = document.getElementById('speed-display');
 
-        speedControl.addEventListener('input', function () {
-            scrollSpeed = parseFloat(this.value);
-            speedDisplay.innerText = scrollSpeed.toFixed(2);
-        });
+            speedControl.addEventListener('input', function () {
+                scrollSpeed = parseFloat(this.value);
+                speedDisplay.innerText = scrollSpeed.toFixed(2);
+            });
 
-        function scrollPage() {
-            if (isScrolling) {
-                toggleBtn.innerHTML = '⏬⏸️';
-                if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+            function scrollPage() {
+                if (isScrolling) {
+                    toggleBtn.innerHTML = '⏬⏸️';
+                    if (Math.abs(window.scrollY - virtualScrollY) > 2) {
+                        virtualScrollY = window.scrollY;
+                    }
+
+                    virtualScrollY += scrollSpeed;
+                    window.scrollTo(0, virtualScrollY);
+
+                    if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        isScrolling = false;
+                        toggleBtn.innerHTML = '⏬▶️';
+                        toggleBtn.style.background = '#27ae60';
+                        return;
+                    }
+
+                    animationFrameId = requestAnimationFrame(scrollPage);
+                }
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                isScrolling = !isScrolling;
+
+                if (isScrolling) {
+                    this.innerHTML = '⏬⏸️';
+                    this.style.background = '#e74c3c';
                     virtualScrollY = window.scrollY;
+                    scrollPage();
+                } else {
+                    this.innerHTML = '⏬▶️';
+                    this.style.background = '#27ae60';
+                    cancelAnimationFrame(animationFrameId);
                 }
+            });
+            // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
+            scrollPage();
+        </script>
+</body>
 
-                virtualScrollY += scrollSpeed;
-                window.scrollTo(0, virtualScrollY);
-
-                if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    isScrolling = false;
-                    toggleBtn.innerHTML = '⏬▶️';
-                    toggleBtn.style.background = '#27ae60';
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(scrollPage);
-            }
-        }
-
-        toggleBtn.addEventListener('click', function () {
-            isScrolling = !isScrolling;
-
-            if (isScrolling) {
-                this.innerHTML = '⏬⏸️';
-                this.style.background = '#e74c3c';
-                virtualScrollY = window.scrollY;
-                scrollPage();
-            } else {
-                this.innerHTML = '⏬▶️';
-                this.style.background = '#27ae60';
-                cancelAnimationFrame(animationFrameId);
-            }
-        });
-        // 【修改 2】當網頁把這段程式碼讀取完畢後，直接立刻執行捲動
-        scrollPage();
-    </script>
-    </body>
-
-    </html>
+</html>
