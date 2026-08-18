@@ -245,9 +245,23 @@
             display: none;
         }
 
+        
         .tab-content.active {
             display: block;
         }
+
+        /* 聽音重組樣式 */
+        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
+        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
+        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #F44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
+        .game-controls { margin-top: 20px; text-align: center; }
     </style>
 </head>
 
@@ -285,7 +299,9 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -748,6 +764,44 @@
                     </ol>
                 </div>
             </div>
+            </div>
+
+
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            6</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div id="reviewArea"></div>
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -991,7 +1045,339 @@
         }
 
         // 頁面載入時初始化
-        window.onload = initText;
+        
+        // 頁面載入時初始化
+        window.onload = () => {
+            if (typeof initText === 'function') initText();
+            initGame();
+        };
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+          {
+                    "en": "When an object vibrates, it sets off a chain reaction of events that might end up inside a person's ear.",
+                    "zh": "當物體振動時，它會引發一連串的連鎖反應，最終可能進入人的耳朵。",
+                    "chunks": [
+                              "When an object vibrates,",
+                              "it sets off",
+                              "a chain reaction of events",
+                              "that might end up",
+                              "inside a person's ear."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "it sets off",
+                                        "meaning": "引發、觸發（sets off = triggers）",
+                                        "collocation": "set off an alarm（觸發警報）、set off a reaction（引發反應）",
+                                        "synonym": "it triggers / it starts",
+                                        "pronunciation": "sets 的 /ts/ 和 off 的 /ɒ/ 連讀為 /tsɒf/。"
+                              },
+                              {
+                                        "chunk": "a chain reaction of events",
+                                        "meaning": "一連串的連鎖反應",
+                                        "collocation": "chain reaction（連鎖反應）",
+                                        "synonym": "a sequence of events",
+                                        "pronunciation": "chain 的 /n/ 和 reaction 的 /r/ 之間有輕微停頓。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Air molecules bash into each other like millions of microscopic Ping-Pong balls, transporting the sound through what becomes a sound wave.",
+                    "zh": "空氣分子像數以百萬計的微小乒乓球一樣互相碰撞，透過形成聲波的東西傳遞聲音。",
+                    "chunks": [
+                              "Air molecules",
+                              "bash into each other",
+                              "like millions of microscopic Ping-Pong balls,",
+                              "transporting the sound",
+                              "through what becomes a sound wave."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "bash into each other",
+                                        "meaning": "互相猛烈碰撞（bash = 猛打）",
+                                        "collocation": "bash into a wall（撞上牆）",
+                                        "synonym": "collide with one another / smash into each other",
+                                        "pronunciation": "bash 的 /æ/ 是開口的短音，into each 連讀為 /ɪntu iːtʃ/。"
+                              },
+                              {
+                                        "chunk": "transporting the sound",
+                                        "meaning": "傳送聲音",
+                                        "collocation": "transport energy（傳輸能量）",
+                                        "synonym": "carrying the sound / transmitting sound",
+                                        "pronunciation": "transporting 重音在第二音節 /trænsˈpɔːr.tɪŋ/，注意 /tr/ 的發音。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Depending on how strong or soft the vibrations are, the sound's volume and tone will vary.",
+                    "zh": "根據振動的強弱，聲音的音量和音調會有所不同。",
+                    "chunks": [
+                              "Depending on",
+                              "how strong or soft",
+                              "the vibrations are,",
+                              "the sound's volume and tone",
+                              "will vary."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "Depending on",
+                                        "meaning": "取決於、視...而定（分詞構句開頭）",
+                                        "collocation": "depending on the weather（視天氣而定）",
+                                        "synonym": "based on / according to",
+                                        "pronunciation": "Depending 的 /ɪŋ/ 和 on 的 /ɒn/ 緊密連讀為 /ɪŋɒn/。"
+                              },
+                              {
+                                        "chunk": "will vary.",
+                                        "meaning": "將會有所不同、將會改變",
+                                        "collocation": "results may vary（結果可能因人而異）",
+                                        "synonym": "will differ / will change",
+                                        "pronunciation": "vary 的 /v/ 清楚起音，重音在第一音節 /ˈveər.i/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "The combination of just the right vibrations create sound waves that enter the atmosphere and reach the ears of the fans.",
+                    "zh": "恰到好處的振動組合產生了聲波，進入大氣並傳到球迷的耳朵。",
+                    "chunks": [
+                              "The combination of",
+                              "just the right vibrations",
+                              "create sound waves",
+                              "that enter the atmosphere",
+                              "and reach the ears of the fans."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "just the right vibrations",
+                                        "meaning": "恰到好處的振動（just the right = 剛好合適的）",
+                                        "collocation": "just the right amount（剛好適量）",
+                                        "synonym": "exactly the correct vibrations",
+                                        "pronunciation": "just the 連讀為 /dʒʌsðə/，right 的 /r/ 清楚捲舌。"
+                              },
+                              {
+                                        "chunk": "reach the ears of the fans.",
+                                        "meaning": "到達球迷的耳朵",
+                                        "collocation": "reach one's ears（傳入某人耳中）",
+                                        "synonym": "arrive at the fans' ears",
+                                        "pronunciation": "reach 的 /tʃ/ 字尾和 the 的 /ð/ 連讀。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Inside the stadium, there is an organ player, waiting for a chance to get the crowd riled up.",
+                    "zh": "體育場內有一位風琴手，正在等待機會讓人群沸騰起來。",
+                    "chunks": [
+                              "Inside the stadium,",
+                              "there is an organ player,",
+                              "waiting for a chance",
+                              "to get the crowd riled up."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "waiting for a chance",
+                                        "meaning": "等待一個機會",
+                                        "collocation": "wait for a chance to speak（等待發言機會）",
+                                        "synonym": "looking for an opportunity",
+                                        "pronunciation": "waiting 的 /t/ 在美式英文中常發成彈舌音，for a 連讀為 /fərə/。"
+                              },
+                              {
+                                        "chunk": "to get the crowd riled up.",
+                                        "meaning": "讓群眾激動沸騰",
+                                        "collocation": "rile someone up（激怒、激動某人）",
+                                        "synonym": "to excite the crowd / to fire up the audience",
+                                        "pronunciation": "riled 的 /d/ 和 up 的 /ʌ/ 連讀為 /dʌp/。"
+                              }
+                    ]
+          }
+];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk';
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('reviewArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = "進度: " + (currentGameIndex + 1) + " / " + gameSentences.length;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = "💡 提示: " + gameSentences[currentGameIndex].zh;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?”“’:]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                const reviewArea = document.getElementById('reviewArea');
+                reviewArea.innerHTML = '';
+                const reviewData = gameSentences[currentGameIndex].reviewData;
+                if (reviewData && gameMode === 'chunk') {
+                    const item = reviewData.find(r => word.includes(r.chunk));
+                    if (item) {
+                        const reviewContainer = document.createElement('div');
+                        reviewContainer.className = 'post-submit-review';
+                        reviewContainer.style.marginTop = '20px';
+                        reviewContainer.style.textAlign = 'left';
+
+                        const card = document.createElement('div');
+                        card.className = 'chunk-review-card';
+                        card.style.backgroundColor = '#f1f8e9';
+                        card.style.borderLeft = '4px solid #8bc34a';
+                        card.style.padding = '15px';
+                        card.style.marginBottom = '10px';
+                        card.style.borderRadius = '6px';
+                        card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                        card.innerHTML = "<div style='font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;'>📌 語塊範例：" + item.chunk + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>中文語意：</strong> " + item.meaning + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>母語者搭配 (Collocations)：</strong> " + item.collocation + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>同義替換 (Synonyms)：</strong> " + item.synonym + "</div><div style='font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;'><strong>🎧 聽力連讀點：</strong> " + item.pronunciation + "</div>";
+                        reviewContainer.appendChild(card);
+                        reviewArea.appendChild(reviewContainer);
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    
+                    finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
     </script>
 
 </body>

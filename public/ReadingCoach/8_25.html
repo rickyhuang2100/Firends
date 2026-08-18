@@ -245,9 +245,23 @@
             display: none;
         }
 
+        
         .tab-content.active {
             display: block;
         }
+
+        /* 聽音重組樣式 */
+        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
+        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
+        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #F44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
+        .game-controls { margin-top: 20px; text-align: center; }
     </style>
 </head>
 
@@ -285,7 +299,9 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -870,6 +886,44 @@
                     </ul>
                 </div>
             </div>
+            </div>
+
+
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            6</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div id="reviewArea"></div>
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://giscus.app/client.js" data-repo="rickyhuang2100/course-discussions" data-repo-id="R_kgDORQOB6g"
@@ -1112,7 +1166,345 @@
         }
 
         // 頁面載入時初始化
-        window.onload = initText;
+        
+        // 頁面載入時初始化
+        window.onload = () => {
+            if (typeof initText === 'function') initText();
+            initGame();
+        };
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+          {
+                    "en": "American Army code breakers had intercepted and deciphered conversations between Japanese leaders in which they announced they had given up on diplomacy with the United States.",
+                    "zh": "美國陸軍密碼破譯員攔截並破譯了日本領導人之間的對話，在對話中他們宣布放棄與美國的外交。",
+                    "chunks": [
+                              "American Army code breakers",
+                              "had intercepted and deciphered",
+                              "conversations between Japanese leaders",
+                              "in which they announced",
+                              "they had given up on diplomacy",
+                              "with the United States."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "had intercepted and deciphered",
+                                        "meaning": "已經攔截並破譯（過去完成式）",
+                                        "collocation": "intercept a message（攔截訊息）、decipher a code（破解密碼）",
+                                        "synonym": "had captured and decoded",
+                                        "pronunciation": "intercepted 重音在第三音節 /ˌɪn.tərˈsep.tɪd/，deciphered 重音在第二音節 /dɪˈsaɪ.fərd/。"
+                              },
+                              {
+                                        "chunk": "given up on diplomacy",
+                                        "meaning": "放棄了外交途徑（give up on = 放棄）",
+                                        "collocation": "give up on negotiations（放棄談判）",
+                                        "synonym": "abandoned / renounced diplomacy",
+                                        "pronunciation": "given up on 連讀，on 弱讀為 /ɒn/，diplomacy 重音在第二音節 /dɪˈploʊ.mə.si/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "To avoid having his critical message fall into Japanese hands, Marshall decided against using the Scrambler and instead sent his orders to Hawaii via telegraph code.",
+                    "zh": "為了避免他的關鍵信息落入日本人手中，馬歇爾決定不使用擾頻器，而是透過電報密碼將命令發送到夏威夷。",
+                    "chunks": [
+                              "To avoid having his critical message",
+                              "fall into Japanese hands,",
+                              "Marshall decided against",
+                              "using the Scrambler",
+                              "and instead sent his orders",
+                              "to Hawaii via telegraph code."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "fall into Japanese hands,",
+                                        "meaning": "落入日本人手中（fall into someone's hands = 落入某人控制）",
+                                        "collocation": "fall into enemy hands（落入敵手）",
+                                        "synonym": "be captured by / be obtained by the Japanese",
+                                        "pronunciation": "fall into 連讀，into 弱讀為 /ɪntə/，Japanese 重音在第三音節 /ˌdʒæp.əˈniːz/。"
+                              },
+                              {
+                                        "chunk": "decided against using",
+                                        "meaning": "決定不使用（decide against = 決定反對/不做）",
+                                        "collocation": "decide against taking the risk（決定不冒險）",
+                                        "synonym": "chose not to use / rejected the idea of using",
+                                        "pronunciation": "decided 字尾 /d/ 和 against 的 /ə/ 連讀，against 重音在第二音節 /əˈɡenst/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "The disaster at Pearl Harbor confirmed what Marshall and other military leaders already knew: they needed a secure system for communication with their troops.",
+                    "zh": "珍珠港的災難證實了馬歇爾和其他軍事領導人已經知道的事情：他們需要一個安全的系統來與部隊通訊。",
+                    "chunks": [
+                              "The disaster at Pearl Harbor",
+                              "confirmed what",
+                              "Marshall and other military leaders",
+                              "already knew:",
+                              "they needed a secure system",
+                              "for communication with their troops."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "confirmed what...already knew:",
+                                        "meaning": "證實了...早已知道的事情",
+                                        "collocation": "confirm one's suspicions（證實某人的懷疑）",
+                                        "synonym": "validated / proved what was already suspected",
+                                        "pronunciation": "confirmed 重音在第二音節 /kənˈfɜːrmd/，already 重音在第二音節 /ɔːlˈredi/。"
+                              },
+                              {
+                                        "chunk": "a secure system for communication",
+                                        "meaning": "用於通訊的安全系統",
+                                        "collocation": "secure communication（安全通訊）",
+                                        "synonym": "an encrypted / protected communication network",
+                                        "pronunciation": "secure 重音在第二音節 /sɪˈkjʊər/，communication 重音在第三音節 /kəˌmjuː.nɪˈkeɪ.ʃn/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Advances in computing power allowed for more values to be added to the equation, so that conversations could be replayed continuously and without gaps.",
+                    "zh": "計算能力的進步允許將更多數值添加到方程式中，以便對話可以連續重播而沒有間隙。",
+                    "chunks": [
+                              "Advances in computing power",
+                              "allowed for more values",
+                              "to be added to the equation,",
+                              "so that conversations",
+                              "could be replayed continuously",
+                              "and without gaps."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "Advances in computing power",
+                                        "meaning": "計算能力的進步",
+                                        "collocation": "advances in technology（技術進步）",
+                                        "synonym": "improvements in processing power",
+                                        "pronunciation": "advances 重音在第二音節 /ədˈvænsɪz/，computing 重音在第二音節 /kəmˈpjuː.tɪŋ/。"
+                              },
+                              {
+                                        "chunk": "replayed continuously and without gaps.",
+                                        "meaning": "連續且無間斷地重播",
+                                        "collocation": "play back continuously（連續回放）",
+                                        "synonym": "reproduced without interruption",
+                                        "pronunciation": "replayed 重音在第二音節 /ˌriːˈpleɪd/，continuously 重音在第二音節 /kənˈtɪn.ju.əs.li/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "This process is called pulse-code modulation, and today it remains the method used by computers, MP3 players, and compact discs to translate sounds into digital form.",
+                    "zh": "這個過程被稱為脈衝編碼調變，直到今天，它仍然是電腦、MP3播放器和CD用來將聲音轉換為數位形式的方法。",
+                    "chunks": [
+                              "This process is called",
+                              "pulse-code modulation,",
+                              "and today it remains",
+                              "the method used by computers,",
+                              "MP3 players, and compact discs",
+                              "to translate sounds into digital form."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "it remains the method",
+                                        "meaning": "它仍然是那個方法（remain = 依然是）",
+                                        "collocation": "remain the standard（仍然是標準）",
+                                        "synonym": "it continues to be the method",
+                                        "pronunciation": "remains 重音在第二音節 /rɪˈmeɪnz/，the method 的 the 在母音前唸 /ðiː/。"
+                              },
+                              {
+                                        "chunk": "to translate sounds into digital form.",
+                                        "meaning": "將聲音轉換成數位形式",
+                                        "collocation": "translate into（轉換成；翻譯成）",
+                                        "synonym": "to convert sounds to digital data",
+                                        "pronunciation": "translate 重音在第二音節 /trænsˈleɪt/，digital 的 /dɪdʒ/ 清楚。"
+                              }
+                    ]
+          }
+];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk';
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('reviewArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = "進度: " + (currentGameIndex + 1) + " / " + gameSentences.length;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = "💡 提示: " + gameSentences[currentGameIndex].zh;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?”“’:]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                const reviewArea = document.getElementById('reviewArea');
+                reviewArea.innerHTML = '';
+                const reviewData = gameSentences[currentGameIndex].reviewData;
+                if (reviewData && gameMode === 'chunk') {
+                    const item = reviewData.find(r => word.includes(r.chunk));
+                    if (item) {
+                        const reviewContainer = document.createElement('div');
+                        reviewContainer.className = 'post-submit-review';
+                        reviewContainer.style.marginTop = '20px';
+                        reviewContainer.style.textAlign = 'left';
+
+                        const card = document.createElement('div');
+                        card.className = 'chunk-review-card';
+                        card.style.backgroundColor = '#f1f8e9';
+                        card.style.borderLeft = '4px solid #8bc34a';
+                        card.style.padding = '15px';
+                        card.style.marginBottom = '10px';
+                        card.style.borderRadius = '6px';
+                        card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                        card.innerHTML = "<div style='font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;'>📌 語塊範例：" + item.chunk + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>中文語意：</strong> " + item.meaning + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>母語者搭配 (Collocations)：</strong> " + item.collocation + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>同義替換 (Synonyms)：</strong> " + item.synonym + "</div><div style='font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;'><strong>🎧 聽力連讀點：</strong> " + item.pronunciation + "</div>";
+                        reviewContainer.appendChild(card);
+                        reviewArea.appendChild(reviewContainer);
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    
+                    finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
     </script>
 
 </body>

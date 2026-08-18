@@ -245,9 +245,23 @@
             display: none;
         }
 
+        
         .tab-content.active {
             display: block;
         }
+
+        /* 聽音重組樣式 */
+        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
+        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
+        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #F44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
+        .game-controls { margin-top: 20px; text-align: center; }
     </style>
 </head>
 
@@ -285,7 +299,9 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -745,6 +761,44 @@
                     </ol>
                 </div>
             </div>
+            </div>
+
+
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            6</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div id="reviewArea"></div>
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -988,7 +1042,340 @@
         }
 
         // 頁面載入時初始化
-        window.onload = initText;
+        
+        // 頁面載入時初始化
+        window.onload = () => {
+            if (typeof initText === 'function') initText();
+            initGame();
+        };
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+          {
+                    "en": "It is no surprise that a society which so valued words would fall in love with paper.",
+                    "zh": "一個如此重視文字的社會會愛上紙張，這並不奇怪。",
+                    "chunks": [
+                              "It is no surprise",
+                              "that a society",
+                              "which so valued words",
+                              "would fall in love with paper."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "It is no surprise",
+                                        "meaning": "這並不奇怪（固定句型）",
+                                        "collocation": "it is no surprise that...（...並不令人意外）",
+                                        "synonym": "it is understandable / it makes sense",
+                                        "pronunciation": "no 的 /oʊ/ 輕輕拉長，surprise 重音在第二音節 /sərˈpraɪz/。"
+                              },
+                              {
+                                        "chunk": "would fall in love with paper.",
+                                        "meaning": "會愛上紙張",
+                                        "collocation": "fall in love with（愛上）",
+                                        "synonym": "would become devoted to paper",
+                                        "pronunciation": "fall in 連讀，in love 的 /n/ 和 /l/ 緊密連接為 /nˈlʌv/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Perhaps most importantly, paper absorbed ink, which meant that anything written on paper could not be erased.",
+                    "zh": "也許最重要的是，紙張會吸收墨水，這意味著寫在紙上的任何東西都無法被擦除。",
+                    "chunks": [
+                              "Perhaps most importantly,",
+                              "paper absorbed ink,",
+                              "which meant that",
+                              "anything written on paper",
+                              "could not be erased."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "Perhaps most importantly,",
+                                        "meaning": "也許最重要的是（強調列舉重點）",
+                                        "collocation": "most importantly（最重要的是）",
+                                        "synonym": "above all else / crucially",
+                                        "pronunciation": "Perhaps 重音在第二音節 /pərˈhæps/，most importantly 快速連讀。"
+                              },
+                              {
+                                        "chunk": "could not be erased.",
+                                        "meaning": "無法被擦除（被動語態）",
+                                        "collocation": "erase a memory（抹去記憶）",
+                                        "synonym": "could not be removed / could not be deleted",
+                                        "pronunciation": "erased 的重音在第二音節 /ɪˈreɪzd/，字尾 /d/ 輕放。"
+                              }
+                    ]
+          },
+          {
+                    "en": "As Europe languished in the Dark Ages, the Muslim world entered a scientific golden age.",
+                    "zh": "當歐洲在黑暗時代苦苦掙扎時，穆斯林世界進入了科學的黃金時代。",
+                    "chunks": [
+                              "As Europe languished",
+                              "in the Dark Ages,",
+                              "the Muslim world",
+                              "entered a scientific golden age."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "As Europe languished",
+                                        "meaning": "當歐洲正在衰弱掙扎之時（languish = 苦苦掙扎、萎靡）",
+                                        "collocation": "languish in poverty（在貧困中苦苦度日）",
+                                        "synonym": "while Europe was struggling / was declining",
+                                        "pronunciation": "languished 的 /æŋ/ 需要鼻音清楚，字尾 /ʃt/ 輕帶。"
+                              },
+                              {
+                                        "chunk": "a scientific golden age.",
+                                        "meaning": "科學的黃金時代",
+                                        "collocation": "golden age of literature（文學黃金時代）",
+                                        "synonym": "a scientific Renaissance / peak of science",
+                                        "pronunciation": "scientific 重音在第三音節 /ˌsaɪənˈtɪf.ɪk/，golden 的 /d/ 在美式中發彈舌音。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Building on the knowledge of the ancient Greeks, Muslim scholars made great advances in geometry, astronomy, and mathematics.",
+                    "zh": "在古希臘人知識的基礎上，穆斯林學者在幾何學、天文學和數學方面取得了巨大進步。",
+                    "chunks": [
+                              "Building on the knowledge",
+                              "of the ancient Greeks,",
+                              "Muslim scholars",
+                              "made great advances",
+                              "in geometry, astronomy, and mathematics."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "Building on the knowledge",
+                                        "meaning": "在...的知識基礎上（建立於...之上）",
+                                        "collocation": "build on previous work（在前人工作的基礎上）",
+                                        "synonym": "drawing from / expanding upon",
+                                        "pronunciation": "Building on 連讀，on 的 /ɒ/ 弱化為 /ən/。"
+                              },
+                              {
+                                        "chunk": "made great advances in",
+                                        "meaning": "在...方面取得了巨大進步",
+                                        "collocation": "make advances in technology（在科技方面取得進步）",
+                                        "synonym": "achieved major breakthroughs in",
+                                        "pronunciation": "advances 的重音在第二音節 /ədˈvænsɪz/，in 弱讀為 /ɪn/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Scholars and poets were supported by the government, and for perhaps the first time in history, it became possible to make a living by reading and writing alone.",
+                    "zh": "學者和詩人受到政府的支持，這也許是歷史上第一次，單靠閱讀和寫作就能謀生。",
+                    "chunks": [
+                              "Scholars and poets",
+                              "were supported by the government,",
+                              "and for perhaps the first time",
+                              "in history,",
+                              "it became possible",
+                              "to make a living",
+                              "by reading and writing alone."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "it became possible",
+                                        "meaning": "變得可能了",
+                                        "collocation": "make it possible to（使...成為可能）",
+                                        "synonym": "it was now feasible",
+                                        "pronunciation": "became 的重音在第二音節，possible 的 /s/ 在美式英文可能弱化為 /pɒs.ɪ.bəl/。"
+                              },
+                              {
+                                        "chunk": "to make a living",
+                                        "meaning": "謀生、維持生計",
+                                        "collocation": "make a living as a writer（以寫作為生）",
+                                        "synonym": "to earn a living / to sustain oneself",
+                                        "pronunciation": "make a 連讀為 /ˈmeɪkə/，living 的 /v/ 清楚發出。"
+                              }
+                    ]
+          }
+];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk';
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('reviewArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = "進度: " + (currentGameIndex + 1) + " / " + gameSentences.length;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = "💡 提示: " + gameSentences[currentGameIndex].zh;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?”“’:]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                const reviewArea = document.getElementById('reviewArea');
+                reviewArea.innerHTML = '';
+                const reviewData = gameSentences[currentGameIndex].reviewData;
+                if (reviewData && gameMode === 'chunk') {
+                    const item = reviewData.find(r => word.includes(r.chunk));
+                    if (item) {
+                        const reviewContainer = document.createElement('div');
+                        reviewContainer.className = 'post-submit-review';
+                        reviewContainer.style.marginTop = '20px';
+                        reviewContainer.style.textAlign = 'left';
+
+                        const card = document.createElement('div');
+                        card.className = 'chunk-review-card';
+                        card.style.backgroundColor = '#f1f8e9';
+                        card.style.borderLeft = '4px solid #8bc34a';
+                        card.style.padding = '15px';
+                        card.style.marginBottom = '10px';
+                        card.style.borderRadius = '6px';
+                        card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                        card.innerHTML = "<div style='font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;'>📌 語塊範例：" + item.chunk + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>中文語意：</strong> " + item.meaning + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>母語者搭配 (Collocations)：</strong> " + item.collocation + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>同義替換 (Synonyms)：</strong> " + item.synonym + "</div><div style='font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;'><strong>🎧 聽力連讀點：</strong> " + item.pronunciation + "</div>";
+                        reviewContainer.appendChild(card);
+                        reviewArea.appendChild(reviewContainer);
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    
+                    finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
     </script>
 
 </body>
