@@ -245,16 +245,32 @@
             display: none;
         }
 
+        
         .tab-content.active {
             display: block;
         }
+
+        /* 聽音重組樣式 */
+        .game-board { margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; min-height: 50px; }
+        .answer-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3; margin-bottom: 20px; }
+        .word-block { background-color: #fff; border: 2px solid #2196F3; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-size: 16px; font-weight: bold; color: #1565c0; user-select: none; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .word-block:hover { background-color: #e3f2fd; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .game-status { margin-top: 15px; font-weight: bold; font-size: 18px; text-align: center; min-height: 27px; }
+        .status-correct { color: #4CAF50; }
+        .status-wrong { color: #F44336; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .error-shake { animation: shake 0.3s ease-in-out; background-color: #ffebee !important; border-color: #f44336 !important; color: #c62828 !important; }
+        .game-controls { margin-top: 20px; text-align: center; }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>📖 Weirdness Under the Sea</h1>
-
+        <a href="8_9_pod.html" target="_blank">🎧AI播客</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://1drv.ms/w/c/6678322931217c5f/IQBG_b6Hr3kgSr138VGZKcPMAUw5NF9dNer7NActDNYhmNw?e=rqe1jZ"
+            target="_blank">沈浸式閱讀程式</a>
         <div class="settings">
             <h3>語音設定</h3>
             <div class="setting-item"><label>語音:</label><select id="voiceSelect"></select></div>
@@ -284,7 +300,9 @@
                 <button type="button" class="tab" onclick="showTab(event, 'vocabulary')">重點單字</button>
                 <button type="button" class="tab" onclick="showTab(event, 'grammar')">文法重點</button>
                 <button type="button" class="tab" onclick="showTab(event, 'sentences')">句型分析</button>
+                
                 <button type="button" class="tab" onclick="showTab(event, 'reading')">閱讀技巧</button>
+                <button type="button" class="tab" onclick="showTab(event, 'reconstruction')">🎧 聽音重組</button>
             </div>
 
             <div id="translation" class="tab-content active">
@@ -668,6 +686,44 @@
                     </ol>
                 </div>
             </div>
+            </div>
+
+
+            <!-- 聽音重組分頁 -->
+            <div id="reconstruction" class="tab-content">
+                <h3>🎧 聽音重組挑戰</h3>
+                <div class="info-box">
+                    <p>點擊下方單字庫，拼出你聽到的句子。所有字母皆轉為小寫，並隱藏標點符號，考驗你真正的聽力！完成語塊會顯示「語塊精解模式」幫助你學好英文。</p>
+                </div>
+                <div class="game-board">
+                    <div class="mode-toggle" style="text-align: center; margin-bottom: 20px;">
+                        <button type="button" id="btnChunkMode" class="btn"
+                            style="padding: 8px 15px; background-color: #2196F3;" onclick="setGameMode('chunk')">🧩
+                            語塊模式</button>
+                        <button type="button" id="btnWordMode" class="btn"
+                            style="padding: 8px 15px; background-color: #9e9e9e;" onclick="setGameMode('word')">🔤
+                            單字模式</button>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span id="gameProgress"
+                            style="font-size: 18px; font-weight: bold; color: #1565c0; margin-right: 15px;">進度: 1 /
+                            6</span>
+                        <button type="button" class="btn" style="background-color: #2196F3;"
+                            onclick="playCurrentSentence()">🔊 播放此句</button>
+                    </div>
+                    <div class="answer-area" id="answerArea"></div>
+                    <div class="word-bank" id="wordBank"></div>
+                    <div id="reviewArea"></div>
+                    <div class="game-controls">
+                        <button type="button" class="btn" style="background-color: #4CAF50; display: none;" id="nextBtn"
+                            onclick="nextSentence()">➡️ 下一句</button>
+                    </div>
+                    <div class="game-status" id="gameStatus"></div>
+                    <div id="translationHint"
+                        style="text-align: center; color: #666; margin-top: 10px; font-style: italic; display: none;">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -911,7 +967,333 @@
         }
 
         // 頁面載入時初始化
-        window.onload = initText;
+        
+        // 頁面載入時初始化
+        window.onload = () => {
+            if (typeof initText === 'function') initText();
+            initGame();
+        };
+
+        // --- 聽音重組遊戲邏輯 ---
+        const gameSentences = [
+          {
+                    "en": "Sunlight has never reached this place, so there are no plants.",
+                    "zh": "陽光從未到達過這個地方，所以那裡沒有植物。",
+                    "chunks": [
+                              "Sunlight has never",
+                              "reached this place,",
+                              "so there are no plants."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "Sunlight has never",
+                                        "meaning": "陽光從來沒有（現在完成式否定）",
+                                        "collocation": "has never been seen（從未被見過）",
+                                        "synonym": "no sunlight has ever",
+                                        "pronunciation": "Sunlight 的 /t/ 遇到 has 的 /h/ 可以稍微停頓。"
+                              },
+                              {
+                                        "chunk": "so there are no plants.",
+                                        "meaning": "因此那裡沒有植物",
+                                        "collocation": "there are no signs of（沒有跡象顯示）",
+                                        "synonym": "therefore no vegetation exists",
+                                        "pronunciation": "so 和 there 直接連讀，are 唸成弱化的 /ər/。"
+                              }
+                    ]
+          },
+          {
+                    "en": "The environment is bitterly cold and the pressure of the water feels like 100 elephants standing on your head.",
+                    "zh": "環境非常寒冷，水壓感覺就像有100頭大象站在你的頭上。",
+                    "chunks": [
+                              "The environment is",
+                              "bitterly cold",
+                              "and the pressure of the water",
+                              "feels like 100 elephants",
+                              "standing on your head."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "bitterly cold",
+                                        "meaning": "苦寒的、刺骨的冷",
+                                        "collocation": "bitterly cold winter（嚴酷的冬天）",
+                                        "synonym": "freezing cold / icy cold",
+                                        "pronunciation": "bitterly 的 /tərli/ 需要輕快唸過，接上 cold 的 /k/。"
+                              },
+                              {
+                                        "chunk": "feels like 100 elephants",
+                                        "meaning": "感覺像100頭大象（誇飾法）",
+                                        "collocation": "feels like a ton of bricks（感覺重如磚塊）",
+                                        "synonym": "as if you had enormous weight on you",
+                                        "pronunciation": "feels 字尾的 /z/ 和 like 的 /l/ 順暢連接。"
+                              }
+                    ]
+          },
+          {
+                    "en": "Most dine on each other and on marine snow.",
+                    "zh": "大多數吃彼此以及「海洋雪」。",
+                    "chunks": [
+                              "Most dine on",
+                              "each other",
+                              "and on marine snow."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "Most dine on",
+                                        "meaning": "大多數以...為食",
+                                        "collocation": "dine on seafood（以海鮮為食）",
+                                        "synonym": "feed on / eat",
+                                        "pronunciation": "dine 的 /n/ 和 on 的 /ɑ/ 會連讀成 /nɑn/。"
+                              },
+                              {
+                                        "chunk": "and on marine snow.",
+                                        "meaning": "以及海洋雪",
+                                        "collocation": "marine life（海洋生物）",
+                                        "synonym": "ocean detritus",
+                                        "pronunciation": "marine 的 /n/ 和 snow 的 /sn/ 之間有清楚的分隔。"
+                              }
+                    ]
+          },
+          {
+                    "en": "This molecule not only helps keep them from being mashed, it allows them to move.",
+                    "zh": "這種分子不僅有助於防止牠們被壓碎，還能讓牠們移動。",
+                    "chunks": [
+                              "This molecule",
+                              "not only helps keep them",
+                              "from being mashed,",
+                              "it allows them to move."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "not only helps keep them",
+                                        "meaning": "不僅幫助保持牠們（not only...but also 句型）",
+                                        "collocation": "not only A but also B（不僅A而且B）",
+                                        "synonym": "not only assists in keeping",
+                                        "pronunciation": "not only 可以連讀，only 的字尾 /i/ 滑入 helps 的 /h/。"
+                              },
+                              {
+                                        "chunk": "from being mashed,",
+                                        "meaning": "免於被壓碎",
+                                        "collocation": "keep from falling（避免跌落）",
+                                        "synonym": "from being crushed",
+                                        "pronunciation": "from 的 /m/ 和 being 的 /b/ 之間的轉換需要用力一點。"
+                              }
+                    ]
+          },
+          {
+                    "en": "There is so much more that we don't know about this mysterious world.",
+                    "zh": "關於這個神祕的世界，還有太多是我們所不知道的。",
+                    "chunks": [
+                              "There is so much more",
+                              "that we don't know",
+                              "about this mysterious world."
+                    ],
+                    "reviewData": [
+                              {
+                                        "chunk": "so much more",
+                                        "meaning": "還有很多更多",
+                                        "collocation": "there is so much more to learn（還有很多需要學習）",
+                                        "synonym": "a great deal more",
+                                        "pronunciation": "so much 可以快速連讀，more 的 /r/ 拖長。"
+                              },
+                              {
+                                        "chunk": "about this mysterious world.",
+                                        "meaning": "關於這個神秘的世界",
+                                        "collocation": "mysterious creature（神秘的生物）",
+                                        "synonym": "regarding this unknown world",
+                                        "pronunciation": "mysterious 的 /ɪəs/ 字尾快速帶過，接上 world。"
+                              }
+                    ]
+          }
+];
+
+        let currentGameIndex = 0;
+        let currentWords = [];
+        let answerWords = [];
+        let bankWords = [];
+        let gameMode = 'chunk';
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('btnChunkMode').style.backgroundColor = (mode === 'chunk') ? '#2196F3' : '#9e9e9e';
+            document.getElementById('btnWordMode').style.backgroundColor = (mode === 'word') ? '#2196F3' : '#9e9e9e';
+            answerWords = [];
+            initGame();
+        }
+
+        function playGoogleTTS(text) {
+            const synth = window.speechSynthesis;
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = synth.getVoices();
+                const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en')) || voices.find(v => v.lang === 'en-US');
+
+                if (googleVoice) {
+                    u.voice = googleVoice;
+                }
+
+                const rateSlider = document.getElementById('rateSlider');
+                if (rateSlider) u.rate = parseFloat(rateSlider.value);
+
+                synth.speak(u);
+            }, 50);
+        }
+
+        function playCurrentSentence() {
+            playGoogleTTS(gameSentences[currentGameIndex].en);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initGame() {
+            if (currentGameIndex >= gameSentences.length) {
+                document.getElementById('gameProgress').textContent = "🎉 恭喜完成所有挑戰！";
+                document.getElementById('wordBank').innerHTML = "";
+                document.getElementById('answerArea').innerHTML = "";
+                document.getElementById('reviewArea').innerHTML = "";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('translationHint').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('gameProgress').textContent = "進度: " + (currentGameIndex + 1) + " / " + gameSentences.length;
+            document.getElementById('gameStatus').textContent = "";
+            document.getElementById('gameStatus').className = "game-status";
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('reviewArea').innerHTML = "";
+
+            const transHint = document.getElementById('translationHint');
+            transHint.textContent = "💡 提示: " + gameSentences[currentGameIndex].zh;
+            transHint.style.display = 'block';
+
+            if (gameMode === 'chunk' && gameSentences[currentGameIndex].chunks) {
+                currentWords = [...gameSentences[currentGameIndex].chunks];
+            } else {
+                let rawText = gameSentences[currentGameIndex].en;
+                rawText = rawText.replace(/[.,!?”“’:]/g, '');
+                currentWords = rawText.split(/\s+/).filter(w => w.length > 0).map(w => w.toLowerCase());
+            }
+
+            answerWords = [];
+            bankWords = [...currentWords];
+            shuffleArray(bankWords);
+
+            renderGame();
+        }
+
+        function renderGame() {
+            const answerArea = document.getElementById('answerArea');
+            const wordBank = document.getElementById('wordBank');
+
+            answerArea.innerHTML = '';
+            answerWords.forEach((word) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.style.cursor = 'default';
+                answerArea.appendChild(btn);
+            });
+
+            wordBank.innerHTML = '';
+            bankWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-block';
+                btn.textContent = word;
+                btn.onclick = () => moveWord(index);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function moveWord(index) {
+            const selectedWord = bankWords[index];
+            const expectedWord = currentWords[answerWords.length];
+
+            playGoogleTTS(selectedWord);
+
+            if (selectedWord === expectedWord) {
+                const word = bankWords.splice(index, 1)[0];
+                answerWords.push(word);
+                document.getElementById('gameStatus').textContent = "";
+                renderGame();
+
+                const reviewArea = document.getElementById('reviewArea');
+                reviewArea.innerHTML = '';
+                const reviewData = gameSentences[currentGameIndex].reviewData;
+                if (reviewData && gameMode === 'chunk') {
+                    const item = reviewData.find(r => word.includes(r.chunk));
+                    if (item) {
+                        const reviewContainer = document.createElement('div');
+                        reviewContainer.className = 'post-submit-review';
+                        reviewContainer.style.marginTop = '20px';
+                        reviewContainer.style.textAlign = 'left';
+
+                        const card = document.createElement('div');
+                        card.className = 'chunk-review-card';
+                        card.style.backgroundColor = '#f1f8e9';
+                        card.style.borderLeft = '4px solid #8bc34a';
+                        card.style.padding = '15px';
+                        card.style.marginBottom = '10px';
+                        card.style.borderRadius = '6px';
+                        card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+
+                        card.innerHTML = "<div style='font-weight: bold; font-size: 16px; color: #33691e; margin-bottom: 8px;'>📌 語塊範例：" + item.chunk + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>中文語意：</strong> " + item.meaning + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>母語者搭配 (Collocations)：</strong> " + item.collocation + "</div><div style='font-size: 15px; margin-bottom: 5px; line-height: 1.5;'><strong>同義替換 (Synonyms)：</strong> " + item.synonym + "</div><div style='font-size: 15px; color: #555; line-height: 1.5; margin-top: 8px; background: #fff; padding: 8px; border-radius: 4px;'><strong>🎧 聽力連讀點：</strong> " + item.pronunciation + "</div>";
+                        reviewContainer.appendChild(card);
+                        reviewArea.appendChild(reviewContainer);
+                    }
+                }
+
+                if (answerWords.length === currentWords.length) {
+                    const statusDiv = document.getElementById('gameStatus');
+                    statusDiv.textContent = "✅ 太棒了！完全正確。";
+                    statusDiv.className = "game-status status-correct";
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+
+                    const wordBank = document.getElementById('wordBank');
+                    wordBank.innerHTML = '';
+                    const finalSentence = document.createElement('div');
+                    finalSentence.className = 'word-block';
+                    finalSentence.style.cursor = 'default';
+                    finalSentence.style.backgroundColor = '#4CAF50';
+                    finalSentence.style.color = 'white';
+                    finalSentence.style.borderColor = '#388E3C';
+                    finalSentence.style.width = '100%';
+                    finalSentence.style.textAlign = 'center';
+                    finalSentence.style.whiteSpace = 'normal';
+                    finalSentence.style.padding = '15px';
+                    
+                    finalSentence.innerHTML = "<div style='font-size: 20px; font-weight: bold; margin-bottom: 8px;'>" + gameSentences[currentGameIndex].en + "</div><div style='font-size: 16px; font-weight: normal; opacity: 0.9;'>" + gameSentences[currentGameIndex].zh + "</div>";
+                    wordBank.appendChild(finalSentence);
+
+                    setTimeout(() => {
+                        playGoogleTTS(gameSentences[currentGameIndex].en);
+                    }, 1500);
+                }
+            } else {
+                const statusDiv = document.getElementById('gameStatus');
+                statusDiv.textContent = gameMode === 'chunk' ? "❌ 順序不對喔！仔細聽聽下一個語塊是什麼。" : "❌ 順序不對喔！仔細聽聽下一個字是什麼。";
+                statusDiv.className = "game-status status-wrong";
+
+                const buttons = document.getElementById('wordBank').children;
+                if (buttons[index]) {
+                    buttons[index].classList.remove('error-shake');
+                    void buttons[index].offsetWidth;
+                    buttons[index].classList.add('error-shake');
+                }
+            }
+        }
+
+        function nextSentence() {
+            currentGameIndex++;
+            initGame();
+        }
     </script>
 
 </body>
